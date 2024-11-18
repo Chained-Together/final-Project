@@ -5,8 +5,15 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
-import { User } from './user/entity/user-entity';
+import { User } from './user/entity/user.entity';
+import { VideoModule } from './video/video.module';
+import { CommentModule } from './comment/comment.module';
+import { ChannelModule } from './channel/channel.module';
 import * as Joi from 'joi';
+import { VideoEntity } from './video/entities/video.entity';
+import { ResolutionsEntity } from './video/entities/resolutions.entity';
+import { ChannelEntity } from './channel/entities/channel.entity';
+import { EntitiesModule } from './utils/entities.module';
 
 const typeOrmModuleOptions = {
   useFactory: async (configService: ConfigService): Promise<TypeOrmModuleOptions> => ({
@@ -17,7 +24,7 @@ const typeOrmModuleOptions = {
     host: configService.get('DB_HOST'),
     port: configService.get<number>('DB_PORT'),
     database: configService.get('DB_NAME'),
-    entities: [User],
+    entities: [User, VideoEntity, ResolutionsEntity, ChannelEntity],
     synchronize: configService.get<boolean>('DB_SYNC'),
     logging: true,
   }),
@@ -40,6 +47,10 @@ const typeOrmModuleOptions = {
     }),
     TypeOrmModule.forRootAsync(typeOrmModuleOptions),
     AuthModule,
+    VideoModule,
+    CommentModule,
+    ChannelModule,
+    EntitiesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
