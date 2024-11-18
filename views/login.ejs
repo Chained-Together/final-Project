@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="kr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="home" content="width=device-width, initial-scale=1.0">
+    <title>home</title>
+    <link rel="stylesheet" type="text/css" href="/styles/style.css">
+</head>
+
+<body>
+    <h1>Login</h1>
+
+    <!-- 로그인 버튼 클릭 시 팝업창 표시 -->
+    <button id="loginButton">Login</button>
+
+    <!-- 팝업창을 위한 HTML -->
+    <div id="popupOverlay"></div>
+    <div id="loginPopup">
+        <h2>Login Form</h2>
+        <form action="/auth/login" method="POST">
+            <div>
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required />
+            </div>
+            <div>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required />
+            </div>
+            <button type="submit">Login</button>
+            <button type="button" id="closePopup">Close</button> <!-- 팝업 닫기 버튼 -->
+        </form>
+    </div>
+
+    <!-- JavaScript로 팝업 열기/닫기 -->
+    <script>
+        // 로그인 버튼 클릭 시 팝업창 열기
+        document.getElementById('loginButton').addEventListener('click', function () {
+            document.getElementById('loginPopup').style.display = 'block';
+            document.getElementById('popupOverlay').style.display = 'block';
+        });
+
+
+        // 팝업창 닫기 버튼 클릭 시 팝업창 닫기
+        document.getElementById('closePopup').addEventListener('click', function () {
+            document.getElementById('loginPopup').style.display = 'none';
+            document.getElementById('popupOverlay').style.display = 'none';
+        });
+
+        // 오버레이 클릭 시 팝업창 닫기
+        document.getElementById('popupOverlay').addEventListener('click', function () {
+            document.getElementById('loginPopup').style.display = 'none';
+            document.getElementById('popupOverlay').style.display = 'none';
+        });
+
+    </script>
+</body>
+
+</html>
