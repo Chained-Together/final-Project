@@ -11,6 +11,7 @@ import { ResolutionsEntity } from './resolutions.entity';
 import { ChannelEntity } from '../../channel/entities/channel.entity';
 import { Visibility } from '../video.visibility.enum';
 import { LikeEntity } from '../../like/entities/like.entity';
+import { CommentEntity } from 'src/comment/entities/comment.entity';
 
 @Entity({
   name: 'videos',
@@ -54,4 +55,7 @@ export class VideoEntity {
 
   @OneToMany(() => LikeEntity, (like) => like.video)
   likes: LikeEntity;
+
+  @OneToMany(() => CommentEntity, (comment) => comment.video)
+  comments: CommentEntity;
 }

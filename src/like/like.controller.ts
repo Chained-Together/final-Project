@@ -15,11 +15,11 @@ export class LikeController {
   async toggleLike(
     @Param('videoId') videoId: number,
     @Req() req: Request,
-  ): Promise<({ video: { id: number }; user: { id: number } } & LikeEntity) | DeleteResult> {
+  ): Promise<({ user: { id: number },video: { id: number }} & LikeEntity) | DeleteResult> {
     const user = req.user as UserEntity;
     const userId = user.id;
 
-    return this.likeService.toggleLike(videoId, userId);
+    return this.likeService.toggleLike(userId, videoId);
     //TODO:트라이캐치사용 ??
     // try {
     //   return await this.likeService.toggleLike(videoId, userId);

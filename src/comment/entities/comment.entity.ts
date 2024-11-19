@@ -1,7 +1,9 @@
+import { VideoEntity } from 'src/video/entities/video.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   Timestamp,
   UpdateDateColumn,
@@ -19,15 +21,24 @@ export class CommentEntity {
   @Column({ type: 'varchar', nullable: false })
   content: string;
 
+  @Column({ type: 'int', nullable: true })
+  parentComment: number;
+
+  @Column({ type: 'int', nullable: false })
+  depth: number;
+
+  @Column({ type: 'int', nullable: false })
+  orderNumber: number;
+
+  @Column({ type: 'int', nullable: false })
+  commentGroup: number;
+
   @CreateDateColumn({ type: 'timestamp', nullable: false })
   createdAt: Timestamp;
 
   @UpdateDateColumn({ type: 'timestamp', nullable: false })
   updatedAt: Timestamp;
 
-  //   @ManyToOne(() => VideoEntity, (video) => video.comments, { onDelete: 'CASCADE' })
-  //   video: VideoEntity;
-
-  //   @OneToMany(() => Replies, (replies) => replies.comment, { cascade: true })
-  //   replies: Replies[];
+  @ManyToOne(() => VideoEntity, (video) => video.comments, { onDelete: 'CASCADE' })
+  video: VideoEntity; 
 }

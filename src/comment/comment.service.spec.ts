@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 import { UserEntity } from 'src/user/entity/user.entity';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { CommentDto } from './dto/comment.dto';
+import { mock } from 'node:test';
 
 describe('CommentService', () => {
   let service: CommentService;
@@ -53,11 +54,11 @@ describe('CommentService', () => {
       const user: UserEntity = { id: 1 } as UserEntity;
       const videoId = 1;
 
-      mockCommentRepository.create.mockReturnValue({
+      mockCommentRepository.create.mockResolvedValue({
         userId: user.id,
         content: commentDto.content,
       });
-      mockCommentRepository.save.mockReturnValue({
+      mockCommentRepository.save.mockResolvedValue({
         id: 1,
         userId: user.id,
         content: commentDto.content,
@@ -66,6 +67,11 @@ describe('CommentService', () => {
       expect(mockCommentRepository.create).toHaveBeenCalledWith({
         userId: user.id,
         content: commentDto.content,
+        commentGroup: 1,
+        depth: 0,
+        orderNumber: 1,
+        parentComment: 0,
+        video: { id: videoId },
       });
       expect(mockCommentRepository.save).toHaveBeenCalled();
       expect(result).toEqual({
@@ -110,26 +116,28 @@ describe('CommentService', () => {
       const videoId = 1;
       const commentId = 1;
 
-      mockVideoRepository.find.mockReturnValue({ id: videoId });
-      mockCommentRepository.findOne.mockReturnValue({
+      mockVideoRepository.find.mockResolvedValue({ id: videoId });
+      mockCommentRepository.findOne.mockResolvedValue({
         id: commentId,
-        userId: 1,
-        content: 'test',
-        createdAt: '2030-12-12',
       });
+
       const result = await service.findOne(videoId, commentId);
-      expect(mockVideoRepository.find).toHaveBeenCalledWith({
-        where: { id: videoId },
-      });
+
       expect(mockCommentRepository.findOne).toHaveBeenCalledWith({
         where: { id: commentId },
       });
-      expect(result).toEqual({
-        id: commentId,
-        userId: 1,
-        content: 'test',
-        createdAt: '2030-12-12',
+
+      expect(mockVideoRepository.find).toHaveBeenCalledWith({
+        where: { id: videoId },
       });
+
+      expect(result).toMatchObject([
+        {
+          id: commentId,
+          userId: 1,
+          content: 'content',
+        },
+      ]);
     });
   });
 
@@ -146,11 +154,21 @@ describe('CommentService', () => {
         createdAt: '2030-12-12',
       };
 
-      mockCommentRepository.findOneBy.mockResolvedValue({ userId, commentId });
-      mockCommentRepository.update.mockResolvedValue({ commentId, content });
+      mockCommentRepository.findOne.mockResolvedValue({ userId });
+      mockCommentRepository.findOneBy.mockResolvedValue({ userId, commentId, videoId });
+      mockCommentRepository.update.mockResolvedValue({ affected: 1 });
+      mockCommentRepository.findOne.mockResolvedValue(updatedComment);
 
       const result = await service.updateComment(videoId, commentId.id, content, userId);
       expect(result).toEqual(updatedComment);
+
+      expect(mockCommentRepository.findOne).toHaveBeenCalledWith({
+        where: { id: commentId.id },
+      });
+      expect(mockCommentRepository.update).toHaveBeenCalledWith(
+        { id: commentId.id },
+        { content: content.content },
+      );
     });
 
     it('댓글 수정 실패 시 NotFoundException 출력 검증', async () => {
@@ -168,20 +186,30 @@ describe('CommentService', () => {
       const videoId = 1;
       const commentId = 1;
       const user = { id: 1 } as UserEntity;
-      mockCommentRepository.findOneBy.mockReturnValue({
-        id: commentId,
+
+      mockCommentRepository.findOne.mockResolvedValue({ userId: user.id });
+
+      mockCommentRepository.findOneBy.mockResolvedValue({
         userId: user.id,
+        id: commentId,
+        video: { id: videoId },
       });
-      mockCommentRepository.delete.mockReturnValue({
+      mockCommentRepository.delete.mockResolvedValue({
         affected: 1,
       });
       const result = await service.removeComment(videoId, commentId, user);
       expect(mockCommentRepository.findOne).toHaveBeenCalledWith({
-        where: { id: commentId },
+        where: { userId: user.id },
+      });
+      expect(mockCommentRepository.findOneBy).toHaveBeenCalledWith({
+        userId: user.id,
+        id: commentId,
+        video: { id: videoId },
       });
       expect(mockCommentRepository.delete).toHaveBeenCalledWith({
         id: commentId,
       });
+
       expect(result).toEqual({
         success: true,
         message: '댓글이 성공적으로 삭제 되었습니다.',
@@ -191,14 +219,70 @@ describe('CommentService', () => {
       const videoId = 1;
       const commentId = 1;
       const user = { id: 1 } as UserEntity;
-      mockCommentRepository.findOneBy.mockReturnValue({
+      mockCommentRepository.findOneBy.mockResolvedValue({
         id: commentId,
         userId: user.id,
+        videoId,
       });
-      mockCommentRepository.delete.mockReturnValue({
+      mockCommentRepository.delete.mockResolvedValue({
         affected: 0,
       });
       await expect(service.removeComment(1, 1, user)).rejects.toThrow(BadRequestException);
+    });
+  });
+
+  describe('답글 생성', () => {
+    it('답글 생성 성공 검증', async () => {
+      const videoId = 1;
+      const commentId = 1;
+      const user = { id: 1 } as UserEntity;
+      const commentDto: CommentDto = { content: 'content' } as CommentDto;
+      const commentGroup = 1;
+      const depth = 1;
+      const createdReply = {
+        userId: user.id,
+        content: commentDto.content,
+        parentComment: commentId,
+        depth: 1,
+        orderNumber: 1,
+        commentGroup: commentGroup,
+        video: { id: videoId },
+      };
+
+      mockCommentRepository.findOneBy.mockResolvedValue({
+        id: commentId,
+        userId: user.id,
+        video: { id: videoId },
+      });
+      mockCommentRepository.findOne
+        .mockResolvedValueOnce({ id: commentId, commentGroup })
+        .mockResolvedValueOnce({ orderNumber: 1 });
+      mockCommentRepository.create.mockReturnValue(createdReply);
+      mockCommentRepository.save.mockResolvedValue(createdReply);
+
+      const result = await service.createReply(videoId, commentId, user, commentDto);
+
+      expect(mockCommentRepository.findOneBy).toHaveBeenCalledWith({
+        userId: user.id,
+        id: commentId,
+        video: { id: videoId },
+      });
+      expect(mockCommentRepository.findOne).toHaveBeenCalledWith({
+        where: { commentGroup, depth: 1 },
+        order: { orderNumber: 'DESC' },
+      });
+
+      expect(mockCommentRepository.create).toHaveBeenCalledWith({
+        userId: user.id,
+        content: commentDto.content,
+        parentComment: commentId,
+        depth: 1,
+        orderNumber: 2,
+        commentGroup: commentGroup,
+        video: { id: videoId },
+      });
+      expect(mockCommentRepository.save).toHaveBeenCalledWith(createdReply);
+      expect(result).toEqual(createdReply);
     });
   });
 });

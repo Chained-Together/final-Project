@@ -15,6 +15,7 @@ describe('CommentController', () => {
     findOne: jest.fn(),
     updateComment: jest.fn(),
     removeComment: jest.fn(),
+    createReply: jest.fn(),
   };
 
   const mockUser = {
@@ -104,6 +105,23 @@ describe('CommentController', () => {
       await commentController.removeComment(videoId, commentId, mockUser);
 
       expect(commentService.removeComment).toHaveBeenCalledWith(videoId, commentId, mockUser);
+    });
+  });
+
+  describe('답글 생성', () => {
+    it('답글 생성 메서드 검증', async () => {
+      const commentDto: CommentDto = { content: 'Content' };
+      const videoId: number = 1;
+      const commentId: number = 1;
+
+      await commentController.createReply(videoId, commentId, mockUser, commentDto);
+
+      expect(commentService.createReply).toHaveBeenCalledWith(
+        videoId,
+        commentId,
+        mockUser,
+        commentDto,
+      );
     });
   });
 });

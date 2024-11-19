@@ -17,11 +17,26 @@ export class CommentService {
   ) {}
 
   async createComment(commentDto: CommentDto, user: UserEntity, videoId: number) {
+    const checkOrderNumber = await this.commentRepository.findOne({
+      where: { video: { id: videoId }, depth: 0 },
+      order: {
+        orderNumber: 'DESC',
+      },
+    });
+
+    const newGroupNumber = (checkOrderNumber?.commentGroup ?? 0) + 1;
+
     const createComment = this.commentRepository.create({
       userId: user.id,
       content: commentDto.content,
-      //   video: { id: videoId },
+      parentComment: 0,
+      depth: 0,
+      orderNumber: 1,
+      commentGroup: newGroupNumber,
+      video: { id: videoId },
     });
+    // 그룹 1 , 오더넘버 1
+    // 그룹 2 , 오더넘버 1
 
     await this.commentRepository.save(createComment);
 
@@ -37,16 +52,22 @@ export class CommentService {
     return { data: comment };
   }
 
-  //TODO: 답글 부분 완성하고 추가하기
   async findOne(videoId: number, commentId: number) {
     await this.verifyVideo(videoId);
     await this.forFindOneVerifyComment(commentId);
 
-    const comment = await this.commentRepository.findOne({
+    const checkCommentGroup = await this.commentRepository.findOne({
       where: { id: commentId },
-      // relations: ['replies'],
-      // select: ['id', 'userId', 'content', 'createdAt'],
     });
+
+    const comment = await this.commentRepository.find({
+      where: { commentGroup: checkCommentGroup.commentGroup },
+      select: ['id', 'userId', 'content', 'createdAt'],
+      order: {
+        orderNumber: 'ASC',
+      },
+    });
+
     return comment;
   }
 
@@ -56,7 +77,8 @@ export class CommentService {
     commentDto: CommentDto,
     user: UserEntity,
   ) {
-    await this.verifyComment(user.id, commentId);
+    await this.verifyUser(user);
+    await this.verifyComment(user.id, commentId, videoId);
 
     await this.commentRepository.update({ id: commentId }, { content: commentDto.content });
 
@@ -68,7 +90,8 @@ export class CommentService {
   }
 
   async removeComment(videoId: number, commentId: number, user: UserEntity) {
-    await this.verifyComment(user.id, commentId);
+    await this.verifyUser(user);
+    await this.verifyComment(user.id, commentId, videoId);
 
     const result = await this.commentRepository.delete({ id: commentId });
 
@@ -79,9 +102,47 @@ export class CommentService {
     }
   }
 
-  // TODO: 나중에 videoId도 추가해야됨
-  private async verifyComment(userId: number, commentId: number) {
-    const findComment = await this.commentRepository.findOneBy({ userId: userId, id: commentId });
+  async createReply(videoId: number, commentId: number, user: UserEntity, commentDto: CommentDto) {
+    await this.verifyComment(user.id, commentId, videoId);
+
+    const checkComment = await this.commentRepository.findOne({
+      where: { id: commentId },
+    });
+
+    const checkReply = await this.commentRepository.findOne({
+      where: { commentGroup: checkComment.commentGroup, depth: 1 },
+      order: {
+        orderNumber: 'DESC',
+      },
+    });
+
+    const newOrderNumber = (checkReply?.orderNumber ?? 1) + 1;
+
+    const createReply = this.commentRepository.create({
+      userId: user.id,
+      content: commentDto.content,
+      parentComment: commentId,
+      depth: 1,
+      orderNumber: newOrderNumber,
+      commentGroup: checkComment.commentGroup,
+      video: { id: videoId },
+    });
+    // 그룹:댓글 그룹1 , 오더넘버 :2,
+    // 그룹:댓글 그룹2 , 오더넘버 = 1: 부모댓글  2:답글,3,4,5
+    // 그룹:댓글 그룹3, 오더넘버 1:부모 2:답글
+    // 이거 보면 이해가능!//감너누 고워뉴민!ㅋㅋㅋㅋㅋ
+
+    await this.commentRepository.save(createReply);
+
+    return createReply;
+  }
+
+  private async verifyComment(userId: number, commentId: number, videoId: number) {
+    const findComment = await this.commentRepository.findOneBy({
+      userId: userId,
+      id: commentId,
+      video: { id: videoId },
+    });
 
     if (_.isNil(findComment)) {
       throw new NotFoundException('해당하는 댓글이 존재하지 않습니다.');
@@ -105,6 +166,16 @@ export class CommentService {
     });
     if (!findComment) {
       throw new NotFoundException('해당하는 댓글이 존재하지 않습니다.');
+    }
+  }
+
+  private async verifyUser(user: UserEntity) {
+    const existingUser = await this.commentRepository.findOne({
+      where: { userId: user.id },
+    });
+
+    if (!existingUser) {
+      throw new NotFoundException('해당하는 유저는 권한이 없습니다.');
     }
   }
 }
