@@ -13,6 +13,7 @@ import * as Joi from 'joi';
 import { VideoEntity } from './video/entities/video.entity';
 import { ResolutionsEntity } from './video/entities/resolutions.entity';
 import { ChannelEntity } from './channel/entities/channel.entity';
+import { EntitiesModule } from './utils/entities.module';
 
 const typeOrmModuleOptions = {
   useFactory: async (configService: ConfigService): Promise<TypeOrmModuleOptions> => ({
@@ -49,6 +50,7 @@ const typeOrmModuleOptions = {
     VideoModule,
     CommentModule,
     ChannelModule,
+    EntitiesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

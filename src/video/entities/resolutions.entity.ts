@@ -8,11 +8,17 @@ export class ResolutionsEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  high: string;
+  @Column({ type: 'varchar', nullable: false })
+  name: string;
 
-  @Column()
-  low: string;
+  @Column({ type: 'varchar', nullable: false })
+  profileImage: string;
+
+  @CreateDateColumn({ type: 'timestamp', nullable: false, name: 'created_at' })
+  createdAt: Date;
+
+  @Column({ type: 'int', nullable: false, name: 'user_id' })
+  userId: number;
 
   @OneToOne(() => VideoEntity, (video) => video.resolution, { onDelete: 'CASCADE' })
   video: VideoEntity;

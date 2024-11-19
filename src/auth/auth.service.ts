@@ -6,15 +6,12 @@ import { UserEntity } from 'src/user/entity/user.entity';
 import { Repository } from 'typeorm';
 import { LoginDto } from './dto/login.dto';
 import { SignUpDto } from './dto/signUp.dto';
-import { ChannelEntity } from 'src/channel/entities/channel.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
-    @InjectRepository(ChannelEntity)
-    private readonly channelRepository: Repository<ChannelEntity>,
     private readonly jwtService: JwtService,
     @Inject('HashingService')
     private readonly bcryptHashingService: HashingService,
@@ -79,9 +76,8 @@ export class AuthService {
     if (!(await this.bcryptHashingService.compare(loginDto.password, findUser.password))) {
       throw new UnauthorizedException('비밀 번호가 일치 하지 않습니다.');
     }
-    const foundChannel = await this.channelRepository.findOne({ where: { userId: findUser.id } });
 
-    const payload = { email: loginDto.email, sub: findUser.id, channelId: foundChannel.id };
+    const payload = { email: loginDto.email, sub: findUser.id };
     const token = this.jwtService.sign(payload);
 
     return {

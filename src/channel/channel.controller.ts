@@ -3,7 +3,7 @@ import { ChannelService } from './channel.service';
 import { ChannelDto } from './dto/channel.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { ChannelEntity } from './entities/channel.entity';
-import { UserEntity } from 'src/user/entity/user.entity';
+import { User } from 'src/user/entity/user.entity';
 import { UserInfo } from 'src/utils/user-info.decorator';
 
 @Controller('channel')
@@ -14,7 +14,7 @@ export class ChannelController {
   @UseGuards(AuthGuard('jwt'))
   async createChannel(
     @Body() channelDto: ChannelDto,
-    @UserInfo() user: UserEntity,
+    @UserInfo() user: User,
   ): Promise<ChannelEntity> {
     return await this.channelService.createChannel(channelDto, user);
   }
@@ -27,7 +27,7 @@ export class ChannelController {
   @Patch()
   @UseGuards(AuthGuard('jwt'))
   async updateChannel(
-    @UserInfo() user: UserEntity,
+    @UserInfo() user: User,
     @Body() channelDto: ChannelDto,
   ): Promise<ChannelEntity> {
     return this.channelService.updateChannel(user, channelDto);
@@ -35,7 +35,7 @@ export class ChannelController {
 
   @Delete()
   @UseGuards(AuthGuard('jwt'))
-  async removeChannel(@UserInfo() user: UserEntity): Promise<ChannelEntity> {
+  async removeChannel(@UserInfo() user: User): Promise<ChannelEntity> {
     return this.channelService.removeChannel(user);
   }
 }

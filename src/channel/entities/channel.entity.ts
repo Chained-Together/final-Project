@@ -1,4 +1,4 @@
-import { VideoEntity } from '../../video/entities/video.entity';
+import { VideoEntity } from 'src/video/entities/video.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({
