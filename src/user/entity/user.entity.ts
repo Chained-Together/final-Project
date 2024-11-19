@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { VideoEntity } from '../../video/entities/video.entity';
+import { LikeEntity } from '../../like/entities/like.entity';
 
 @Entity({
   name: 'users',
@@ -21,4 +23,7 @@ export class UserEntity {
 
   @Column({ type: 'varchar', nullable: false, unique: true })
   phoneNumber: string;
+
+  @OneToMany(() => LikeEntity, (like) => like.user)
+  likes: LikeEntity;
 }

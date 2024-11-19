@@ -14,7 +14,9 @@ import { VideoEntity } from './video/entities/video.entity';
 import { ResolutionsEntity } from './video/entities/resolutions.entity';
 import { ChannelEntity } from './channel/entities/channel.entity';
 import { EntitiesModule } from './utils/entities.module';
+import { LikeModule } from './like/like.module';
 import { CommentEntity } from './comment/entities/comment.entity';
+
 
 const typeOrmModuleOptions = {
   useFactory: async (configService: ConfigService): Promise<TypeOrmModuleOptions> => ({
@@ -52,6 +54,7 @@ const typeOrmModuleOptions = {
     CommentModule,
     ChannelModule,
     EntitiesModule,
+    LikeModule,
   ],
   controllers: [AppController],
   providers: [AppService],
