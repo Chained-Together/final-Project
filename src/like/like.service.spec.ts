@@ -46,11 +46,11 @@ describe('LikeService', () => {
       const result = await likeService.toggleLike(123, 1);
 
       expect(likeRepository.findOne).toHaveBeenCalledWith({
-        where: { video: { id: 123 }, user: { id: 1 } },
+        where: { user: { id: 1 } ,video: { id: 123 }},
       });
       expect(likeRepository.delete).toHaveBeenCalledWith({
-        video: { id: 123 },
         user: { id: 1 },
+        video: { id: 123 },
       });
       expect(result).toEqual({ affected: 1 });
     });
@@ -65,13 +65,13 @@ describe('LikeService', () => {
 
       expect(likeRepository.findOne).toHaveBeenCalledWith({
         where: {
-          video: { id: 123 },
           user: { id: 1 },
+          video: { id: 123 },
         },
       });
       expect(likeRepository.save).toHaveBeenCalledWith({
-        video: { id: 123 },
         user: { id: 1 },
+        video: { id: 123 },
       });
 
       expect(result).toEqual(mockLike);

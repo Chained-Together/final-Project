@@ -49,4 +49,15 @@ export class CommentController {
   ) {
     return this.commentService.removeComment(videoId, commentId, user);
   }
+
+  @Post('/:commentId')
+  @UseGuards(AuthGuard('jwt'))
+  createReply(
+    @Param('videoId') videoId: number,
+    @Param('commentId') commentId: number,
+    @UserInfo() user: UserEntity,
+    @Body() commentDto: CommentDto,
+  ) {
+    return this.commentService.createReply(videoId, commentId, user, commentDto);
+  }
 }
