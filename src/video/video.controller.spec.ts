@@ -46,10 +46,27 @@ describe('VideoController', () => {
         description: 'This is a test description',
         thumbnailURL: 'https://example.com/thumbnail.jpg',
         hashtags: ['#test', '#video'],
+        high: 'url',
+        low: 'url',
         duration: 300,
         visibility: Visibility.PUBLIC,
       };
-      const mockVideo = { id: 1, ...videoDto } as VideoEntity;
+
+      const mockVideo: VideoEntity = {
+        id: 1,
+        title: 'test',
+        description: 'test',
+        thumbnailURL: 'test',
+        hashtags: ['공포', '고양이'],
+        visibility: Visibility.PUBLIC,
+        duration: 10,
+        views: 0,
+        uploadedAt: new Date(),
+        updatedAt: null,
+        resolution: null,
+        channel: null,
+        likes: null,
+      };
 
       jest.spyOn(mockVideoService, 'createVideo').mockResolvedValueOnce(mockVideo);
 
