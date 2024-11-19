@@ -1,20 +1,27 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { VideoEntity } from './entities/video.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { channel } from 'diagnostics_channel';
 import { VideoDto } from './dto/video.dto';
 import { Visibility } from './video.visibility.enum';
+import { UpdateVideoDto } from './dto/update.video.dto';
+import { UserEntity } from '../user/entity/user.entity';
+import { ChannelEntity } from '../channel/entities/channel.entity';
 
 @Injectable()
 export class VideoService {
   constructor(
     @InjectRepository(VideoEntity)
     private videoRepository: Repository<VideoEntity>,
+    @InjectRepository(ChannelEntity)
+    private channelRepository: Repository<ChannelEntity>,
   ) {}
 
-  async createVideo(videoDto: VideoDto): Promise<VideoEntity> {
+  async createVideo(user: UserEntity, videoDto: VideoDto): Promise<VideoEntity> {
     const { title, description, thumbnailURL, hashtags, duration, visibility } = videoDto;
+
+    const foundChannel = await this.findChannelByUserId(user.id);
 
     const video = this.videoRepository.create({
       title,
@@ -23,6 +30,7 @@ export class VideoService {
       hashtags,
       duration,
       visibility,
+      channel: foundChannel,
     });
 
     const saveVideo = this.videoRepository.save(video);
@@ -46,13 +54,14 @@ export class VideoService {
     return foundVideo;
   }
 
-  async updateVideo(videoId: number, updateVideoDto): Promise<VideoEntity> {
-    const foundVideo = await this.videoRepository.findOne({
-      where: { id: videoId },
-    });
-    if (!foundVideo) {
-      throw new NotFoundException('존재 하지 않는 비디오 입니다.');
-    }
+  async updateVideo(
+    user: UserEntity,
+    videoId: number,
+    updateVideoDto: UpdateVideoDto,
+  ): Promise<VideoEntity> {
+    await this.findChannelByUserId(user.id);
+
+    await this.findVideoById(videoId);
 
     const updateData = await this.updateDetails(updateVideoDto);
 
@@ -62,13 +71,10 @@ export class VideoService {
     return updatedVideo;
   }
 
-  async deleteVideo(videoId: number): Promise<object> {
-    const foundVideo = await this.videoRepository.findOne({
-      where: { id: videoId },
-    });
-    if (!foundVideo) {
-      throw new NotFoundException('존재 하지 않는 비디오 입니다.');
-    }
+  async deleteVideo(user: UserEntity, videoId: number): Promise<object> {
+    await this.findChannelByUserId(user.id);
+
+    await this.findVideoById(videoId);
 
     await this.videoRepository.delete({
       id: videoId,
@@ -77,7 +83,25 @@ export class VideoService {
     return { message: '동영상이 삭제되었습니다.' };
   }
 
-  private async updateDetails(updateVideoDto) {
+  private async findChannelByUserId(id) {
+    const foundChannel = await this.channelRepository.findOne({ where: { userId: id } });
+    if (!foundChannel) {
+      throw new UnauthorizedException('채널이 존재하지 않습니다.');
+    }
+    return foundChannel;
+  }
+
+  private async findVideoById(id) {
+    const foundVideo = await this.videoRepository.findOne({
+      where: { id: id },
+    });
+    if (!foundVideo) {
+      throw new NotFoundException('존재 하지 않는 비디오 입니다.');
+    }
+    return foundVideo;
+  }
+
+  private async updateDetails(updateVideoDto: UpdateVideoDto) {
     const updateData: Partial<VideoEntity> = {};
 
     if (updateVideoDto.title) {
@@ -88,8 +112,12 @@ export class VideoService {
       updateData.description = updateVideoDto.description;
     }
 
-    if (updateVideoDto.thumbnail_url) {
-      updateData.description = updateVideoDto.thumbnail_url;
+    if (updateVideoDto.thumbnailURL) {
+      updateData.thumbnailURL = updateVideoDto.thumbnailURL;
+    }
+
+    if (updateVideoDto.hashtags) {
+      updateData.hashtags = updateVideoDto.hashtags;
     }
 
     if (updateVideoDto.visibility) {
