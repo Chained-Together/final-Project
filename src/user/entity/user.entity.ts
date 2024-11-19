@@ -19,6 +19,6 @@ export class User {
   @Column({ type: 'varchar', nullable: false, unique: true })
   nickname: string;
 
-  @Column({ type: 'varchar', nullable: false, unique: true, name: 'phone_name' })
+  @Column({ type: 'varchar', nullable: false, unique: true })
   phoneNumber: string;
 }

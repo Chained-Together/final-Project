@@ -1,18 +1,42 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CommentController } from './comment.controller';
+import { CommentService } from './comment.service';
+import { User } from 'src/user/entity/user.entity';
+import { AuthGuard } from '@nestjs/passport';
 
 describe('CommentController', () => {
-  let controller: CommentController;
+  let commentController: CommentController;
+  let commentService: CommentService;
+
+  const mockCommentService = {
+    createComment: jest.fn(),
+    findAll: jest.fn(),
+    findOne: jest.fn(),
+    updatedComment: jest.fn(),
+    removeComment: jest.fn(),
+  };
+
+  const mockUser = {};
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [CommentController],
-    }).compile();
+      providers: [
+        {
+          provide: CommentService,
+          useValue: mockCommentService,
+        },
+      ],
+    })
+      .overrideGuard(AuthGuard('jwt'))
+      .useValue({ canActivate: () => true })
+      .compile();
 
-    controller = module.get<CommentController>(CommentController);
+    commentController = module.get<CommentController>(CommentController);
+    commentService = module.get<CommentService>(CommentService);
   });
 
   it('should be defined', () => {
-    expect(controller).toBeDefined();
+    expect(commentController).toBeDefined();
   });
 });
