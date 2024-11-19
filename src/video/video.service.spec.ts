@@ -56,6 +56,7 @@ describe('VideoService', () => {
     name: 'test',
     nickname: 'test',
     phoneNumber: '010-4444-4444',
+    likes: null,
   };
 
   const mockChannel: ChannelEntity = {
@@ -75,11 +76,11 @@ describe('VideoService', () => {
     visibility: Visibility.PUBLIC,
     duration: 10,
     views: 0,
-    likes: 0,
     uploadedAt: new Date(),
     updatedAt: null,
     resolution: null,
     channel: mockChannel,
+    likes: null,
   };
 
   const mockVideoDto: VideoDto = {
@@ -108,11 +109,11 @@ describe('VideoService', () => {
     visibility: Visibility.PUBLIC,
     duration: 10,
     views: 0,
-    likes: 0,
     uploadedAt: new Date(),
     updatedAt: null,
     resolution: null,
     channel: mockChannel,
+    likes: null,
   };
 
   describe('영상 생성 시', () => {
