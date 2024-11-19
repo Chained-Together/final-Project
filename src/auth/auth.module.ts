@@ -5,7 +5,7 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from 'src/user/entity/user.entity';
+import { UserEntity } from 'src/user/entity/user.entity';
 import { JwtStrategy } from './jwt.strategy';
 import { BcryptHashingService } from 'src/interface/impl/bcrypt-hashing-service';
 
@@ -18,7 +18,7 @@ import { BcryptHashingService } from 'src/interface/impl/bcrypt-hashing-service'
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([UserEntity]),
   ],
   controllers: [AuthController],
   providers: [
