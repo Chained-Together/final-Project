@@ -10,6 +10,7 @@ import { VideoDto } from './dto/video.dto';
 import { NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { create } from 'lodash';
 import { UpdateVideoDto } from './dto/update.video.dto';
+import { ResolutionsEntity } from './entities/resolutions.entity';
 
 const mockVideoRepository = {
   create: jest.fn(),
@@ -22,6 +23,11 @@ const mockVideoRepository = {
 
 const mockChannelRepository = {
   findOne: jest.fn(),
+};
+
+const mockResolutionRepository = {
+  create: jest.fn(),
+  save: jest.fn(),
 };
 
 describe('VideoService', () => {
@@ -40,6 +46,11 @@ describe('VideoService', () => {
         {
           provide: getRepositoryToken(ChannelEntity),
           useValue: mockChannelRepository,
+        },
+
+        {
+          provide: getRepositoryToken(ResolutionsEntity),
+          useValue: mockResolutionRepository,
         },
       ],
     }).compile();
@@ -90,6 +101,8 @@ describe('VideoService', () => {
     duration: 10,
     hashtags: ['공포', '강아지'],
     visibility: Visibility.PUBLIC,
+    high: '임의 링크',
+    low: '임의 링크',
   };
 
   const mockUpdateVideoDto: UpdateVideoDto = {
