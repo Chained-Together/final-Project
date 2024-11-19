@@ -5,7 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
-import { User } from './user/entity/user.entity';
+import { UserEntity } from './user/entity/user.entity';
 import { VideoModule } from './video/video.module';
 import { CommentModule } from './comment/comment.module';
 import { ChannelModule } from './channel/channel.module';
@@ -25,7 +25,7 @@ const typeOrmModuleOptions = {
     host: configService.get('DB_HOST'),
     port: configService.get<number>('DB_PORT'),
     database: configService.get('DB_NAME'),
-    entities: [User, VideoEntity, ResolutionsEntity, ChannelEntity, CommentEntity],
+    entities: [UserEntity, VideoEntity, ResolutionsEntity, ChannelEntity, CommentEntity],
     synchronize: configService.get<boolean>('DB_SYNC'),
     logging: true,
   }),
