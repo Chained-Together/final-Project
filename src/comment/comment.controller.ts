@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { User } from 'src/user/entity/user.entity';
+import { UserEntity } from 'src/user/entity/user.entity';
 import { UserInfo } from 'src/utils/user-info.decorator';
 import { CommentService } from './comment.service';
 import { CommentDto } from './dto/comment.dto';
@@ -13,7 +13,7 @@ export class CommentController {
   @UseGuards(AuthGuard('jwt'))
   createComment(
     @Param('videoId') videoId: number,
-    @UserInfo() user: User,
+    @UserInfo() user: UserEntity,
     @Body() commentDto: CommentDto,
   ) {
     return this.commentService.createComment(commentDto, user, videoId);
@@ -35,7 +35,7 @@ export class CommentController {
     @Param('videoId') videoId: number,
     @Param('commentId') commentId: number,
     @Body() commentDto: CommentDto,
-    @UserInfo() user: User,
+    @UserInfo() user: UserEntity,
   ) {
     return this.commentService.updateComment(videoId, commentId, user, commentDto);
   }
@@ -45,7 +45,7 @@ export class CommentController {
   deleteComment(
     @Param('videoId') videoId: number,
     @Param('commentId') commentId: number,
-    @UserInfo() user: User,
+    @UserInfo() user: UserEntity,
   ) {
     return this.commentService.removeComment(videoId, commentId, user);
   }

@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CommentEntity } from './entities/comment.entity';
 import { Repository } from 'typeorm';
 import { CommentDto } from './dto/comment.dto';
-import { User } from 'src/user/entity/user.entity';
+import { UserEntity } from 'src/user/entity/user.entity';
 import _ from 'lodash';
 import { VideoEntity } from 'src/video/entities/video.entity';
 
@@ -16,7 +16,7 @@ export class CommentService {
     private readonly videoRepository: Repository<VideoEntity>,
   ) {}
 
-  async createComment(commentDto: CommentDto, user: User, videoId: number) {
+  async createComment(commentDto: CommentDto, user: UserEntity, videoId: number) {
     const createComment = this.commentRepository.create({
       userId: user.id,
       content: commentDto.content,
@@ -50,7 +50,12 @@ export class CommentService {
     return comment;
   }
 
-  async updateComment(videoId: number, commentId: number, user: User, commentDto: CommentDto) {
+  async updateComment(
+    videoId: number,
+    commentId: number,
+    user: UserEntity,
+    commentDto: CommentDto,
+  ) {
     await this.verifyComment(user.id, commentId);
 
     await this.commentRepository.update({ id: commentId }, { content: commentDto.content });
@@ -62,7 +67,7 @@ export class CommentService {
     return findUpdatedComment;
   }
 
-  async removeComment(videoId: number, commentId: number, user: User) {
+  async removeComment(videoId: number, commentId: number, user: UserEntity) {
     await this.verifyComment(user.id, commentId);
 
     const result = await this.commentRepository.delete({ id: commentId });
