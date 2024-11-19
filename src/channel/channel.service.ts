@@ -17,11 +17,9 @@ export class ChannelService {
     private readonly channelRepository: Repository<ChannelEntity>,
   ) {}
 
-  /**채널 생성 */
   async createChannel(channelDto: ChannelDto, user: UserEntity): Promise<ChannelEntity> {
     const { name, profileImage } = channelDto;
 
-    //채널명 중복확인
     const found = await this.findChannel({ name });
     if (found) {
       throw new ConflictException(`입력하신 채널이름(${name})이 이미 존재합니다.`);
@@ -38,7 +36,6 @@ export class ChannelService {
     return createChannel;
   }
 
-  /**채널 상세 조회 */
   async getChannel(id: number): Promise<ChannelEntity> {
     const foundChannel = await this.findChannel({ id });
     if (!foundChannel) {
@@ -48,7 +45,6 @@ export class ChannelService {
     return foundChannel;
   }
 
-  /**채널 수정*/
   async updateChannel(user: UserEntity, channelDto: ChannelDto): Promise<ChannelEntity> {
     const foundChannel = await this.findChannel({ userId: user.id });
     if (!foundChannel) {
@@ -67,7 +63,6 @@ export class ChannelService {
     return foundUpdatedChannel;
   }
 
-  /**채널 삭제*/
   async removeChannel(user: UserEntity): Promise<ChannelEntity> {
     const foundChannelById = await this.findChannel({ userId: user.id });
     if (!foundChannelById) {
@@ -76,7 +71,6 @@ export class ChannelService {
 
     const channelId = foundChannelById.id;
 
-    //채널삭제
     await this.channelRepository.delete({ id: channelId });
     return foundChannelById;
   }

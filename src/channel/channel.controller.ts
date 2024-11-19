@@ -12,11 +12,11 @@ export class ChannelController {
 
   @Post()
   @UseGuards(AuthGuard('jwt'))
-  async createChannel(
+  createChannel(
     @Body() channelDto: ChannelDto,
     @UserInfo() user: UserEntity,
   ): Promise<ChannelEntity> {
-    return await this.channelService.createChannel(channelDto, user);
+    return this.channelService.createChannel(channelDto, user);
   }
 
   @Get('/:channelId')
