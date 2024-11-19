@@ -3,12 +3,14 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { ResolutionsEntity } from './resolutions.entity';
-import { ChannelEntity } from 'src/channel/entities/channel.entity';
+import { ChannelEntity } from '../../channel/entities/channel.entity';
 import { Visibility } from '../video.visibility.enum';
+import { LikeEntity } from '../../like/entities/like.entity';
 
 @Entity({
   name: 'videos',
@@ -38,9 +40,6 @@ export class VideoEntity {
   @Column({ type: 'int', nullable: false })
   views: number;
 
-  @Column({ type: 'int', nullable: false })
-  likes: number;
-
   @CreateDateColumn({ type: 'timestamp', nullable: false, name: 'uploaded_at' })
   uploadedAt: Date;
 
@@ -52,4 +51,7 @@ export class VideoEntity {
 
   @ManyToOne(() => ChannelEntity, (channel) => channel.video, { onDelete: 'CASCADE' })
   channel: ChannelEntity;
+
+  @OneToMany(() => LikeEntity, (like) => like.video)
+  likes: LikeEntity;
 }

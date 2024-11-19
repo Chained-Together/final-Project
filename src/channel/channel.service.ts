@@ -8,7 +8,7 @@ import { Repository } from 'typeorm';
 import { ChannelEntity } from './entities/channel.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ChannelDto } from './dto/channel.dto';
-import { User } from 'src/user/entity/user.entity';
+import { UserEntity } from 'src/user/entity/user.entity';
 
 @Injectable()
 export class ChannelService {
@@ -18,7 +18,7 @@ export class ChannelService {
   ) {}
 
   /**채널 생성 */
-  async createChannel(channelDto: ChannelDto, user: User): Promise<ChannelEntity> {
+  async createChannel(channelDto: ChannelDto, user: UserEntity): Promise<ChannelEntity> {
     const { name, profileImage } = channelDto;
 
     //채널명 중복확인
@@ -49,7 +49,7 @@ export class ChannelService {
   }
 
   /**채널 수정*/
-  async updateChannel(user: User, channelDto: ChannelDto): Promise<ChannelEntity> {
+  async updateChannel(user: UserEntity, channelDto: ChannelDto): Promise<ChannelEntity> {
     const foundChannel = await this.findChannel({ userId: user.id });
     if (!foundChannel) {
       throw new NotFoundException('해당 채널이 존재하지 않습니다.');
@@ -68,7 +68,7 @@ export class ChannelService {
   }
 
   /**채널 삭제*/
-  async removeChannel(user: User): Promise<ChannelEntity> {
+  async removeChannel(user: UserEntity): Promise<ChannelEntity> {
     const foundChannelById = await this.findChannel({ userId: user.id });
     if (!foundChannelById) {
       throw new NotFoundException('해당 채널이 존재하지 않습니다.');
