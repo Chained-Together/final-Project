@@ -14,6 +14,7 @@ import { VideoEntity } from './video/entities/video.entity';
 import { ResolutionsEntity } from './video/entities/resolutions.entity';
 import { ChannelEntity } from './channel/entities/channel.entity';
 import { EntitiesModule } from './utils/entities.module';
+import { CommentEntity } from './comment/entities/comment.entity';
 
 const typeOrmModuleOptions = {
   useFactory: async (configService: ConfigService): Promise<TypeOrmModuleOptions> => ({
@@ -24,7 +25,7 @@ const typeOrmModuleOptions = {
     host: configService.get('DB_HOST'),
     port: configService.get<number>('DB_PORT'),
     database: configService.get('DB_NAME'),
-    entities: [UserEntity, VideoEntity, ResolutionsEntity, ChannelEntity],
+    entities: [UserEntity, VideoEntity, ResolutionsEntity, ChannelEntity, CommentEntity],
     synchronize: configService.get<boolean>('DB_SYNC'),
     logging: true,
   }),
