@@ -5,9 +5,10 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { VideoEntity } from './entities/video.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ChannelEntity } from 'src/channel/entities/channel.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([VideoEntity])],
+  imports: [TypeOrmModule.forFeature([VideoEntity, ChannelEntity])],
   controllers: [VideoController],
   providers: [VideoService],
 })

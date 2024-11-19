@@ -8,6 +8,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from 'src/user/entity/user.entity';
 import { JwtStrategy } from './jwt.strategy';
 import { BcryptHashingService } from 'src/interface/impl/bcrypt-hashing-service';
+import { ChannelEntity } from 'src/channel/entities/channel.entity';
 
 @Module({
   imports: [
@@ -18,7 +19,7 @@ import { BcryptHashingService } from 'src/interface/impl/bcrypt-hashing-service'
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([UserEntity]),
+    TypeOrmModule.forFeature([UserEntity, ChannelEntity]),
   ],
   controllers: [AuthController],
   providers: [

@@ -37,7 +37,7 @@ export class VideoEntity {
   @Column({ type: 'int', nullable: false })
   duration: number;
 
-  @Column({ type: 'int', nullable: false })
+  @Column({ type: 'int', nullable: false, default: 0 })
   views: number;
 
   @CreateDateColumn({ type: 'timestamp', nullable: false, name: 'uploaded_at' })
