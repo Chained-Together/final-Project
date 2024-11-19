@@ -37,12 +37,12 @@ export class CommentController {
     @Body() commentDto: CommentDto,
     @UserInfo() user: UserEntity,
   ) {
-    return this.commentService.updateComment(videoId, commentId, user, commentDto);
+    return this.commentService.updateComment(videoId, commentId, commentDto, user);
   }
 
   @Delete('/:commentId')
   @UseGuards(AuthGuard('jwt'))
-  deleteComment(
+  removeComment(
     @Param('videoId') videoId: number,
     @Param('commentId') commentId: number,
     @UserInfo() user: UserEntity,

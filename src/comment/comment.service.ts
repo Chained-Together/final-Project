@@ -1,11 +1,11 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CommentEntity } from './entities/comment.entity';
+import _ from 'lodash';
+import { UserEntity } from 'src/user/entity/user.entity';
+import { VideoEntity } from 'src/video/entities/video.entity';
 import { Repository } from 'typeorm';
 import { CommentDto } from './dto/comment.dto';
-import { UserEntity } from 'src/user/entity/user.entity';
-import _ from 'lodash';
-import { VideoEntity } from 'src/video/entities/video.entity';
+import { CommentEntity } from './entities/comment.entity';
 
 @Injectable()
 export class CommentService {
@@ -37,10 +37,10 @@ export class CommentService {
     return { data: comment };
   }
 
-  //TODO: 답글 부분 와선하고 추가하기
+  //TODO: 답글 부분 완성하고 추가하기
   async findOne(videoId: number, commentId: number) {
     await this.verifyVideo(videoId);
-    await this.forFindOneverifyComment(commentId);
+    await this.forFindOneVerifyComment(commentId);
 
     const comment = await this.commentRepository.findOne({
       where: { id: commentId },
@@ -53,8 +53,8 @@ export class CommentService {
   async updateComment(
     videoId: number,
     commentId: number,
-    user: UserEntity,
     commentDto: CommentDto,
+    user: UserEntity,
   ) {
     await this.verifyComment(user.id, commentId);
 
@@ -99,8 +99,8 @@ export class CommentService {
     }
   }
 
-  private async forFindOneverifyComment(commentId: number) {
-    const findComment = await this.commentRepository.find({
+  private async forFindOneVerifyComment(commentId: number) {
+    const findComment = await this.commentRepository.findOne({
       where: { id: commentId },
     });
     if (!findComment) {
