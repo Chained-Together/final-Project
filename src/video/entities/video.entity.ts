@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { ResolutionsEntity } from './resolutions.entity';
-import { ChannelEntity } from 'src/channel/entities/channel.entity';
+import { ChannelEntity } from '../../channel/entities/channel.entity';
 import { Visibility } from '../video.visibility.enum';
 
 @Entity({
@@ -35,10 +35,10 @@ export class VideoEntity {
   @Column({ type: 'int', nullable: false })
   duration: number;
 
-  @Column({ type: 'int', nullable: false })
+  @Column({ type: 'int', nullable: false, default: 0 })
   views: number;
 
-  @Column({ type: 'int', nullable: false })
+  @Column({ type: 'int', nullable: false, default: 0 })
   likes: number;
 
   @CreateDateColumn({ type: 'timestamp', nullable: false, name: 'uploaded_at' })
