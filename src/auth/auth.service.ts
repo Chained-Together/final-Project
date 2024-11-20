@@ -81,7 +81,7 @@ export class AuthService {
     }
     const foundChannel = await this.channelRepository.findOne({ where: { userId: findUser.id } });
 
-    const payload = { email: loginDto.email, sub: findUser.id, channelId: foundChannel.id };
+    const payload = { email: loginDto.email, sub: findUser.id };
     const token = this.jwtService.sign(payload);
 
     return {

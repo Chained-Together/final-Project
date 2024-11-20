@@ -1,13 +1,13 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
-import { VideoEntity } from './entities/video.entity';
+import { Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { LambdaService } from 'src/lambda/lambda.service';
 import { Repository } from 'typeorm';
-import { channel } from 'diagnostics_channel';
-import { VideoDto } from './dto/video.dto';
-import { Visibility } from './video.visibility.enum';
-import { UpdateVideoDto } from './dto/update.video.dto';
-import { UserEntity } from '../user/entity/user.entity';
 import { ChannelEntity } from '../channel/entities/channel.entity';
+import { UserEntity } from '../user/entity/user.entity';
+import { UpdateVideoDto } from './dto/update.video.dto';
+import { VideoDto } from './dto/video.dto';
+import { VideoEntity } from './entities/video.entity';
+import { ResolutionsEntity } from './entities/resolutions.entity';
 
 @Injectable()
 export class VideoService {
@@ -16,25 +16,62 @@ export class VideoService {
     private videoRepository: Repository<VideoEntity>,
     @InjectRepository(ChannelEntity)
     private channelRepository: Repository<ChannelEntity>,
+    @InjectRepository(ResolutionsEntity)
+    private resolutionRepository: Repository<ResolutionsEntity>,
+    @Inject('LambdaService')
+    private readonly lambdaService: LambdaService,
   ) {}
 
-  async createVideo(user: UserEntity, videoDto: VideoDto): Promise<VideoEntity> {
-    const { title, description, thumbnailURL, hashtags, duration, visibility } = videoDto;
+  async createVideo(
+    user: UserEntity,
+    videoDto: VideoDto,
+    file: Express.Multer.File, // 업로드된 비디오 파일
+  ): Promise<VideoEntity> {
+    const { title, description, thumbnailURL, hashtags, duration, visibility, high, low } =
+      videoDto;
 
+    // 사용자의 채널 찾기
     const foundChannel = await this.findChannelByUserId(user.id);
 
+    console.log(file);
+    // Lambda에 전달할 payload 생성
+    const lambdaPayload = {
+      videoData: {
+        fileName: file.originalname,
+        fileType: file.mimetype,
+        fileContent: file.buffer.toString('base64'), // 파일 데이터를 Base64로 변환
+      },
+    };
+
+    // Lambda 호출
+    const lambdaResponse = await this.lambdaService.invokeLambda(
+      'videoService-dev-api',
+      lambdaPayload,
+    );
+
+    console.log('Lambda Response:', lambdaResponse);
+
+    // Lambda 호출 결과를 사용하여 VideoEntity 생성
     const video = this.videoRepository.create({
       title,
       description,
-      thumbnailURL,
+      thumbnailURL: lambdaResponse.thumbnailURL || thumbnailURL, // Lambda에서 썸네일 URL 반환 시 사용
       hashtags,
       duration,
       visibility,
       channel: foundChannel,
     });
 
-    const saveVideo = this.videoRepository.save(video);
-    return saveVideo;
+    const resolution = this.resolutionRepository.create({
+      high,
+      low,
+    });
+
+    await this.resolutionRepository.save(resolution);
+
+    // 비디오 저장
+    const savedVideo = await this.videoRepository.save(video);
+    return savedVideo;
   }
 
   async getAllVideo(): Promise<VideoEntity[]> {
@@ -126,6 +163,4 @@ export class VideoService {
 
     return updateData;
   }
-
-  async 
 }
