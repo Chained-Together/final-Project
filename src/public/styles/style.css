@@ -32,3 +32,9 @@
   padding: 5px 10px;
   font-size: 14px;
 }
+
+.output {
+  overflow: scroll;
+  margin: 1rem 0;
+  height: 200px;
+}

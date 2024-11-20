@@ -3,6 +3,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import * as Joi from 'joi';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { ChannelModule } from './channel/channel.module';
 import { ChannelEntity } from './channel/entities/channel.entity';
@@ -10,11 +12,13 @@ import { CommentModule } from './comment/comment.module';
 import { CommentEntity } from './comment/entities/comment.entity';
 import { LikeEntity } from './like/entities/like.entity';
 import { LikeModule } from './like/like.module';
+import { UploadModule } from './upload/upload.module';
 import { UserEntity } from './user/entity/user.entity';
 import { ResolutionsEntity } from './video/entities/resolutions.entity';
 import { VideoEntity } from './video/entities/video.entity';
-import { VideoController } from './video/video.controller';
 import { VideoModule } from './video/video.module';
+import { ViewController } from './view/view.controller';
+import { ViewModule } from './view/view.module';
 
 const typeOrmModuleOptions = {
   useFactory: async (configService: ConfigService): Promise<TypeOrmModuleOptions> => ({
@@ -59,9 +63,10 @@ const typeOrmModuleOptions = {
     CommentModule,
     ChannelModule,
     LikeModule,
+    ViewModule,
+    UploadModule,
   ],
-  controllers: [],
-  providers: [],
-  exports: [],
+  controllers: [AppController, ViewController],
+  providers: [AppService],
 })
 export class AppModule {}
