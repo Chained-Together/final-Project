@@ -16,6 +16,9 @@ import { ChannelEntity } from './channel/entities/channel.entity';
 import { LikeModule } from './like/like.module';
 import { CommentEntity } from './comment/entities/comment.entity';
 import { LikeEntity } from './like/entities/like.entity';
+import { ViewController } from './view/view.controller';
+import { ViewModule } from './view/view.module';
+import { UploadModule } from './upload/upload.module';
 
 const typeOrmModuleOptions = {
   useFactory: async (configService: ConfigService): Promise<TypeOrmModuleOptions> => ({
@@ -60,8 +63,10 @@ const typeOrmModuleOptions = {
     CommentModule,
     ChannelModule,
     LikeModule,
+    ViewModule,
+    UploadModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, ViewController],
   providers: [AppService],
 })
 export class AppModule {}
