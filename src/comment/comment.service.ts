@@ -17,14 +17,14 @@ export class CommentService {
   ) {}
 
   async createComment(commentDto: CommentDto, user: UserEntity, videoId: number) {
-    const checkOrderNumber = await this.commentRepository.findOne({
+    const checkGroupNumber = await this.commentRepository.findOne({
       where: { video: { id: videoId }, depth: 0 },
       order: {
         orderNumber: 'DESC',
       },
     });
 
-    const newGroupNumber = (checkOrderNumber?.commentGroup ?? 0) + 1;
+    const newGroupNumber = (checkGroupNumber?.commentGroup ?? 0) + 1;
 
     const createComment = this.commentRepository.create({
       userId: user.id,
@@ -35,13 +35,12 @@ export class CommentService {
       commentGroup: newGroupNumber,
       video: { id: videoId },
     });
-    // 그룹 1 , 오더넘버 1
-    // 그룹 2 , 오더넘버 1
 
     await this.commentRepository.save(createComment);
 
     return createComment;
   }
+
   async findAll(videoId: number) {
     await this.verifyVideo(videoId);
     const comment = await this.commentRepository.find({
@@ -127,10 +126,6 @@ export class CommentService {
       commentGroup: checkComment.commentGroup,
       video: { id: videoId },
     });
-    // 그룹:댓글 그룹1 , 오더넘버 :2,
-    // 그룹:댓글 그룹2 , 오더넘버 = 1: 부모댓글  2:답글,3,4,5
-    // 그룹:댓글 그룹3, 오더넘버 1:부모 2:답글
-    // 이거 보면 이해가능!//감너누 고워뉴민!ㅋㅋㅋㅋㅋ
 
     await this.commentRepository.save(createReply);
 
