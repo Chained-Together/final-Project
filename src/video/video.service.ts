@@ -1,6 +1,5 @@
 import { Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { LambdaService } from 'src/lambda/lambda.service';
 import { Repository } from 'typeorm';
 import { ChannelEntity } from '../channel/entities/channel.entity';
 import { UserEntity } from '../user/entity/user.entity';
@@ -23,7 +22,7 @@ export class VideoService {
   async createVideo(
     user: UserEntity,
     videoDto: VideoDto,
-    file: Express.Multer.File, // 업로드된 비디오 파일
+    file: Express.Multer.File,
   ): Promise<VideoEntity> {
     const { title, description, thumbnailURL, hashtags, duration, visibility, high, low } =
       videoDto;
