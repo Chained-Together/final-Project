@@ -1,12 +1,12 @@
-import { Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ChannelEntity } from '../channel/entities/channel.entity';
 import { UserEntity } from '../user/entity/user.entity';
 import { UpdateVideoDto } from './dto/update.video.dto';
 import { VideoDto } from './dto/video.dto';
-import { VideoEntity } from './entities/video.entity';
 import { ResolutionsEntity } from './entities/resolutions.entity';
+import { VideoEntity } from './entities/video.entity';
 
 @Injectable()
 export class VideoService {
