@@ -1,102 +1,67 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="kr">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="home" content="width=device-width, initial-scale=1.0" />
-  <title></title>
-  <!-- <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>File Upload</title>
 </head>
 
 <body>
   <input type="file" id="fileInput" />
-  <div class="output">
-    <button id="uploadBtn">업로드</button>
-  </div>
-
-  <div id="result"></div>
+  <button id="uploadBtn">Generate URL & Upload</button>
 
   <script>
-
-    const fileInput = document.querySelector('#fileInput');
-    const uploadBtn = document.querySelector('#uploadBtn');
-    const resultDiv = document.querySelector('#result');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const fileInput = document.getElementById('fileInput');
 
     uploadBtn.addEventListener('click', async () => {
       const file = fileInput.files[0];
-
       if (!file) {
-        alert('파일을 선택하세요.');
+        alert('Please select a file!');
         return;
       }
 
-      const controllerUrl = 'http://localhost:3000/lambda'
-      
-      const formData = new FormData();
-      formData.append('file', file);
+      const payload = {
+        fileName: file.name,
+        bucket: '15-final-project', 
+        region: 'ap-northeast-2', 
+        fileType: file.type,
+      };
 
       try {
-        const response = await fetch(controllerUrl, {
+        
+        const response = await fetch('http://localhost:3000/s3/generate-url', {
           method: 'POST',
-          body: formData,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
         });
 
+        if (!response.ok) throw new Error('URL 요청에 실패 했습니다.');
 
-        if (!response.ok) {
-          throw new Error(`${response.status}`)
+        const { presignedUrl } = await response.json();
+
+        
+        const uploadResponse = await fetch(presignedUrl, {
+          method: 'PUT',
+          body: file,
+          headers: {
+            'Content-Type': file.type,
+          },
+        });
+
+        if (uploadResponse.ok) {
+          alert('파일 업로드에 성공 하였습니다.');
+        } else {
+          throw new Error('파일 업로드에 실패 하였습니다.');
         }
-
-        const data = await response.json();
-        return data;
-
       } catch (error) {
-        throw error
-
+        console.error(error);
+        alert('파일 업로드 중에 에러가 발생 했습니다.');
       }
-
-      //   try {
-      //     // 파일 업로드 함수 호출
-      //     const response = await uploadFile(file);
-
-      //     // 성공 결과 표시
-      //     resultDiv.textContent = `업로드 성공: ${response.fileUrl}`;
-      //   } catch (error) {
-      //     // 오류 결과 표시
-      //     console.error('업로드 실패:', error);
-      //     resultDiv.textContent = '업로드 실패: ' + error.message;
-      //   }
-      // });
-
-      // async function uploadFile(file) {
-      //   const apiGatewayUrl = 'https://1zodmj2uge.execute-api.ap-northeast-2.amazonaws.com/dev/upload';
-
-      //   const fileData = await toBase64(file);
-
-      //   const payload = {
-      //     fileName: file.name,
-      //     fileType: file.type,
-      //     fileData: fileData.split(',')[1], // Base64 인코딩된 파일 데이터만 전달
-      //   };
-
-      //   const response = await axios.post(apiGatewayUrl, payload, {
-      //     headers: {
-      //       'Content-Type': 'application/json',
-      //     },
-      //   });
-
-      //   return response.data;
-      // }
-
-      // Helper function: File to Base64
-      // function toBase64(file) {
-      //   return new Promise((resolve, reject) => {
-      //     const reader = new FileReader();
-      //     reader.readAsDataURL(file);
-      //     reader.onload = () => resolve(reader.result);
-      //     reader.onerror = (error) => reject(error);
-      //   });
-    }
-    )
+    });
   </script>
 </body>
 
