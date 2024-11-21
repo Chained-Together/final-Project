@@ -7,11 +7,17 @@ export class S3Controller {
 
   @Post('generate-url')
   async generatePresignedUrl(
-    @Body() body: { region: string; bucket: string; fileName: string; fileType: string },
+    @Body()
+    body: {
+      region: string;
+      bucket: string;
+      fileName: string;
+      fileType: string;
+      fileSize: number;
+    },
   ) {
-    const { region, bucket, fileName, fileType } = body;
+    const { region, bucket, fileName, fileType, fileSize } = body;
 
-    
     const key = `uploads/${Date.now()}_${fileName}`;
 
     const presignedUrl = await this.s3Service.createPresignedUrlWithoutClient({
@@ -19,6 +25,7 @@ export class S3Controller {
       bucket,
       key,
       fileType,
+      fileSize,
     });
 
     return { presignedUrl };

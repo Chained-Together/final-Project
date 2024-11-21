@@ -8,21 +8,31 @@ import { parseUrl } from '@smithy/url-parser';
 @Injectable()
 export class S3Service {
   private readonly logger = new Logger(S3Service.name);
+  private readonly MAX_FILE_SIZE_MB = 50;
+  private readonly MAX_FILE_SIZE_BYTES = this.MAX_FILE_SIZE_MB * 1024 * 1024; 
 
   async createPresignedUrlWithoutClient({
     region,
     bucket,
     key,
-    fileType, // 파일 타입을 매개변수로 받음
+    fileType,
+    fileSize,
   }: {
-    region: string;
+    region: string; 
     bucket: string;
     key: string;
-    fileType: string; // 예: 'video/mp4', 'image/jpeg' 등
+    fileType: string; 
+    fileSize: number;
   }): Promise<string> {
-    // 파일 타입이 'video/*'로 시작하는지 확인
+    
     if (!fileType.startsWith('video/')) {
       throw new Error('이미지는 업로드할 수 없습니다. 비디오 파일만 허용됩니다.');
+    }
+
+    if (fileSize > this.MAX_FILE_SIZE_BYTES) {
+      throw new Error(
+        `파일 크기가 너무 큽니다. 최대 허용 크기는 ${this.MAX_FILE_SIZE_BYTES}MB입니다.`,
+      );
     }
 
     const url = parseUrl(`https://${bucket}.s3.${region}.amazonaws.com/${key}`);
@@ -43,7 +53,7 @@ export class S3Service {
         ...url,
         method: 'PUT',
         headers: {
-          'Content-Type': fileType, // 클라이언트가 업로드할 파일의 Content-Type을 설정
+          'Content-Type': fileType,
         },
       }),
     );

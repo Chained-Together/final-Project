@@ -11,39 +11,72 @@
   <input type="file" id="fileInput" />
   <button id="uploadBtn">Generate URL & Upload</button>
 
+  <form>
+    <div>
+      <label for="title">영상 제목</label>
+      <input type="text" id="title" placeholder="영상 제목을 입력하세요." />
+    </div>
+
+    <div>
+      <label for="title">영상 설명</label>
+      <textarea id="video-description" placeholder="영상 설명을 입력하세요"></textarea>
+    </div>
+
+    <div>
+      <label for="title">해시 태그</label>
+      <input type="text" id="hashtags" placeholder="해시태그를 입력하세요." />
+    </div>
+
+    <div>
+      <label for="title">공개 여부</label>
+      <input type="text" id="visibility" placeholder="공개 여부를 입력하세요" />
+    </div>
+
+    <div>
+      <label for="title">썸네일 url</label>
+      <input type="text" id="thumbnailUrl" placeholder="썸네일 url 을 입력하세요." />
+    </div>
+
+  </form>
+
+
   <script>
     const uploadBtn = document.getElementById('uploadBtn');
     const fileInput = document.getElementById('fileInput');
+    const titleInput = document.getElementById('title');
+    const descriptionInput = document.getElementById('video-description');
+    const hashtagsInput = document.getElementById('hashtags');
+    const visibilityInput = document.getElementById('visibility');
+    const thumbnailUrlInput = document.getElementById('thumbnailUrl');
 
     uploadBtn.addEventListener('click', async () => {
       const file = fileInput.files[0];
       if (!file) {
-        alert('Please select a file!');
+        alert('파일을 선택해주세요.');
         return;
       }
 
+      console.log(file);
+
       const payload = {
         fileName: file.name,
-        bucket: '15-final-project', 
-        region: 'ap-northeast-2', 
         fileType: file.type,
+        fileSize: file.size,
+        bucket: "15-final-project",
+        region: "ap-northeast-2",
       };
 
       try {
-        
         const response = await fetch('http://localhost:3000/s3/generate-url', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
         });
 
-        if (!response.ok) throw new Error('URL 요청에 실패 했습니다.');
+        if (!response.ok) throw new Error('Pre-signed URL 요청 실패');
 
         const { presignedUrl } = await response.json();
 
-        
         const uploadResponse = await fetch(presignedUrl, {
           method: 'PUT',
           body: file,
@@ -53,15 +86,16 @@
         });
 
         if (uploadResponse.ok) {
-          alert('파일 업로드에 성공 하였습니다.');
+          alert('파일 업로드 성공!');
         } else {
-          throw new Error('파일 업로드에 실패 하였습니다.');
+          throw new Error('파일 업로드 실패');
         }
       } catch (error) {
         console.error(error);
-        alert('파일 업로드 중에 에러가 발생 했습니다.');
+        alert(`업로드 중 오류 발생: ${error.message}`);
       }
     });
+
   </script>
 </body>
 
