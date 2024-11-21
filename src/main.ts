@@ -13,7 +13,7 @@ async function bootstrap() {
   expressApp.set('views', join(__dirname, '..', 'views'));
   console.log(join(process.cwd(), 'views'));
 
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(process.env.PORT ?? 3001);
   Logger.log(`서버 실행 http://localhost:${process.env.PORT}`);
 }
 bootstrap();

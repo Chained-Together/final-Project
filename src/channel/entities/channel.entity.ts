@@ -14,7 +14,7 @@ export class ChannelEntity {
   @Column({ type: 'int', nullable: false, name: 'user_id' })
   userId: number;
 
-  @Column({ type: 'varchar', nullable: false })
+  @Column({ type: 'varchar', nullable: true })
   profileImage: string;
 
   @OneToMany(() => VideoEntity, (video) => video.channel, { cascade: true })

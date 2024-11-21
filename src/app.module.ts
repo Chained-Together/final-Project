@@ -1,24 +1,24 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import * as Joi from 'joi';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
-import { UserEntity } from './user/entity/user.entity';
-import { VideoModule } from './video/video.module';
-import { CommentModule } from './comment/comment.module';
 import { ChannelModule } from './channel/channel.module';
-import * as Joi from 'joi';
-import { VideoEntity } from './video/entities/video.entity';
-import { ResolutionsEntity } from './video/entities/resolutions.entity';
 import { ChannelEntity } from './channel/entities/channel.entity';
-import { LikeModule } from './like/like.module';
+import { CommentModule } from './comment/comment.module';
 import { CommentEntity } from './comment/entities/comment.entity';
 import { LikeEntity } from './like/entities/like.entity';
+import { LikeModule } from './like/like.module';
+import { UploadModule } from './upload/upload.module';
+import { UserEntity } from './user/entity/user.entity';
+import { ResolutionsEntity } from './video/entities/resolutions.entity';
+import { VideoEntity } from './video/entities/video.entity';
+import { VideoModule } from './video/video.module';
 import { ViewController } from './view/view.controller';
 import { ViewModule } from './view/view.module';
-import { UploadModule } from './upload/upload.module';
 
 const typeOrmModuleOptions = {
   useFactory: async (configService: ConfigService): Promise<TypeOrmModuleOptions> => ({

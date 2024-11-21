@@ -1,4 +1,15 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UserEntity } from '../user/entity/user.entity';
 import { UserInfo } from '../utils/user-info.decorator';
@@ -6,6 +17,8 @@ import { VideoDto } from './dto/video.dto';
 import { VideoEntity } from './entities/video.entity';
 import { VideoService } from './video.service';
 import { UpdateVideoDto } from './dto/update.video.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { multerOptions } from './multer.option';
 
 @Controller('video')
 export class VideoController {
@@ -13,11 +26,14 @@ export class VideoController {
 
   @Post()
   @UseGuards(AuthGuard('jwt'))
+  @UseInterceptors(FileInterceptor('file',multerOptions))
   async createVideo(
     @UserInfo() user: UserEntity,
     @Body() videoDto: VideoDto,
+    @UploadedFile() file: Express.Multer.File,
   ): Promise<VideoEntity> {
-    return this.videoService.createVideo(user, videoDto);
+    console.log(file);
+    return this.videoService.createVideo(user, videoDto, file);
   }
 
   @Get()
