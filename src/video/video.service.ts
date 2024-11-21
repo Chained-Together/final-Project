@@ -18,8 +18,6 @@ export class VideoService {
     private channelRepository: Repository<ChannelEntity>,
     @InjectRepository(ResolutionsEntity)
     private resolutionRepository: Repository<ResolutionsEntity>,
-    @Inject('LambdaService')
-    private readonly lambdaService: LambdaService,
   ) {}
 
   async createVideo(
@@ -33,29 +31,11 @@ export class VideoService {
     // 사용자의 채널 찾기
     const foundChannel = await this.findChannelByUserId(user.id);
 
-    console.log(file);
-    // Lambda에 전달할 payload 생성
-    const lambdaPayload = {
-      videoData: {
-        fileName: file.originalname,
-        fileType: file.mimetype,
-        fileContent: file.buffer.toString('base64'), // 파일 데이터를 Base64로 변환
-      },
-    };
-
-    // Lambda 호출
-    const lambdaResponse = await this.lambdaService.invokeLambda(
-      'videoService-dev-api',
-      lambdaPayload,
-    );
-
-    console.log('Lambda Response:', lambdaResponse);
-
     // Lambda 호출 결과를 사용하여 VideoEntity 생성
     const video = this.videoRepository.create({
       title,
       description,
-      thumbnailURL: lambdaResponse.thumbnailURL || thumbnailURL, // Lambda에서 썸네일 URL 반환 시 사용
+      thumbnailURL: thumbnailURL, // Lambda에서 썸네일 URL 반환 시 사용
       hashtags,
       duration,
       visibility,

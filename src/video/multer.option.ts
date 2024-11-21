@@ -1,11 +1,6 @@
-import { diskStorage } from 'multer';
+import { diskStorage, memoryStorage } from 'multer';
 
 export const multerOptions = {
-  storage: diskStorage({
-    destination: './uploads',
-    filename: (req, file, callback) => {
-      callback(null, `${Date.now()}-${file.originalname}`);
-    },
-  }),
+  storage: memoryStorage(),
   limits: { fileSize: 30 * 1024 * 1024 }, //30MB 제한
 };
