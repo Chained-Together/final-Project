@@ -11,7 +11,7 @@
         margin: 0;
         padding: 0;
         height: 100;
-        background: linear-gradient(135deg, #070707, #1f1f1f); /* 그라디언트 배경 */
+        background: linear-gradient(135deg, rgb(31, 31, 31), #cbcbcb);
         display: flex;
         justify-content: center;
         align-items: center;
@@ -30,13 +30,12 @@
         transform: translateX(-50%);
       }
 
-      /* 폼 스타일 */
       form {
-        background: #2c2828;
-        padding: 30px;
+        /* background: rgba(54, 48, 48, 0.171); */
+        padding: 20px;
         border-radius: 10px;
         width: 100%;
-        max-width: 400px;
+        max-width: 300px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       }
 
@@ -71,7 +70,7 @@
       button[type='submit'] {
         width: 100%;
         padding: 12px;
-        background: #fefefe;
+        background: #fefefe15;
         color: #000000;
         font-size: 1.2rem;
         font-weight: bold;
@@ -93,7 +92,7 @@
 
         form {
           padding: 20px;
-          width: 90%;
+          width: 80%;
         }
 
         input[type='text'],
@@ -111,14 +110,13 @@
   </head>
 
   <body>
-    <h2>로그인</h2>
     <form id="loginForm">
       <div>
-        <label for="username">이메일:</label>
+        <label for="username">Email</label>
         <input type="text" id="email" name="email" required />
       </div>
       <div>
-        <label for="password">비밀번호:</label>
+        <label for="password">Password</label>
         <input type="password" id="password" name="password" required />
       </div>
       <button type="submit">로그인</button>
@@ -132,11 +130,6 @@
         const email = document.getElementById('email');
         const password = document.getElementById('password');
         const url = '/auth/login';
-
-        // const bodyValue = {
-        //   email: email.value,
-        //   password: password.value,
-        // };
 
         try {
           const response = await fetch(url, {

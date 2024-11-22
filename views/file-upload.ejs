@@ -196,7 +196,6 @@
             headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
             body: JSON.stringify(payload),
           });
-          console.log('난 response 야', response);
 
           if (!response.ok) throw new Error('Pre-signed URL 요청 실패');
 
@@ -231,8 +230,6 @@
               },
               body: JSON.stringify(metadataPayload),
             });
-            console.log('난 업로드 토큰이야', token);
-            console.log('metadataResponse', metadataResponse);
 
             if (!metadataResponse.ok) {
               throw new Error('메타데이터 전송 실패');
@@ -243,7 +240,6 @@
             throw new Error('파일 업로드 실패');
           }
         } catch (error) {
-          console.error(error);
           alert(`업로드 중 오류 발생: ${error.message}`);
         }
       });

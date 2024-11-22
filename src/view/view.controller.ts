@@ -26,6 +26,12 @@ export class ViewController {
     return;
   }
 
+  @Get('/channel')
+  @Render('channel')
+  showChannelPage() {
+    return;
+  }
+
   @Get('/upload')
   @Render('file-upload')
   showUploadPage() {

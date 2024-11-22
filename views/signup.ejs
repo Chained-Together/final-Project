@@ -2,67 +2,41 @@
 <html lang="kr">
   <head>
     <meta charset="UTF-8" />
-    <meta name="home" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>회원가입</title>
-    <!-- <link rel="stylesheet" type="text/css" href="/styles/style.css" /> -->
     <style>
-      /* 기본 스타일 */
       body {
-        font-family: Arial, sans-serif;
+        font-family: 'Arial', sans-serif;
         margin: 0;
         padding: 0;
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh;
-        background: linear-gradient(135deg, #070707, #1f1f1f);
-        color: #fff;
+        min-height: 100vh;
+        background: linear-gradient(135deg, rgb(31, 31, 31), #cbcbcb);
+        color: #ffffff;
       }
 
       h2 {
-        font-size: 2rem;
-        color: #fff;
+        font-size: 2.2rem;
+        color: #ffffff;
+        margin-bottom: 20px;
         text-align: center;
-        margin: 0;
-        position: absolute;
-        top: 50px;
-        left: 50%;
-        transform: translateX(-50%);
       }
 
-      /* 팝업 오버레이 스타일 */
-      #popupOverlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgb(0, 0, 0);
-        z-index: 1;
-      }
-
-      /* 회원가입 팝업 */
       #signupPopup {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 400px;
-        background: #2c2828;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
         padding: 30px;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        z-index: 2;
+        width: 400px;
       }
 
       #signupPopup h2 {
-        text-align: center;
-        margin-bottom: 20px;
-        font-size: 1.8rem;
-        color: #fff;
+        margin-bottom: 30px;
       }
 
-      /* 폼 스타일 */
       form {
         display: flex;
         flex-direction: column;
@@ -73,47 +47,53 @@
       }
 
       label {
-        display: block;
         font-size: 1rem;
-        color: #f6f2f2;
+        font-weight: bold;
         margin-bottom: 5px;
+        display: block;
+        color: #e8e8e8;
       }
 
       input[type='text'],
       input[type='password'] {
         width: 100%;
         padding: 12px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
+        border: none;
+        border-radius: 8px;
         font-size: 1rem;
+        background: rgba(255, 255, 255, 0.2);
+        color: #ffffff;
         box-sizing: border-box;
       }
 
       input[type='text']:focus,
       input[type='password']:focus {
-        border-color: #e6e6e6;
+        background: rgba(255, 255, 255, 0.3);
         outline: none;
+        box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
       }
 
-      /* 버튼 스타일 */
       #submitBtn {
         width: 100%;
         padding: 12px;
-        background: #fefefe;
-        color: #000000;
         font-size: 1.2rem;
         font-weight: bold;
         border: none;
-        border-radius: 5px;
+        border-radius: 8px;
         cursor: pointer;
-        transition: background-color 0.3s ease;
+        background: linear-gradient(90deg, #ff8c00, #ff3b00);
+        color: #ffffff;
+        text-transform: uppercase;
+        transition:
+          transform 0.3s ease,
+          background 0.3s ease;
       }
 
       #submitBtn:hover {
-        background: #2575fc;
+        transform: scale(1.05);
+        background: linear-gradient(90deg, #ff3b00, #ff8c00);
       }
 
-      /* 반응형 디자인 */
       @media (max-width: 480px) {
         #signupPopup {
           width: 90%;
@@ -121,7 +101,7 @@
         }
 
         h2 {
-          font-size: 1.5rem;
+          font-size: 1.8rem;
         }
 
         input[type='text'],
@@ -139,33 +119,56 @@
   </head>
 
   <body>
-    <h2>회원가입</h2>
-    <div id="popupOverlay"></div>
     <div id="signupPopup">
+      <h2>회원가입</h2>
       <form action="/auth/signup" method="POST">
         <div>
           <label for="email">이메일:</label>
-          <input type="text" id="email" name="email" required />
+          <input type="text" id="email" name="email" placeholder="이메일을 입력하세요" required />
         </div>
         <div>
           <label for="password">비밀번호:</label>
-          <input type="password" id="password" name="password" required />
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="비밀번호를 입력하세요"
+            required
+          />
         </div>
         <div>
-          <label for="confirmedPassword">비밀번호:</label>
-          <input type="password" id="password" name="confirmedPassword" required />
+          <label for="confirmedPassword">비밀번호 확인:</label>
+          <input
+            type="password"
+            id="confirmedPassword"
+            name="confirmedPassword"
+            placeholder="비밀번호를 다시 입력하세요"
+            required
+          />
         </div>
         <div>
           <label for="name">이름:</label>
-          <input type="text" id="name" name="name" required />
+          <input type="text" id="name" name="name" placeholder="이름을 입력하세요" required />
         </div>
         <div>
           <label for="nickname">닉네임:</label>
-          <input type="text" id="nickname" name="nickname" required />
+          <input
+            type="text"
+            id="nickname"
+            name="nickname"
+            placeholder="닉네임을 입력하세요"
+            required
+          />
         </div>
         <div>
           <label for="phoneNumber">전화번호:</label>
-          <input type="text" id="phoneNumber" name="phoneNumber" required />
+          <input
+            type="text"
+            id="phoneNumber"
+            name="phoneNumber"
+            placeholder="전화번호를 입력하세요"
+            required
+          />
         </div>
         <button type="submit" id="submitBtn">가입하기</button>
       </form>
