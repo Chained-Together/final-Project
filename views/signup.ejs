@@ -4,54 +4,61 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>회원가입</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
       body {
-        font-family: 'Arial', sans-serif;
+        font-family: 'Roboto', sans-serif;
         margin: 0;
         padding: 0;
         display: flex;
         justify-content: center;
         align-items: center;
         min-height: 100vh;
-        background: linear-gradient(135deg, rgb(31, 31, 31), #cbcbcb);
+        background: linear-gradient(135deg, #1e2025, #4c5c68);
         color: #ffffff;
       }
 
       h2 {
-        font-size: 2.2rem;
+        font-size: 2.5rem;
+        font-weight: bold;
         color: #ffffff;
         margin-bottom: 20px;
         text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
       }
 
       #signupPopup {
         background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        border-radius: 15px;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-        padding: 30px;
+        backdrop-filter: blur(12px);
+        border-radius: 20px;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+        padding: 40px;
         width: 400px;
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
       }
 
-      #signupPopup h2 {
-        margin-bottom: 30px;
+      #signupPopup:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
       }
 
       form {
         display: flex;
         flex-direction: column;
-      }
-
-      form div {
-        margin-bottom: 20px;
+        gap: 20px;
       }
 
       label {
         font-size: 1rem;
         font-weight: bold;
+        color: #e0e0e0;
         margin-bottom: 5px;
-        display: block;
-        color: #e8e8e8;
       }
 
       input[type='text'],
@@ -59,49 +66,58 @@
         width: 100%;
         padding: 12px;
         border: none;
-        border-radius: 8px;
+        border-radius: 10px;
         font-size: 1rem;
         background: rgba(255, 255, 255, 0.2);
         color: #ffffff;
         box-sizing: border-box;
+        transition:
+          background 0.3s ease,
+          box-shadow 0.3s ease;
       }
 
       input[type='text']:focus,
       input[type='password']:focus {
         background: rgba(255, 255, 255, 0.3);
         outline: none;
-        box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+        box-shadow: 0 4px 10px rgba(255, 255, 255, 0.5);
+      }
+
+      input::placeholder {
+        color: rgba(255, 255, 255, 0.6);
       }
 
       #submitBtn {
         width: 100%;
-        padding: 12px;
-        font-size: 1.2rem;
+        padding: 15px;
+        font-size: 1.3rem;
         font-weight: bold;
         border: none;
-        border-radius: 8px;
+        border-radius: 12px;
         cursor: pointer;
-        background: linear-gradient(90deg, #ff8c00, #ff3b00);
+        background: linear-gradient(90deg, #ff7e5f, #feb47b);
         color: #ffffff;
         text-transform: uppercase;
         transition:
           transform 0.3s ease,
           background 0.3s ease;
+        letter-spacing: 1px;
       }
 
       #submitBtn:hover {
         transform: scale(1.05);
-        background: linear-gradient(90deg, #ff3b00, #ff8c00);
+        background: linear-gradient(90deg, #feb47b, #ff7e5f);
+        box-shadow: 0 4px 15px rgba(255, 126, 95, 0.7);
       }
 
       @media (max-width: 480px) {
         #signupPopup {
           width: 90%;
-          padding: 20px;
+          padding: 30px;
         }
 
         h2 {
-          font-size: 1.8rem;
+          font-size: 2rem;
         }
 
         input[type='text'],
@@ -111,7 +127,7 @@
         }
 
         #submitBtn {
-          padding: 10px;
+          padding: 12px;
           font-size: 1rem;
         }
       }
