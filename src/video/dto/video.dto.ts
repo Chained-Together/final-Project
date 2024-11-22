@@ -24,6 +24,10 @@ export class VideoDto {
   thumbnailUrl: string;
 
   @IsNotEmpty()
+  @IsString()
+  videoCode: string;
+
+  @IsNotEmpty()
   @IsString({ each: true })
   @IsArray()
   hashtags: string[];

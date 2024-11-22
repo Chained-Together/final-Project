@@ -162,7 +162,19 @@
       const visibilityInput = document.getElementById('visibility');
       const thumbnailUrlInput = document.getElementById('thumbnailUrl');
       const token = localStorage.getItem('token');
-      console.log(`정확한 토큰이 맞는가? :${token}`);
+
+      // 페이지가 로드될 때 저장된 값을 복원
+      window.addEventListener('load', () => {
+        const savedVisibility = localStorage.getItem('visibility');
+        if (savedVisibility) {
+          visibilityInput.value = savedVisibility;
+        }
+      });
+
+      // 입력값이 변경될 때 localStorage에 저장
+      visibilityInput.addEventListener('input', () => {
+        localStorage.setItem('visibility', visibilityInput.value);
+      });
 
       uploadBtn.addEventListener('click', async () => {
         const file = fileInput.files[0];
@@ -172,57 +184,34 @@
         }
 
         try {
+          const payload = {
+            fileType: file.type,
+            fileSize: file.size,
+            bucket: '15-final-project',
+            region: 'ap-northeast-2',
+          };
+
+          const response = await fetch('http://localhost:3000/s3/generate-url', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+            body: JSON.stringify(payload),
+          });
+          console.log('난 response 야', response);
+
+          if (!response.ok) throw new Error('Pre-signed URL 요청 실패');
+
+          const { presignedUrl, key } = await response.json();
+          console.log(presignedUrl, key);
+
           const metadataPayload = {
             title: titleInput.value || null,
             description: descriptionInput.value || null,
             thumbnailUrl: thumbnailUrlInput.value || null,
             hashtags: hashtagsInput.value ? hashtagsInput.value.split(',') : [],
             visibility: visibilityInput.value || null,
-          };
-          console.log('난 페이로드야', metadataPayload);
-
-          console.log(`페이로드 title: ${titleInput.value}`);
-          console.log(`페이로드 description: ${descriptionInput.value}`);
-          console.log(`페이로드 hashtags: ${hashtagsInput.value}`);
-          console.log(`페이로드 visibility: ${visibilityInput.value}`);
-          console.log(`페이로드 thumbnailUrl: ${thumbnailUrlInput.value}`);
-
-          const metadataResponse = await fetch('http://localhost:3000/video', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify(metadataPayload),
-          });
-          console.log('난 업로드 토큰이야', token);
-          console.log('metadataResponse', metadataResponse);
-
-          if (!metadataResponse.ok) {
-            throw new Error('메타데이터 전송 실패');
-          }
-
-          const { key } = await metadataResponse.json();
-          console.log('메타데이터 전송 성공', key);
-
-          const payload = {
-            fileName: file.name,
-            fileType: file.type,
-            fileSize: file.size,
-            bucket: '15-final-project',
-            region: 'ap-northeast-2',
-            key,
+            videoCode: key,
           };
 
-          const response = await fetch('http://localhost:3000/s3/generate-url', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload),
-          });
-
-          if (!response.ok) throw new Error('Pre-signed URL 요청 실패');
-
-          const { presignedUrl } = await response.json();
           const uploadResponse = await fetch(presignedUrl, {
             method: 'PUT',
             body: file,
@@ -233,6 +222,23 @@
 
           if (uploadResponse.ok) {
             alert('파일 업로드 성공!');
+
+            const metadataResponse = await fetch('http://localhost:3000/video', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify(metadataPayload),
+            });
+            console.log('난 업로드 토큰이야', token);
+            console.log('metadataResponse', metadataResponse);
+
+            if (!metadataResponse.ok) {
+              throw new Error('메타데이터 전송 실패');
+            }
+
+            console.log('메타데이터 전송 성공');
           } else {
             throw new Error('파일 업로드 실패');
           }
