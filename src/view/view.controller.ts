@@ -2,6 +2,18 @@ import { Controller, Get, Render } from '@nestjs/common';
 
 @Controller('')
 export class ViewController {
+  @Get('/main')
+  @Render('main')
+  showMainPage() {
+    return;
+  }
+
+  @Get('/signin')
+  @Render('signin')
+  showSigninPage() {
+    return;
+  }
+
   @Get('/signup')
   @Render('signup')
   showSignupPage() {

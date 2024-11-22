@@ -20,13 +20,21 @@ export class VideoService {
   ) {}
 
   async saveMetadata(user: UserEntity, videoDto: VideoDto): Promise<object> {
-    const { title, description, thumbnailUrl, hashtags, duration, visibility, high, low } =
-      videoDto;
+    const {
+      title,
+      description,
+      thumbnailUrl,
+      hashtags,
+      duration,
+      visibility,
+      high,
+      low,
+      videoCode,
+    } = videoDto;
 
     console.log(`비디오DTO:${videoDto}`);
 
     const foundChannel = await this.findChannelByUserId(user.id);
-    const videoCode = await this.createKey(user);
 
     const video = this.videoRepository.create({
       title,
@@ -140,12 +148,5 @@ export class VideoService {
     }
 
     return updateData;
-  }
-
-  async createKey(user) {
-    const userId = user.id;
-    const timestamp = Date.now();
-    const uniqueKey = `uploads/${userId}_${timestamp}`;
-    return uniqueKey;
   }
 }

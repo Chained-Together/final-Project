@@ -4,6 +4,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Hash } from '@smithy/hash-node';
 import { HttpRequest } from '@smithy/protocol-http';
 import { parseUrl } from '@smithy/url-parser';
+import { UserEntity } from 'src/user/entity/user.entity';
 
 @Injectable()
 export class S3Service {
@@ -11,19 +12,20 @@ export class S3Service {
   private readonly MAX_FILE_SIZE_MB = 50;
   private readonly MAX_FILE_SIZE_BYTES = this.MAX_FILE_SIZE_MB * 1024 * 1024;
 
-  async createPresignedUrlWithoutClient({
-    region,
-    bucket,
-    key,
-    fileType,
-    fileSize,
-  }: {
-    region: string;
-    bucket: string;
-    key: string;
-    fileType: string;
-    fileSize: number;
-  }): Promise<string> {
+  async createPresignedUrlWithoutClient(
+    user: UserEntity,
+    {
+      region,
+      bucket,
+      fileType,
+      fileSize,
+    }: {
+      region: string;
+      bucket: string;
+      fileType: string;
+      fileSize: number;
+    },
+  ): Promise<object> {
     if (!fileType.startsWith('video/')) {
       throw new Error('이미지는 업로드할 수 없습니다. 비디오 파일만 허용됩니다.');
     }
@@ -33,6 +35,8 @@ export class S3Service {
         `파일 크기가 너무 큽니다. 최대 허용 크기는 ${this.MAX_FILE_SIZE_BYTES}MB입니다.`,
       );
     }
+
+    const key = await this.createKey(user);
 
     const url = parseUrl(`https://${bucket}.s3.${region}.amazonaws.com/${key}`);
 
@@ -57,8 +61,13 @@ export class S3Service {
       }),
     );
 
-    return formatUrl(signedUrlObject);
+    return { presignedUrl: formatUrl(signedUrlObject), key };
+  }
+
+  private async createKey(user: UserEntity) {
+    const userId = user.id;
+    const timestamp = Date.now();
+    const uniqueKey = `uploads/${userId}_${timestamp}`;
+    return uniqueKey;
   }
 }
-
-// 영상길이 << 람다
