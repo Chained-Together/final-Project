@@ -26,14 +26,11 @@ export class VideoController {
 
   @Post()
   @UseGuards(AuthGuard('jwt'))
-  @UseInterceptors(FileInterceptor('file',multerOptions))
-  async createVideo(
-    @UserInfo() user: UserEntity,
-    @Body() videoDto: VideoDto,
-    @UploadedFile() file: Express.Multer.File,
-  ): Promise<VideoEntity> {
-    console.log(file);
-    return this.videoService.createVideo(user, videoDto, file);
+  async saveMetadata(@UserInfo() user: UserEntity, @Body() videoDto: VideoDto): Promise<object> {
+    console.log('Received videoDto:', videoDto);
+    console.log('Received user:', user);
+
+    return this.videoService.saveMetadata(user, videoDto);
   }
 
   @Get()

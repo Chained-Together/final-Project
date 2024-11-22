@@ -1,59 +1,170 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="kr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="home" content="width=device-width, initial-scale=1.0" />
+    <title>로그인</title>
+    <!-- <link rel="stylesheet" type="text/css" href="/styles/style.css" /> -->
+    <style>
+      /* 전체적인 스타일 */
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        height: 100;
+        background: linear-gradient(135deg, #070707, #1f1f1f); /* 그라디언트 배경 */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        color: #fff;
+      }
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="home" content="width=device-width, initial-scale=1.0">
-    <title>home</title>
-    <link rel="stylesheet" type="text/css" href="/styles/style.css">
-</head>
+      h2 {
+        font-size: 2rem;
+        color: #fff;
+        text-align: center;
+        margin: 0;
+        position: absolute;
+        top: 50px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
 
-<body>
-    <h1>Login</h1>
+      /* 폼 스타일 */
+      form {
+        background: #2c2828;
+        padding: 30px;
+        border-radius: 10px;
+        width: 100%;
+        max-width: 400px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
 
-    <!-- 로그인 버튼 클릭 시 팝업창 표시 -->
-    <button id="loginButton">Login</button>
+      div {
+        margin-bottom: 20px;
+      }
 
-    <!-- 팝업창을 위한 HTML -->
-    <div id="popupOverlay"></div>
-    <div id="loginPopup">
-        <h2>Login Form</h2>
-        <form action="/auth/login" method="POST">
-            <div>
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required />
-            </div>
-            <div>
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required />
-            </div>
-            <button type="submit">Login</button>
-            <button type="button" id="closePopup">Close</button> <!-- 팝업 닫기 버튼 -->
-        </form>
-    </div>
+      label {
+        font-size: 1rem;
+        color: #f6f2f2;
+        margin-bottom: 5px;
+        display: block;
+      }
 
-    <!-- JavaScript로 팝업 열기/닫기 -->
+      input[type='text'],
+      input[type='password'] {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 1rem;
+        box-sizing: border-box;
+      }
+
+      input[type='text']:focus,
+      input[type='password']:focus {
+        border-color: #e6e6e6;
+        outline: none;
+      }
+
+      /* 버튼 스타일 */
+      button[type='submit'] {
+        width: 100%;
+        padding: 12px;
+        background: #fefefe;
+        color: #000000;
+        font-size: 1.2rem;
+        font-weight: bold;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      button[type='submit']:hover {
+        background: #2575fc;
+      }
+
+      /* 반응형 디자인 */
+      @media (max-width: 480px) {
+        h2 {
+          font-size: 1.5rem;
+        }
+
+        form {
+          padding: 20px;
+          width: 90%;
+        }
+
+        input[type='text'],
+        input[type='password'] {
+          padding: 10px;
+          font-size: 1rem;
+        }
+
+        button[type='submit'] {
+          padding: 10px;
+          font-size: 1rem;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <h2>로그인</h2>
+    <form id="loginForm">
+      <div>
+        <label for="username">이메일:</label>
+        <input type="text" id="email" name="email" required />
+      </div>
+      <div>
+        <label for="password">비밀번호:</label>
+        <input type="password" id="password" name="password" required />
+      </div>
+      <button type="submit">로그인</button>
+    </form>
+
     <script>
-        // 로그인 버튼 클릭 시 팝업창 열기
-        document.getElementById('loginButton').addEventListener('click', function () {
-            document.getElementById('loginPopup').style.display = 'block';
-            document.getElementById('popupOverlay').style.display = 'block';
-        });
+      const loginForm = document.getElementById('loginForm');
 
+      loginForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const email = document.getElementById('email');
+        const password = document.getElementById('password');
+        const url = '/auth/login';
 
-        // 팝업창 닫기 버튼 클릭 시 팝업창 닫기
-        document.getElementById('closePopup').addEventListener('click', function () {
-            document.getElementById('loginPopup').style.display = 'none';
-            document.getElementById('popupOverlay').style.display = 'none';
-        });
+        // const bodyValue = {
+        //   email: email.value,
+        //   password: password.value,
+        // };
 
-        // 오버레이 클릭 시 팝업창 닫기
-        document.getElementById('popupOverlay').addEventListener('click', function () {
-            document.getElementById('loginPopup').style.display = 'none';
-            document.getElementById('popupOverlay').style.display = 'none';
-        });
+        try {
+          const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email: email.value,
+              password: password.value,
+            }),
+          });
 
+          const token = await response.headers.get('Authorization');
+
+          console.log('난 로그인 토큰이야', token);
+
+          if (token) {
+            localStorage.setItem('token', token);
+          } else {
+            console.error('토큰이 존재하지 않습니다.');
+          }
+        } catch (error) {
+          console.error(error);
+          alert(`로그인 중 오류 발생: ${error.message}`);
+        }
+      });
     </script>
-</body>
-
+  </body>
 </html>
