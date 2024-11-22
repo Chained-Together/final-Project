@@ -19,38 +19,37 @@ export class VideoService {
     private resolutionRepository: Repository<ResolutionsEntity>,
   ) {}
 
-  async createVideo(
-    user: UserEntity,
-    videoDto: VideoDto,
-    file: Express.Multer.File,
-  ): Promise<VideoEntity> {
-    const { title, description, thumbnailURL, hashtags, duration, visibility, high, low } =
+  async saveMetadata(user: UserEntity, videoDto: VideoDto): Promise<object> {
+    const { title, description, thumbnailUrl, hashtags, duration, visibility, high, low } =
       videoDto;
 
-    // 사용자의 채널 찾기
-    const foundChannel = await this.findChannelByUserId(user.id);
+    console.log(`비디오DTO:${videoDto}`);
 
-    // Lambda 호출 결과를 사용하여 VideoEntity 생성
+    const foundChannel = await this.findChannelByUserId(user.id);
+    const videoCode = await this.createKey(user);
+
     const video = this.videoRepository.create({
       title,
       description,
-      thumbnailURL: thumbnailURL, // Lambda에서 썸네일 URL 반환 시 사용
+      thumbnailUrl: thumbnailUrl,
       hashtags,
       duration,
       visibility,
       channel: foundChannel,
+      videoCode,
     });
+
+    const savedVideo = await this.videoRepository.save(video);
 
     const resolution = this.resolutionRepository.create({
       high,
       low,
+      video: savedVideo,
     });
 
     await this.resolutionRepository.save(resolution);
 
-    // 비디오 저장
-    const savedVideo = await this.videoRepository.save(video);
-    return savedVideo;
+    return { key: videoCode };
   }
 
   async getAllVideo(): Promise<VideoEntity[]> {
@@ -129,7 +128,7 @@ export class VideoService {
     }
 
     if (updateVideoDto.thumbnailURL) {
-      updateData.thumbnailURL = updateVideoDto.thumbnailURL;
+      updateData.thumbnailUrl = updateVideoDto.thumbnailURL;
     }
 
     if (updateVideoDto.hashtags) {
@@ -141,5 +140,12 @@ export class VideoService {
     }
 
     return updateData;
+  }
+
+  async createKey(user) {
+    const userId = user.id;
+    const timestamp = Date.now();
+    const uniqueKey = `uploads/${userId}_${timestamp}`;
+    return uniqueKey;
   }
 }

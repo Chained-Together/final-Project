@@ -75,7 +75,6 @@ export class AuthService {
       throw new UnauthorizedException('존재하지 않는 사용자 입니다. 회원 가입을 진행해 주세요.');
     }
 
-    console.log(loginDto.password, findUser.password);
     if (!(await this.bcryptHashingService.compare(loginDto.password, findUser.password))) {
       throw new UnauthorizedException('비밀 번호가 일치 하지 않습니다.');
     }
@@ -83,6 +82,7 @@ export class AuthService {
 
     const payload = { email: loginDto.email, sub: findUser.id };
     const token = this.jwtService.sign(payload);
+    console.log(token);
 
     return {
       access_token: token,

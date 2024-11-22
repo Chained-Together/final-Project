@@ -12,6 +12,7 @@ import { ChannelEntity } from '../../channel/entities/channel.entity';
 import { Visibility } from '../video.visibility.enum';
 import { LikeEntity } from '../../like/entities/like.entity';
 import { CommentEntity } from 'src/comment/entities/comment.entity';
+import { bool, boolean } from 'joi';
 
 @Entity({
   name: 'videos',
@@ -27,7 +28,7 @@ export class VideoEntity {
   description: string;
 
   @Column({ type: 'varchar', nullable: false, name: 'thumbnail_url' })
-  thumbnailURL: string;
+  thumbnailUrl: string;
 
   @Column({ type: 'text', nullable: false })
   hashtags: string[];
@@ -35,11 +36,17 @@ export class VideoEntity {
   @Column({ type: 'enum', enum: Visibility })
   visibility: Visibility;
 
-  @Column({ type: 'int', nullable: false })
+  @Column({ type: 'int', nullable: true })
   duration: number;
 
   @Column({ type: 'int', nullable: false, default: 0 })
   views: number;
+
+  @Column({ type: 'boolean', nullable: false, default: false })
+  status: boolean;
+
+  @Column({ type: 'varchar', nullable: false })
+  videoCode: string;
 
   @CreateDateColumn({ type: 'timestamp', nullable: false, name: 'uploaded_at' })
   uploadedAt: Date;

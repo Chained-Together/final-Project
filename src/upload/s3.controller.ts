@@ -14,12 +14,10 @@ export class S3Controller {
       fileName: string;
       fileType: string;
       fileSize: number;
+      key: string;
     },
   ) {
-    const { region, bucket, fileName, fileType, fileSize } = body;
-
-    const key = `uploads/${Date.now()}_${fileName}`;
-
+    const { region, bucket, fileName, fileType, fileSize, key } = body;
     const presignedUrl = await this.s3Service.createPresignedUrlWithoutClient({
       region,
       bucket,

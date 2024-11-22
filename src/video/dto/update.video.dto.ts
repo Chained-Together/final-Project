@@ -8,7 +8,7 @@ export class UpdateVideoDto {
   @IsString()
   description: string;
 
-  @IsUrl()
+  @IsString()
   thumbnailURL: string;
 
   @IsString({ each: true })

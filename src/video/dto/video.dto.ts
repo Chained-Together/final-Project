@@ -1,4 +1,13 @@
-import { IsArray, IsEnum, IsNotEmpty, IsNumber, IsString, IsUrl } from 'class-validator';
+import {
+  IsArray,
+  IsEmpty,
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUrl,
+} from 'class-validator';
 import { Visibility } from '../video.visibility.enum';
 
 export class VideoDto {
@@ -11,24 +20,24 @@ export class VideoDto {
   description: string;
 
   @IsNotEmpty()
-  @IsUrl()
-  thumbnailURL: string;
+  @IsString()
+  thumbnailUrl: string;
 
   @IsNotEmpty()
   @IsString({ each: true })
   @IsArray()
   hashtags: string[];
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsNumber()
   duration: number;
 
-  @IsNotEmpty()
-  @IsUrl()
+  @IsOptional()
+  @IsString()
   high: string;
 
-  @IsNotEmpty()
-  @IsUrl()
+  @IsOptional()
+  @IsString()
   low: string;
 
   @IsNotEmpty()

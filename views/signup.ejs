@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="kr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="home" content="width=device-width, initial-scale=1.0" />
+    <title>회원가입</title>
+    <!-- <link rel="stylesheet" type="text/css" href="/styles/style.css" /> -->
+    <style>
+      /* 기본 스타일 */
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: linear-gradient(135deg, #070707, #1f1f1f);
+        color: #fff;
+      }
+
+      h2 {
+        font-size: 2rem;
+        color: #fff;
+        text-align: center;
+        margin: 0;
+        position: absolute;
+        top: 50px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      /* 팝업 오버레이 스타일 */
+      #popupOverlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgb(0, 0, 0);
+        z-index: 1;
+      }
+
+      /* 회원가입 팝업 */
+      #signupPopup {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 400px;
+        background: #2c2828;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        z-index: 2;
+      }
+
+      #signupPopup h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 1.8rem;
+        color: #fff;
+      }
+
+      /* 폼 스타일 */
+      form {
+        display: flex;
+        flex-direction: column;
+      }
+
+      form div {
+        margin-bottom: 20px;
+      }
+
+      label {
+        display: block;
+        font-size: 1rem;
+        color: #f6f2f2;
+        margin-bottom: 5px;
+      }
+
+      input[type='text'],
+      input[type='password'] {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 1rem;
+        box-sizing: border-box;
+      }
+
+      input[type='text']:focus,
+      input[type='password']:focus {
+        border-color: #e6e6e6;
+        outline: none;
+      }
+
+      /* 버튼 스타일 */
+      #submitBtn {
+        width: 100%;
+        padding: 12px;
+        background: #fefefe;
+        color: #000000;
+        font-size: 1.2rem;
+        font-weight: bold;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      #submitBtn:hover {
+        background: #2575fc;
+      }
+
+      /* 반응형 디자인 */
+      @media (max-width: 480px) {
+        #signupPopup {
+          width: 90%;
+          padding: 20px;
+        }
+
+        h2 {
+          font-size: 1.5rem;
+        }
+
+        input[type='text'],
+        input[type='password'] {
+          padding: 10px;
+          font-size: 1rem;
+        }
+
+        #submitBtn {
+          padding: 10px;
+          font-size: 1rem;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <h2>회원가입</h2>
+    <div id="popupOverlay"></div>
+    <div id="signupPopup">
+      <form action="/auth/signup" method="POST">
+        <div>
+          <label for="email">이메일:</label>
+          <input type="text" id="email" name="email" required />
+        </div>
+        <div>
+          <label for="password">비밀번호:</label>
+          <input type="password" id="password" name="password" required />
+        </div>
+        <div>
+          <label for="confirmedPassword">비밀번호:</label>
+          <input type="password" id="password" name="confirmedPassword" required />
+        </div>
+        <div>
+          <label for="name">이름:</label>
+          <input type="text" id="name" name="name" required />
+        </div>
+        <div>
+          <label for="nickname">닉네임:</label>
+          <input type="text" id="nickname" name="nickname" required />
+        </div>
+        <div>
+          <label for="phoneNumber">전화번호:</label>
+          <input type="text" id="phoneNumber" name="phoneNumber" required />
+        </div>
+        <button type="submit" id="submitBtn">가입하기</button>
+      </form>
+    </div>
+  </body>
+</html>

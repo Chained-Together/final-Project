@@ -9,7 +9,7 @@ import { parseUrl } from '@smithy/url-parser';
 export class S3Service {
   private readonly logger = new Logger(S3Service.name);
   private readonly MAX_FILE_SIZE_MB = 50;
-  private readonly MAX_FILE_SIZE_BYTES = this.MAX_FILE_SIZE_MB * 1024 * 1024; 
+  private readonly MAX_FILE_SIZE_BYTES = this.MAX_FILE_SIZE_MB * 1024 * 1024;
 
   async createPresignedUrlWithoutClient({
     region,
@@ -18,13 +18,12 @@ export class S3Service {
     fileType,
     fileSize,
   }: {
-    region: string; 
+    region: string;
     bucket: string;
     key: string;
-    fileType: string; 
+    fileType: string;
     fileSize: number;
   }): Promise<string> {
-    
     if (!fileType.startsWith('video/')) {
       throw new Error('이미지는 업로드할 수 없습니다. 비디오 파일만 허용됩니다.');
     }
@@ -61,3 +60,5 @@ export class S3Service {
     return formatUrl(signedUrlObject);
   }
 }
+
+// 영상길이 << 람다
