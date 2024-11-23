@@ -13,12 +13,13 @@ import { CommentEntity } from './comment/entities/comment.entity';
 import { LikeEntity } from './like/entities/like.entity';
 import { LikeModule } from './like/like.module';
 import { UserEntity } from './user/entity/user.entity';
-import { ResolutionsEntity } from './video/entities/resolutions.entity';
 import { VideoEntity } from './video/entities/video.entity';
 import { VideoModule } from './video/video.module';
 import { ViewController } from './view/view.controller';
 import { ViewModule } from './view/view.module';
 import { S3Module } from './upload/s3.module';
+import { ResolutionModule } from './resolution/resolution.module';
+import { ResolutionEntity } from './resolution/entities/resolution.entity';
 
 const typeOrmModuleOptions = {
   useFactory: async (configService: ConfigService): Promise<TypeOrmModuleOptions> => ({
@@ -29,14 +30,7 @@ const typeOrmModuleOptions = {
     host: configService.get('DB_HOST'),
     port: configService.get<number>('DB_PORT'),
     database: configService.get('DB_NAME'),
-    entities: [
-      UserEntity,
-      VideoEntity,
-      ResolutionsEntity,
-      ChannelEntity,
-      CommentEntity,
-      LikeEntity,
-    ],
+    entities: [UserEntity, VideoEntity, ResolutionEntity, ChannelEntity, CommentEntity, LikeEntity],
     synchronize: configService.get<boolean>('DB_SYNC'),
     logging: true,
   }),
@@ -65,6 +59,7 @@ const typeOrmModuleOptions = {
     LikeModule,
     ViewModule,
     S3Module,
+    ResolutionModule,
   ],
   controllers: [AppController, ViewController],
   providers: [AppService],
