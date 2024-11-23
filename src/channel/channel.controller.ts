@@ -24,6 +24,12 @@ export class ChannelController {
     return this.channelService.getChannel(id);
   }
 
+  @Get()
+  @UseGuards(AuthGuard('jwt'))
+  getMyChannel(@UserInfo() user: UserEntity): Promise<ChannelEntity> {
+    return this.channelService.getMyChannel(user);
+  }
+
   @Patch()
   @UseGuards(AuthGuard('jwt'))
   async updateChannel(

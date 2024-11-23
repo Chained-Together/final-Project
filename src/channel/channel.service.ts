@@ -45,6 +45,15 @@ export class ChannelService {
     return foundChannel;
   }
 
+  async getMyChannel(user: UserEntity): Promise<ChannelEntity> {
+    const foundChannel = await this.findChannel({ userId: user.id });
+    if (!foundChannel) {
+      throw new NotFoundException('해당 채널이 존재하지 않습니다.');
+    }
+
+    return foundChannel;
+  }
+
   async updateChannel(user: UserEntity, channelDto: ChannelDto): Promise<ChannelEntity> {
     const foundChannel = await this.findChannel({ userId: user.id });
     if (!foundChannel) {

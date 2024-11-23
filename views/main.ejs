@@ -13,8 +13,13 @@
       <h1>Loopify</h1>
     </div>
     <div class="header-buttons">
-        <button class="profile-btn" id ="accountBtn" >Account</button>
-        <button class="channel-btn" id = "channelBtn">Channel</button>
+        <div class="profile-btn" id ="profileBtn">
+          <img src="profileImageElement.src" alt="프로필 사진" id="profileImage" />
+        </div>
+
+        <div class="profile-btn" id ="accountBtn">
+          <img src="profileImageElement.src" alt="프로필 사진" id="profileImage" />
+        </div>
       </div>
 
     <div class="shortform-grid">
@@ -33,25 +38,46 @@
 
 
 <script>
-  const accountBtn = document.getElementById('accountBtn');
-  accountBtn.addEventListener('click', ()=>{
-    const token= localStorage.getItem('token')
-    if(token){
-      window.location.href= '/login'
-    }else{
-      window.location.href= '/login'
-    }
-  })
+ document.addEventListener('DOMContentLoaded', async () => {
+  const token = localStorage.getItem('token');
+  const profileImageElement = document.getElementById('profileImage');
 
-  const channelBtn = document.getElementById('channelBtn');
-  channelBtn.addEventListener('click', ()=>{
-    const token= localStorage.getItem('token')
-    if(token){
-      window.location.href= '/channel'
-    }else{
-      window.location.href= '/login'
+  if (!token) {
+    console.error('사용자 인증이 필요합니다.');
+    return;
+  }
+
+  try {
+    const response = await fetch('/channel', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('프로필 정보를 가져오지 못했습니다.');
     }
-  })
+
+    const profileData = await response.json();
+    profileImageElement.src = profileData.profileImage || '/path/to/default-profile.png';
+  } catch (error) {
+    console.error('오류:', error);
+    profileImageElement.src = '/path/to/default-profile.png'; 
+  }
+});
+
+
+const accountBtn = document.getElementById('accountBtn');
+accountBtn.addEventListener('click', () => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    window.location.href = '/mychannel';
+  } else {
+    window.location.href = '/login';
+  }
+});
+
  
 </script>
 
@@ -145,6 +171,34 @@
 .header-buttons button:hover {
   opacity: 0.9;
 }
+.profile-btn {
+        position: absolute;
+        top: 30px;
+        left: 30px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 2px solid rgba(255, 255, 255, 0.8);
+        cursor: pointer;
+        background-color: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transition:
+          transform 0.3s ease,
+          border-color 0.3s ease;
+      }
+
+      .profile-btn:hover {
+        transform: scale(1.1);
+        border-color: rgba(255, 255, 255, 1);
+      }
+
+      .profile-btn img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+  
 </style>
 
 </body>
