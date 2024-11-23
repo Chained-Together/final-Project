@@ -26,8 +26,8 @@ export class ViewController {
     return;
   }
 
-  @Get('/channel')
-  @Render('channel')
+  @Get('/mychannel')
+  @Render('my-channel')
   showChannelPage() {
     return;
   }
