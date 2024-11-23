@@ -120,6 +120,7 @@
         <input type="password" id="password" name="password" required />
       </div>
       <button type="submit">로그인</button>
+      <a href="/signup" class="link">회원가입</a>
     </form>
 
     <script>
@@ -143,6 +144,10 @@
             }),
           });
 
+          if (!response.ok) {
+            throw new Error('로그인에 실패했습니다.');
+          }
+
           const token = await response.headers.get('Authorization');
 
           console.log('난 로그인 토큰이야', token);
@@ -152,6 +157,8 @@
           } else {
             console.error('토큰이 존재하지 않습니다.');
           }
+
+          window.location.href = '/main';
         } catch (error) {
           console.error(error);
           alert(`로그인 중 오류 발생: ${error.message}`);
