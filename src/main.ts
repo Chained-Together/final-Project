@@ -16,6 +16,9 @@ async function bootstrap() {
 
   const expressApp = app.getHttpAdapter().getInstance();
 
+  app.useStaticAssets(join(__dirname, '..', 'public'), {
+    prefix: '/public',
+  });
   expressApp.set('view engine', 'ejs');
   expressApp.set('views', join(__dirname, '..', 'views'));
   console.log(join(process.cwd(), 'views'));
