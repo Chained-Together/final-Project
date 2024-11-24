@@ -1,3 +1,5 @@
+import { CommentEntity } from 'src/comment/entities/comment.entity';
+import { ResolutionEntity } from 'src/resolution/entities/resolution.entity';
 import {
   Column,
   CreateDateColumn,
@@ -7,12 +9,9 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { ResolutionsEntity } from './resolutions.entity';
 import { ChannelEntity } from '../../channel/entities/channel.entity';
-import { Visibility } from '../video.visibility.enum';
 import { LikeEntity } from '../../like/entities/like.entity';
-import { CommentEntity } from 'src/comment/entities/comment.entity';
-import { bool, boolean } from 'joi';
+import { Visibility } from '../video.visibility.enum';
 
 @Entity({
   name: 'videos',
@@ -54,8 +53,8 @@ export class VideoEntity {
   @CreateDateColumn({ type: 'timestamp', nullable: false, name: 'updated_at' })
   updatedAt: Date;
 
-  @OneToOne(() => ResolutionsEntity, (resolution) => resolution.video, { cascade: true })
-  resolution: ResolutionsEntity;
+  @OneToOne(() => ResolutionEntity, (resolution) => resolution.video, { cascade: true })
+  resolution: ResolutionEntity;
 
   @ManyToOne(() => ChannelEntity, (channel) => channel.video, { onDelete: 'CASCADE' })
   channel: ChannelEntity;

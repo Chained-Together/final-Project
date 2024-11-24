@@ -1,24 +1,11 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-  UploadedFile,
-  UseGuards,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UserEntity } from '../user/entity/user.entity';
 import { UserInfo } from '../utils/user-info.decorator';
+import { UpdateVideoDto } from './dto/update.video.dto';
 import { VideoDto } from './dto/video.dto';
 import { VideoEntity } from './entities/video.entity';
 import { VideoService } from './video.service';
-import { UpdateVideoDto } from './dto/update.video.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { multerOptions } from './multer.option';
 
 @Controller('video')
 export class VideoController {

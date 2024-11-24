@@ -117,7 +117,7 @@ describe('VideoService', () => {
     id: 1,
     title: 'test',
     description: 'test',
-    thumbnailURL: 'test',
+    thumbnailUrl: 'test',
     hashtags: ['공포', '고양이'],
     visibility: Visibility.PUBLIC,
     duration: 10,

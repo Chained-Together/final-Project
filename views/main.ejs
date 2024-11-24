@@ -13,8 +13,13 @@
       <h1>Loopify</h1>
     </div>
     <div class="header-buttons">
-        <button class="profile-btn">프로필</button>
-        <button class="channel-btn">내 채널</button>
+     
+        <div class="profile-btn" id ="profileBtn">
+          <img src="profileImageElement.src" alt="프로필 사진" class="profileImage" />
+        </div>
+        <div class="account-btn" id ="accountBtn">
+          <img src="profileImageElement.src" alt="계정 사진" class="profileImage" />
+        </div>
       </div>
 
     <div class="shortform-grid">
@@ -31,91 +36,249 @@
     </div>
   </div>
 
+
+<script>
+ document.addEventListener('DOMContentLoaded', async () => {
+  const token = localStorage.getItem('token');
+  const profileImageElements = document.querySelectorAll('.profileImage')
+
+
+  const setImageSrc = (src) => {
+    profileImageElements.forEach((img) => {
+      img.src = src;
+    });
+  };
+
+  if (!token) {
+    setImageSrc('/path/to/default-profile.png');
+    return;
+  }
+
+  try {
+    const response = await fetch('/channel', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('프로필 정보를 가져오지 못했습니다.');
+    }
+
+    const profileData = await response.json();
+    const profileImageUrl = profileData.profileImage || '/path/to/default-profile.png';
+    setImageSrc(profileImageUrl);
+  } catch (error) {
+    console.error('오류:', error);
+    setImageSrc('/path/to/default-profile.png');
+  }
+});
+
+
+const profileBtn = document.getElementById('profileBtn');
+profileBtn.addEventListener('click', () => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    window.location.href = '/mychannel';
+  } else {
+    window.location.href = '/login';
+  }
+});
+
+const accountBtn = document.getElementById('accountBtn');
+const createLogoutButton = () => {
+  const logoutButton = document.createElement('button');
+  logoutButton.textContent = '로그아웃';
+  logoutButton.id = 'logoutBtn';
+  logoutButton.style = `
+    position: absolute;
+    top: 60px;
+    right: 30px;
+    background-color: #fff;
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 1000;
+  `;
+  
  
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f4f4f4;
-    }
+  logoutButton.addEventListener('click', () => {
+    localStorage.removeItem('token');
+    alert('로그아웃 되었습니다.');
+    window.location.href = '/main';
+  });
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 40px;
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
+  return logoutButton;
+};
 
-    .header {
-      text-align: center;
-      margin-bottom: 20px;
+accountBtn.addEventListener('click', () => {
+  const token = localStorage.getItem('token');
+  
+  if (token) {
+    let logoutBtn = document.getElementById('logoutBtn');
+    if (!logoutBtn) {
+      logoutBtn = createLogoutButton();
+      document.body.appendChild(logoutBtn);
+    } else {
+      logoutBtn.remove(); 
     }
+  } else {
+    window.location.href = '/main'; 
+  }
+});
+ 
+</script>
 
-    .header h1 {
-      font-size: 2rem;
-      margin: 0;
-      color: #333;
-    }
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, rgb(31, 31, 31), #cbcbcb);
+  }
 
-    .shortform-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr); 
-      gap: 20px; 
-      margin-top: 50px
-    }
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
 
-    .shortform-item {
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      overflow: hidden;
-      background-color: #f9f9f9;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      padding: 15px;
-    }
+  .header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
 
-    .placeholder-video {
-      width: 100%;
-      height: 150px;
-      background-color: #ccc;
-      border-radius: 8px;
-    }
+  .header h1 {
+    font-size: 2rem;
+    margin: 0;
+    color: #333;
+  }
 
-    .placeholder-title {
-      width: 60%;
-      height: 20px;
-      background-color: #ddd;
-      margin-top: 15px;
-      border-radius: 4px;
-    }
+  .shortform-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 20px; 
+    margin-top: 50px
+  }
 
-    .placeholder-description {
-      width: 80%;
-      height: 15px;
-      background-color: #ddd;
-      margin-top: 10px;
-      border-radius: 4px;
-    }
+  .shortform-item {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+  }
 
-    .placeholder-hashtags {
-      width: 50%;
-      height: 15px;
-      background-color: #ddd;
-      margin-top: 10px;
-      border-radius: 4px;
-    }
+  .placeholder-video {
+    width: 100%;
+    height: 150px;
+    background-color: #ccc;
+    border-radius: 8px;
+  }
 
-    .placeholder {
-      opacity: 0.6;
-    }
+  .placeholder-title {
+    width: 60%;
+    height: 20px;
+    background-color: #ddd;
+    margin-top: 15px;
+    border-radius: 4px;
+  }
 
-    .header-buttons{
-        background-color: green;
-    
-    }
-  </style>
+  .placeholder-description {
+    width: 80%;
+    height: 15px;
+    background-color: #ddd;
+    margin-top: 10px;
+    border-radius: 4px;
+  }
+
+  .placeholder-hashtags {
+    width: 50%;
+    height: 15px;
+    background-color: #ddd;
+    margin-top: 10px;
+    border-radius: 4px;
+  }
+
+  .placeholder {
+    opacity: 0.6;
+  }
+
+  .header-buttonsbutton {
+  padding: 10px 15px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.header-buttons button:hover {
+  opacity: 0.9;
+}
+.profile-btn {
+        position: absolute;
+        top: 30px;
+        left: 30px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 2px solid rgba(255, 255, 255, 0.8);
+        cursor: pointer;
+        background-color: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transition:
+          transform 0.3s ease,
+          border-color 0.3s ease;
+      }
+
+      .profile-btn:hover {
+        transform: scale(1.1);
+        border-color: rgba(255, 255, 255, 1);
+      }
+
+      .profile-btn img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .account-btn {
+        position: absolute;
+        top: 30px;
+        right: 30px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 2px solid rgba(255, 255, 255, 0.8);
+        cursor: pointer;
+        background-color: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transition:
+          transform 0.3s ease,
+          border-color 0.3s ease;
+      }
+
+      .account-btn:hover {
+        transform: scale(1.1);
+        border-color: rgba(255, 255, 255, 1);
+      }
+
+      .account-btn img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+  
+</style>
 
 </body>
 </html>

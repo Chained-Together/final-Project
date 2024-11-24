@@ -1,17 +1,10 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  JoinColumn,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { VideoEntity } from './video.entity';
+import { VideoEntity } from 'src/video/entities/video.entity';
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({
   name: 'resolutions',
 })
-export class ResolutionsEntity {
+export class ResolutionEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

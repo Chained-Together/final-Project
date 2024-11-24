@@ -5,8 +5,8 @@ import { ChannelEntity } from '../channel/entities/channel.entity';
 import { UserEntity } from '../user/entity/user.entity';
 import { UpdateVideoDto } from './dto/update.video.dto';
 import { VideoDto } from './dto/video.dto';
-import { ResolutionsEntity } from './entities/resolutions.entity';
 import { VideoEntity } from './entities/video.entity';
+import { ResolutionEntity } from 'src/resolution/entities/resolution.entity';
 
 @Injectable()
 export class VideoService {
@@ -15,8 +15,8 @@ export class VideoService {
     private videoRepository: Repository<VideoEntity>,
     @InjectRepository(ChannelEntity)
     private channelRepository: Repository<ChannelEntity>,
-    @InjectRepository(ResolutionsEntity)
-    private resolutionRepository: Repository<ResolutionsEntity>,
+    @InjectRepository(ResolutionEntity)
+    private resolutionRepository: Repository<ResolutionEntity>,
   ) {}
 
   async saveMetadata(user: UserEntity, videoDto: VideoDto): Promise<object> {
