@@ -10,6 +10,7 @@ describe('LikeController', () => {
 
   const mockLikeService = {
     toggleLike: jest.fn(),
+    getLikes: jest.fn(),
   };
 
   const mockAuthGuard = {
@@ -44,7 +45,7 @@ describe('LikeController', () => {
 
     const result = await controller.toggleLike(videoId, { user: { id: 1 } } as any);
 
-    expect(service.toggleLike).toHaveBeenCalledWith(videoId, 1);
+    expect(service.toggleLike).toHaveBeenCalledWith(1, videoId);
     expect(result).toEqual(mockResponse);
   });
 
@@ -56,7 +57,7 @@ describe('LikeController', () => {
 
     const result = await controller.toggleLike(videoId, { user: { id: 1 } } as any);
 
-    expect(service.toggleLike).toHaveBeenCalledWith(videoId, 1);
+    expect(service.toggleLike).toHaveBeenCalledWith(1, videoId);
     expect(result).toEqual(mockDeleteResult);
   });
 
@@ -69,6 +70,17 @@ describe('LikeController', () => {
       '테스트 에러',
     );
 
-    expect(service.toggleLike).toHaveBeenCalledWith(videoId, 1);
+    expect(service.toggleLike).toHaveBeenCalledWith(1, videoId);
+  });
+
+  it('좋아요 총갯수를 가져와야 한다', async () => {
+    const videoId = 123;
+
+    mockLikeService.getLikes.mockResolvedValue(videoId);
+
+    const result = await controller.getLikes(videoId);
+
+    expect(service.getLikes).toHaveBeenCalledWith(videoId);
+    expect(result).toEqual(videoId);
   });
 });

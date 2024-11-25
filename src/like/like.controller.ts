@@ -1,10 +1,10 @@
-import { Controller, HttpException, HttpStatus, Param, Post, Req, UseGuards } from '@nestjs/common';
-import { LikeService } from './like.service';
+import { Controller, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
+import { DeleteResult } from 'typeorm';
 import { UserEntity } from '../user/entity/user.entity';
 import { LikeEntity } from './entities/like.entity';
-import { DeleteResult } from 'typeorm';
+import { LikeService } from './like.service';
 
 @Controller('likes')
 export class LikeController {
@@ -15,7 +15,7 @@ export class LikeController {
   async toggleLike(
     @Param('videoId') videoId: number,
     @Req() req: Request,
-  ): Promise<({ user: { id: number },video: { id: number }} & LikeEntity) | DeleteResult> {
+  ): Promise<({ user: { id: number }; video: { id: number } } & LikeEntity) | DeleteResult> {
     const user = req.user as UserEntity;
     const userId = user.id;
 
@@ -26,5 +26,10 @@ export class LikeController {
     // } catch (error) {
     //   throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     // }
+  }
+
+  @Get(':videoId')
+  async getLikes(@Param('videoId') videoId: number) {
+    return this.likeService.getLikes(videoId);
   }
 }

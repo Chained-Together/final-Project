@@ -12,6 +12,7 @@ describe('LikeService', () => {
     findOne: jest.fn(),
     delete: jest.fn(),
     save: jest.fn(),
+    count: jest.fn(),
   };
 
   const mockLike = { id: 1, user: { id: 1 }, video: { id: 123 } };
@@ -43,10 +44,10 @@ describe('LikeService', () => {
       // jest.spyOn(likeRepository, 'findOne').mockResolvedValue(mockLike as LikeEntity);
       // jest.spyOn(likeRepository, 'delete').mockResolvedValue({ affected: 1 } as any);
 
-      const result = await likeService.toggleLike(123, 1);
+      const result = await likeService.toggleLike(1, 123);
 
       expect(likeRepository.findOne).toHaveBeenCalledWith({
-        where: { user: { id: 1 } ,video: { id: 123 }},
+        where: { user: { id: 1 }, video: { id: 123 } },
       });
       expect(likeRepository.delete).toHaveBeenCalledWith({
         user: { id: 1 },
@@ -61,7 +62,7 @@ describe('LikeService', () => {
       // jest.spyOn(likeRepository, 'findOne').mockResolvedValue(null);
       // jest.spyOn(likeRepository, 'save').mockResolvedValue(mockLike as LikeEntity);
 
-      const result = await likeService.toggleLike(123, 1);
+      const result = await likeService.toggleLike(1, 123);
 
       expect(likeRepository.findOne).toHaveBeenCalledWith({
         where: {
@@ -75,6 +76,22 @@ describe('LikeService', () => {
       });
 
       expect(result).toEqual(mockLike);
+    });
+  });
+
+  describe('getLikes', () => {
+    it('좋아요 총 갯수를 가져온다.', async () => {
+      mockLikeRepository.count.mockResolvedValue(mockLike.video);
+
+      const result = await likeService.getLikes(123);
+
+      expect(likeRepository.count).toHaveBeenCalledWith({
+        where: {
+          video: { id: 123 },
+        },
+      });
+
+      expect(result).toEqual(mockLike.video);
     });
   });
 });
