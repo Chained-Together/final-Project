@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
   const token = localStorage.getItem('token');
   const profileImageElements = document.querySelectorAll('.profileImage');
-  const videoElements = document.querySelectorAll('.placeholder-video');
 
   const setImageSrc = (src) => {
     profileImageElements.forEach((img) => {
@@ -35,8 +34,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 });
 
-// 썸네일 가져와!
-async function loadThumbnails() {
+async function loadInfos() {
   try {
     const response = await fetch('/video', { method: 'GET' });
     if (!response.ok) {
@@ -44,27 +42,39 @@ async function loadThumbnails() {
     }
     const videos = await response.json();
 
-    const gridContainer = document.querySelector('.placeholder-video');
-    videos.forEach((video) => {
-      const videoItem = document.createElement('div');
-      videoItem.classList.add('placeholder-video');
+    const thumbnails = document.querySelectorAll('.placeholder-video');
+    const titles = document.querySelectorAll('.placeholder-title');
+    const descriptions = document.querySelectorAll('.placeholder-description');
+    const hashtags = document.querySelectorAll('.placeholder-hashtags');
 
-      // 썸네일 이미지 추가
-      const thumbnail = document.createElement('img');
-      thumbnail.src = video.thumnailUrl;
-      //   thumbnail.alt = `${video.title} 썸네일`;
-      thumbnail.classList.add('thumbnail-image');
+    thumbnails.forEach((placeholder, index) => {
+      const video = videos[index];
+      console.log(video);
+      const thumbnailUrl = video?.thumbnailUrl || '/path/to/default-thumbnail.png';
 
-      videoItem.appendChild(thumbnail);
-      gridContainer.appendChild(videoItem);
+      placeholder.style.backgroundImage = `url(${thumbnailUrl})`;
+    });
+
+    titles.forEach((titleElement, index) => {
+      const video = videos[index];
+      const title = video?.title || '기본 제목';
+      titleElement.textContent = title;
+    });
+    descriptions.forEach((descElement, index) => {
+      const video = videos[index];
+      const description = video?.description || '기본 설명';
+      descElement.textContent = description;
+    });
+    hashtags.forEach((hashtageElement, index) => {
+      const video = videos[index];
+      const hashtag = video?.hashtags || '#해시태그';
+      hashtageElement.textContent = hashtag;
     });
   } catch (error) {
     console.error('오류 발생:', error);
   }
 }
-
-// 페이지 로드 시 썸네일 로드
-loadThumbnails();
+loadInfos();
 
 const profileBtn = document.getElementById('profileBtn');
 profileBtn.addEventListener('click', () => {
