@@ -1,19 +1,35 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shortform Content</title>
-  <link rel="stylesheet" href="/public/styles/main.css" />
-  
-</head>
-<body>
-  <div class="container">
-    <div class="header">
-      <h1>Loopify</h1>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Loopfiy</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Gamja+Flower&family=Gasoek+One&family=Hi+Melody&family=Jua&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/public/styles/main.css" />
+    <script src="https://kit.fontawesome.com/6a4db89020.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+  </head>
+  <body>
+    <header>
+      <nav class="LoopfiyBar">
+        <div class="log">
+          <i class="fa-solid fa-bolt"></i>
+          <a class="bungee-spice-regular">Loopfiy</a>
+        </div>
+        <div class="search_container">
+          <input class="search__input" type="text" placeholder="Search">
+        </div>
+      </nav>
+    </header>
+    <div class="container">
+    <div class="main">
+      <a  href="/create-channel" class="link">test용 채널</a>
     </div>
     <div class="header-buttons">
-     
+      
         <div class="profile-btn" id ="profileBtn">
           <img src="profileImageElement.src" alt="프로필 사진" class="profileImage" />
         </div>
@@ -21,21 +37,19 @@
           <img src="profileImageElement.src" alt="계정 사진" class="profileImage" />
         </div>
       </div>
+     
     <div class="shortform-grid">
       <% for (let i = 0; i < 16; i++) { %> 
         <div class="shortform-item placeholder">
           <div class="placeholder-video"></div> 
-          <div class="info">
             <div class="placeholder-title"></div> 
             <div class="placeholder-description"></div> 
             <div class="placeholder-hashtags"></div> 
-          </div>
         </div>
       <% } %>
     </div>
+    
   </div>
-
 <script src="/public/scripts/main.js"></script>
-
-</body>
+  </body>
 </html>

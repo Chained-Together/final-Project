@@ -46,3 +46,70 @@ body {
     height: 40px;
   }
 }
+
+.placeholder-video {
+  width: 100%;
+  height: 200px;
+  background-color: #ddd;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 10px;
+}
+
+.video-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* 반응형으로 자동 조정 */
+  gap: 20px;
+  width: 80%;
+  margin-top: 20px;
+}
+
+/* 카드 스타일 */
+.video-card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: left;
+  overflow: hidden;
+  transition: transform 0.2s ease-in-out;
+  cursor: pointer;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.video-card:hover {
+  transform: scale(1.03); /* 호버 시 확대 효과 */
+}
+
+.video-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.video-card h3 {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 5px 0;
+  color: #333;
+  text-align: center;
+}
+
+.video-card p {
+  font-size: 14px;
+  color: #555;
+  text-align: center;
+  margin: 5px 0;
+}
+
+.video-card .hashtags {
+  font-size: 12px;
+  color: #777;
+  text-align: center;
+  margin: 5px 0;
+}

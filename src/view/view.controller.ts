@@ -43,4 +43,10 @@ export class ViewController {
   showUploadPage() {
     return;
   }
+
+  @Get('/view-video')
+  @Render('video')
+  showVideoPage() {
+    return;
+  }
 }

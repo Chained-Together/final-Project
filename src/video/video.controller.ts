@@ -25,6 +25,12 @@ export class VideoController {
     return this.videoService.getAllVideo();
   }
 
+  @Get('/:channelId')
+  getAllVideoOfChannel(@Param('channelId') channelId: number) {
+    // console.log(channelId);
+    return this.videoService.getAllVideoOfChannel(channelId);
+  }
+
   @Get('/:id')
   getVideo(@Param('id') id: number): Promise<VideoEntity> {
     return this.videoService.getVideo(id);

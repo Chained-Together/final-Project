@@ -62,6 +62,13 @@ export class VideoService {
     return this.videoRepository.find();
   }
 
+  async getAllVideoOfChannel(channelId: number): Promise<VideoEntity[]> {
+    console.log('Channel ID:', channelId);
+    return this.videoRepository.find({
+      where: { channel: { id: channelId } },
+    });
+  }
+
   async getVideo(videoId: number): Promise<VideoEntity> {
     const foundVideo = await this.videoRepository.findOne({
       where: { id: videoId },
