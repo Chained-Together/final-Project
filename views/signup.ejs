@@ -3,130 +3,29 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>회원가입</title>
-    <style>
-      body {
-        font-family: 'Arial', sans-serif;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-        background: linear-gradient(135deg, rgb(31, 31, 31), #cbcbcb);
-        color: #ffffff;
-      }
-
-      h2 {
-        font-size: 2.2rem;
-        color: #ffffff;
-        margin-bottom: 20px;
-        text-align: center;
-      }
-
-      #signupPopup {
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        border-radius: 15px;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-        padding: 30px;
-        width: 400px;
-      }
-
-      #signupPopup h2 {
-        margin-bottom: 30px;
-      }
-
-      form {
-        display: flex;
-        flex-direction: column;
-      }
-
-      form div {
-        margin-bottom: 20px;
-      }
-
-      label {
-        font-size: 1rem;
-        font-weight: bold;
-        margin-bottom: 5px;
-        display: block;
-        color: #e8e8e8;
-      }
-
-      input[type='text'],
-      input[type='password'] {
-        width: 100%;
-        padding: 12px;
-        border: none;
-        border-radius: 8px;
-        font-size: 1rem;
-        background: rgba(255, 255, 255, 0.2);
-        color: #ffffff;
-        box-sizing: border-box;
-      }
-
-      input[type='text']:focus,
-      input[type='password']:focus {
-        background: rgba(255, 255, 255, 0.3);
-        outline: none;
-        box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
-      }
-
-      #submitBtn {
-        width: 100%;
-        padding: 12px;
-        font-size: 1.2rem;
-        font-weight: bold;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        background: linear-gradient(90deg, #ff8c00, #ff3b00);
-        color: #ffffff;
-        text-transform: uppercase;
-        transition: transform 0.3s ease;
-      }
-
-      #submitBtn:hover {
-        transform: scale(1.05);
-        background: linear-gradient(90deg, #ff3b00, #ff8c00);
-      }
-
-      @media (max-width: 480px) {
-        #signupPopup {
-          width: 90%;
-          padding: 20px;
-        }
-
-        h2 {
-          font-size: 1.8rem;
-        }
-
-        input[type='text'],
-        input[type='password'] {
-          padding: 10px;
-          font-size: 1rem;
-        }
-
-        #submitBtn {
-          padding: 10px;
-          font-size: 1rem;
-        }
-      }
-    </style>
+    <title>Loopfiy</title>
+    <link rel="stylesheet" href="/public/styles/signup.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Gasoek+One&family=Jua&display=swap"
+      rel="stylesheet"
+    />
   </head>
-
   <body>
+    <div id="maintitle">
+      <h2 class="jua-regular">Loopfiy</h2>
+    </div>
+
     <div id="signupPopup">
-      <h2>회원가입</h2>
       <form id="signupForm" action="/auth/signup" method="POST">
         <div>
-          <label for="email">이메일:</label>
-          <input type="text" id="email" name="email" placeholder="이메일을 입력하세요" required />
+          <label class="jua-regular" for="email">이메일:</label>
+          <input type="email" id="email" name="email" placeholder="이메일을 입력하세요" required />
           <span class="error-message"></span>
         </div>
         <div>
-          <label for="password">비밀번호:</label>
+          <label class="jua-regular" for="password">비밀번호:</label>
           <input
             type="password"
             id="password"
@@ -137,7 +36,7 @@
           <span class="error-message"></span>
         </div>
         <div>
-          <label for="confirmedPassword">비밀번호 확인:</label>
+          <label class="jua-regular" for="confirmedPassword">비밀번호 확인:</label>
           <input
             type="password"
             id="confirmedPassword"
@@ -148,12 +47,12 @@
           <span class="error-message"></span>
         </div>
         <div>
-          <label for="name">이름:</label>
+          <label class="jua-regular" for="name">이름:</label>
           <input type="text" id="name" name="name" placeholder="이름을 입력하세요" required />
           <span class="error-message"></span>
         </div>
         <div>
-          <label for="nickname">닉네임:</label>
+          <label class="jua-regular" for="nickname">닉네임:</label>
           <input
             type="text"
             id="nickname"
@@ -164,7 +63,7 @@
           <span class="error-message"></span>
         </div>
         <div>
-          <label for="phoneNumber">전화번호:</label>
+          <label class="jua-regular" for="phoneNumber">전화번호:</label>
           <input
             type="text"
             id="phoneNumber"
@@ -174,124 +73,9 @@
           />
           <span class="error-message"></span>
         </div>
-        <button type="submit" id="submitBtn">가입하기</button>
+        <button class="jua-regular" type="submit" id="submitBtn">가입하기</button>
       </form>
     </div>
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const signupForm = document.getElementById('signupForm');
-
-        // 유효성 검사 함수
-        function validateField(input, regex, errorMessage) {
-          const value = input.value.trim();
-          const errorElement = input.nextElementSibling;
-          if (!regex.test(value)) {
-            errorElement.textContent = errorMessage;
-            input.classList.add('error');
-            return false;
-          }
-          errorElement.textContent = '';
-          input.classList.remove('error');
-          return true;
-        }
-
-        // 필드 별 유효성 검사 설정
-        const emailInput = document.getElementById('email');
-        const passwordInput = document.getElementById('password');
-        const confirmedPasswordInput = document.getElementById('confirmedPassword');
-        const phoneNumberInput = document.getElementById('phoneNumber');
-
-        emailInput.addEventListener('blur', () => {
-          validateField(emailInput, /^[^\s@]+@[^\s@]+\.[^\s@]+$/, '유효한 이메일을 입력하세요.');
-        });
-
-        passwordInput.addEventListener('blur', () => {
-          validateField(
-            passwordInput,
-            /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
-            '비밀번호는 최소 8자이며, 문자와 숫자를 포함해야 합니다.',
-          );
-        });
-
-        confirmedPasswordInput.addEventListener('blur', () => {
-          const errorElement = confirmedPasswordInput.nextElementSibling;
-          if (confirmedPasswordInput.value !== passwordInput.value) {
-            errorElement.textContent = '비밀번호가 일치하지 않습니다.';
-            confirmedPasswordInput.classList.add('error');
-          } else {
-            errorElement.textContent = '';
-            confirmedPasswordInput.classList.remove('error');
-          }
-        });
-
-        phoneNumberInput.addEventListener('blur', () => {
-          validateField(phoneNumberInput, /^\d{10,11}$/, '전화번호는 10-11자리 숫자여야 합니다.');
-        });
-
-        // 폼 제출 이벤트 핸들러
-        signupForm.addEventListener('submit', async (event) => {
-          event.preventDefault();
-
-          // 유효성 검사
-          const isEmailValid = validateField(
-            emailInput,
-            /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-            '유효한 이메일을 입력하세요.',
-          );
-          const isPasswordValid = validateField(
-            passwordInput,
-            /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
-            '비밀번호는 최소 8자이며, 문자와 숫자를 포함해야 합니다.',
-          );
-          const isConfirmedPasswordValid =
-            confirmedPasswordInput.value.trim() === passwordInput.value.trim();
-          const isPhoneNumberValid = validateField(
-            phoneNumberInput,
-            /^\d{10,11}$/,
-            '전화번호는 10-11자리 숫자여야 합니다.',
-          );
-
-          if (
-            !isEmailValid ||
-            !isPasswordValid ||
-            !isConfirmedPasswordValid ||
-            !isPhoneNumberValid
-          ) {
-            alert('모든 필드를 올바르게 입력하세요.');
-            return;
-          }
-
-          try {
-            // 서버 요청
-            const response = await fetch('/auth/signup', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                email: emailInput.value.trim(),
-                password: passwordInput.value.trim(),
-                confirmedPassword: confirmedPasswordInput.value.trim(),
-                name: document.getElementById('name').value.trim(),
-                nickname: document.getElementById('nickname').value.trim(),
-                phoneNumber: phoneNumberInput.value.trim(),
-              }),
-            });
-
-            if (!response.ok) {
-              const errorData = await response.json();
-              const errorMessage = errorData.message || '회원가입에 실패했습니다.';
-              alert(`오류: ${errorMessage}`);
-              return;
-            }
-
-            alert('회원가입이 성공적으로 완료되었습니다!');
-            window.location.href = '/login';
-          } catch (err) {
-            alert('서버와 통신 중 오류가 발생했습니다.');
-          }
-        });
-      });
-    </script>
+    <script src="/public/scripts/signup.js"></script>
   </body>
 </html>
