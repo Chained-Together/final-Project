@@ -44,9 +44,9 @@ export class CommentService {
   async findAll(videoId: number) {
     await this.verifyVideo(videoId);
     const comment = await this.commentRepository.find({
-      where: { id: videoId },
+      where: { video: { id: videoId }, depth: 0 },
       select: ['id', 'userId', 'content', 'createdAt'],
-      order: { createdAt: 'DESC' },
+      order: { createdAt: 'ASC' },
     });
     return { data: comment };
   }

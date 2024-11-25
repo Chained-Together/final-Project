@@ -67,7 +67,7 @@ export class VideoService {
   async getVideo(videoId: number): Promise<VideoEntity> {
     const foundVideo = await this.videoRepository.findOne({
       where: { id: videoId },
-      relations: ['channel'],
+      relations: ['channel', 'resolution'],
     });
 
     if (!foundVideo) {

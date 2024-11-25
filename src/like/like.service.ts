@@ -10,7 +10,7 @@ export class LikeService {
     private readonly likeRepository: Repository<LikeEntity>,
   ) {}
   // TODO : 예외처리하기
-  async toggleLike(userId: number ,videoId: number) {
+  async toggleLike(userId: number, videoId: number) {
     const findLike = await this.likeRepository.findOne({
       where: {
         user: { id: userId },
@@ -24,9 +24,18 @@ export class LikeService {
         video: { id: videoId },
       });
     }
+
     return await this.likeRepository.save({
       user: { id: userId },
       video: { id: videoId },
     });
+  }
+
+  async getLikes(videoId: number) {
+    const getLikes = await this.likeRepository.count({
+      where: { video: { id: videoId } },
+    });
+
+    return getLikes;
   }
 }
