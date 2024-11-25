@@ -9,7 +9,7 @@ import { UpdateVideoDto } from './dto/update.video.dto';
 import { Visibility } from './video.visibility.enum';
 
 const mockVideoService = {
-  createVideo: jest.fn(),
+  saveMetadata: jest.fn(),
   getAllVideo: jest.fn(),
   getVideo: jest.fn(),
   updateVideo: jest.fn(),
@@ -39,24 +39,25 @@ describe('VideoController', () => {
   });
 
   describe('createVideo', () => {
-    it('비디오를 생성하고 반환한다', async () => {
+    it('비디오를 메타 데이터를 저장하고 키를 반환한다.', async () => {
       const mockUser = { id: 1 } as any;
       const videoDto: VideoDto = {
         title: 'Test Video',
         description: 'This is a test description',
-        thumbnailURL: 'https://example.com/thumbnail.jpg',
+        thumbnailUrl: 'https://example.com/thumbnail.jpg',
         hashtags: ['#test', '#video'],
         high: 'url',
         low: 'url',
         duration: 300,
         visibility: Visibility.PUBLIC,
+        videoCode: '1',
       };
 
       const mockVideo: VideoEntity = {
         id: 1,
         title: 'test',
         description: 'test',
-        thumbnailURL: 'test',
+        thumbnailUrl: 'test',
         hashtags: ['공포', '고양이'],
         visibility: Visibility.PUBLIC,
         duration: 10,
@@ -66,14 +67,19 @@ describe('VideoController', () => {
         resolution: null,
         channel: null,
         likes: null,
+        videoCode: '1',
+        status: false,
+        comments: null,
       };
 
-      jest.spyOn(mockVideoService, 'createVideo').mockResolvedValueOnce(mockVideo);
+      jest
+        .spyOn(mockVideoService, 'saveMetadata')
+        .mockResolvedValueOnce({ key: mockVideo.videoCode });
 
-      const result = await videoController.createVideo(mockUser, videoDto);
+      const result = await videoController.saveMetadata(mockUser, videoDto);
 
-      expect(mockVideoService.createVideo).toHaveBeenCalledWith(mockUser, videoDto);
-      expect(result).toEqual(mockVideo);
+      expect(mockVideoService.saveMetadata).toHaveBeenCalledWith(mockUser, videoDto);
+      expect(result).toEqual({ key: mockVideo.videoCode });
     });
   });
 
@@ -83,7 +89,7 @@ describe('VideoController', () => {
       const updateDto: UpdateVideoDto = {
         title: 'Updated Title',
         description: 'Updated description',
-        thumbnailURL: 'https://example.com/updated-thumbnail.jpg',
+        thumbnailUrl: 'https://example.com/updated-thumbnail.jpg',
         hashtags: ['#updated', '#video'],
         visibility: Visibility.PRIVATE,
       };
@@ -106,7 +112,7 @@ describe('VideoController', () => {
         id: 1,
         title: 'Partially Updated Title',
         description: 'Original description',
-        thumbnailURL: 'https://example.com/original-thumbnail.jpg',
+        thumbnailUrl: 'https://example.com/original-thumbnail.jpg',
         hashtags: ['#original'],
         visibility: Visibility.PUBLIC,
       } as VideoEntity;

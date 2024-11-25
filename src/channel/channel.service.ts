@@ -20,6 +20,10 @@ export class ChannelService {
   async createChannel(channelDto: ChannelDto, user: UserEntity): Promise<ChannelEntity> {
     const { name, profileImage } = channelDto;
 
+    const isExistChannel = await this.findChannel({ userId: user.id });
+    if (isExistChannel) {
+      throw new ConflictException(`이미 채널을 보유 중 입니다.${isExistChannel.name}`);
+    }
     const found = await this.findChannel({ name });
     if (found) {
       throw new ConflictException(`입력하신 채널이름(${name})이 이미 존재합니다.`);

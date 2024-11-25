@@ -1,6 +1,14 @@
-import { Column, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  OneToMany,
+  OneToOne,
+  PrimaryColumn,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { VideoEntity } from '../../video/entities/video.entity';
 import { LikeEntity } from '../../like/entities/like.entity';
+import { ChannelEntity } from 'src/channel/entities/channel.entity';
 
 @Entity({
   name: 'users',
@@ -26,4 +34,7 @@ export class UserEntity {
 
   @OneToMany(() => LikeEntity, (like) => like.user)
   likes: LikeEntity;
+
+  @OneToOne(() => ChannelEntity, (channel) => channel.user)
+  channel: ChannelEntity;
 }

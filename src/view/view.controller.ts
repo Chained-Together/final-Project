@@ -26,6 +26,12 @@ export class ViewController {
     return;
   }
 
+  @Get('/create-channel')
+  @Render('create-channel')
+  showCreateChannelPage() {
+    return;
+  }
+
   @Get('/mychannel')
   @Render('my-channel')
   showChannelPage() {

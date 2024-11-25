@@ -32,8 +32,6 @@ export class VideoService {
       videoCode,
     } = videoDto;
 
-    console.log(`비디오DTO:${videoDto}`);
-
     const foundChannel = await this.findChannelByUserId(user.id);
 
     const video = this.videoRepository.create({
@@ -135,8 +133,8 @@ export class VideoService {
       updateData.description = updateVideoDto.description;
     }
 
-    if (updateVideoDto.thumbnailURL) {
-      updateData.thumbnailUrl = updateVideoDto.thumbnailURL;
+    if (updateVideoDto.thumbnailUrl) {
+      updateData.thumbnailUrl = updateVideoDto.thumbnailUrl;
     }
 
     if (updateVideoDto.hashtags) {

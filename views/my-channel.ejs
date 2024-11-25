@@ -4,56 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>내 채널</title>
-    <style>
-      body {
-        font-family: 'Arial', sans-serif;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        min-height: 100vh;
-        background: linear-gradient(135deg, rgb(31, 31, 31), #cbcbcb);
-        color: #ffffff;
-      }
-
-      .profile-btn {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        overflow: hidden;
-        border: 2px solid rgba(255, 255, 255, 0.8);
-        cursor: pointer;
-        background-color: rgba(255, 255, 255, 0.1);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        transition:
-          transform 0.3s ease,
-          border-color 0.3s ease;
-      }
-
-      .profile-btn:hover {
-        transform: scale(1.1);
-        border-color: rgba(255, 255, 255, 1);
-      }
-
-      .profile-btn img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-
-      @media (max-width: 480px) {
-        .profile-btn {
-          top: 10px;
-          right: 10px;
-          width: 40px;
-          height: 40px;
-        }
-      }
-    </style>
+    <link rel="stylesheet" href="/public/styles/channel.css" />
   </head>
   <body>
     <div class="profile-btn" id="profileButton">
@@ -70,53 +21,6 @@
 
     <div class="video-list"></div>
 
-    <script>
-      document.addEventListener('DOMContentLoaded', async () => {
-        const token = localStorage.getItem('token');
-        const channelNameElement = document.getElementById('channelName');
-        const profileImageElement = document.getElementById('profileImage');
-
-        if (!token) {
-          channelNameElement.textContent = '로그인이 필요합니다.';
-          return;
-        }
-
-        try {
-          const response = await fetch('/channel', {
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-
-          if (!response.ok) {
-            throw new Error('채널 정보를 가져오지 못했습니다.');
-          }
-
-          const channelData = await response.json();
-          channelNameElement.textContent = channelData.name || '알 수 없음';
-          profileImageElement.src = channelData.profileImage || '/path/to/default-profile.png';
-        } catch (error) {
-          console.error('오류:', error);
-          channelNameElement.textContent = '채널 정보를 로드하는 중 오류가 발생했습니다.';
-        }
-      });
-
-      const uploadBtn = document.getElementById('uploadBtn');
-      uploadBtn.addEventListener('click', () => {
-        const token = localStorage.getItem('token');
-        if (token) {
-          window.location.href = '/upload';
-        } else {
-          window.location.href = '/login';
-        }
-      });
-
-      // 프로필 버튼 클릭 이벤트
-      const profileButton = document.getElementById('profileButton');
-      profileButton.addEventListener('click', () => {
-        window.location.href = '/mychannel';
-      });
-    </script>
+    <script src="/public/scripts/channel.js"></script>
   </body>
 </html>

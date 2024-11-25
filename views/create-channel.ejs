@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="kr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>File Upload</title>
+    <link rel="stylesheet" href="/public/styles/file-upload.css" />
+  </head>
+
+  <body>
+    <form id="createChannelForm">
+      <div>
+        <label for="title">채널 이름</label>
+        <input type="text" id="name" placeholder="채널 이름을 입력하세요" />
+      </div>
+
+      <div>
+        <label for="title">프로필 이미지</label>
+        <input type="text" id="profileImage" placeholder="프로필 이미지 url 을 입력하세요." />
+      </div>
+
+      <button id="submitBtn">채널 만들기</button>
+    </form>
+
+    <script src="/public/scripts/create-channel.js"></script>
+  </body>
+</html>

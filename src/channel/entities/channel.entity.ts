@@ -1,5 +1,6 @@
+import { UserEntity } from 'src/user/entity/user.entity';
 import { VideoEntity } from '../../video/entities/video.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({
   name: 'channel',
@@ -19,4 +20,7 @@ export class ChannelEntity {
 
   @OneToMany(() => VideoEntity, (video) => video.channel, { cascade: true })
   video: VideoEntity;
+
+  @OneToOne(() => UserEntity, (user) => user.channel, { cascade: true })
+  user: UserEntity;
 }

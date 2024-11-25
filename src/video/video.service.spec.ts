@@ -10,7 +10,7 @@ import { VideoDto } from './dto/video.dto';
 import { NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { create } from 'lodash';
 import { UpdateVideoDto } from './dto/update.video.dto';
-import { ResolutionsEntity } from './entities/resolutions.entity';
+import { ResolutionEntity } from '../resolution/entities/resolution.entity';
 
 const mockVideoRepository = {
   create: jest.fn(),
@@ -34,6 +34,7 @@ describe('VideoService', () => {
   let videoService: VideoService;
   let videoRepository: Repository<VideoEntity>;
   let channelRepository: Repository<ChannelEntity>;
+  let resolutionRepository: Repository<ResolutionEntity>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -49,7 +50,7 @@ describe('VideoService', () => {
         },
 
         {
-          provide: getRepositoryToken(ResolutionsEntity),
+          provide: getRepositoryToken(ResolutionEntity),
           useValue: mockResolutionRepository,
         },
       ],
@@ -58,6 +59,9 @@ describe('VideoService', () => {
     videoService = module.get<VideoService>(VideoService);
     videoRepository = module.get<Repository<VideoEntity>>(getRepositoryToken(VideoEntity));
     channelRepository = module.get<Repository<ChannelEntity>>(getRepositoryToken(ChannelEntity));
+    resolutionRepository = module.get<Repository<ResolutionEntity>>(
+      getRepositoryToken(ChannelEntity),
+    );
   });
 
   const mockUser: UserEntity = {
@@ -68,6 +72,7 @@ describe('VideoService', () => {
     nickname: 'test',
     phoneNumber: '010-4444-4444',
     likes: null,
+    channel: null,
   };
 
   const mockChannel: ChannelEntity = {
@@ -76,39 +81,44 @@ describe('VideoService', () => {
     profileImage: 'test',
     userId: 1,
     video: null,
+    user: null,
   };
 
   const mockVideo: VideoEntity = {
     id: 1,
     title: 'test',
     description: 'test',
-    thumbnailURL: 'test',
+    thumbnailUrl: 'test',
     hashtags: ['공포', '강아지'],
     visibility: Visibility.PUBLIC,
-    duration: 10,
+    duration: null,
     views: 0,
     uploadedAt: new Date(),
     updatedAt: null,
     resolution: null,
     channel: mockChannel,
     likes: null,
+    videoCode: '1',
+    status: false,
+    comments: null,
   };
 
   const mockVideoDto: VideoDto = {
     title: 'test',
     description: 'test',
-    thumbnailURL: 'test',
-    duration: 10,
+    thumbnailUrl: 'test',
+    duration: null,
     hashtags: ['공포', '강아지'],
     visibility: Visibility.PUBLIC,
     high: '임의 링크',
     low: '임의 링크',
+    videoCode: '1',
   };
 
   const mockUpdateVideoDto: UpdateVideoDto = {
     title: 'test',
     description: 'test',
-    thumbnailURL: 'test',
+    thumbnailUrl: 'test',
     hashtags: ['공포', '고양이'],
     visibility: Visibility.PUBLIC,
   };
@@ -120,19 +130,28 @@ describe('VideoService', () => {
     thumbnailUrl: 'test',
     hashtags: ['공포', '고양이'],
     visibility: Visibility.PUBLIC,
-    duration: 10,
+    duration: null,
     views: 0,
     uploadedAt: new Date(),
     updatedAt: null,
     resolution: null,
     channel: mockChannel,
     likes: null,
+    videoCode: '1',
+    status: false,
+    comments: null,
+  };
+  const mockResolution: ResolutionEntity = {
+    id: 1,
+    high: '임의 링크',
+    low: '임의 링크',
+    video: mockVideo,
   };
 
-  describe('영상 생성 시', () => {
+  describe('영상 메타 데이터 저장 시 ', () => {
     it('유저가 소유한 채널이 없으면 UnauthorizedException을 반환해야 한다.', async () => {
       mockChannelRepository.findOne.mockResolvedValue(null);
-      await expect(videoService.createVideo(mockUser, mockVideoDto)).rejects.toThrow(
+      await expect(videoService.saveMetadata(mockUser, mockVideoDto)).rejects.toThrow(
         UnauthorizedException,
       );
     });
@@ -142,14 +161,32 @@ describe('VideoService', () => {
       mockVideoRepository.create.mockReturnValue(mockVideo as never);
       mockVideoRepository.save.mockResolvedValue(mockVideo);
 
-      const result = await videoService.createVideo(mockUser, mockVideoDto);
+      mockResolutionRepository.create.mockReturnValue(mockResolution);
+      mockResolutionRepository.save.mockResolvedValue(mockResolution);
+
+      const result = await videoService.saveMetadata(mockUser, mockVideoDto);
+
       expect(channelRepository.findOne).toHaveBeenCalledWith({ where: { userId: mockUser.id } });
       expect(videoRepository.create).toHaveBeenCalledWith({
-        ...mockVideoDto,
+        title: mockVideoDto.title,
+        description: mockVideoDto.description,
+        thumbnailUrl: mockVideoDto.thumbnailUrl,
+        hashtags: mockVideoDto.hashtags,
+        duration: null,
+        visibility: mockVideoDto.visibility,
         channel: mockChannel,
+        videoCode: mockVideo.videoCode,
       });
       expect(videoRepository.save).toHaveBeenCalledWith(mockVideo);
-      expect(result).toEqual(mockVideo);
+
+      expect(mockResolutionRepository.create).toHaveBeenCalledWith({
+        high: mockVideoDto.high,
+        low: mockVideoDto.low,
+        video: mockVideo,
+      });
+
+      expect(mockResolutionRepository.save).toHaveBeenCalledWith(mockResolution);
+      expect(result).toEqual({ key: mockVideo.videoCode });
     });
   });
 

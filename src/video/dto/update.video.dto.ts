@@ -9,7 +9,7 @@ export class UpdateVideoDto {
   description: string;
 
   @IsString()
-  thumbnailURL: string;
+  thumbnailUrl: string;
 
   @IsString({ each: true })
   @IsArray()
