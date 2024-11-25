@@ -211,7 +211,7 @@ describe('VideoService', () => {
 
       expect(videoRepository.findOne).toHaveBeenCalledWith({
         where: { id: 1 },
-        relations: ['channel'],
+        relations: ['channel', 'resolution'],
       });
       expect(result).toEqual(mockVideo);
     });
