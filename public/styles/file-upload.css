@@ -1,0 +1,113 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  background: linear-gradient(135deg, #1e1e1e, #000000); /* 그라디언트 배경 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+}
+
+/* 컨테이너 스타일 */
+form {
+  background: #020202; /* 폼 배경색 */
+  padding: 30px;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+h2 {
+  font-size: 1.8rem;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #f5f5f5;
+}
+
+/* 입력 폼 스타일 */
+form div {
+  margin-bottom: 20px;
+}
+
+label {
+  font-size: 1rem;
+  margin-bottom: 8px;
+  display: block;
+  color: #cfcfcf;
+}
+
+input[type='text'],
+input[type='file'],
+textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #555;
+  border-radius: 5px;
+  background-color: #3a3a3a;
+  color: #fff;
+  box-sizing: border-box;
+}
+
+textarea {
+  height: 100px; /* 텍스트 영역 높이 */
+  resize: vertical; /* 크기 조정 가능 */
+}
+
+input[type='file'] {
+  padding: 5px;
+  font-size: 0.9rem;
+  border: none;
+}
+
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: #56baed; /* 포커스 시 테두리 색상 */
+}
+
+/* 버튼 스타일 */
+button {
+  width: 100%;
+  padding: 12px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #fff;
+  background: #56baed; /* 버튼 배경색 */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
+}
+
+button:hover {
+  background: #4094d0;
+  transform: scale(1.05); /* 살짝 확대 효과 */
+}
+
+/* 반응형 디자인 */
+@media (max-width: 480px) {
+  form {
+    padding: 20px;
+    width: 90%;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  input[type='text'],
+  textarea {
+    font-size: 0.9rem;
+  }
+
+  button {
+    font-size: 1rem;
+    padding: 10px;
+  }
+}

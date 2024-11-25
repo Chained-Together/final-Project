@@ -39,6 +39,7 @@ describe('ChannelService', () => {
     nickname: 'test',
     phoneNumber: '010-4444-4444',
     likes: null,
+    channel: null,
   };
 
   const mockChannelDto: ChannelDto = {
@@ -52,6 +53,7 @@ describe('ChannelService', () => {
     profileImage: 'image',
     userId: 1,
     video: null,
+    user: mockUser,
   };
 
   const mockUpdatedChannelDto: ChannelDto = {
@@ -65,6 +67,7 @@ describe('ChannelService', () => {
     profileImage: 'image',
     userId: 1,
     video: null,
+    user: mockUser,
   };
 
   it('should be defined', () => {

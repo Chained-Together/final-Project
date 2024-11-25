@@ -4,6 +4,7 @@ import { ChannelDto } from './dto/channel.dto';
 import { ChannelEntity } from './entities/channel.entity';
 import { ChannelService } from './channel.service';
 import { UserEntity } from 'src/user/entity/user.entity';
+import { isNil } from 'lodash';
 
 const mockChannelService = {
   createChannel: jest.fn(),
@@ -36,6 +37,7 @@ describe('ChannelController', () => {
     nickname: 'test',
     phoneNumber: '010-4444-4444',
     likes: null,
+    channel: null,
   };
 
   const channelDto: ChannelDto = {
@@ -49,6 +51,7 @@ describe('ChannelController', () => {
     userId: user.id,
     profileImage: 'image',
     video: null,
+    user: user,
   };
 
   const updatedChannel: ChannelEntity = {
