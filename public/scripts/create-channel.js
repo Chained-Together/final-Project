@@ -19,6 +19,10 @@ createChannrlForm.addEventListener('submit', async (event) => {
         profileImage: profileImage.value,
       }),
     });
+    if (response.ok) {
+      alert('채널이 성공적으로 생성되었습니다.');
+      window.location.href = '/main';
+    }
 
     if (!response.ok) {
       throw new Error('채널 생성에 실패했습니다.');

@@ -1,81 +1,70 @@
 <!doctype html>
 <html lang="kr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Loopfiy</title>
-    <link rel="stylesheet" href="/public/styles/signup.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Gasoek+One&family=Jua&display=swap"
-      rel="stylesheet"
-    />
-  </head>
-  <body>
-    <div id="maintitle">
-      <h2 class="jua-regular">Loopfiy</h2>
-    </div>
 
-    <div id="signupPopup">
-      <form id="signupForm" action="/auth/signup" method="POST">
-        <div>
-          <label class="jua-regular" for="email">이메일:</label>
-          <input type="email" id="email" name="email" placeholder="이메일을 입력하세요" required />
-          <span class="error-message"></span>
-        </div>
-        <div>
-          <label class="jua-regular" for="password">비밀번호:</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            placeholder="비밀번호를 입력하세요"
-            required
-          />
-          <span class="error-message"></span>
-        </div>
-        <div>
-          <label class="jua-regular" for="confirmedPassword">비밀번호 확인:</label>
-          <input
-            type="password"
-            id="confirmedPassword"
-            name="confirmedPassword"
-            placeholder="비밀번호를 다시 입력하세요"
-            required
-          />
-          <span class="error-message"></span>
-        </div>
-        <div>
-          <label class="jua-regular" for="name">이름:</label>
-          <input type="text" id="name" name="name" placeholder="이름을 입력하세요" required />
-          <span class="error-message"></span>
-        </div>
-        <div>
-          <label class="jua-regular" for="nickname">닉네임:</label>
-          <input
-            type="text"
-            id="nickname"
-            name="nickname"
-            placeholder="닉네임을 입력하세요"
-            required
-          />
-          <span class="error-message"></span>
-        </div>
-        <div>
-          <label class="jua-regular" for="phoneNumber">전화번호:</label>
-          <input
-            type="text"
-            id="phoneNumber"
-            name="phoneNumber"
-            placeholder="전화번호를 입력하세요"
-            required
-          />
-          <span class="error-message"></span>
-        </div>
-        <button class="jua-regular" type="submit" id="submitBtn">가입하기</button>
-      </form>
-    </div>
-    <script src="/public/scripts/signup.js"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Loopfiy</title>
+  <link rel="stylesheet" href="/public/styles/signup.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gasoek+One&family=Jua&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Gamja+Flower&family=Gasoek+One&family=Hi+Melody&family=Jua&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+    rel="stylesheet">
+    <link rel="stylesheet" href="/public/styles/global.css" />
+  <script src="https://kit.fontawesome.com/6a4db89020.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <header>
+    <nav class="LoopfiyBar">
+      <div class="log">
+        <i class="fa-solid fa-bolt"></i>
+        <a href="/main" class="bungee-spice-regular">Loopfiy</a>
+      </div>
+    </nav>
+  </header>
+  <div id="maintitle">
+    <h2 class="jua-regular">Loopfiy</h2>
+  </div>
+
+  <div id="signupPopup">
+    <form id="signupForm" action="/auth/signup" method="POST">
+      <div>
+        <label class="jua-regular" for="email">이메일:</label>
+        <input type="email" id="email" name="email" placeholder="이메일을 입력하세요" required />
+        <span class="error-message"></span>
+      </div>
+      <div>
+        <label class="jua-regular" for="password">비밀번호:</label>
+        <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" required />
+        <span class="error-message"></span>
+      </div>
+      <div>
+        <label class="jua-regular" for="confirmedPassword">비밀번호 확인:</label>
+        <input type="password" id="confirmedPassword" name="confirmedPassword" placeholder="비밀번호를 다시 입력하세요" required />
+        <span class="error-message"></span>
+      </div>
+      <div>
+        <label class="jua-regular" for="name">이름:</label>
+        <input type="text" id="name" name="name" placeholder="이름을 입력하세요" required />
+        <span class="error-message"></span>
+      </div>
+      <div>
+        <label class="jua-regular" for="nickname">닉네임:</label>
+        <input type="text" id="nickname" name="nickname" placeholder="닉네임을 입력하세요" required />
+        <span class="error-message"></span>
+      </div>
+      <div>
+        <label class="jua-regular" for="phoneNumber">전화번호:</label>
+        <input type="text" id="phoneNumber" name="phoneNumber" placeholder="전화번호를 입력하세요" required />
+        <span class="error-message"></span>
+      </div>
+      <button class="jua-regular" type="submit" id="submitBtn">가입하기</button>
+    </form>
+  </div>
+  <script src="/public/scripts/signup.js"></script>
+</body>
+
 </html>

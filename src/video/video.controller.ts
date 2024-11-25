@@ -25,7 +25,7 @@ export class VideoController {
     return this.videoService.getAllVideo();
   }
 
-  @Get('/:channelId')
+  @Get('my/:channelId')
   getAllVideoOfChannel(@Param('channelId') channelId: number) {
     // console.log(channelId);
     return this.videoService.getAllVideoOfChannel(channelId);

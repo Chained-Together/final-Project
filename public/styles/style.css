@@ -1,6 +1,5 @@
-/* 팝업창 스타일 */
 #loginPopup {
-  display: none; /* 기본적으로 숨김 */
+  display: none;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -13,7 +12,7 @@
 }
 
 #popupOverlay {
-  display: none; /* 기본적으로 숨김 */
+  display: none;
   position: fixed;
   top: 0;
   left: 0;
@@ -23,7 +22,6 @@
   z-index: 999;
 }
 
-/* 팝업창 닫기 버튼 */
 #closePopup {
   cursor: pointer;
   background-color: #f44336;

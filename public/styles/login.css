@@ -1,3 +1,35 @@
+/* header {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000; 
+  padding: 10px 20px;
+}
+
+.log {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.log i {
+  font-size: 30px;
+  color: #fe6c17;
+}
+
+.log a {
+  font-size: 30px;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.bungee-spice-regular {
+  font-family: 'Bungee Spice', sans-serif;
+  font-weight: 400;
+} */
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;

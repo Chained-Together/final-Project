@@ -1,26 +1,42 @@
 <!doctype html>
 <html lang="kr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="home" content="width=device-width, initial-scale=1.0" />
-    <title>로그인</title>
-    <link rel="stylesheet" href="/public/styles/login.css" />
-  </head>
 
-  <body>
-    <form id="loginForm">
-      <div>
-        <label for="username">Email</label>
-        <input type="text" id="email" name="email" required />
-      </div>
-      <div>
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" required />
-      </div>
-      <button type="submit">로그인</button>
-      <a for="signup" href="/signup" class="link">회원가입</a>
-    </form>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="home" content="width=device-width, initial-scale=1.0" />
+  <title>로그인</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Gamja+Flower&family=Gasoek+One&family=Hi+Melody&family=Jua&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/public/styles/login.css" />
+  <link rel="stylesheet" href="/public/styles/global.css" />
+  <script src="https://kit.fontawesome.com/6a4db89020.js" crossorigin="anonymous">
+  </script>
+</head>
 
-    <script src="/public/scripts/login.js"></script>
-  </body>
+<body>
+  <header>
+    <nav class="LoopfiyBar">
+      <div class="log">
+        <i class="fa-solid fa-bolt"></i>
+        <a href="/main" class="bungee-spice-regular">Loopfiy</a>
+      </div>
+    </nav>
+  </header>
+  <form id="loginForm">
+    <div>
+      <label for="username">Email</label>
+      <input type="text" id="email" name="email" required />
+    </div>
+    <div>
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required />
+    </div>
+    <button type="submit">로그인</button>
+    <a for="signup" href="/signup" class="link">회원가입</a>
+  </form>
+
+  <script src="/public/scripts/login.js"></script>
+</body>
+
 </html>

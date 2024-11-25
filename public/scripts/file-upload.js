@@ -80,6 +80,7 @@ uploadBtn.addEventListener('click', async () => {
       }
 
       console.log('메타데이터 전송 성공');
+      window.location.href = '/mychannel';
     } else {
       throw new Error('파일 업로드 실패');
     }

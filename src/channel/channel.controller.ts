@@ -5,6 +5,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { ChannelEntity } from './entities/channel.entity';
 import { UserEntity } from 'src/user/entity/user.entity';
 import { UserInfo } from 'src/utils/user-info.decorator';
+import { Response } from 'express';
 
 @Controller('channel')
 export class ChannelController {
@@ -15,9 +16,16 @@ export class ChannelController {
   createChannel(
     @Body() channelDto: ChannelDto,
     @UserInfo() user: UserEntity,
-  ): Promise<ChannelEntity> {
+    // @Res() res: Response,
+  ) {
     return this.channelService.createChannel(channelDto, user);
+    // return res.redirect('main');
   }
+
+  // @Get('main')
+  // renderMain(@Res() res: Response) {
+  //   res.render('main');
+  // }
 
   @Get('/:channelId')
   getChannel(@Param('channelId') id: number): Promise<ChannelEntity> {

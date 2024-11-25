@@ -1,27 +1,42 @@
 <!doctype html>
 <html lang="kr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>File Upload</title>
-    <link rel="stylesheet" href="/public/styles/file-upload.css" />
-  </head>
 
-  <body>
-    <form id="createChannelForm">
-      <div>
-        <label for="title">채널 이름</label>
-        <input type="text" id="name" placeholder="채널 이름을 입력하세요" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>File Upload</title>
+  <link rel="stylesheet" href="/public/styles/file-upload.css" />
+  <link rel="stylesheet" href="/public/styles/global.css" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Gamja+Flower&family=Gasoek+One&family=Hi+Melody&family=Jua&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+    rel="stylesheet">
+  <script src="https://kit.fontawesome.com/6a4db89020.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <header>
+    <nav class="LoopfiyBar">
+      <div class="log">
+        <i class="fa-solid fa-bolt"></i>
+        <a href="/main" class="bungee-spice-regular">Loopfiy</a>
       </div>
+    </nav>
+  </header>
+  <form id="createChannelForm">
+    <div>
+      <label for="title">채널 이름</label>
+      <input type="text" id="name" placeholder="채널 이름을 입력하세요" />
+    </div>
 
-      <div>
-        <label for="title">프로필 이미지</label>
-        <input type="text" id="profileImage" placeholder="프로필 이미지 url 을 입력하세요." />
-      </div>
+    <div>
+      <label for="title">프로필 이미지</label>
+      <input type="text" id="profileImage" placeholder="프로필 이미지 url 을 입력하세요." />
+    </div>
 
-      <button id="submitBtn">채널 만들기</button>
-    </form>
+    <button id="submitBtn">채널 만들기</button>
+  </form>
 
-    <script src="/public/scripts/create-channel.js"></script>
-  </body>
+  <script src="/public/scripts/create-channel.js"></script>
+</body>
+
 </html>
