@@ -47,7 +47,6 @@ async function loadInfos() {
     // shortform-grid 컨테이너 가져오기
     const shortformGrid = document.querySelector('.shortform-grid');
 
-    // 기존 placeholder 비우기
     shortformGrid.innerHTML = '';
 
     // 비디오 데이터 렌더링
@@ -74,25 +73,25 @@ async function loadInfos() {
       if (video.title) {
         const placeholderTitle = document.createElement('div');
         placeholderTitle.className = 'placeholder-title';
-        placeholderTitle.textContent = `제목: ${video.title}`;
+        placeholderTitle.textContent = video.title;
         shortformItem.appendChild(placeholderTitle);
       }
 
-      // 설명 추가
-      if (video.description) {
-        const placeholderDescription = document.createElement('div');
-        placeholderDescription.className = 'placeholder-description';
-        placeholderDescription.textContent = `설명: ${video.description}`;
-        shortformItem.appendChild(placeholderDescription);
-      }
+      // // 설명 추가
+      // if (video.description) {
+      //   const placeholderDescription = document.createElement('div');
+      //   placeholderDescription.className = 'placeholder-description';
+      //   placeholderDescription.textContent = `설명: ${video.description}`;
+      //   shortformItem.appendChild(placeholderDescription);
+      // }
 
-      // 해시태그 추가
-      if (video.hashtags) {
-        const placeholderHashtags = document.createElement('div');
-        placeholderHashtags.className = 'placeholder-hashtags';
-        placeholderHashtags.textContent = `해시태그: ${video.hashtags}`;
-        shortformItem.appendChild(placeholderHashtags);
-      }
+      // // 해시태그 추가
+      // if (video.hashtags) {
+      //   const placeholderHashtags = document.createElement('div');
+      //   placeholderHashtags.className = 'placeholder-hashtags';
+      //   placeholderHashtags.textContent = `해시태그: ${video.hashtags}`;
+      //   shortformItem.appendChild(placeholderHashtags);
+      // }
 
       // 완성된 비디오 아이템을 그리드에 추가
       shortformGrid.appendChild(shortformItem);
@@ -111,49 +110,6 @@ async function loadInfos() {
 
 // 초기 로드
 loadInfos();
-
-// 무한 스크롤 추가
-let isLoading = false; // 로딩 상태를 관리
-
-const loadMoreVideos = async () => {
-  if (isLoading) return; // 중복 호출 방지
-  isLoading = true;
-
-  try {
-    const response = await fetch('/video/more'); // 추가 데이터를 요청하는 API 엔드포인트
-    if (!response.ok) throw new Error('추가 데이터를 가져오는 데 실패했습니다.');
-
-    const newVideos = await response.json();
-
-    // 새로운 비디오 요소 추가
-    const videoContainer = document.getElementById('videoContainer');
-    newVideos.forEach((video) => {
-      const videoElement = document.createElement('div');
-      videoElement.classList.add('video-item');
-      videoElement.innerHTML = `
-        <div class="thumbnail" style="background-image: url(${video.thumbnailUrl || '/path/to/default-thumbnail.png'}); height: 200px;"></div>
-        <h3>${video.title || '기본 제목'}</h3>
-        <p>${video.description || '기본 설명'}</p>
-        <p>${video.hashtags || '#해시태그'}</p>
-      `;
-      videoContainer.appendChild(videoElement);
-    });
-  } catch (error) {
-    console.error('무한 스크롤 오류:', error);
-  } finally {
-    isLoading = false;
-  }
-};
-
-// 스크롤 이벤트 추가
-window.addEventListener('scroll', () => {
-  const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-
-  // 하단 근처에 도달 시 추가 데이터 로드
-  if (scrollTop + clientHeight >= scrollHeight - 50) {
-    loadMoreVideos();
-  }
-});
 
 const profileBtn = document.getElementById('profileBtn');
 profileBtn.addEventListener('click', () => {
