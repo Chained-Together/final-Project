@@ -1,5 +1,4 @@
 import { showPopup } from './video-edit-popup.js';
-
 document.addEventListener('DOMContentLoaded', async () => {
   const token = localStorage.getItem('token');
   const channelNameElement = document.getElementById('channelName');
@@ -60,7 +59,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       videoData.forEach((video) => {
         const card = document.createElement('div');
-        card.classList.add('video-card', 'thumbnail'); // "thumbnail" 클래스 추가
+        card.classList.add('video-card', 'thumbnail'); // "thumsbnail" 클래스 추가
         card.id = video.id;
 
         const img = document.createElement('img');
@@ -115,27 +114,26 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.error('오류:', error);
     channelNameElement.textContent = '정보를 로드하는 중 오류가 발생했습니다.';
   }
-});
 
-const uploadBtn = document.getElementById('uploadBtn');
-uploadBtn.addEventListener('click', () => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    window.location.href = '/upload';
-  } else {
-    window.location.href = '/login';
-  }
-});
+  const uploadBtn = document.getElementById('uploadBtn');
+  uploadBtn.addEventListener('click', () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      window.location.href = '/upload';
+    } else {
+      window.location.href = '/login';
+    }
+  });
 
-const profileButton = document.getElementById('profileButton');
-
-const createChannelEditButton = () => {
-  const channelEditButton = document.createElement('button');
-  channelEditButton.textContent = '채널 편집';
-  channelEditButton.id = 'channelEditBtn';
-  channelEditButton.style = `
+  const profileButton = document.getElementById('profileButton');
+  console.log('Profile Button:', profileButton);
+  const createChannelEditButton = () => {
+    const channelEditButton = document.createElement('button');
+    channelEditButton.textContent = '채널 편집';
+    channelEditButton.id = 'channelEditBtn';
+    channelEditButton.style = `
       position: absolute;
-      top: 30px; /* 계정 버튼 아래로 배치 */
+      top: 30px;
       right: 100px;
       background-color: #fff;
       color: #000;
@@ -146,19 +144,19 @@ const createChannelEditButton = () => {
       z-index: 1000;
     `;
 
-  channelEditButton.addEventListener('click', () => {
-    window.location.href = '/edit-mychannel';
+    channelEditButton.addEventListener('click', () => {
+      window.location.href = '/edit-mychannel';
+    });
+
+    return channelEditButton;
+  };
+  profileButton.addEventListener('click', () => {
+    let channelEditBtn = document.getElementById('channelEditBtn');
+    if (!channelEditBtn) {
+      channelEditBtn = createChannelEditButton();
+      document.body.appendChild(channelEditBtn);
+    } else {
+      channelEditBtn.remove();
+    }
   });
-
-  return channelEditButton;
-};
-
-profileButton.addEventListener('click', () => {
-  let channelEditBtn = document.getElementById('channelEditBtn');
-  if (!channelEditBtn) {
-    channelEditBtn = createChannelEditButton();
-    document.body.appendChild(channelEditBtn);
-  } else {
-    channelEditBtn.remove();
-  }
 });

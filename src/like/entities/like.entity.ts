@@ -1,6 +1,5 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { ChannelEntity } from '../../channel/entities/channel.entity';
-import { UserEntity } from '../../user/entity/user.entity';
+import { Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { UserEntity } from '../../user/entities/user.entity';
 import { VideoEntity } from '../../video/entities/video.entity';
 
 @Entity({
@@ -15,5 +14,4 @@ export class LikeEntity {
 
   @ManyToOne(() => VideoEntity, (video) => video.likes, { onDelete: 'CASCADE' })
   video: VideoEntity;
-
 }

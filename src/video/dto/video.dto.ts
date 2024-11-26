@@ -6,8 +6,6 @@ import {
   IsNumber,
   IsOptional,
   IsString,
-  IsUrl,
-  IsUUID,
 } from 'class-validator';
 import { Visibility } from '../video.visibility.enum';
 

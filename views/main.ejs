@@ -31,30 +31,7 @@
       </div>
     </nav>
   </header>
-  <script>
-    //윈도우 스크롤바 내량 양 + 눈에 보이는 높이 === 윈도우의 실제 총 높이 비교
-    $(window).on('scroll', () => {
-      const 스크롤양 = $(window).scrollTop(); // 스크롤된 양
-      const 눈높이 = $(window).height(); // 브라우저 창 높이
-      const 실제높이 = $(document).height(); // 전체 문서 높이
 
-    //   if(스크롤양+눈높이 === 시제높이){
-    //     const 신규6개 = 서버에서 6개씩 보내주는 데이터를 호출해
-
-    //     const 템플릿 =  `
-    //         <div class="shortform-grid">
-    //           <div class="shortform-item placeholder">
-    //             <div class="placeholder-video">${신규6개.프로필이미지}</div>
-    //             <div class="placeholder-title">${신규6개.title}</div>
-    //           </div>
-    //         </div>
-    //     `
-    //   }
-    // });
-
-    //서버에서 신규 6개의 영상데이터를 반환 ( 기존에 보냈던 영상은 제외 )
-    //자바스크립트 파일에서
-  </script>
   <div class="container">
     <div class="main">
       <a href="/create-channel" class="link">test용 채널</a>
@@ -67,11 +44,9 @@
         <img src="profileImageElement.src" alt="계정 사진" class="profileImage" />
       </div>
     </div>
+
     <div class="shortform-grid">
-      <div class="shortform-item placeholder">
-        <div class="placeholder-video"></div>
-        <div class="placeholder-title"></div>
-      </div>
+
     </div>
 
     <div class="loading-indicator" id="loadingIndicator" style="display: none;">

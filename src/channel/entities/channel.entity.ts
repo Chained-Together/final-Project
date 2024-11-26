@@ -1,5 +1,5 @@
-import { UserEntity } from 'src/user/entity/user.entity';
-import { VideoEntity } from '../../video/entities/video.entity';
+import { UserEntity } from 'src/user/entities/user.entity';
+import { VideoEntity } from 'src/video/entities/video.entity';
 import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({

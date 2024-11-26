@@ -32,7 +32,7 @@ export class ViewController {
     return;
   }
 
-  @Get('/mychannel')
+  @Get('/myChannel')
   @Render('my-channel')
   showChannelPage() {
     return;
@@ -47,6 +47,12 @@ export class ViewController {
   @Get('/upload')
   @Render('file-upload')
   showUploadPage() {
+    return;
+  }
+
+  @Get('/findInfo')
+  @Render('findInfo')
+  showFindInfoPage() {
     return;
   }
 

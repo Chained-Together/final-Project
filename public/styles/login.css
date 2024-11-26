@@ -1,35 +1,3 @@
-/* header {
-  width: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1000; 
-  padding: 10px 20px;
-}
-
-.log {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 10px;
-}
-
-.log i {
-  font-size: 30px;
-  color: #fe6c17;
-}
-
-.log a {
-  font-size: 30px;
-  color: #ffffff;
-  text-decoration: none;
-}
-
-.bungee-spice-regular {
-  font-family: 'Bungee Spice', sans-serif;
-  font-weight: 400;
-} */
-
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -56,7 +24,6 @@ h2 {
 
 form {
   position: absolute;
-  /* background: rgba(54, 48, 48, 0.171); */
   padding: 20px;
   border-radius: 10px;
   width: 100%;
@@ -101,7 +68,6 @@ input[type='password']:focus {
   outline: none;
 }
 
-/* 버튼 스타일 */
 button[type='submit'] {
   width: 100%;
   padding: 12px;
@@ -119,7 +85,7 @@ button[type='submit']:hover {
   background: #2575fc;
 }
 
-/* 반응형 디자인 */
+
 @media (max-width: 480px) {
   h2 {
     font-size: 1.5rem;
@@ -140,4 +106,21 @@ button[type='submit']:hover {
     padding: 10px;
     font-size: 1rem;
   }
+}
+#findInfo {
+  margin-top: 350px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+}
+
+#findInfo a {
+  text-decoration: none;
+  color: #fefefe;
+  font-size: 14px;
+}
+
+#findInfo a:hover {
+  text-decoration: underline;
 }

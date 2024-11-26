@@ -203,20 +203,90 @@ describe('VideoService', () => {
   });
 
   describe('영상 상세 조회 시', () => {
-    it('해당 영상이 없으면 NotFoundException을 반환해야 한다.', async () => {
+    it('해당 영상이 없으면 상태 코드 404와 존재하지 않는 비디오입니다. 반환해야 한다.', async () => {
       mockVideoRepository.findOne.mockResolvedValue(null);
-      await expect(videoService.getVideo(1, mockUser.id)).rejects.toThrow(NotFoundException);
+      const result = await videoService.getVideo(1, mockUser.id);
+
+      expect(result).toEqual({
+        statusCode: 404,
+        message: '존재하지 않는 비디오입니다.',
+      });
     });
 
-    it('해당 영상이 존재 하면 영상 메타데이터와 채널 정보를 반환한다. ', async () => {
-      mockVideoRepository.findOne.mockResolvedValue(mockVideo);
+    it('공개(PUBLIC) 영상이면 메타데이터와 채널 정보를 반환한다.', async () => {
+      mockVideoRepository.findOne.mockResolvedValue({
+        ...mockVideo,
+        visibility: Visibility.PUBLIC,
+      });
       const result = await videoService.getVideo(1, mockUser.id);
 
       expect(videoRepository.findOne).toHaveBeenCalledWith({
         where: { id: 1 },
         relations: ['channel', 'resolution'],
       });
-      expect(result).toEqual(mockVideo);
+      expect(result).toEqual({ ...mockVideo, visibility: Visibility.PUBLIC });
+    });
+
+    it('비공개(PRIVATE) 영상일 때 소유자가 아니면 상태 코드 401과 비공개 비디오에 접근할 수 없습니다.를 반환해야 한다.', async () => {
+      mockVideoRepository.findOne.mockResolvedValue({
+        ...mockVideo,
+        visibility: Visibility.PRIVATE,
+        channel: { ...mockChannel, userId: 999 },
+      });
+
+      const result = await videoService.getVideo(1, mockUser.id);
+
+      expect(result).toEqual({
+        statusCode: 401,
+        message: '비공개 비디오에 접근할 수 없습니다.',
+      });
+    });
+    it('비공개(PRIVATE) 영상일 때 소유자라면 메타데이터를 반환한다.', async () => {
+      mockVideoRepository.findOne.mockResolvedValue({
+        ...mockVideo,
+        visibility: Visibility.PRIVATE,
+        channel: { ...mockChannel, userId: mockUser.id },
+      });
+
+      const result = await videoService.getVideo(1, mockUser.id);
+
+      expect(result).toEqual({
+        ...mockVideo,
+        visibility: Visibility.PRIVATE,
+        channel: { ...mockChannel, userId: mockUser.id },
+      });
+    });
+
+    it('일부공개(UNLISTED) 영상일 때 accessKey가 올바르지 않으면 상태 코드 403과 올바른 링크가 아니면 접근할 수 없습니다.를 반환해야 한다.', async () => {
+      mockVideoRepository.findOne.mockResolvedValue({
+        ...mockVideo,
+        visibility: Visibility.UNLISTED,
+        accessKey: 'valid-key',
+        channel: { ...mockChannel, userId: 999 },
+      });
+
+      const result = await videoService.getVideo(1, mockUser.id, 'invalid-key');
+
+      expect(result).toEqual({
+        statusCode: 403,
+        message: '올바른 링크가 아니면 접근할 수 없습니다.',
+      });
+    });
+
+    it('일부공개(UNLISTED) 영상일 때 accessKey가 올바르면 메타데이터를 반환한다.', async () => {
+      mockVideoRepository.findOne.mockResolvedValue({
+        ...mockVideo,
+        visibility: Visibility.UNLISTED,
+        accessKey: 'valid-key',
+      });
+
+      const result = await videoService.getVideo(1, mockUser.id, 'valid-key');
+
+      expect(result).toEqual({
+        ...mockVideo,
+        visibility: Visibility.UNLISTED,
+        accessKey: 'valid-key',
+      });
     });
   });
 

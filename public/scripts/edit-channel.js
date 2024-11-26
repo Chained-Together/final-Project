@@ -149,7 +149,7 @@ const createChannelEditButton = () => {
     `;
 
   channelEditButton.addEventListener('click', () => {
-    window.location.href = '/mychannel';
+    window.location.href = '/myChannel';
   });
 
   return channelEditButton;
