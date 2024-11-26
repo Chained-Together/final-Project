@@ -1,4 +1,14 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UserEntity } from '../user/entity/user.entity';
 import { UserInfo } from '../utils/user-info.decorator';
@@ -6,6 +16,7 @@ import { UpdateVideoDto } from './dto/update.video.dto';
 import { VideoDto } from './dto/video.dto';
 import { VideoEntity } from './entities/video.entity';
 import { VideoService } from './video.service';
+import { OptionalAuthGuard } from 'src/utils/optional-authguard';
 
 @Controller('video')
 export class VideoController {
@@ -31,9 +42,20 @@ export class VideoController {
     return this.videoService.getAllVideoOfChannel(channelId);
   }
 
+  @Get('edit/:channelId')
+  @UseGuards(AuthGuard('jwt'))
+  getAllVideoOfMYChannel(@Param('channelId') channelId: number, @UserInfo() user: UserEntity) {
+    return this.videoService.getAllVideoOfMyChannel(channelId, user.id);
+  }
+
   @Get('/:id')
-  getVideo(@Param('id') id: number): Promise<VideoEntity> {
-    return this.videoService.getVideo(id);
+  @UseGuards(OptionalAuthGuard)
+  async getVideo(
+    @Param('id') id: number,
+    @Query('accessKey') accessKey?: string,
+    @UserInfo() user?: UserEntity,
+  ): Promise<VideoEntity> {
+    return this.videoService.getVideo(id, user?.id, accessKey);
   }
 
   @Patch('/:id')

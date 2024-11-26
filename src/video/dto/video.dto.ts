@@ -7,6 +7,7 @@ import {
   IsOptional,
   IsString,
   IsUrl,
+  IsUUID,
 } from 'class-validator';
 import { Visibility } from '../video.visibility.enum';
 
@@ -47,4 +48,8 @@ export class VideoDto {
   @IsNotEmpty()
   @IsEnum(Visibility)
   visibility: Visibility;
+
+  @IsOptional()
+  @IsString()
+  accessKey?: string;
 }
