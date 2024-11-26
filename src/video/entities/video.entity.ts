@@ -47,6 +47,9 @@ export class VideoEntity {
   @Column({ type: 'varchar', nullable: false })
   videoCode: string;
 
+  @Column({ type: 'varchar', nullable: true, name: 'access_key' })
+  accessKey: string;
+
   @CreateDateColumn({ type: 'timestamp', nullable: false, name: 'uploaded_at' })
   uploadedAt: Date;
 

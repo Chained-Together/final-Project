@@ -26,8 +26,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     channelNameElement.textContent = channelData.name || '알 수 없음';
     profileImageElement.src = channelData.profileImage || '/path/to/default-profile.png';
 
-    const videoResponse = await fetch(`/video/my/${channelData.id}`, {
+    const videoResponse = await fetch(`/video/edit/${channelData.id}`, {
       method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
     console.log(channelData.id);
 
@@ -82,8 +85,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       gap: 5px;
     `;
 
-        console.log(video.hashtags);
-        // 해시태그 추가
         if (Array.isArray(video.hashtags)) {
           video.hashtags.forEach((tag) => {
             const hashtag = document.createElement('span');
@@ -109,6 +110,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         card.appendChild(description);
         card.appendChild(hashtagContainer);
         thumbnailsContainer.appendChild(card);
+        addEditDeleteButtons();
       });
     }, 0);
   } catch (error) {
@@ -131,7 +133,7 @@ const profileButton = document.getElementById('profileButton');
 
 const createChannelEditButton = () => {
   const channelEditButton = document.createElement('button');
-  channelEditButton.textContent = '채널 편집';
+  channelEditButton.textContent = '편집 완료';
   channelEditButton.id = 'channelEditBtn';
   channelEditButton.style = `
       position: absolute;
@@ -147,10 +149,85 @@ const createChannelEditButton = () => {
     `;
 
   channelEditButton.addEventListener('click', () => {
-    window.location.href = '/edit-mychannel';
+    window.location.href = '/mychannel';
   });
 
   return channelEditButton;
+};
+
+const addEditDeleteButtons = () => {
+  const token = localStorage.getItem('token');
+  const thumbnails = document.querySelectorAll('.thumbnail');
+  thumbnails.forEach((thumbnail) => {
+    if (thumbnail.querySelector('.editBtn') || thumbnail.querySelector('.deleteBtn')) return;
+
+    const editBtn = document.createElement('button');
+    editBtn.textContent = '편집';
+    editBtn.className = 'editBtn';
+    editBtn.style = `
+      position: absolute;
+      top: 215px;
+      right: 10px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      z-index: 10;
+    `;
+    editBtn.addEventListener('click', (event) => {
+      event.stopPropagation();
+      alert('편집 모드로 전환합니다.');
+      showPopup(thumbnail);
+    });
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.textContent = '삭제';
+    deleteBtn.className = 'deleteBtn';
+    deleteBtn.style = `
+      position: absolute;
+      top: 185px;
+      right: 10px;
+      background-color: #dc3545;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      z-index: 10;
+    `;
+    deleteBtn.addEventListener('click', async (event) => {
+      event.stopPropagation();
+      console.log('Thumbnail ID:', thumbnail.id);
+      if (confirm('이 비디오를 삭제하시겠습니까?')) {
+        const removeResponse = await fetch(`/video/${thumbnail.id}`, {
+          method: 'Delete',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!removeResponse.ok) {
+          alert('비디오 삭제에 실패했습니다.');
+          return;
+        }
+
+        thumbnail.remove();
+      }
+    });
+
+    thumbnail.style.position = 'relative';
+    thumbnail.appendChild(editBtn);
+    thumbnail.appendChild(deleteBtn);
+  });
+};
+
+const removeEditDeleteButtons = () => {
+  const editButtons = document.querySelectorAll('.editBtn');
+  const deleteButtons = document.querySelectorAll('.deleteBtn');
+  editButtons.forEach((btn) => btn.remove());
+  deleteButtons.forEach((btn) => btn.remove());
 };
 
 profileButton.addEventListener('click', () => {

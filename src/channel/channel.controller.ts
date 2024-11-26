@@ -1,4 +1,16 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Redirect,
+  Render,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { ChannelService } from './channel.service';
 import { ChannelDto } from './dto/channel.dto';
 import { AuthGuard } from '@nestjs/passport';
@@ -13,18 +25,22 @@ export class ChannelController {
 
   @Post()
   @UseGuards(AuthGuard('jwt'))
-  createChannel(
+  async createChannel(
     @Body() channelDto: ChannelDto,
     @UserInfo() user: UserEntity,
-    // @Res() res: Response,
+    @Res() res: Response,
   ) {
-    return this.channelService.createChannel(channelDto, user);
-    // return res.redirect('main');
+    await this.channelService.createChannel(channelDto, user);
+    // return { success: true, redirectUrl: '/channel/main' };
+    res.setHeader('X-Redirect-URL', '/channel/main');
+    return res.status(200).json({ success: true });
   }
-
-  // @Get('main')
-  // renderMain(@Res() res: Response) {
-  //   res.render('main');
+  // @Get('/main')
+  // @Render('main')
+  // @UseGuards(AuthGuard('jwt'))
+  // renderMain(@UserInfo() user: UserEntity) {
+  //   console.log('여기로 들어오나? 들어와라잉');
+  //   return { user };
   // }
 
   @Get('/:channelId')

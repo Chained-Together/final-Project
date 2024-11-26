@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="kr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>내 채널</title>
+
+    <link rel="stylesheet" href="/public/styles/channel.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Gamja+Flower&family=Gasoek+One&family=Hi+Melody&family=Jua&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/public/styles/my-channel.css" />
+    <link rel="stylesheet" href="./public/styles/video-edit-popup.css" />
+
+    <script src="https://kit.fontawesome.com/6a4db89020.js" crossorigin="anonymous"></script>
+
+    <script type="module" src="../public/scripts/edit-channel.js"></script>
+  </head>
+
+  <body>
+    <header>
+      <nav class="LoopfiyBar">
+        <div class="log">
+          <i class="fa-solid fa-bolt"></i>
+          <a href="/main" class="bungee-spice-regular">Loopfiy</a>
+        </div>
+      </nav>
+    </header>
+
+    <div class="profile-btn" id="profileButton">
+      <img src="profileImageElement.src" alt="프로필 사진" id="profileImage" />
+    </div>
+
+    <div class="channel-info" id="channelInfo">
+      <h2>
+        <p><strong id="channelName">로딩 중...</strong></p>
+      </h2>
+      <div><button id="uploadBtn" class="uploadBtn">upload</button></div>
+    </div>
+    <p class="error" id="errorMessage"></p>
+
+    <div class="video-list" id="thumbnailsContainer"></div>
+
+    <script src="/public/scripts/edit-channel.js"></script>
+  </body>
+</html>

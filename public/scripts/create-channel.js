@@ -1,6 +1,6 @@
-const createChannrlForm = document.getElementById('createChannelForm');
+const createChannelrlForm = document.getElementById('createChannelForm');
 
-createChannrlForm.addEventListener('submit', async (event) => {
+createChannelrlForm.addEventListener('submit', async (event) => {
   event.preventDefault();
   const name = document.getElementById('name');
   const profileImage = document.getElementById('profileImage');
@@ -20,15 +20,18 @@ createChannrlForm.addEventListener('submit', async (event) => {
       }),
     });
     if (response.ok) {
-      alert('채널이 성공적으로 생성되었습니다.');
-      window.location.href = '/main';
-    }
-
-    if (!response.ok) {
-      throw new Error('채널 생성에 실패했습니다.');
+      const redirectUrl = response.headers.get('X-Redirect-URL');
+      if (data.redirectUrl) {
+        window.location.href = redirectUrl; // 브라우저 리디렉션 수행
+      } else {
+        console.log('리디렉션 URL이 없음:', redirectUrl);
+      }
+    } else {
+      console.error('요청 실패:', response.status);
     }
   } catch (error) {
     console.error(error);
     alert(`채널 생성 중 오류 발생: ${error.message}`);
   }
 });
+// 커스텀 헤더

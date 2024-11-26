@@ -38,6 +38,12 @@ export class ViewController {
     return;
   }
 
+  @Get('/edit-mychannel')
+  @Render('edit-my-channel')
+  showEditPage() {
+    return;
+  }
+
   @Get('/upload')
   @Render('file-upload')
   showUploadPage() {
