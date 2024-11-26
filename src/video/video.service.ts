@@ -7,6 +7,7 @@ import { UpdateVideoDto } from './dto/update.video.dto';
 import { VideoDto } from './dto/video.dto';
 import { VideoEntity } from './entities/video.entity';
 import { ResolutionEntity } from 'src/resolution/entities/resolution.entity';
+import { Visibility } from './video.visibility.enum';
 
 @Injectable()
 export class VideoService {
@@ -34,6 +35,9 @@ export class VideoService {
 
     const foundChannel = await this.findChannelByUserId(user.id);
 
+    const accessKey = visibility === Visibility.UNLISTED ? this.generateAccessKey() : null;
+
+    console.log(accessKey);
     const video = this.videoRepository.create({
       title,
       description,
@@ -43,6 +47,7 @@ export class VideoService {
       visibility,
       channel: foundChannel,
       videoCode,
+      accessKey,
     });
 
     const savedVideo = await this.videoRepository.save(video);
@@ -55,7 +60,19 @@ export class VideoService {
 
     await this.resolutionRepository.save(resolution);
 
-    return { key: videoCode };
+    return {
+      key: videoCode,
+      ...(accessKey && {
+        link: `https://your-domain.com/video/${savedVideo.id}?accessKey=${accessKey}`,
+      }),
+    };
+  }
+  //TODO: 도메인 이름 넣기
+  //프론트 일부공개 ,일부공개시만 링크제공되는지 확인,get 옵셔널 어스가드, 액세스 토큰 테스트 코드 , ngrok 링크 , 람다 status 코드추가
+
+  //액세스키 UUID 생성
+  private generateAccessKey(): string {
+    return `${Math.random().toString(36).substr(2, 9)}-${Date.now()}`;
   }
 
   async getAllVideo(): Promise<VideoEntity[]> {
@@ -65,18 +82,44 @@ export class VideoService {
   async getAllVideoOfChannel(channelId: number): Promise<VideoEntity[]> {
     console.log('Channel ID:', channelId);
     return this.videoRepository.find({
+      where: { channel: { id: channelId }, visibility: Visibility.PUBLIC },
+    });
+  }
+
+  async getAllVideoOfMyChannel(channelId: number, userId: number): Promise<VideoEntity[]> {
+    const foundChannel = await this.channelRepository.findOne({
+      where: { id: channelId, userId },
+    });
+
+    if (!foundChannel) {
+      throw new UnauthorizedException('해당 채널의 소유자가 아닙니다.');
+    }
+
+    return this.videoRepository.find({
       where: { channel: { id: channelId } },
     });
   }
 
-  async getVideo(videoId: number): Promise<VideoEntity> {
+  async getVideo(videoId: number, userId?: number, accessKey?: string): Promise<VideoEntity> {
     const foundVideo = await this.videoRepository.findOne({
       where: { id: videoId },
       relations: ['channel', 'resolution'],
     });
 
     if (!foundVideo) {
-      throw new NotFoundException('존재 하지 않는 비디오 입니다.');
+      throw new NotFoundException('존재하지 않는 비디오입니다.');
+    }
+
+    const { visibility, channel, accessKey: storedAccessKey } = foundVideo;
+
+    // 비공개 비디오 처리
+    if (visibility === Visibility.PRIVATE && channel.userId !== userId) {
+      throw new UnauthorizedException('비공개 비디오에 접근할 수 없습니다.');
+    }
+
+    // 일부공개 비디오 처리
+    if (visibility === Visibility.UNLISTED && storedAccessKey !== accessKey) {
+      throw new UnauthorizedException('올바른 링크가 아니면 접근할 수 없습니다.');
     }
 
     return foundVideo;

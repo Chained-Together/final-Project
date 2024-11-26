@@ -101,6 +101,7 @@ describe('VideoService', () => {
     videoCode: '1',
     status: false,
     comments: null,
+    accessKey: null,
   };
 
   const mockVideoDto: VideoDto = {
@@ -140,6 +141,7 @@ describe('VideoService', () => {
     videoCode: '1',
     status: false,
     comments: null,
+    accessKey: null,
   };
   const mockResolution: ResolutionEntity = {
     id: 1,
@@ -176,6 +178,7 @@ describe('VideoService', () => {
         visibility: mockVideoDto.visibility,
         channel: mockChannel,
         videoCode: mockVideo.videoCode,
+        accessKey: null,
       });
       expect(videoRepository.save).toHaveBeenCalledWith(mockVideo);
 
@@ -202,12 +205,12 @@ describe('VideoService', () => {
   describe('영상 상세 조회 시', () => {
     it('해당 영상이 없으면 NotFoundException을 반환해야 한다.', async () => {
       mockVideoRepository.findOne.mockResolvedValue(null);
-      await expect(videoService.getVideo(1)).rejects.toThrow(NotFoundException);
+      await expect(videoService.getVideo(1, mockUser.id)).rejects.toThrow(NotFoundException);
     });
 
     it('해당 영상이 존재 하면 영상 메타데이터와 채널 정보를 반환한다. ', async () => {
       mockVideoRepository.findOne.mockResolvedValue(mockVideo);
-      const result = await videoService.getVideo(1);
+      const result = await videoService.getVideo(1, mockUser.id);
 
       expect(videoRepository.findOne).toHaveBeenCalledWith({
         where: { id: 1 },
