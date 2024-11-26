@@ -34,132 +34,116 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 });
 
-async function loadInfos() {
+let isFetching = false; // 중복 요청 방지 플래그
+let lastVideoId = null; // 마지막 데이터의 id
+
+// 서버에서 비디오 데이터 가져오기
+async function fetchVideos(lastId) {
+  const url = lastId ? `video/many/${lastId}/6` : 'video/many/1/12'; // RESTful URL
+  const response = await fetch(url, { method: 'GET' });
+
+  if (!response.ok) {
+    throw new Error('데이터를 가져오지 못했습니다.');
+  }
+
+  return response.json();
+}
+
+// 비디오 데이터를 템플릿으로 생성
+function createVideoElement(video) {
+  if (!video || (!video.thumbnailUrl && !video.title)) {
+    console.warn('유효하지 않은 비디오 데이터:', video);
+    return null;
+  }
+
+  const shortformItem = document.createElement('div');
+  shortformItem.className = 'shortform-item';
+
+  shortformItem.addEventListener('click', () => {
+    window.location.href = `/view-video?id=${video.id}`;
+  });
+
+  if (video.thumbnailUrl) {
+    const placeholderVideo = document.createElement('div');
+    placeholderVideo.className = 'placeholder-video';
+    placeholderVideo.style.backgroundImage = `url('${video.thumbnailUrl}')`;
+    shortformItem.appendChild(placeholderVideo);
+  }
+
+  if (video.title) {
+    const placeholderTitle = document.createElement('div');
+    placeholderTitle.className = 'placeholder-title';
+    placeholderTitle.textContent = video.title;
+    shortformItem.appendChild(placeholderTitle);
+  }
+
+  return shortformItem;
+}
+
+// 비디오 데이터를 추가 렌더링
+function appendVideos(container, videos) {
+  videos.forEach((video) => {
+    const videoElement = createVideoElement(video);
+    if (videoElement) {
+      $(container).append(videoElement);
+    }
+  });
+}
+
+// 초기 로드 및 스크롤 처리
+async function initialize() {
+  const shortformGrid = document.querySelector('.shortform-grid');
+
   try {
-    const response = await fetch('/video', { method: 'GET' });
+    // 초기 데이터 로드
+    const initialVideos = await fetchVideos();
+    appendVideos(shortformGrid, initialVideos);
 
-    if (!response.ok) {
-      throw new Error('썸네일을 가져오지 못했습니다.');
+    // 마지막 비디오 ID 저장
+    if (initialVideos.length > 0) {
+      lastVideoId = initialVideos[initialVideos.length - 1].id;
     }
 
-    const videos = await response.json();
+    // 스크롤 이벤트 추가
+    $(window).on('scroll', async () => {
+      const scroll = $(window).scrollTop();
+      const clientesScroll = $(window).height();
+      const height = $(document).height();
 
-    // shortform-grid 컨테이너 가져오기
-    const shortformGrid = document.querySelector('.shortform-grid');
+      if (scroll + clientesScroll >= height - 10 && !isFetching) {
+        isFetching = true;
 
-    // 기존 placeholder 비우기
-    shortformGrid.innerHTML = '';
+        try {
+          const newVideos = await fetchVideos(lastVideoId);
+          if (newVideos.length > 0) {
+            appendVideos(shortformGrid, newVideos);
 
-    // 비디오 데이터 렌더링
-    videos.forEach((video) => {
-      // 유효하지 않은 비디오 데이터 건너뛰기
-      if (!video || (!video.thumbnailUrl && !video.title)) {
-        console.warn('유효하지 않은 비디오 데이터:', video);
-        return;
+            // 마지막 비디오 ID 업데이트
+            lastVideoId = newVideos[newVideos.length - 1].id;
+          } else {
+            console.log('더 이상 불러올 데이터가 없습니다.');
+            $(window).off('scroll'); // 더 이상 이벤트 감지 중단
+          }
+        } catch (error) {
+          console.error('추가 데이터를 가져오는 중 오류 발생:', error);
+        } finally {
+          isFetching = false;
+        }
       }
-
-      // 비디오 카드 생성
-      const shortformItem = document.createElement('div');
-      shortformItem.className = 'shortform-item';
-
-      // 썸네일 추가
-      if (video.thumbnailUrl) {
-        const placeholderVideo = document.createElement('div');
-        placeholderVideo.className = 'placeholder-video';
-        placeholderVideo.style.backgroundImage = `url(${video.thumbnailUrl})`;
-        shortformItem.appendChild(placeholderVideo);
-      }
-
-      // 제목 추가
-      if (video.title) {
-        const placeholderTitle = document.createElement('div');
-        placeholderTitle.className = 'placeholder-title';
-        placeholderTitle.textContent = `제목: ${video.title}`;
-        shortformItem.appendChild(placeholderTitle);
-      }
-
-      // 설명 추가
-      if (video.description) {
-        const placeholderDescription = document.createElement('div');
-        placeholderDescription.className = 'placeholder-description';
-        placeholderDescription.textContent = `설명: ${video.description}`;
-        shortformItem.appendChild(placeholderDescription);
-      }
-
-      // 해시태그 추가
-      if (video.hashtags) {
-        const placeholderHashtags = document.createElement('div');
-        placeholderHashtags.className = 'placeholder-hashtags';
-        placeholderHashtags.textContent = `해시태그: ${video.hashtags}`;
-        shortformItem.appendChild(placeholderHashtags);
-      }
-
-      // 완성된 비디오 아이템을 그리드에 추가
-      shortformGrid.appendChild(shortformItem);
     });
-
-    // 비디오 데이터가 없을 경우
-    if (videos.length === 0) {
-      shortformGrid.innerHTML = '<p>비디오가 없습니다.</p>';
-    }
   } catch (error) {
-    console.error('오류 발생:', error);
-    const shortformGrid = document.querySelector('.shortform-grid');
-    shortformGrid.innerHTML = '<p>비디오를 가져오는 데 실패했습니다.</p>';
+    console.error('초기 데이터 로드 중 오류 발생:', error);
   }
 }
 
-// 초기 로드
-loadInfos();
-
-// 무한 스크롤 추가
-let isLoading = false; // 로딩 상태를 관리
-
-const loadMoreVideos = async () => {
-  if (isLoading) return; // 중복 호출 방지
-  isLoading = true;
-
-  try {
-    const response = await fetch('/video/more'); // 추가 데이터를 요청하는 API 엔드포인트
-    if (!response.ok) throw new Error('추가 데이터를 가져오는 데 실패했습니다.');
-
-    const newVideos = await response.json();
-
-    // 새로운 비디오 요소 추가
-    const videoContainer = document.getElementById('videoContainer');
-    newVideos.forEach((video) => {
-      const videoElement = document.createElement('div');
-      videoElement.classList.add('video-item');
-      videoElement.innerHTML = `
-        <div class="thumbnail" style="background-image: url(${video.thumbnailUrl || '/path/to/default-thumbnail.png'}); height: 200px;"></div>
-        <h3>${video.title || '기본 제목'}</h3>
-        <p>${video.description || '기본 설명'}</p>
-        <p>${video.hashtags || '#해시태그'}</p>
-      `;
-      videoContainer.appendChild(videoElement);
-    });
-  } catch (error) {
-    console.error('무한 스크롤 오류:', error);
-  } finally {
-    isLoading = false;
-  }
-};
-
-// 스크롤 이벤트 추가
-window.addEventListener('scroll', () => {
-  const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-
-  // 하단 근처에 도달 시 추가 데이터 로드
-  if (scrollTop + clientHeight >= scrollHeight - 50) {
-    loadMoreVideos();
-  }
-});
+// 초기 실행
+initialize();
 
 const profileBtn = document.getElementById('profileBtn');
 profileBtn.addEventListener('click', () => {
   const token = localStorage.getItem('token');
   if (token) {
-    window.location.href = '/mychannel';
+    window.location.href = '/myChannel';
   } else {
     window.location.href = '/login';
   }

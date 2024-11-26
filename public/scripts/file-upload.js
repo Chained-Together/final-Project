@@ -44,7 +44,7 @@ uploadBtn.addEventListener('click', async () => {
     if (!response.ok) throw new Error('Pre-signed URL 요청 실패');
 
     const { presignedUrl, key } = await response.json();
-    console.log(presignedUrl, key);
+    console.log('프리사인 URL', presignedUrl, key);
 
     const metadataPayload = {
       title: titleInput.value || null,
@@ -62,29 +62,43 @@ uploadBtn.addEventListener('click', async () => {
         'Content-Type': file.type,
       },
     });
-
     if (uploadResponse.ok) {
       alert('파일 업로드 성공!');
-
+    }
       const metadataResponse = await fetch('http://localhost:3000/video', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
+        redirect: 'follow',
         body: JSON.stringify(metadataPayload),
       });
-
-      if (!metadataResponse.ok) {
-        throw new Error('메타데이터 전송 실패');
-      }
-
-      console.log('메타데이터 전송 성공');
-      window.location.href = '/mychannel';
-    } else {
-      throw new Error('파일 업로드 실패');
-    }
+    if (metadataResponse.redirected) {
+  alert('메타데이터 전송 성공');
+  window.location.href = metadataResponse.url;
+} else if (metadataResponse.ok) {
+  console.log('요청 성공:', await metadataResponse.json());
+  alert('영상 업로드 성공!');
+} else {
+  console.error('요청 실패:', metadataResponse.status);
+  throw new Error('메타데이터 전송 실패');
+}
   } catch (error) {
     alert(`업로드 중 오류 발생: ${error.message}`);
   }
 });
+
+
+// alert(metadataResponse);
+
+
+
+// if (metadataResponse.ok) {
+  //     alert('메타데이터 전송 성공!');
+  //   } else {
+  //     const errorData = await metadataResponse.json();
+  //     console.error('Error response from /video:', errorData);
+  //     throw new Error(`메타데이터 전송 실패: ${errorData.message || 'Unknown error'}`);
+  //   }
+  // }

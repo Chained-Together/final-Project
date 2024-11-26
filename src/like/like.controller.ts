@@ -2,7 +2,7 @@ import { Controller, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
 import { DeleteResult } from 'typeorm';
-import { UserEntity } from '../user/entity/user.entity';
+import { UserEntity } from '../user/entities/user.entity';
 import { LikeEntity } from './entities/like.entity';
 import { LikeService } from './like.service';
 

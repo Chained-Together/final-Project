@@ -1,22 +1,27 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { UserEntity } from '../user/entity/user.entity';
+
+import { Response } from 'express';
+import { UserEntity } from 'src/user/entities/user.entity';
+import { OptionalAuthGuard } from 'src/utils/optional-authguard';
 import { UserInfo } from '../utils/user-info.decorator';
 import { UpdateVideoDto } from './dto/update.video.dto';
 import { VideoDto } from './dto/video.dto';
 import { VideoEntity } from './entities/video.entity';
 import { VideoService } from './video.service';
-import { OptionalAuthGuard } from 'src/utils/optional-authguard';
 
 @Controller('video')
 export class VideoController {
@@ -24,11 +29,16 @@ export class VideoController {
 
   @Post()
   @UseGuards(AuthGuard('jwt'))
-  async saveMetadata(@UserInfo() user: UserEntity, @Body() videoDto: VideoDto): Promise<object> {
+  async saveMetadata(
+    @UserInfo() user: UserEntity,
+    @Body() videoDto: VideoDto,
+    @Res() res: Response,
+  ) {
     console.log('Received videoDto:', videoDto);
     console.log('Received user:', user);
 
-    return this.videoService.saveMetadata(user, videoDto);
+    await this.videoService.saveMetadata(user, videoDto);
+    return res.redirect('/myChannel');
   }
 
   @Get()
@@ -54,7 +64,7 @@ export class VideoController {
     @Param('id') id: number,
     @Query('accessKey') accessKey?: string,
     @UserInfo() user?: UserEntity,
-  ): Promise<VideoEntity> {
+  ): Promise<VideoEntity | object> {
     return this.videoService.getVideo(id, user?.id, accessKey);
   }
 
@@ -72,5 +82,25 @@ export class VideoController {
   @UseGuards(AuthGuard('jwt'))
   deleteVideo(@UserInfo() user: UserEntity, @Param('id') id: number): Promise<object> {
     return this.videoService.deleteVideo(user, id);
+  }
+
+  @Get('/many/:lastId/:take')
+  getNewVideos(
+    @Param('lastId', ParseIntPipe) lastId: number,
+    @Param('take', ParseIntPipe) take: number,
+  ) {
+    const validTakeValues = [6, 12];
+
+    if (!validTakeValues.includes(take)) {
+      throw new BadRequestException('유효한 take 값은 6 또는 12만 가능합니다.');
+    }
+
+    return this.videoService.getNewVideos(lastId, take);
+  }
+
+  @Get('/link/:id')
+  @UseGuards(OptionalAuthGuard)
+  getVideoLink(@Param('id') id: number) {
+    return this.videoService.getVideoLink(id);
   }
 }

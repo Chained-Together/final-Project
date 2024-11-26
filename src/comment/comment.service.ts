@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import _ from 'lodash';
-import { UserEntity } from 'src/user/entity/user.entity';
+import { UserEntity } from 'src/user/entities/user.entity';
 import { VideoEntity } from 'src/video/entities/video.entity';
 import { Repository } from 'typeorm';
 import { CommentDto } from './dto/comment.dto';

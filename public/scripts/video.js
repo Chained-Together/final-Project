@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', async () => {
   const urlParams = new URLSearchParams(window.location.search);
   const videoId = urlParams.get('id');
+  const token = localStorage.getItem('token') || null;
+  const thumbnailsContainer = document.getElementById('thumbnailsContainer'); // 컨테이너 선택
 
   if (!videoId) {
     console.error('비디오 ID가 없습니다.');
@@ -10,6 +12,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   try {
     const videoResponse = await fetch(`/video/${videoId}`, {
       method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     if (!videoResponse.ok) {
@@ -17,10 +22,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     const videoData = await videoResponse.json();
-    console.log('비디오 데이터:', videoData);
+    if (videoData?.message) {
+      throw new Error(videoData.message);
+    }
 
-    // thumbnailsContainer 초기화
-    thumbnailsContainer.innerHTML = '';
+    // 비디오와 버튼 렌더링
+    thumbnailsContainer.innerHTML = ''; // 기존 컨텐츠 초기화
 
     // 비디오 요소 생성
     const videoElement = document.createElement('video');
@@ -31,7 +38,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     videoElement.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
     videoElement.style.margin = '20px';
 
-    // 비디오 소스 설정
     const highResolutionUrl = videoData?.resolution?.high || '/path/to/default-video.mp4';
     const sourceElement = document.createElement('source');
     sourceElement.setAttribute('src', highResolutionUrl);
@@ -40,19 +46,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     videoElement.appendChild(sourceElement);
     console.log('비디오 소스 URL:', highResolutionUrl);
 
-    // 비디오 제목 생성
+    // 제목 생성
     const titleElement = document.createElement('h3');
     titleElement.textContent = videoData?.title || '제목 없음';
     titleElement.style.textAlign = 'center';
     titleElement.style.marginTop = '10px';
 
-    // 비디오 설명 생성
+    // 설명 생성
     const descriptionElement = document.createElement('p');
     descriptionElement.textContent = videoData?.description || '설명이 없습니다.';
     descriptionElement.style.textAlign = 'center';
     descriptionElement.style.color = '#555';
 
-    // 스타일 설정 및 요소 추가
+    // 비디오 및 텍스트 추가
     thumbnailsContainer.style.display = 'flex';
     thumbnailsContainer.style.flexDirection = 'column';
     thumbnailsContainer.style.alignItems = 'center';
@@ -61,13 +67,51 @@ document.addEventListener('DOMContentLoaded', async () => {
     thumbnailsContainer.appendChild(videoElement);
     thumbnailsContainer.appendChild(titleElement);
     thumbnailsContainer.appendChild(descriptionElement);
+
+    // 버튼 생성 조건
+    if (videoData?.visibility !== 'private') {
+      let linkBtn = document.getElementById('linkBtn');
+      if (!linkBtn) {
+        linkBtn = document.createElement('button');
+        linkBtn.id = 'linkBtn';
+        linkBtn.textContent = '링크 공유';
+        linkBtn.style = `
+          padding: 10px 20px;
+          background-color: #007bff;
+          color: white;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+        `;
+
+        // 버튼 클릭 이벤트
+        linkBtn.addEventListener('click', async () => {
+          try {
+            const response = await fetch(`/video/link/${videoId}`, {
+              method: 'GET',
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+
+            if (!response.ok) {
+              throw new Error('링크를 가져오는데 실패했습니다.');
+            }
+
+            const { url } = await response.json();
+            await navigator.clipboard.writeText(url);
+            alert('링크가 클립보드에 복사되었습니다!');
+          } catch (error) {
+            alert(`오류 발생: ${error.message}`);
+          }
+        });
+
+        // 버튼 추가
+        thumbnailsContainer.appendChild(linkBtn);
+      }
+    }
   } catch (error) {
     console.error('오류:', error);
-    thumbnailsContainer.innerHTML = '<p>비디오를 로드하는 중 오류가 발생했습니다.</p>';
+    thumbnailsContainer.innerHTML = `<p>${error.message}</p>`;
   }
 });
-
-// const profileButton = document.getElementById('profileButton');
-// profileButton.addEventListener('click', () => {
-//   window.location.href = '/mychannel';
-// });

@@ -1,14 +1,6 @@
-import {
-  Column,
-  Entity,
-  OneToMany,
-  OneToOne,
-  PrimaryColumn,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { VideoEntity } from '../../video/entities/video.entity';
-import { LikeEntity } from '../../like/entities/like.entity';
 import { ChannelEntity } from 'src/channel/entities/channel.entity';
+import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { LikeEntity } from '../../like/entities/like.entity';
 
 @Entity({
   name: 'users',

@@ -2,11 +2,12 @@ import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/co
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ChannelEntity } from '../channel/entities/channel.entity';
-import { UserEntity } from '../user/entity/user.entity';
+
+import { ResolutionEntity } from 'src/resolution/entities/resolution.entity';
+import { UserEntity } from 'src/user/entities/user.entity';
 import { UpdateVideoDto } from './dto/update.video.dto';
 import { VideoDto } from './dto/video.dto';
 import { VideoEntity } from './entities/video.entity';
-import { ResolutionEntity } from 'src/resolution/entities/resolution.entity';
 import { Visibility } from './video.visibility.enum';
 
 @Injectable()
@@ -19,6 +20,22 @@ export class VideoService {
     @InjectRepository(ResolutionEntity)
     private resolutionRepository: Repository<ResolutionEntity>,
   ) {}
+
+  async getNewVideos(lastId: number, take: number) {
+    const query = this.videoRepository
+      .createQueryBuilder('videos')
+      .where('videos.visibility = :visibility', { visibility: 'public' })
+      .orderBy('videos.id', 'ASC')
+      .take(take);
+
+    if (lastId) {
+      query.andWhere('videos.id > :lastId', { lastId });
+    }
+
+    const newVideos = await query.getMany();
+
+    return newVideos;
+  }
 
   async saveMetadata(user: UserEntity, videoDto: VideoDto): Promise<object> {
     const {
@@ -63,14 +80,13 @@ export class VideoService {
     return {
       key: videoCode,
       ...(accessKey && {
-        link: `https://your-domain.com/video/${savedVideo.id}?accessKey=${accessKey}`,
+        link: `https://localhost:3000/video/${savedVideo.id}?accessKey=${accessKey}`,
       }),
     };
   }
   //TODO: 도메인 이름 넣기
-  //프론트 일부공개 ,일부공개시만 링크제공되는지 확인,get 옵셔널 어스가드, 액세스 토큰 테스트 코드 , ngrok 링크 , 람다 status 코드추가
+  //프론트 일부공개 ,일부 공개시만 링크제공되는지 확인,람다 status 코드추가
 
-  //액세스키 UUID 생성
   private generateAccessKey(): string {
     return `${Math.random().toString(36).substr(2, 9)}-${Date.now()}`;
   }
@@ -100,26 +116,32 @@ export class VideoService {
     });
   }
 
-  async getVideo(videoId: number, userId?: number, accessKey?: string): Promise<VideoEntity> {
+  async getVideo(
+    videoId: number,
+    userId?: number,
+    accessKey?: string,
+  ): Promise<VideoEntity | object> {
     const foundVideo = await this.videoRepository.findOne({
       where: { id: videoId },
       relations: ['channel', 'resolution'],
     });
 
     if (!foundVideo) {
-      throw new NotFoundException('존재하지 않는 비디오입니다.');
+      return { statusCode: 404, message: '존재하지 않는 비디오입니다.' };
     }
 
     const { visibility, channel, accessKey: storedAccessKey } = foundVideo;
 
-    // 비공개 비디오 처리
     if (visibility === Visibility.PRIVATE && channel.userId !== userId) {
-      throw new UnauthorizedException('비공개 비디오에 접근할 수 없습니다.');
+      return { statusCode: 401, message: '비공개 비디오에 접근할 수 없습니다.' };
     }
 
-    // 일부공개 비디오 처리
-    if (visibility === Visibility.UNLISTED && storedAccessKey !== accessKey) {
-      throw new UnauthorizedException('올바른 링크가 아니면 접근할 수 없습니다.');
+    if (
+      visibility === Visibility.UNLISTED &&
+      channel.userId !== userId &&
+      storedAccessKey !== accessKey
+    ) {
+      return { statusCode: 403, message: '올바른 링크가 아니면 접근할 수 없습니다.' };
     }
 
     return foundVideo;
@@ -196,5 +218,26 @@ export class VideoService {
     }
 
     return updateData;
+  }
+
+  async getVideoLink(id: number): Promise<object> {
+    const foundVideo = await this.findVideoById(id);
+    const accessKey = foundVideo.accessKey;
+    const baseUrl = `http://localhost:3000`;
+
+    let url;
+    if (foundVideo.visibility === Visibility.PUBLIC) {
+      url = `${baseUrl}/view-video?id=${foundVideo.id}`;
+    }
+
+    if (foundVideo.visibility === Visibility.UNLISTED) {
+      url = `${baseUrl}/view-video?id=${foundVideo.id}?accessKey=${accessKey}`;
+    }
+
+    if (foundVideo.visibility === Visibility.PRIVATE) {
+      url = `${baseUrl}/view-video?id=${foundVideo.id}`;
+    }
+
+    return { url, visibility: foundVideo.visibility };
   }
 }

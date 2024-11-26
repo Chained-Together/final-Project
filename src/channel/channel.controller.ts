@@ -15,9 +15,10 @@ import { ChannelService } from './channel.service';
 import { ChannelDto } from './dto/channel.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { ChannelEntity } from './entities/channel.entity';
-import { UserEntity } from 'src/user/entity/user.entity';
+
 import { UserInfo } from 'src/utils/user-info.decorator';
 import { Response } from 'express';
+import { UserEntity } from 'src/user/entities/user.entity';
 
 @Controller('channel')
 export class ChannelController {
@@ -32,8 +33,10 @@ export class ChannelController {
   ) {
     await this.channelService.createChannel(channelDto, user);
     // return { success: true, redirectUrl: '/channel/main' };
-    res.setHeader('X-Redirect-URL', '/channel/main');
-    return res.status(200).json({ success: true });
+    // res.setHeader('X-Redirect-URL', '/channel/main');
+    // return res.status(200).json({ success: true });
+
+    return res.redirect('/main');
   }
   // @Get('/main')
   // @Render('main')

@@ -12,7 +12,6 @@ import { CommentModule } from './comment/comment.module';
 import { CommentEntity } from './comment/entities/comment.entity';
 import { LikeEntity } from './like/entities/like.entity';
 import { LikeModule } from './like/like.module';
-import { UserEntity } from './user/entity/user.entity';
 import { VideoEntity } from './video/entities/video.entity';
 import { VideoModule } from './video/video.module';
 import { ViewController } from './view/view.controller';
@@ -20,6 +19,8 @@ import { ViewModule } from './view/view.module';
 import { S3Module } from './upload/s3.module';
 import { ResolutionModule } from './resolution/resolution.module';
 import { ResolutionEntity } from './resolution/entities/resolution.entity';
+import { UserModule } from './user/user.module';
+import { UserEntity } from './user/entities/user.entity';
 
 const typeOrmModuleOptions = {
   useFactory: async (configService: ConfigService): Promise<TypeOrmModuleOptions> => ({
@@ -60,6 +61,7 @@ const typeOrmModuleOptions = {
     ViewModule,
     S3Module,
     ResolutionModule,
+    UserModule,
   ],
   controllers: [AppController, ViewController],
   providers: [AppService],

@@ -5,10 +5,11 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserEntity } from 'src/user/entity/user.entity';
+
 import { JwtStrategy } from './jwt.strategy';
 import { BcryptHashingService } from 'src/interface/impl/bcrypt-hashing-service';
 import { ChannelEntity } from 'src/channel/entities/channel.entity';
+import { UserEntity } from 'src/user/entities/user.entity';
 
 @Module({
   imports: [

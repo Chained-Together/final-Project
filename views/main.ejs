@@ -5,6 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Loopfiy</title>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,12 +31,12 @@
       </div>
     </nav>
   </header>
+
   <div class="container">
     <div class="main">
       <a href="/create-channel" class="link">test용 채널</a>
     </div>
     <div class="header-buttons">
-
       <div class="profile-btn" id="profileBtn">
         <img src="profileImageElement.src" alt="프로필 사진" class="profileImage" />
       </div>
@@ -45,20 +46,13 @@
     </div>
 
     <div class="shortform-grid">
-      <div class="shortform-item placeholder">
-        <div class="placeholder-video"></div>
-        <div class="placeholder-title"></div>
-        <div class="placeholder-description"></div>
-        <div class="placeholder-hashtags"></div>
-      </div>
+
     </div>
+
     <div class="loading-indicator" id="loadingIndicator" style="display: none;">
       Loading more videos...
     </div>
   </div>
-
-  </div>
-
   <script src="/public/scripts/main.js"></script>
 </body>
 

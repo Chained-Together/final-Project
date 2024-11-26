@@ -8,7 +8,7 @@ import { Repository } from 'typeorm';
 import { ChannelEntity } from './entities/channel.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ChannelDto } from './dto/channel.dto';
-import { UserEntity } from 'src/user/entity/user.entity';
+import { UserEntity } from '../../src/user/entities/user.entity';
 
 @Injectable()
 export class ChannelService {
