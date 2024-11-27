@@ -20,7 +20,7 @@ export class CommentService {
     const checkGroupNumber = await this.commentRepository.findOne({
       where: { video: { id: videoId }, depth: 0 },
       order: {
-        orderNumber: 'DESC',
+        createdAt: 'DESC',
       },
     });
 
@@ -55,12 +55,8 @@ export class CommentService {
     await this.verifyVideo(videoId);
     await this.forFindOneVerifyComment(commentId);
 
-    const checkCommentGroup = await this.commentRepository.findOne({
-      where: { id: commentId },
-    });
-
     const comment = await this.commentRepository.find({
-      where: { commentGroup: checkCommentGroup.commentGroup },
+      where: { parentComment: commentId, depth: 1 },
       select: ['id', 'userId', 'content', 'createdAt'],
       order: {
         orderNumber: 'ASC',

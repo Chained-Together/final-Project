@@ -1,14 +1,9 @@
-import {
-  ConflictException,
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
-import { Repository } from 'typeorm';
-import { ChannelEntity } from './entities/channel.entity';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ChannelDto } from './dto/channel.dto';
+import { Repository } from 'typeorm';
 import { UserEntity } from '../../src/user/entities/user.entity';
+import { ChannelDto } from './dto/channel.dto';
+import { ChannelEntity } from './entities/channel.entity';
 
 @Injectable()
 export class ChannelService {

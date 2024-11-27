@@ -75,6 +75,7 @@ export class VideoController {
     @Param('id') id: number,
     @Body() updateVideoDto: UpdateVideoDto,
   ): Promise<VideoEntity> {
+    console.log('요청 받음');
     return this.videoService.updateVideo(user, id, updateVideoDto);
   }
 

@@ -1,20 +1,14 @@
-import { showPopup } from './video-edit-popup.js';
 document.addEventListener('DOMContentLoaded', async () => {
-  const token = localStorage.getItem('token');
+  const urlPath = window.location.pathname;
+  const segments = urlPath.split('/');
+  const channelId = segments[segments.length - 1];
   const channelNameElement = document.getElementById('channelName');
   const profileImageElement = document.getElementById('profileImage');
   const thumbnailsContainer = document.getElementById('thumbnailsContainer');
-  if (!token) {
-    channelNameElement.textContent = '로그인이 필요합니다.';
-    return;
-  }
 
   try {
-    const response = await fetch('/channel', {
+    const response = await fetch(`/channel/${channelId}`, {
       method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
     });
 
     if (!response.ok) {
@@ -74,30 +68,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const hashtagContainer = document.createElement('div');
         hashtagContainer.classList.add('hashtag-container');
-        hashtagContainer.style = `
-      margin-top: 10px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 5px;
-    `;
 
-        console.log(video.hashtags);
-        // 해시태그 추가
-        if (Array.isArray(video.hashtags)) {
-          video.hashtags.forEach((tag) => {
-            const hashtag = document.createElement('span');
-            hashtag.classList.add('hashtag');
-            hashtag.textContent = `#${tag}`;
-            hashtag.style = `
-          background-color: #f0f0f0;
-          color: #333;
-          padding: 5px 10px;
-          border-radius: 15px;
-          font-size: 12px;
-        `;
-            hashtagContainer.appendChild(hashtag);
-          });
-        }
+        const span = document.createElement('p');
+        span.textContent = String(video.hashtags);
+        hashtagContainer.appendChild(span);
 
         card.addEventListener('click', () => {
           window.location.href = `/view-video?id=${video.id}`;
