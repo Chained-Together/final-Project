@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { FindPasswordDto } from './dto/findPassword.dto';
 import { DeleteUserDto } from './dto/delete-user.dto';
 import { HashingService } from 'src/interface/hashing-interface';
+import { UpdateUserDto } from './dto/updata-User.dto';
 @Injectable()
 export class UserService {
   constructor(
@@ -52,15 +53,67 @@ export class UserService {
     }
   }
 
+  async updateUserProfile(user: UserEntity, updateUserDto: UpdateUserDto) {
+    // 1. 사용자 확인
+    const foundUser = await this.userRepository.findOne({ where: { id: user.id } });
+    if (!foundUser) {
+      throw new NotFoundException('유저가 존재하지 않거나, userId가 잘못되었습니다.');
+    }
 
+    await this.validateUniqueFields(user, updateUserDto);
 
+    await this.userRepository.update(user.id, updateUserDto);
 
+    return this.userRepository.findOne({ where: { id: user.id } });
+  }
 
+  private async validateUniqueFields(user: UserEntity, updateUserDto: UpdateUserDto) {
+    const { email, nickname, phoneNumber, name } = updateUserDto;
 
-  private async findUserById(id: number) {
+    if (email) {
+      const emailExists = await this.userRepository.findOne({
+        where: { email, id: user.id },
+      });
+      if (emailExists) {
+        throw new BadRequestException('해당 이메일은 이미 사용 중입니다.');
+      }
+    }
+
+    if (nickname) {
+      const nicknameExists = await this.userRepository.findOne({
+        where: { nickname, id: user.id },
+      });
+      if (nicknameExists) {
+        throw new BadRequestException('해당 닉네임은 이미 사용 중입니다.');
+      }
+    }
+
+    if (phoneNumber) {
+      const phoneExists = await this.userRepository.findOne({
+        where: { phoneNumber, id: user.id },
+      });
+      if (phoneExists) {
+        throw new BadRequestException('해당 전화번호는 이미 사용 중입니다.');
+      }
+    }
+
+    if (name) {
+      const nameExists = await this.userRepository.findOne({
+        where: { name, id: user.id },
+      });
+      if (nameExists) {
+        throw new BadRequestException('해당 이름은 이미 사용 중입니다.');
+      }
+    }
+  }
+
+  private async findUserById(user: UserEntity) {
     const foundUser = await this.userRepository.findOne({
-      where : { id }
+      where : { id: user.id }
     })
+    if (!foundUser) {
+      throw new NotFoundException('유저가 존재하지 않거나, userId가 잘못되었습니다.');
+    }
     return foundUser;
   }
 

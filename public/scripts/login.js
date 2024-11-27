@@ -32,7 +32,7 @@ loginForm.addEventListener('submit', async (event) => {
       console.error('토큰이 존재하지 않습니다.');
     }
 
-    window.location.href = '/main';
+    window.location.href = '/';
   } catch (error) {
     console.error(error);
     alert(`로그인 중 오류 발생: ${error.message}`);
