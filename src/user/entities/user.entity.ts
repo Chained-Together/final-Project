@@ -1,6 +1,7 @@
 import { ChannelEntity } from 'src/channel/entities/channel.entity';
-import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, DeleteDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { LikeEntity } from '../../like/entities/like.entity';
+import { Delete } from '@nestjs/common';
 
 @Entity({
   name: 'users',
@@ -23,6 +24,9 @@ export class UserEntity {
 
   @Column({ type: 'varchar', nullable: false, unique: true })
   phoneNumber: string;
+
+  @DeleteDateColumn({ type: 'timestamp', nullable: true, name: 'deleted_at' })
+  deletedAt: Date | null;
 
   @OneToMany(() => LikeEntity, (like) => like.user)
   likes: LikeEntity;
