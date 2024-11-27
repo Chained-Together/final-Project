@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { LoginDto } from './dto/login.dto';
 import { SignUpDto } from './dto/signUp.dto';
 import { UserEntity } from 'src/user/entities/user.entity';
+import { Request } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -17,7 +18,11 @@ export class AuthService {
     private readonly bcryptHashingService: HashingService,
   ) {}
 
-  async signUp(signUpDto: SignUpDto) {
+  async signUp(signUpDto: SignUpDto, req: Request) {
+    const checkCode: boolean = await this.verifyCode(signUpDto.code, req);
+    if (!checkCode) {
+      throw new BadRequestException('인증 코드가 일치하지 않습니다.');
+    }
     const findUser = await this.userRepository.findOne({
       where: {
         email: signUpDto.email,
@@ -83,5 +88,8 @@ export class AuthService {
     return {
       access_token: token,
     };
+  }
+  private async verifyCode(code: string, req: Request): Promise<boolean> {
+    return code === req.session.code;
   }
 }

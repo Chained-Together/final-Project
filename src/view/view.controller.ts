@@ -1,4 +1,4 @@
-import { Controller, Get, Render } from '@nestjs/common';
+import { Controller, Get, Query, Render } from '@nestjs/common';
 
 @Controller('')
 export class ViewController {
@@ -54,6 +54,12 @@ export class ViewController {
   @Render('findInfo')
   showFindInfoPage() {
     return;
+  }
+
+  @Get('/reset-password')
+  @Render('reset-password')
+  showResetPasswordPage(@Query('token') token: string) {
+    return { token };
   }
 
   @Get('/view-video')
