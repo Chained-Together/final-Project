@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   const signupForm = document.getElementById('signupForm');
 
-
   function validateField(input, regex, errorMessage) {
     const value = input.value.trim();
     const errorElement = input.nextElementSibling;
@@ -15,10 +14,10 @@ document.addEventListener('DOMContentLoaded', () => {
     return true;
   }
 
-
   const emailInput = document.getElementById('email');
   const passwordInput = document.getElementById('password');
   const confirmedPasswordInput = document.getElementById('confirmedPassword');
+  const codeInput = document.getElementById('code');
   const phoneNumberInput = document.getElementById('phoneNumber');
 
   emailInput.addEventListener('blur', () => {
@@ -48,10 +47,8 @@ document.addEventListener('DOMContentLoaded', () => {
     validateField(phoneNumberInput, /^\d{10,11}$/, '전화번호는 10-11자리 숫자여야 합니다.');
   });
 
-
   signupForm.addEventListener('submit', async (event) => {
     event.preventDefault();
-
 
     const isEmailValid = validateField(
       emailInput,
@@ -76,8 +73,17 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    try {
+    const response = await fetch('/nodemailer', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        emailInput,
+      }),
+    });
 
+    try {
       const response = await fetch('/auth/signup', {
         method: 'POST',
         headers: {
