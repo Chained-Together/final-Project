@@ -25,6 +25,7 @@ export class VideoService {
     const query = this.videoRepository
       .createQueryBuilder('videos')
       .where('videos.visibility = :visibility', { visibility: 'public' })
+      .andWhere('videos.status = :status', { status: true })
       .orderBy('videos.id', 'ASC')
       .take(take);
 
@@ -98,7 +99,7 @@ export class VideoService {
   async getAllVideoOfChannel(channelId: number): Promise<VideoEntity[]> {
     console.log('Channel ID:', channelId);
     return this.videoRepository.find({
-      where: { channel: { id: channelId }, visibility: Visibility.PUBLIC },
+      where: { channel: { id: channelId }, visibility: Visibility.PUBLIC, status: true },
     });
   }
 
@@ -112,7 +113,7 @@ export class VideoService {
     }
 
     return this.videoRepository.find({
-      where: { channel: { id: channelId } },
+      where: { channel: { id: channelId }, status: true },
     });
   }
 
@@ -154,9 +155,9 @@ export class VideoService {
   ): Promise<VideoEntity> {
     await this.findChannelByUserId(user.id);
 
-    await this.findVideoById(videoId);
+    const foundVideo = await this.findVideoById(videoId);
 
-    const updateData = await this.updateDetails(updateVideoDto);
+    const updateData = await this.updateDetails(updateVideoDto, foundVideo);
 
     await this.videoRepository.update({ id: videoId }, updateData);
 
@@ -194,7 +195,7 @@ export class VideoService {
     return foundVideo;
   }
 
-  private async updateDetails(updateVideoDto: UpdateVideoDto) {
+  private async updateDetails(updateVideoDto: UpdateVideoDto, foundVideo: VideoEntity) {
     const updateData: Partial<VideoEntity> = {};
 
     if (updateVideoDto.title) {
@@ -215,6 +216,10 @@ export class VideoService {
 
     if (updateVideoDto.visibility) {
       updateData.visibility = updateVideoDto.visibility;
+    }
+
+    if (updateVideoDto.visibility === 'unlisted' && !foundVideo.accessKey) {
+      updateData.accessKey = this.generateAccessKey();
     }
 
     return updateData;
