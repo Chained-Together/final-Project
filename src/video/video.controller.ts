@@ -48,7 +48,7 @@ export class VideoController {
 
   @Get('my/:channelId')
   getAllVideoOfChannel(@Param('channelId') channelId: number) {
-    // console.log(channelId);
+    console.log('요청 받음');
     return this.videoService.getAllVideoOfChannel(channelId);
   }
 

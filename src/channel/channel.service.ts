@@ -15,11 +15,14 @@ export class ChannelService {
   async createChannel(channelDto: ChannelDto, user: UserEntity): Promise<ChannelEntity> {
     const { name, profileImage } = channelDto;
 
-    const isExistChannel = await this.findChannel({ userId: user.id });
+    const isExistChannel = await this.findChannel({ user: { id: user.id } });
+
     if (isExistChannel) {
       throw new ConflictException(`이미 채널을 보유 중 입니다.${isExistChannel.name}`);
     }
+
     const found = await this.findChannel({ name });
+
     if (found) {
       throw new ConflictException(`입력하신 채널이름(${name})이 이미 존재합니다.`);
     }
@@ -27,7 +30,7 @@ export class ChannelService {
     const createChannel = this.channelRepository.create({
       name,
       profileImage,
-      userId: user.id,
+      user: user,
     });
 
     await this.channelRepository.save(createChannel);
@@ -45,7 +48,7 @@ export class ChannelService {
   }
 
   async getMyChannel(user: UserEntity): Promise<ChannelEntity> {
-    const foundChannel = await this.findChannel({ userId: user.id });
+    const foundChannel = await this.findChannel({ user: { id: user.id } });
     if (!foundChannel) {
       throw new NotFoundException('해당 채널이 존재하지 않습니다.');
     }
@@ -54,7 +57,7 @@ export class ChannelService {
   }
 
   async updateChannel(user: UserEntity, channelDto: ChannelDto): Promise<ChannelEntity> {
-    const foundChannel = await this.findChannel({ userId: user.id });
+    const foundChannel = await this.findChannel({ user: { id: user.id } });
     if (!foundChannel) {
       throw new NotFoundException('해당 채널이 존재하지 않습니다.');
     }
@@ -67,12 +70,13 @@ export class ChannelService {
       },
     );
 
-    const foundUpdatedChannel = await this.findChannel({ userId: user.id });
+    const foundUpdatedChannel = await this.findChannel({ user: { id: user.id } });
     return foundUpdatedChannel;
   }
 
   async removeChannel(user: UserEntity): Promise<ChannelEntity> {
-    const foundChannelById = await this.findChannel({ userId: user.id });
+    const foundChannelById = await this.findChannel({ user: { id: user.id } });
+
     if (!foundChannelById) {
       throw new NotFoundException('해당 채널이 존재하지 않습니다.');
     }
@@ -83,8 +87,8 @@ export class ChannelService {
     return foundChannelById;
   }
 
-  private async findChannel(condition) {
-    const foundChannel = await this.channelRepository.findOne({ where: condition });
+  private async findChannel(userId) {
+    const foundChannel = await this.channelRepository.findOne({ where: userId });
     return foundChannel;
   }
 }
