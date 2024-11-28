@@ -1,9 +1,10 @@
-import { Body, Controller, Get, Post, Render, Req, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { Response } from 'express';
 import { SignUpDto } from './dto/signUp.dto';
 import { Request } from 'express';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 export class AuthController {
@@ -23,5 +24,17 @@ export class AuthController {
       message: '로그인 성공',
       // 홈페이지 리턴되게
     });
+  }
+
+  @Get('google')
+  @UseGuards(AuthGuard('google')) // 1.구글 전략
+  async googleAuth() {}
+
+  @Get('google/callback') //2.여기로 보내짐
+  @UseGuards(AuthGuard('google'))
+  async googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
+    const token = await this.authService.googleLogin(req);
+    res.setHeader('access_token', token.access_token);
+    res.redirect('/main');
   }
 }

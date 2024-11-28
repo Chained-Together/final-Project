@@ -10,6 +10,7 @@ import { JwtStrategy } from './jwt.strategy';
 import { BcryptHashingService } from 'src/interface/impl/bcrypt-hashing-service';
 import { ChannelEntity } from 'src/channel/entities/channel.entity';
 import { UserEntity } from 'src/user/entities/user.entity';
+import { GoogleStrategy } from './google.strategy';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { UserEntity } from 'src/user/entities/user.entity';
   providers: [
     AuthService,
     JwtStrategy,
+    GoogleStrategy,
     {
       provide: 'HashingService',
       useClass: BcryptHashingService,

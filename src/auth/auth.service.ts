@@ -92,4 +92,48 @@ export class AuthService {
   private async verifyCode(code: string, req: Request): Promise<boolean> {
     return code === req.session.code;
   }
+  async googleLogin(req: any): Promise<{ access_token: string }> {
+    if (!req.user) {
+      throw new Error('구글 인증 실패: 사용자 정보가 없습니다.');
+    }
+
+    const { googleId, email, displayName, accessToken, firstName } = req.user;
+
+    // 사용자 조회
+    let user = await this.userRepository.findOne({ where: { googleId } });
+
+    const num = Math.floor(1000 + Math.random() * 9000);
+    const num1 = Math.floor(1000 + Math.random() * 9000);
+    if (!user) {
+      // 새로운 사용자 생성
+      user = this.userRepository.create({
+        email,
+        name: displayName,
+        firstName,
+        googleId,
+        isSocial: true,
+        nickname: displayName,
+        phoneNumber: `010-${num}-${num1}`,
+        accessToken: accessToken,
+      });
+      await this.userRepository.save(user);
+    } else {
+      // 기존 사용자 정보 업데이트
+      user.accessToken = accessToken;
+      user.firstName = firstName;
+      await this.userRepository.save(user);
+    }
+
+    // JWT 발급
+    const payload = {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      nickname: user.nickname,
+      isSocial: user.isSocial,
+    };
+
+    const access_token = this.jwtService.sign(payload);
+    return { access_token };
+  }
 }

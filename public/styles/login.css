@@ -124,3 +124,37 @@ button[type='submit']:hover {
 #findInfo a:hover {
   text-decoration: underline;
 }
+.social-button {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: #4285F4; /* 구글의 기본 파란색 */
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  text-align: center;
+  width: 100%;
+  max-width: 300px;
+  cursor: pointer;
+  margin-top: 500px;
+}
+
+.social-button:hover {
+  background-color: #357ae8; /* 호버 시 약간 어두운 파란색 */
+}
+
+.social-button span {
+  display: inline-block;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.social-button:before {
+  /*content: url('https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1200px-Google_2015_logo.svg.png'); !* 구글 아이콘 *!*/
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  vertical-align: middle;
+}

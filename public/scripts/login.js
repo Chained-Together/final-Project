@@ -1,5 +1,4 @@
 const loginForm = document.getElementById('loginForm');
-
 loginForm.addEventListener('submit', async (event) => {
   event.preventDefault();
   const email = document.getElementById('email');
@@ -37,4 +36,8 @@ loginForm.addEventListener('submit', async (event) => {
     console.error(error);
     alert(`로그인 중 오류 발생: ${error.message}`);
   }
+});
+document.getElementById('google-connect').addEventListener('click', (event) => {
+  event.preventDefault(); // 기본 동작을 막고
+  window.location.href = '/auth/google'; // 구글 인증을 위한 경로로 이동
 });
