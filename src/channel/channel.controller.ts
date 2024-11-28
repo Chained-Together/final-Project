@@ -1,24 +1,12 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-  Redirect,
-  Render,
-  Res,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Res, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { ChannelService } from './channel.service';
 import { ChannelDto } from './dto/channel.dto';
-import { AuthGuard } from '@nestjs/passport';
 import { ChannelEntity } from './entities/channel.entity';
 
-import { UserInfo } from 'src/utils/user-info.decorator';
 import { Response } from 'express';
 import { UserEntity } from 'src/user/entities/user.entity';
+import { UserInfo } from 'src/utils/user-info.decorator';
 
 @Controller('channel')
 export class ChannelController {

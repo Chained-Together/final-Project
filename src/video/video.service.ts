@@ -99,13 +99,13 @@ export class VideoService {
   async getAllVideoOfChannel(channelId: number): Promise<VideoEntity[]> {
     console.log('Channel ID:', channelId);
     return this.videoRepository.find({
-      where: { channel: { id: channelId }, visibility: Visibility.PUBLIC, status: true },
+      where: { channel: { id: channelId }, visibility: Visibility.PUBLIC },
     });
   }
 
   async getAllVideoOfMyChannel(channelId: number, userId: number): Promise<VideoEntity[]> {
     const foundChannel = await this.channelRepository.findOne({
-      where: { id: channelId, userId },
+      where: { id: channelId, user: { id: userId } },
     });
 
     if (!foundChannel) {
@@ -113,7 +113,7 @@ export class VideoService {
     }
 
     return this.videoRepository.find({
-      where: { channel: { id: channelId }, status: true },
+      where: { channel: { id: channelId } },
     });
   }
 
@@ -133,13 +133,13 @@ export class VideoService {
 
     const { visibility, channel, accessKey: storedAccessKey } = foundVideo;
 
-    if (visibility === Visibility.PRIVATE && channel.userId !== userId) {
+    if (visibility === Visibility.PRIVATE && channel.user.id !== userId) {
       return { statusCode: 401, message: '비공개 비디오에 접근할 수 없습니다.' };
     }
 
     if (
       visibility === Visibility.UNLISTED &&
-      channel.userId !== userId &&
+      channel.user.id !== userId &&
       storedAccessKey !== accessKey
     ) {
       return { statusCode: 403, message: '올바른 링크가 아니면 접근할 수 없습니다.' };
@@ -178,7 +178,9 @@ export class VideoService {
   }
 
   private async findChannelByUserId(id) {
-    const foundChannel = await this.channelRepository.findOne({ where: { userId: id } });
+    const foundChannel = await this.channelRepository.findOne({
+      where: { user: { id: id } },
+    });
     if (!foundChannel) {
       throw new UnauthorizedException('채널이 존재하지 않습니다.');
     }

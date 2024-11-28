@@ -44,7 +44,7 @@ export class ResolutionService {
         { high: highResolutionUrl, low: lowResolutionUrl },
       );
 
-      await this.videoRepository.update({ id: findVideo.id }, { duration: duration });
+      await this.videoRepository.update({ id: findVideo.id }, { duration: duration, status: true });
 
       const findResolution = await this.resolutionRepository.findOne({
         where: { video: { id: findVideo.id } },
