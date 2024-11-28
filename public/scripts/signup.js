@@ -47,10 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  emailInput.addEventListener('blur', () => {
-    validateField(emailInput, /^[^\s@]+@[^\s@]+\.[^\s@]+$/, '유효한 이메일을 입력하세요.');
-  });
-
   passwordInput.addEventListener('blur', () => {
     validateField(
       passwordInput,
@@ -92,13 +88,20 @@ document.addEventListener('DOMContentLoaded', () => {
     );
     const isConfirmedPasswordValid =
       confirmedPasswordInput.value.trim() === passwordInput.value.trim();
+    const isCodeValid = validateField(codeInput, /^[a-f0-9]{6}/, '인증번호를 입력해주세요.');
     const isPhoneNumberValid = validateField(
       phoneNumberInput,
       /^\d{10,11}$/,
       '전화번호는 10-11자리 숫자여야 합니다.',
     );
 
-    if (!isEmailValid || !isPasswordValid || !isConfirmedPasswordValid || !isPhoneNumberValid) {
+    if (
+      !isEmailValid ||
+      !isPasswordValid ||
+      !isConfirmedPasswordValid ||
+      !isCodeValid ||
+      !isPhoneNumberValid
+    ) {
       alert('모든 값을 올바르게 입력하세요.');
       return;
     }
@@ -115,6 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
           confirmedPassword: confirmedPasswordInput.value.trim(),
           name: document.getElementById('name').value.trim(),
           nickname: document.getElementById('nickname').value.trim(),
+          code: codeInput.value.trim(),
           phoneNumber: phoneNumberInput.value.trim(),
         }),
       });
