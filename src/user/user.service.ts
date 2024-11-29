@@ -3,7 +3,6 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
 import { Repository } from 'typeorm';
-import { FindPasswordDto } from './dto/findPassword.dto';
 import { DeleteUserDto } from './dto/delete-user.dto';
 import { HashingService } from 'src/interface/hashing-interface';
 @Injectable()
@@ -21,59 +20,41 @@ export class UserService {
     return { email: user.email };
   }
 
-  //TODO: nodemailer,휴대폰 문자 인증,비밀번호 찾기 할때 지정 이메일로 비밀번호 변경 메일전송
-  async findPassword(findPasswordDto: FindPasswordDto): Promise<void> {
-    const { email, phoneNumber } = findPasswordDto;
-
-    const findUser : UserEntity = await this.userRepository.findOne({
-      where : {email : email}
-    })
-
-    if(!findUser){
-      throw new NotFoundException('해당하는 사용자가 없습니다.');
-    }
-
-    if(findUser.phoneNumber !== phoneNumber){
-      throw new UnauthorizedException('본인확인 정보가 일치하지 않습니다.');
-    }
-  }
   //todo 11/27 : 회원탈퇴 / 회원정보 수정 / 해당기능 프론트 버튼에 연결
-  async deleteUserAccount( user: UserEntity ,deleteUserDto: DeleteUserDto ) {
+  async deleteUserAccount(user: UserEntity, deleteUserDto: DeleteUserDto) {
     try {
-      await this.findUserEmail(deleteUserDto)
-      await this.verifyPassword(deleteUserDto)
+      await this.findUserEmail(deleteUserDto);
+      await this.verifyPassword(deleteUserDto);
 
-      await this.userRepository.softDelete({ id: user.id })
+      await this.userRepository.softDelete({ id: user.id });
       return { message: '회원탈퇴 성공' };
-    } catch(err) {
+    } catch (err) {
       throw new Error(
-        `사용자 계정을 삭제하는 중 오류가 발생했습니다: ${err.message || '알 수 없는 오류가 발생했습니다.'}`
+        `사용자 계정을 삭제하는 중 오류가 발생했습니다: ${err.message || '알 수 없는 오류가 발생했습니다.'}`,
       );
     }
   }
 
-
-
-
-
-
   private async findUserById(id: number) {
     const foundUser = await this.userRepository.findOne({
-      where : { id }
-    })
+      where: { id },
+    });
     return foundUser;
   }
 
-  private async findUserEmail(deleteUserDto: DeleteUserDto)  {
-    const foundEmail = await this.userRepository.findOne({ where: { email: deleteUserDto.email } })
-    if(!foundEmail) throw new NotFoundException('해당 이메일의 사용자가 존재하지 않습니다.');
+  private async findUserEmail(deleteUserDto: DeleteUserDto) {
+    const foundEmail = await this.userRepository.findOne({ where: { email: deleteUserDto.email } });
+    if (!foundEmail) throw new NotFoundException('해당 이메일의 사용자가 존재하지 않습니다.');
 
     return foundEmail;
   }
 
   private async verifyPassword(deleteUserDto: DeleteUserDto) {
-    const foundUser = this.findUserEmail(deleteUserDto)
-    const foundPassword = await this.bcryptHashingService.compare(deleteUserDto.password, (await foundUser).password)
+    const foundUser = this.findUserEmail(deleteUserDto);
+    const foundPassword = await this.bcryptHashingService.compare(
+      deleteUserDto.password,
+      (await foundUser).password,
+    );
     if (!foundPassword) {
       throw new UnauthorizedException('비밀 번호가 일치 하지 않습니다.');
     }
