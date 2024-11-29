@@ -97,4 +97,82 @@ export class AuthService {
   private async verifyCode(code: string, req: Request): Promise<boolean> {
     return code === req.session.code;
   }
+
+  async googleLogin(req: any): Promise<{ access_token: string }> {
+    if (!req.user) {
+      throw new Error('구글 인증 실패: 사용자 정보가 없습니다.');
+    }
+
+    const { googleId, email, displayName, accessToken } = req.user;
+
+    // 사용자 조회
+    let user = await this.userRepository.findOne({ where: { googleId } });
+
+    const num = Math.floor(1000 + Math.random() * 9000);
+    const num1 = Math.floor(1000 + Math.random() * 9000);
+    if (!user) {
+      // 새로운 사용자 생성
+      user = this.userRepository.create({
+        email,
+        name: displayName,
+        googleId,
+        isSocial: true,
+        nickname: displayName,
+        phoneNumber: `010-${num}-${num1}`,
+        // accessToken: accessToken,
+      });
+      await this.userRepository.save(user);
+    } else {
+      // user.accessToken = accessToken; //기존 소셜로그인 사용자 업데이트
+      await this.userRepository.save(user);
+    }
+
+    const payload = {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      nickname: user.nickname,
+      isSocial: user.isSocial,
+    };
+
+    const access_token = this.jwtService.sign(payload);
+    return { access_token };
+  }
+  async naverLogin(req: any): Promise<{ access_token: string }> {
+    if (!req.user) {
+      throw new Error('네이버 인증 실패: 사용자 정보가 없습니다.');
+    }
+
+    const { naverId, email, nickname } = req.user;
+
+    let user = await this.userRepository.findOne({ where: { naverId } });
+
+    const num = Math.floor(1000 + Math.random() * 9000);
+    const num1 = Math.floor(1000 + Math.random() * 9000);
+    if (!user) {
+      user = this.userRepository.create({
+        email,
+        nickname,
+        name: nickname,
+        naverId,
+        phoneNumber: `010-${num}-${num1}`,
+        isSocial: true,
+      });
+      await this.userRepository.save(user);
+    } else {
+      user.email = email;
+      user.nickname = nickname;
+      await this.userRepository.save(user);
+    }
+
+    const payload = {
+      id: user.id,
+      email: user.email,
+      nickname: user.nickname,
+      isSocial: user.isSocial,
+    };
+
+    const access_token = this.jwtService.sign(payload);
+    return { access_token };
+  }
 }

@@ -1,8 +1,9 @@
-import { Body, Controller, Post, Req, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { Request, Response } from 'express';
 import { SignUpDto } from './dto/signUp.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 export class AuthController {
@@ -23,5 +24,31 @@ export class AuthController {
       message: '로그인 성공',
       // 홈페이지 리턴되게
     });
+  }
+
+  @Get('google')
+  @UseGuards(AuthGuard('google')) // 1.구글 전략
+  async googleAuth() {}
+
+  @Get('google/callback') //2.여기로 보내짐
+  @UseGuards(AuthGuard('google'))
+  async googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
+    const token = await this.authService.googleLogin(req);
+    console.log(token);
+    res.setHeader('Authorization', token.access_token);
+    res.redirect(`/main?token=${token.access_token}`);
+  }
+
+  @Get('naver')
+  @UseGuards(AuthGuard('naver'))
+  async naverAuth() {}
+
+  @Get('naver/callback')
+  @UseGuards(AuthGuard('naver'))
+  async naverAuthCallback(@Req() req: Request, @Res() res: Response) {
+    const token = await this.authService.naverLogin(req);
+
+    res.setHeader('Authorization', token.access_token);
+    res.redirect(`/main?token=${token.access_token}`);
   }
 }

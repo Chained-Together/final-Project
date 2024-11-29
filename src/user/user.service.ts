@@ -29,10 +29,7 @@ export class UserService {
       await this.userRepository.softDelete({ id: user.id });
       return { message: '회원탈퇴 성공' };
     } catch (err) {
-      if (err instanceof NotFoundException || err instanceof UnauthorizedException) {
-        throw err;
-      }
-      throw new UnauthorizedException(
+      throw new Error(
         `사용자 계정을 삭제하는 중 오류가 발생했습니다: ${err.message || '알 수 없는 오류가 발생했습니다.'}`,
       );
     }

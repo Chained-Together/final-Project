@@ -34,11 +34,11 @@ export class CommentEntity {
   commentGroup: number;
 
   @CreateDateColumn({ type: 'timestamp', nullable: false })
-  createdAt: Timestamp;
+  createdAt: Date;
 
   @UpdateDateColumn({ type: 'timestamp', nullable: false })
-  updatedAt: Timestamp;
+  updatedAt: Date;
 
   @ManyToOne(() => VideoEntity, (video) => video.comments, { onDelete: 'CASCADE' })
-  video: VideoEntity; 
+  video: VideoEntity;
 }
