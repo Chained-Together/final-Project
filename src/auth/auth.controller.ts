@@ -1,10 +1,10 @@
 import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginDto } from './dto/login.dto';
 import { Response } from 'express';
 import { SignUpDto } from './dto/signUp.dto';
 import { Request } from 'express';
 import { AuthGuard } from '@nestjs/passport';
+import { LoginDto } from './dto/login.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -34,6 +34,21 @@ export class AuthController {
   @UseGuards(AuthGuard('google'))
   async googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
     const token = await this.authService.googleLogin(req);
+    res.setHeader('access_token', token.access_token);
+    res.redirect('/main');
+  }
+
+  @Get('naver')
+  @UseGuards(AuthGuard('naver'))
+  async naverAuth() {}
+
+  @Get('naver/callback')
+  @UseGuards(AuthGuard('naver'))
+  async naverAuthCallback(
+    @Req() req: Request,
+    @Res() res: Response, // : Promise<NaverLoginAuthOutputDto>
+  ) {
+    const token = await this.authService.naverLogin(req);
     res.setHeader('access_token', token.access_token);
     res.redirect('/main');
   }

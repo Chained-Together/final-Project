@@ -38,6 +38,10 @@ loginForm.addEventListener('submit', async (event) => {
   }
 });
 document.getElementById('google-connect').addEventListener('click', (event) => {
-  event.preventDefault(); // 기본 동작을 막고
-  window.location.href = '/auth/google'; // 구글 인증을 위한 경로로 이동
+  event.preventDefault();
+  window.location.href = '/auth/google';
+});
+document.getElementById('Naver-connect').addEventListener('click', (event) => {
+  event.preventDefault();
+  window.location.href = '/auth/naver';
 });

@@ -59,14 +59,14 @@ export class UserEntity {
   @Column({ type: 'boolean', default: false })
   isSocial: boolean;
 
-  @Column({ type: 'varchar', nullable: true })
-  firstName: string;
-
   @Column({ type: 'varchar', nullable: true, unique: true })
   googleId: string;
 
-  @Column({ type: 'varchar', nullable: true })
-  accessToken: string; // 구글 OAuth 액세스 토큰
+  // @Column({ type: 'varchar', nullable: true })
+  // accessToken: string; // 구글 OAuth 액세스 토큰
+
+  @Column({ type: 'varchar', nullable: true, unique: true })
+  naverId: string;
 
   @OneToMany(() => LikeEntity, (like) => like.user)
   likes: LikeEntity;
