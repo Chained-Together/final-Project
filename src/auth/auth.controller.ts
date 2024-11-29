@@ -18,6 +18,7 @@ export class AuthController {
   @Post('login')
   async logIn(@Body() loginDto: LoginDto, @Res() res: Response) {
     const result = await this.authService.logIn(loginDto);
+    //
     res.setHeader('Authorization', result.access_token);
 
     return res.status(200).json({
@@ -34,8 +35,9 @@ export class AuthController {
   @UseGuards(AuthGuard('google'))
   async googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
     const token = await this.authService.googleLogin(req);
-    res.setHeader('access_token', token.access_token);
-    res.redirect('/main');
+    console.log(token);
+    res.setHeader('Authorization', token.access_token);
+    res.redirect(`/main?token=${token.access_token}`);
   }
 
   @Get('naver')
@@ -44,12 +46,10 @@ export class AuthController {
 
   @Get('naver/callback')
   @UseGuards(AuthGuard('naver'))
-  async naverAuthCallback(
-    @Req() req: Request,
-    @Res() res: Response, // : Promise<NaverLoginAuthOutputDto>
-  ) {
+  async naverAuthCallback(@Req() req: Request, @Res() res: Response) {
     const token = await this.authService.naverLogin(req);
-    res.setHeader('access_token', token.access_token);
-    res.redirect('/main');
+
+    res.setHeader('Authorization', token.access_token);
+    res.redirect(`/main?token=${token.access_token}`);
   }
 }

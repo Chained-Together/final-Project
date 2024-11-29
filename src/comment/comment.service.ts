@@ -6,6 +6,7 @@ import { VideoEntity } from 'src/video/entities/video.entity';
 import { Repository } from 'typeorm';
 import { CommentDto } from './dto/comment.dto';
 import { CommentEntity } from './entities/comment.entity';
+import { NotificationService } from 'src/notification/notification.service';
 
 @Injectable()
 export class CommentService {
@@ -14,13 +15,14 @@ export class CommentService {
     private readonly commentRepository: Repository<CommentEntity>,
     @InjectRepository(VideoEntity)
     private readonly videoRepository: Repository<VideoEntity>,
+    private readonly notificationService: NotificationService,
   ) {}
 
   async createComment(commentDto: CommentDto, user: UserEntity, videoId: number) {
     const checkGroupNumber = await this.commentRepository.findOne({
       where: { video: { id: videoId }, depth: 0 },
       order: {
-        orderNumber: 'DESC',
+        createdAt: 'DESC',
       },
     });
 
@@ -37,6 +39,8 @@ export class CommentService {
     });
 
     await this.commentRepository.save(createComment);
+
+    await this.forwardNotification(videoId, user.id);
 
     return createComment;
   }
@@ -55,12 +59,8 @@ export class CommentService {
     await this.verifyVideo(videoId);
     await this.forFindOneVerifyComment(commentId);
 
-    const checkCommentGroup = await this.commentRepository.findOne({
-      where: { id: commentId },
-    });
-
     const comment = await this.commentRepository.find({
-      where: { commentGroup: checkCommentGroup.commentGroup },
+      where: { parentComment: commentId, depth: 1 },
       select: ['id', 'userId', 'content', 'createdAt'],
       order: {
         orderNumber: 'ASC',
@@ -129,6 +129,8 @@ export class CommentService {
 
     await this.commentRepository.save(createReply);
 
+    await this.forwardNotification(videoId, user.id);
+
     return createReply;
   }
 
@@ -150,18 +152,24 @@ export class CommentService {
     const findVideo = await this.videoRepository.find({
       where: { id: videoId },
     });
+
     if (_.isNil(findVideo)) {
       throw new NotFoundException('해당하는 비디오가 존재하지 않습니다.');
     }
+
+    return findVideo;
   }
 
   private async forFindOneVerifyComment(commentId: number) {
     const findComment = await this.commentRepository.findOne({
       where: { id: commentId },
     });
+
     if (!findComment) {
       throw new NotFoundException('해당하는 댓글이 존재하지 않습니다.');
     }
+
+    return findComment;
   }
 
   private async verifyUser(user: UserEntity) {
@@ -172,5 +180,11 @@ export class CommentService {
     if (!existingUser) {
       throw new NotFoundException('해당하는 유저는 권한이 없습니다.');
     }
+  }
+
+  private async forwardNotification(videoId: number, userId: number) {
+    const message = `${userId}님이 ${videoId} 영상에 댓글을 달았습니다.`;
+
+    this.notificationService.emitNotification(message, videoId);
   }
 }

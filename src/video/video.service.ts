@@ -25,6 +25,7 @@ export class VideoService {
     const query = this.videoRepository
       .createQueryBuilder('videos')
       .where('videos.visibility = :visibility', { visibility: 'public' })
+      .andWhere('videos.status = :status', { status: true })
       .orderBy('videos.id', 'ASC')
       .take(take);
 
@@ -104,7 +105,7 @@ export class VideoService {
 
   async getAllVideoOfMyChannel(channelId: number, userId: number): Promise<VideoEntity[]> {
     const foundChannel = await this.channelRepository.findOne({
-      where: { id: channelId, userId },
+      where: { id: channelId, user: { id: userId } },
     });
 
     if (!foundChannel) {
@@ -132,13 +133,13 @@ export class VideoService {
 
     const { visibility, channel, accessKey: storedAccessKey } = foundVideo;
 
-    if (visibility === Visibility.PRIVATE && channel.userId !== userId) {
+    if (visibility === Visibility.PRIVATE && channel.user.id !== userId) {
       return { statusCode: 401, message: '비공개 비디오에 접근할 수 없습니다.' };
     }
 
     if (
       visibility === Visibility.UNLISTED &&
-      channel.userId !== userId &&
+      channel.user.id !== userId &&
       storedAccessKey !== accessKey
     ) {
       return { statusCode: 403, message: '올바른 링크가 아니면 접근할 수 없습니다.' };
@@ -154,9 +155,9 @@ export class VideoService {
   ): Promise<VideoEntity> {
     await this.findChannelByUserId(user.id);
 
-    await this.findVideoById(videoId);
+    const foundVideo = await this.findVideoById(videoId);
 
-    const updateData = await this.updateDetails(updateVideoDto);
+    const updateData = await this.updateDetails(updateVideoDto, foundVideo);
 
     await this.videoRepository.update({ id: videoId }, updateData);
 
@@ -177,7 +178,9 @@ export class VideoService {
   }
 
   private async findChannelByUserId(id) {
-    const foundChannel = await this.channelRepository.findOne({ where: { userId: id } });
+    const foundChannel = await this.channelRepository.findOne({
+      where: { user: { id: id } },
+    });
     if (!foundChannel) {
       throw new UnauthorizedException('채널이 존재하지 않습니다.');
     }
@@ -194,7 +197,7 @@ export class VideoService {
     return foundVideo;
   }
 
-  private async updateDetails(updateVideoDto: UpdateVideoDto) {
+  private async updateDetails(updateVideoDto: UpdateVideoDto, foundVideo: VideoEntity) {
     const updateData: Partial<VideoEntity> = {};
 
     if (updateVideoDto.title) {
@@ -215,6 +218,10 @@ export class VideoService {
 
     if (updateVideoDto.visibility) {
       updateData.visibility = updateVideoDto.visibility;
+    }
+
+    if (updateVideoDto.visibility === 'unlisted' && !foundVideo.accessKey) {
+      updateData.accessKey = this.generateAccessKey();
     }
 
     return updateData;
