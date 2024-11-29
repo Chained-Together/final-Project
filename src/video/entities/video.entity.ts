@@ -63,7 +63,7 @@ export class VideoEntity {
   channel: ChannelEntity;
 
   @OneToMany(() => LikeEntity, (like) => like.video)
-  likes: LikeEntity;
+  likes: LikeEntity[];
 
   @OneToMany(() => CommentEntity, (comment) => comment.video)
   comments: CommentEntity;

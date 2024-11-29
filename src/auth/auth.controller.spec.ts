@@ -4,6 +4,7 @@ import { AuthService } from './auth.service';
 import { SignUpDto } from './dto/signUp.dto';
 import { LoginDto } from './dto/login.dto';
 import { Response } from 'express';
+import { Request } from 'express';
 
 describe('AuthController', () => {
   let authController: AuthController;
@@ -42,9 +43,18 @@ describe('AuthController', () => {
         name: 'name',
         nickname: 'nickname',
         phoneNumber: '01000000000',
+        code: '1234',
       };
 
-      await authController.singUp(signUpDto);
+      // Request 객체 모킹
+      const mockRequest: Partial<Request> = {
+        headers: {
+          authorization: 'Bearer mockToken',
+        },
+        body: signUpDto,
+      };
+
+      await authController.singUp(signUpDto, mockRequest as Request);
 
       expect(authService.signUp).toHaveBeenCalledWith(signUpDto);
     });

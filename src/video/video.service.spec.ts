@@ -4,31 +4,24 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { VideoEntity } from './entities/video.entity';
 import { Repository } from 'typeorm';
 import { ChannelEntity } from '../channel/entities/channel.entity';
-import { UserEntity } from '../user/entity/user.entity';
 import { Visibility } from './video.visibility.enum';
-import { VideoDto } from './dto/video.dto';
 import { NotFoundException, UnauthorizedException } from '@nestjs/common';
-import { create } from 'lodash';
-import { UpdateVideoDto } from './dto/update.video.dto';
 import { ResolutionEntity } from '../resolution/entities/resolution.entity';
-
-const mockVideoRepository = {
-  create: jest.fn(),
-  save: jest.fn(),
-  find: jest.fn(),
-  findOne: jest.fn(),
-  update: jest.fn(),
-  delete: jest.fn(),
-};
-
-const mockChannelRepository = {
-  findOne: jest.fn(),
-};
-
-const mockResolutionRepository = {
-  create: jest.fn(),
-  save: jest.fn(),
-};
+import {
+  mockChannelRepository,
+  mockResolutionRepository,
+  mockVideoRepository,
+} from './__mocks__/mock.video.service';
+import {
+  mockChannel,
+  mockResolution,
+  mockUpdatedVideo,
+  mockUpdateVideoDto,
+  mockUser,
+  mockVideo,
+  mockVideoDto,
+} from './__mocks__/mock.video.data';
+import { object } from 'joi';
 
 describe('VideoService', () => {
   let videoService: VideoService;
@@ -64,111 +57,22 @@ describe('VideoService', () => {
     );
   });
 
-  const mockUser: UserEntity = {
-    id: 1,
-    email: 'test@test.com',
-    password: 'testtest',
-    name: 'test',
-    nickname: 'test',
-    phoneNumber: '010-4444-4444',
-    likes: null,
-    channel: null,
-  };
-
-  const mockChannel: ChannelEntity = {
-    id: 1,
-    name: 'testTV',
-    profileImage: 'test',
-    userId: 1,
-    video: null,
-    user: null,
-  };
-
-  const mockVideo: VideoEntity = {
-    id: 1,
-    title: 'test',
-    description: 'test',
-    thumbnailUrl: 'test',
-    hashtags: ['공포', '강아지'],
-    visibility: Visibility.PUBLIC,
-    duration: null,
-    views: 0,
-    uploadedAt: new Date(),
-    updatedAt: null,
-    resolution: null,
-    channel: mockChannel,
-    likes: null,
-    videoCode: '1',
-    status: false,
-    comments: null,
-    accessKey: null,
-  };
-
-  const mockVideoDto: VideoDto = {
-    title: 'test',
-    description: 'test',
-    thumbnailUrl: 'test',
-    duration: null,
-    hashtags: ['공포', '강아지'],
-    visibility: Visibility.PUBLIC,
-    high: '임의 링크',
-    low: '임의 링크',
-    videoCode: '1',
-  };
-
-  const mockUpdateVideoDto: UpdateVideoDto = {
-    title: 'test',
-    description: 'test',
-    thumbnailUrl: 'test',
-    hashtags: ['공포', '고양이'],
-    visibility: Visibility.PUBLIC,
-  };
-
-  const mockUpdatedVideo: VideoEntity = {
-    id: 1,
-    title: 'test',
-    description: 'test',
-    thumbnailUrl: 'test',
-    hashtags: ['공포', '고양이'],
-    visibility: Visibility.PUBLIC,
-    duration: null,
-    views: 0,
-    uploadedAt: new Date(),
-    updatedAt: null,
-    resolution: null,
-    channel: mockChannel,
-    likes: null,
-    videoCode: '1',
-    status: false,
-    comments: null,
-    accessKey: null,
-  };
-  const mockResolution: ResolutionEntity = {
-    id: 1,
-    high: '임의 링크',
-    low: '임의 링크',
-    video: mockVideo,
-  };
-
   describe('영상 메타 데이터 저장 시 ', () => {
-    it('유저가 소유한 채널이 없으면 UnauthorizedException을 반환해야 한다.', async () => {
-      mockChannelRepository.findOne.mockResolvedValue(null);
-      await expect(videoService.saveMetadata(mockUser, mockVideoDto)).rejects.toThrow(
-        UnauthorizedException,
-      );
-    });
-
-    it('유저가 소유한 채널이면 영상을 저장하고 반환한다. ', async () => {
+    it('유저가 소유한 채널이면 영상을 저장하고 반환한다.', async () => {
+      // Arrange
       mockChannelRepository.findOne.mockResolvedValue(mockChannel);
       mockVideoRepository.create.mockReturnValue(mockVideo as never);
       mockVideoRepository.save.mockResolvedValue(mockVideo);
-
       mockResolutionRepository.create.mockReturnValue(mockResolution);
       mockResolutionRepository.save.mockResolvedValue(mockResolution);
 
+      // Act
       const result = await videoService.saveMetadata(mockUser, mockVideoDto);
 
-      expect(channelRepository.findOne).toHaveBeenCalledWith({ where: { userId: mockUser.id } });
+      // Assert
+      expect(channelRepository.findOne).toHaveBeenCalledWith({
+        where: { user: { id: mockUser.id } },
+      });
       expect(videoRepository.create).toHaveBeenCalledWith({
         title: mockVideoDto.title,
         description: mockVideoDto.description,
@@ -178,7 +82,7 @@ describe('VideoService', () => {
         visibility: mockVideoDto.visibility,
         channel: mockChannel,
         videoCode: mockVideo.videoCode,
-        accessKey: null,
+        accessKey: mockVideoDto.visibility === Visibility.UNLISTED ? expect.any(String) : null,
       });
       expect(videoRepository.save).toHaveBeenCalledWith(mockVideo);
 
@@ -187,12 +91,18 @@ describe('VideoService', () => {
         low: mockVideoDto.low,
         video: mockVideo,
       });
-
       expect(mockResolutionRepository.save).toHaveBeenCalledWith(mockResolution);
-      expect(result).toEqual({ key: mockVideo.videoCode });
+
+      if (mockVideoDto.visibility === Visibility.UNLISTED) {
+        expect(result).toEqual({
+          key: mockVideo.videoCode,
+          link: expect.stringContaining(`/video/${mockVideo.id}?accessKey=`),
+        });
+      } else {
+        expect(result).toEqual({ key: mockVideo.videoCode });
+      }
     });
   });
-
   describe('영상 전체 조회 시', () => {
     it('전체 조회 요청 시 영상 메타데이터 전체를 배열로 반환한다.', async () => {
       mockVideoRepository.find.mockResolvedValue([mockVideo]);
@@ -203,13 +113,13 @@ describe('VideoService', () => {
   });
 
   describe('영상 상세 조회 시', () => {
-    it('해당 영상이 없으면 상태 코드 404와 존재하지 않는 비디오입니다. 반환해야 한다.', async () => {
+    it('존재하지 않는 비디오에 대해 NotFoundException을 던져야합니다.', async () => {
       mockVideoRepository.findOne.mockResolvedValue(null);
-      const result = await videoService.getVideo(1, mockUser.id);
 
-      expect(result).toEqual({
-        statusCode: 404,
-        message: '존재하지 않는 비디오입니다.',
+      await expect(videoService.getVideo(1, mockUser.id)).rejects.toThrow(NotFoundException);
+      expect(videoRepository.findOne).toHaveBeenCalledWith({
+        where: { id: 1 },
+        relations: ['channel', 'resolution'],
       });
     });
 
@@ -227,25 +137,20 @@ describe('VideoService', () => {
       expect(result).toEqual({ ...mockVideo, visibility: Visibility.PUBLIC });
     });
 
-    it('비공개(PRIVATE) 영상일 때 소유자가 아니면 상태 코드 401과 비공개 비디오에 접근할 수 없습니다.를 반환해야 한다.', async () => {
+    it('비공개(PRIVATE) 영상 접근 시 소유자가 아니면 UnauthorizedException을 던져야합니다.', async () => {
       mockVideoRepository.findOne.mockResolvedValue({
         ...mockVideo,
         visibility: Visibility.PRIVATE,
-        channel: { ...mockChannel, userId: 999 },
+        channel: { user: { id: 999 } },
       });
 
-      const result = await videoService.getVideo(1, mockUser.id);
-
-      expect(result).toEqual({
-        statusCode: 401,
-        message: '비공개 비디오에 접근할 수 없습니다.',
-      });
+      await expect(videoService.getVideo(1, mockUser.id)).rejects.toThrow(UnauthorizedException);
     });
     it('비공개(PRIVATE) 영상일 때 소유자라면 메타데이터를 반환한다.', async () => {
       mockVideoRepository.findOne.mockResolvedValue({
         ...mockVideo,
         visibility: Visibility.PRIVATE,
-        channel: { ...mockChannel, userId: mockUser.id },
+        channel: { user: { id: mockUser.id } },
       });
 
       const result = await videoService.getVideo(1, mockUser.id);
@@ -253,24 +158,21 @@ describe('VideoService', () => {
       expect(result).toEqual({
         ...mockVideo,
         visibility: Visibility.PRIVATE,
-        channel: { ...mockChannel, userId: mockUser.id },
+        channel: { user: { id: mockUser.id } },
       });
     });
 
-    it('일부공개(UNLISTED) 영상일 때 accessKey가 올바르지 않으면 상태 코드 403과 올바른 링크가 아니면 접근할 수 없습니다.를 반환해야 한다.', async () => {
+    it('잘못된 accessKey로 일부공개(UNLISTED) 영상 접근 시 UnauthorizedException을 던져야합니다.', async () => {
       mockVideoRepository.findOne.mockResolvedValue({
         ...mockVideo,
         visibility: Visibility.UNLISTED,
         accessKey: 'valid-key',
-        channel: { ...mockChannel, userId: 999 },
+        channel: { user: { id: 999 } },
       });
 
-      const result = await videoService.getVideo(1, mockUser.id, 'invalid-key');
-
-      expect(result).toEqual({
-        statusCode: 403,
-        message: '올바른 링크가 아니면 접근할 수 없습니다.',
-      });
+      await expect(videoService.getVideo(1, mockUser.id, 'invalid-key')).rejects.toThrow(
+        UnauthorizedException,
+      );
     });
 
     it('일부공개(UNLISTED) 영상일 때 accessKey가 올바르면 메타데이터를 반환한다.', async () => {
@@ -278,6 +180,7 @@ describe('VideoService', () => {
         ...mockVideo,
         visibility: Visibility.UNLISTED,
         accessKey: 'valid-key',
+        channel: { user: { id: 999 } },
       });
 
       const result = await videoService.getVideo(1, mockUser.id, 'valid-key');
@@ -286,12 +189,13 @@ describe('VideoService', () => {
         ...mockVideo,
         visibility: Visibility.UNLISTED,
         accessKey: 'valid-key',
+        channel: { user: { id: 999 } },
       });
     });
   });
 
   describe('영상 수정 시', () => {
-    it('유저가 소유한 채널이 아닐 시 UnauthorizedException을 반환해야 한다.', async () => {
+    it('유저가 소유한 채널이 아닐 시 UnauthorizedException을 던져야 한다.', async () => {
       mockChannelRepository.findOne.mockResolvedValue(null);
 
       await expect(videoService.updateVideo(mockUser, 1, mockVideoDto)).rejects.toThrow(
@@ -299,7 +203,7 @@ describe('VideoService', () => {
       );
     });
 
-    it('해당 비디오가 존재 하지 않을 시 NotFoundException을 반환한다. ', async () => {
+    it('해당 비디오가 존재 하지 않을 시 NotFoundException을 던져야한다. ', async () => {
       mockChannelRepository.findOne.mockResolvedValue(mockChannel);
       mockVideoRepository.findOne.mockResolvedValue(null);
 
@@ -311,30 +215,37 @@ describe('VideoService', () => {
     it('수정된 비디오 메타데이터를 반환한다.', async () => {
       mockChannelRepository.findOne.mockResolvedValue(mockChannel);
       mockVideoRepository.findOne.mockResolvedValue(mockVideo);
-
-      const updatedData = { ...mockVideo, ...mockUpdateVideoDto };
       mockVideoRepository.update.mockResolvedValue(undefined);
       mockVideoRepository.findOne.mockResolvedValue(mockUpdatedVideo);
 
       const result = await videoService.updateVideo(mockUser, 1, mockUpdateVideoDto);
 
       expect(channelRepository.findOne).toHaveBeenLastCalledWith({
-        where: { userId: mockUser.id },
+        where: { user: { id: mockUser.id } },
       });
       expect(videoRepository.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
-      expect(videoRepository.update).toHaveBeenCalledWith({ id: 1 }, mockUpdateVideoDto);
-      expect(result).toEqual(updatedData);
+      expect(videoRepository.update).toHaveBeenCalledWith(
+        { id: 1 },
+        {
+          title: mockUpdateVideoDto.title,
+          description: mockUpdateVideoDto.description,
+          thumbnailUrl: mockUpdateVideoDto.thumbnailUrl,
+          hashtags: mockUpdateVideoDto.hashtags,
+          visibility: mockUpdateVideoDto.visibility,
+        },
+      );
+      expect(result).toEqual(mockUpdatedVideo);
     });
   });
 
   describe('영상 삭제 시', () => {
-    it('유저가 소유한 채널이 아닐 시 UnauthorizedException을 반환해야 한다.', async () => {
+    it('유저가 소유한 채널이 아닐 시 UnauthorizedException을 던져야 한다.', async () => {
       mockChannelRepository.findOne.mockResolvedValue(null);
 
       await expect(videoService.deleteVideo(mockUser, 1)).rejects.toThrow(UnauthorizedException);
     });
 
-    it('해당 비디오가 존재 하지 않을 시 NotFoundException을 반환한다. ', async () => {
+    it('해당 비디오가 존재 하지 않을 시 NotFoundException을 던져야한다. ', async () => {
       mockChannelRepository.findOne.mockResolvedValue(mockChannel);
       mockVideoRepository.findOne.mockResolvedValue(null);
 
@@ -349,7 +260,7 @@ describe('VideoService', () => {
       const result = await videoService.deleteVideo(mockUser, 1);
 
       expect(channelRepository.findOne).toHaveBeenLastCalledWith({
-        where: { userId: mockUser.id },
+        where: { user: { id: mockUser.id } },
       });
       expect(videoRepository.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
       expect(videoRepository.delete).toHaveBeenCalledWith({ id: 1 });

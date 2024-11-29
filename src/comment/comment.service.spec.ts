@@ -4,10 +4,9 @@ import { CommentEntity } from './entities/comment.entity';
 import { VideoEntity } from 'src/video/entities/video.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UserEntity } from 'src/user/entity/user.entity';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { CommentDto } from './dto/comment.dto';
-import { mock } from 'node:test';
+import { UserEntity } from '../user/entities/user.entity';
 
 describe('CommentService', () => {
   let service: CommentService;

@@ -5,8 +5,9 @@ import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { HashingService } from 'src/interface/hashing-interface';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { BcryptHashingService } from 'src/interface/impl/bcrypt-hashing-service';
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
+import { Request } from 'express';
+import { SignUpDto } from './dto/signUp.dto';
 
 describe('AuthService', () => {
   let authService: AuthService;
@@ -28,19 +29,24 @@ describe('AuthService', () => {
     compare: jest.fn(),
   };
 
-  const signUpDto = {
+  const signUpDto: SignUpDto = {
     email: 'test@test.com',
     password: 'password',
     confirmedPassword: 'password',
     name: 'name',
     nickname: 'nickname',
     phoneNumber: '01000000000',
+    code: '1234',
   };
 
   const loginDTO = {
     email: 'test@test.com',
     password: 'test',
   };
+
+  const mockRequest: Request = {
+    session: { code: 'wrongCode' },
+  } as unknown as Request;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -68,50 +74,63 @@ describe('AuthService', () => {
   });
 
   describe('회원가입', () => {
-    it('회원가입 시 이메일이 중복되면 BadRequestException 반환', async () => {
-      mockUserRepository.findOne.mockResolvedValue({ email: 'test@test.com' });
-
-      await expect(authService.signUp(signUpDto)).rejects.toThrow(BadRequestException);
+    it('회원가입 시 인증번호가 일치하지 않으면 BadRequestException 던짐', async () => {
+      await expect(authService.signUp(signUpDto, mockRequest)).rejects.toThrow(BadRequestException);
     });
 
-    it('회원가입 시 비밀번호 확인이 다르면 BadRequestException 반환', async () => {
-      const wrongPassword = {
+    it('회원가입 시 이메일이 중복되면 BadRequestException 던짐', async () => {
+      mockUserRepository.findOne.mockResolvedValue({ email: 'test@test.com' });
+
+      await expect(authService.signUp(signUpDto, mockRequest)).rejects.toThrow(BadRequestException);
+    });
+
+    it('회원가입 시 비밀번호 확인이 다르면 BadRequestException 던짐', async () => {
+      const wrongPassword: SignUpDto = {
         email: 'test@test.com',
         password: 'password',
         confirmedPassword: 'wrongPassword',
         name: 'name',
         nickname: 'nickname',
         phoneNumber: '01000000000',
+        code: '1234',
       };
 
       mockUserRepository.findOne.mockResolvedValueOnce(null);
 
-      await expect(authService.signUp(wrongPassword)).rejects.toThrow(BadRequestException);
+      await expect(authService.signUp(wrongPassword, mockRequest)).rejects.toThrow(
+        BadRequestException,
+      );
     });
 
-    it('회원가입 시 닉네임이 중복되면 BadRequestException 반환', async () => {
+    it('회원가입 시 닉네임이 중복되면 BadRequestException 던짐', async () => {
       mockUserRepository.findOne
         .mockResolvedValueOnce(null)
         .mockResolvedValue({ nickname: 'nickname' });
 
-      await expect(authService.signUp(signUpDto)).rejects.toThrow(BadRequestException);
+      await expect(authService.signUp(signUpDto, mockRequest)).rejects.toThrow(BadRequestException);
     });
 
-    it('회원가입 시 전화번호가 중복되면 BadRequestException 반환', async () => {
+    it('회원가입 시 전화번호가 중복되면 BadRequestException 던짐', async () => {
       mockUserRepository.findOne
         .mockResolvedValueOnce(null)
         .mockResolvedValueOnce(null)
         .mockResolvedValue({ phoneNumber: '01000000000' });
 
-      await expect(authService.signUp(signUpDto)).rejects.toThrow(BadRequestException);
+      await expect(authService.signUp(signUpDto, mockRequest)).rejects.toThrow(BadRequestException);
     });
 
     it('회원가입 성공 검증', async () => {
+      mockRequest.session.code = '1234';
       mockUserRepository.findOne.mockResolvedValue(null);
       mockHashingService.hash.mockResolvedValue('hashedPassword');
 
-      await authService.signUp(signUpDto);
+      await authService.signUp(signUpDto, mockRequest);
 
+      const result = await authService.signUp(signUpDto, mockRequest);
+
+      expect(result).toEqual({
+        message: '회원가입에 성공했습니다.',
+      });
       expect(mockHashingService.hash).toHaveBeenCalledWith(signUpDto.password);
       expect(mockUserRepository.save).toHaveBeenCalledWith({
         email: signUpDto.email,
@@ -124,13 +143,13 @@ describe('AuthService', () => {
   });
 
   describe('login', () => {
-    it('유저가 존재하지 않으면 UnauthorizedException 반환', async () => {
+    it('유저가 존재하지 않으면 UnauthorizedException 던짐', async () => {
       mockUserRepository.findOne.mockResolvedValue(null);
 
       await expect(authService.logIn(loginDTO)).rejects.toThrow(UnauthorizedException);
     });
 
-    it('비밀번호가 일치하지 않으면 UnauthorizedException 반환', async () => {
+    it('비밀번호가 일치하지 않으면 UnauthorizedException 던짐', async () => {
       const mockUser = {
         id: 1,
         email: 'test@test.com',
@@ -143,7 +162,7 @@ describe('AuthService', () => {
       await expect(authService.logIn(loginDTO)).rejects.toThrow(UnauthorizedException);
     });
 
-    it('유저가 존재하고 비밀번호가 일치하면 엑세스 토큰을 반환', async () => {
+    it('유저가 존재하고 비밀번호가 일치하면 엑세스 토큰을 던짐', async () => {
       const mockUser = {
         id: 1,
         email: 'test@test.com',
