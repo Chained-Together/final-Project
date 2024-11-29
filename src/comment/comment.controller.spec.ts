@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CommentController } from './comment.controller';
 import { CommentService } from './comment.service';
-import { UserEntity } from 'src/user/entity/user.entity';
+import { UserEntity } from 'src/user/entities/user.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { CommentDto } from './dto/comment.dto';
 
@@ -18,15 +18,21 @@ describe('CommentController', () => {
     createReply: jest.fn(),
   };
 
-  const mockUser = {
+  const mockUser: UserEntity = {
     id: 1,
     email: 'test@test.com',
     password: 'password',
     name: 'name',
     nickname: 'nickname',
     phoneNumber: '010-0000-0000',
-  } as UserEntity;
+    likes:null,
+    channel:null
+  };
 
+  // as 는 any 또는 unknown 타입일 때만 사용ㅈ
+  
+
+  
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [CommentController],

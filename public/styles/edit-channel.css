@@ -1,0 +1,70 @@
+/* 채널 수정 컨테이너 스타일 */
+.channel-edit-container {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.channel-edit-container label {
+  margin-right: 10px;
+}
+
+.channel-edit-container input {
+  padding: 5px;
+  margin-right: 20px;
+}
+
+.channel-edit-container button {
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* 비디오 카드 스타일 */
+.video-card {
+  position: relative;
+}
+
+.video-card .editBtn,
+.video-card .deleteBtn {
+  position: absolute;
+  right: 10px;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.video-card .editBtn {
+  top: 215px;
+  background-color: #007bff;
+  color: #fff;
+}
+
+.video-card .deleteBtn {
+  top: 185px;
+  background-color: #dc3545;
+  color: #fff;
+}
+
+/* 프로필 편집 버튼 스타일 */
+#channelEditBtn {
+  position: absolute;
+  top: 30px; /* 계정 버튼 아래로 배치 */
+  right: 100px;
+  background-color: #fff;
+  color: #000;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.bungee-spice-regular {
+  font-family: 'Bungee Spice', sans-serif;
+  font-weight: 400;
+}

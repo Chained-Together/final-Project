@@ -1,5 +1,13 @@
 import { ChannelEntity } from 'src/channel/entities/channel.entity';
-import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  DeleteDateColumn,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { LikeEntity } from '../../like/entities/like.entity';
 
 @Entity({
@@ -24,9 +32,13 @@ export class UserEntity {
   @Column({ type: 'varchar', nullable: false, unique: true })
   phoneNumber: string;
 
+  @DeleteDateColumn({ type: 'timestamp', nullable: true, name: 'deleted_at' })
+  deletedAt: Date | null;
+
   @OneToMany(() => LikeEntity, (like) => like.user)
   likes: LikeEntity;
 
   @OneToOne(() => ChannelEntity, (channel) => channel.user)
+  @JoinColumn()
   channel: ChannelEntity;
 }
