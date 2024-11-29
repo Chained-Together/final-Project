@@ -1,5 +1,6 @@
-import { Controller, Sse, UseGuards } from '@nestjs/common';
-import { interval, Observable } from 'rxjs';
+import { Controller, Delete, Get, Param, Sse, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { UserEntity } from 'src/user/entities/user.entity';
 import { JwtQueryAuthGuard } from 'src/utils/jwtquery-authguard';
@@ -22,5 +23,18 @@ export class NotificationController {
         } as MessageEvent;
       }),
     );
+  }
+
+  @Delete('/:id')
+  @UseGuards(AuthGuard('jwt'))
+  updateNotification(@Param('id') id: number) {
+    return this.notificationService.updateNotification(id);
+  }
+
+  @Get()
+  @UseGuards(AuthGuard('jwt'))
+  getPastNotifications(@UserInfo() user: UserEntity) {
+    console.log('요청 0');
+    return this.notificationService.getPastNotifications(user.id);
   }
 }

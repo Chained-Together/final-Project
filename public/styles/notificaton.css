@@ -1,0 +1,13 @@
+.notification-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  background-color: #f9f9f9;
+  cursor: pointer;
+}
+
+.notification-item:hover {
+  background-color: #e9e9e9;
+}

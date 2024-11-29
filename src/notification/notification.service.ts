@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Observable, ReplaySubject } from 'rxjs';
@@ -18,7 +18,7 @@ export class NotificationService {
     private readonly eventEmitter: EventEmitter2,
   ) {
     if (!this.users) {
-      this.users = new ReplaySubject<{ userId: number; message: string }>(1);
+      this.users = new ReplaySubject<{ id: number; userId: number; message: string }>(1);
     }
   }
 
@@ -29,34 +29,57 @@ export class NotificationService {
     });
 
     if (!foundChannel || !foundChannel.user) {
-      console.error('Channel 또는 User를 찾을 수 없습니다.');
-      return;
+      throw new NotFoundException('해당 사용자를 찾을 수 없습니다.');
     }
-
     const userId = foundChannel.user.id;
-    this.eventEmitter.emit(`notification:${userId}`, message);
-    this.notificationRepository.save({
+
+    const createNotification = this.notificationRepository.create({
       userId,
       message: message,
     });
+
+    const saveNotification = await this.notificationRepository.save(createNotification);
+
+    this.eventEmitter.emit(`notification:${userId}`, {
+      message,
+      id: saveNotification.id,
+    });
   }
 
-  getNotificationStream(userId: number): Observable<string> {
+  getNotificationStream(userId: number): Observable<any> {
     console.log(`SSE 스트림 생성 for userId: ${userId}`);
-    return new Observable<string>((subscriber) => {
-      const handler = (message: string) => {
-        console.log(`알림 전송 to userId: ${userId} -> ${message}`);
-        subscriber.next(message);
+    return new Observable<any>((subscriber) => {
+      const handler = (data: { message: string; id: number }) => {
+        subscriber.next(data);
       };
 
       // 이벤트 등록
       this.eventEmitter.on(`notification:${userId}`, handler);
 
-      // 클라이언트가 연결을 끊을 때 이벤트 제거
       return () => {
         this.eventEmitter.off(`notification:${userId}`, handler);
         console.log(`SSE 스트림 종료 for userId: ${userId}`);
       };
     });
+  }
+
+  async getPastNotifications(userId: number) {
+    const pastNotifications = await this.notificationRepository.find({
+      where: { userId, type: false },
+      order: { createdAt: 'DESC' },
+    });
+
+    const data = pastNotifications.map((pastNotification) => ({
+      message: `받은 알림: {message: ${pastNotification.message}}`,
+      id: pastNotification.id,
+    }));
+
+    return data;
+  }
+
+  async updateNotification(id: number) {
+    await this.notificationRepository.update({ id: id }, { type: true });
+
+    return { message: '알림 삭제가 완료 되었습니다.' };
   }
 }
