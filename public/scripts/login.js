@@ -31,6 +31,22 @@ loginForm.addEventListener('submit', async (event) => {
       console.error('토큰이 존재하지 않습니다.');
     }
 
+    const notificationResponse = await fetch('/notifications', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!notificationResponse.ok) {
+      throw new Error('알림 정보를 로드하는데 실패했습니다.');
+    }
+
+    const notifications = await notificationResponse.json();
+    
+    localStorage.setItem('pastNotifications', JSON.stringify(notifications));
+
     window.location.href = '/main';
   } catch (error) {
     console.error(error);

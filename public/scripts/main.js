@@ -1,3 +1,4 @@
+import { openNotificationPopup, closeNotificationPopup } from './notifications-popup.js';
 document.addEventListener('DOMContentLoaded', async () => {
   const urlParams = new URLSearchParams(window.location.search);
   const token = localStorage.getItem('token') || urlParams.get('token');
@@ -164,8 +165,8 @@ const createLogoutButton = () => {
   logoutButton.id = 'logoutBtn';
   logoutButton.style = `
       position: absolute;
-      top: 60px;
-      right: 30px;
+      top: 40px;
+      right: 90px;
       background-color: #fff;
       color: #000;
       border: none;
@@ -184,15 +185,49 @@ const createLogoutButton = () => {
   return logoutButton;
 };
 
+const createNotificationButton = () => {
+  const notificationButton = document.createElement('button');
+  notificationButton.textContent = '알림';
+  notificationButton.id = 'notificationButtonBtn';
+  notificationButton.style = `
+      position: absolute;
+      top: 70px;
+      right: 90px;
+      background-color: #fff;
+      color: #000;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      z-index: 1000;
+    `;
+
+  notificationButton.addEventListener('click', openNotificationPopup);
+
+  return notificationButton;
+};
+
+document.getElementById('closePopupButton').addEventListener('click', closeNotificationPopup);
+
 accountBtn.addEventListener('click', () => {
   const token = localStorage.getItem('token');
 
   if (token) {
     let logoutBtn = document.getElementById('logoutBtn');
+    let notificationButton = document.getElementById('notificationButton');
+
     if (!logoutBtn) {
       logoutBtn = createLogoutButton();
+      logoutBtn.id = 'logoutBtn';
       document.body.appendChild(logoutBtn);
+    }
+
+    if (!notificationButton) {
+      notificationButton = createNotificationButton();
+      notificationButton.id = 'notificationButton';
+      document.body.appendChild(notificationButton);
     } else {
+      notificationButton.remove();
       logoutBtn.remove();
     }
   } else {
