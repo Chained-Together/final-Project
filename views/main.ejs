@@ -13,6 +13,8 @@
     href="https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Gamja+Flower&family=Gasoek+One&family=Hi+Melody&family=Jua&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="/public/styles/main.css" />
+  <link rel="stylesheet" href="/public/styles/notification.css" />
+  <script type="module" src="../public/scripts/main.js"></script>
   <script src="https://kit.fontawesome.com/6a4db89020.js" crossorigin="anonymous"></script>
 </head>
 
@@ -44,6 +46,11 @@
         <img src="profileImageElement.src" alt="계정 사진" class="profileImage" />
       </div>
     </div>
+    <div id="notificationPopup"
+      style="display: none; position: fixed; top: 20%; left: 50%; transform: translate(-50%, 0); background: white; width: 80%; max-width: 400px; height: 50%; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); overflow-y: auto; z-index: 1000;">
+      <div id="notificationList"></div>
+      <button id="closePopupButton" style="position: absolute; top: 8px; right: 8px;">닫기</button>
+    </div>
 
     <div class="shortform-grid">
 
@@ -55,6 +62,8 @@
   </div>
   <script src="/public/scripts/main.js"></script>
   <script src="/public/scripts/alarm.js"></script>
+  <script src="/public/scripts/past-notifications.js"></script>
+  <script src="/public/scripts/notifications-popup.js"></script>
 </body>
 
 </html>
