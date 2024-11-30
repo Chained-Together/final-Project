@@ -1,11 +1,7 @@
-import { CreateUserDto } from '../dto/create-user.dto';
-import { ChannelEntity } from '../../channel/entities/channel.entity';
-import { LikeEntity } from '../../like/entities/like.entity';
 import { UserEntity } from '../entities/user.entity';
-import { VideoEntity } from '../../video/entities/video.entity';
-import { DeleteUserDto } from '../dto/delete-user.dto';
 import { CommentDto } from '../../comment/dto/comment.dto';
-import { mockChannel, mockLike } from '../../video/__mocks__/mock.video.data';
+import { mockLike } from '../../video/__mocks__/mock.video.data';
+import { PasswordResetTokenEntity } from 'src/password/entities/password.reset.token.entity';
 
 export const mockUser: UserEntity = {
   id: 1,
@@ -19,7 +15,7 @@ export const mockUser: UserEntity = {
   naverId: null,
   deletedAt: null,
   likes: [mockLike],
-  channel: mockChannel,
+  channel: null,
 };
 
 export const mockCommentDto: CommentDto = {

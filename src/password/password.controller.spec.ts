@@ -1,20 +1,57 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PasswordController } from './password.controller';
 import { PasswordService } from './password.service';
+import { mockPasswordService } from './__mocks__/mock.password.service';
+import { mockResetPasswordRequestDto, mockUpdatePasswordDto } from './__mocks__/mock.password.data';
 
 describe('PasswordController', () => {
-  let controller: PasswordController;
+  let passwordController: PasswordController;
+  let passwordService: PasswordService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [PasswordController],
-      providers: [PasswordService],
+      providers: [
+        {
+          provide: PasswordService,
+          useValue: mockPasswordService,
+        },
+      ],
     }).compile();
 
-    controller = module.get<PasswordController>(PasswordController);
+    passwordController = module.get<PasswordController>(PasswordController);
+    passwordService = module.get<PasswordService>(PasswordService);
   });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
+  it('컨트롤러가 정의되어야 한다.', () => {
+    expect(passwordController).toBeDefined();
+  });
+
+  describe('resetPasswordRequest', () => {
+    it('비밀번호 초기화 요청을 성공적으로 처리해야 한다.', async () => {
+      mockPasswordService.resetPasswordRequest.mockResolvedValue(undefined);
+
+      await expect(
+        passwordController.resetPasswordRequest(mockResetPasswordRequestDto),
+      ).resolves.toBeUndefined();
+
+      expect(passwordService.resetPasswordRequest).toHaveBeenCalledWith(
+        mockResetPasswordRequestDto.email,
+      );
+    });
+  });
+
+  describe('updatePassword', () => {
+    it('비밀번호를 성공적으로 변경해야 한다.', async () => {
+      mockPasswordService.resetPassword.mockResolvedValue(undefined);
+
+      const result = await passwordController.updatePassword('valid-token', mockUpdatePasswordDto);
+
+      expect(result).toEqual('Password successfully reset');
+      expect(passwordService.resetPassword).toHaveBeenCalledWith(
+        'valid-token',
+        mockUpdatePasswordDto.newPassword,
+      );
+    });
   });
 });
