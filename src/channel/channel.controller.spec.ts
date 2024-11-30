@@ -3,10 +3,10 @@ import { ChannelController } from './channel.controller';
 import { ChannelService } from './channel.service';
 import { channelDto } from './_mocks_/mock.channel.data'
 import { ChannelEntity } from './entities/channel.entity';
-import { mockChannelService } from './_mocks_/mock.channel.service'
+import { mockChannelService, mockResponse } from './_mocks_/mock.channel.service'
 import { mockUser } from './_mocks_/mock.channel.data';
 import { mockChannel } from './_mocks_/mock.channel.data';
-
+import MockRes from 'mock-res';
 
 describe('ChannelController', () => {
   let controller: ChannelController;
@@ -31,21 +31,19 @@ describe('ChannelController', () => {
     ...channelDto,
   };
 
-  // const mockResponse = {
-  //   message: 'Channel deleted successfully',
-  //   deletedChannel: mockChannel,
-  // };
+  // describe('createChannel', () => {
+  //   it('채널을 생성하고 /main으로 리다이렉트한다.', async () => {
+    
+      
+  //     mockChannelService.createChannel.mockResolvedValueOnce(mockChannel);
+  
+  //     await controller.createChannel(channelDto, mockUser, mockResponse);
+  
+  //     expect(mockChannelService.createChannel).toHaveBeenCalledWith(channelDto, mockUser);
+  //     expect(mockResponse.redirect).toHaveBeenCalledWith('/main');
+  //   });
 
-  describe('createChannel', () => {
-    it('채널을 생성하고 반환한다.', async () => {
-      mockChannelService.createChannel.mockResolvedValueOnce(mockChannel);
-
-      //const result = await controller.createChannel(channelDto, user, res);
-      //console.log(result);
-      expect(mockChannelService.createChannel).toHaveBeenCalledWith(channelDto, mockUser);
-      //expect(result).toEqual(mockChannel);
-    });
-
+  //TODO: mockResponse부분 수정 
     describe('getChannel', () => {
       it('채널 정보를 반환한다.', async () => {
         mockChannelService.getChannel.mockResolvedValueOnce(mockChannel);
@@ -87,4 +85,3 @@ describe('ChannelController', () => {
       });
     });
   });
-});

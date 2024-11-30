@@ -8,26 +8,13 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { Request } from 'express';
 import { SignUpDto } from './dto/signUp.dto';
+import { mockHashingService, mockJwtService, mockUserRepository } from './__mocks__/mock.auth.service';
 
 describe('AuthService', () => {
   let authService: AuthService;
   let userRepository: Repository<UserEntity>;
   let jwtService: JwtService;
   let hashingService: HashingService;
-
-  const mockUserRepository = {
-    findOne: jest.fn(),
-    save: jest.fn(),
-  };
-
-  const mockJwtService = {
-    sign: jest.fn(),
-  };
-
-  const mockHashingService = {
-    hash: jest.fn(),
-    compare: jest.fn(),
-  };
 
   const signUpDto: SignUpDto = {
     email: 'test@test.com',
