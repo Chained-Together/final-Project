@@ -46,6 +46,7 @@ export const mockChannel: ChannelEntity = {
   id: 1,
   name: 'Testname',
   profileImage: 'https://example.com/channel.jpg',
+  createdAt: new Date(),
   video: null,
   user: null,
 };
@@ -66,6 +67,9 @@ export const mockUserEntity: UserEntity = {
   deletedAt: null,
   likes: [mockLike],
   channel: mockChannel,
+  isSocial: false,
+  googleId: 'google@google.com',
+  naverId: 'naverId@naver.com',
 };
 
 export const mockDeleteUserDto: DeleteUserDto = {
