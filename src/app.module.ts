@@ -21,7 +21,12 @@ import { ResolutionModule } from './resolution/resolution.module';
 import { ResolutionEntity } from './resolution/entities/resolution.entity';
 import { UserModule } from './user/user.module';
 import { UserEntity } from './user/entities/user.entity';
-
+import { NodemailerModule } from './auth/nodemailer/nodemailer.module';
+import { PasswordModule } from './password/password.module';
+import { PasswordResetTokenEntity } from './password/entities/password.reset.token.entity';
+import { NotificationModule } from './notification/notification.module';
+import { NotificationEntity } from './notification/entities/notification.entity';
+import { EventEmitter2, EventEmitterModule } from '@nestjs/event-emitter';
 const typeOrmModuleOptions = {
   useFactory: async (configService: ConfigService): Promise<TypeOrmModuleOptions> => ({
     namingStrategy: new SnakeNamingStrategy(),
@@ -31,7 +36,16 @@ const typeOrmModuleOptions = {
     host: configService.get('DB_HOST'),
     port: configService.get<number>('DB_PORT'),
     database: configService.get('DB_NAME'),
-    entities: [UserEntity, VideoEntity, ResolutionEntity, ChannelEntity, CommentEntity, LikeEntity],
+    entities: [
+      UserEntity,
+      VideoEntity,
+      ResolutionEntity,
+      ChannelEntity,
+      CommentEntity,
+      LikeEntity,
+      PasswordResetTokenEntity,
+      NotificationEntity,
+    ],
     synchronize: configService.get<boolean>('DB_SYNC'),
     logging: true,
   }),
@@ -62,6 +76,10 @@ const typeOrmModuleOptions = {
     S3Module,
     ResolutionModule,
     UserModule,
+    NodemailerModule,
+    PasswordModule,
+    NotificationModule,
+    EventEmitterModule.forRoot(),
   ],
   controllers: [AppController, ViewController],
   providers: [AppService],

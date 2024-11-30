@@ -29,7 +29,7 @@ export class VideoEntity {
   @Column({ type: 'varchar', nullable: false, name: 'thumbnail_url' })
   thumbnailUrl: string;
 
-  @Column({ type: 'text', nullable: false })
+  @Column({ type: 'json', nullable: false })
   hashtags: string[];
 
   @Column({ type: 'enum', enum: Visibility })
@@ -63,7 +63,7 @@ export class VideoEntity {
   channel: ChannelEntity;
 
   @OneToMany(() => LikeEntity, (like) => like.video)
-  likes: LikeEntity;
+  likes: LikeEntity[];
 
   @OneToMany(() => CommentEntity, (comment) => comment.video)
   comments: CommentEntity;

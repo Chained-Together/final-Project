@@ -74,30 +74,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const hashtagContainer = document.createElement('div');
         hashtagContainer.classList.add('hashtag-container');
-        hashtagContainer.style = `
-      margin-top: 10px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 5px;
-    `;
 
-        console.log(video.hashtags);
-        // 해시태그 추가
-        if (Array.isArray(video.hashtags)) {
-          video.hashtags.forEach((tag) => {
-            const hashtag = document.createElement('span');
-            hashtag.classList.add('hashtag');
-            hashtag.textContent = `#${tag}`;
-            hashtag.style = `
-          background-color: #f0f0f0;
-          color: #333;
-          padding: 5px 10px;
-          border-radius: 15px;
-          font-size: 12px;
-        `;
-            hashtagContainer.appendChild(hashtag);
-          });
-        }
+        const span = document.createElement('p');
+        span.textContent = String(video.hashtags);
+        hashtagContainer.appendChild(span);
 
         card.addEventListener('click', () => {
           window.location.href = `/view-video?id=${video.id}`;

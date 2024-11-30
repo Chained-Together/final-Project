@@ -3,23 +3,17 @@ import { VideoController } from './video.controller';
 import { VideoService } from './video.service';
 import { AuthGuard } from '@nestjs/passport';
 import { ExecutionContext } from '@nestjs/common';
-import { VideoEntity } from './entities/video.entity';
-import { VideoDto } from './dto/video.dto';
 import { UpdateVideoDto } from './dto/update.video.dto';
 import { Visibility } from './video.visibility.enum';
-
-const mockVideoService = {
-  saveMetadata: jest.fn(),
-  getAllVideo: jest.fn(),
-  getVideo: jest.fn(),
-  updateVideo: jest.fn(),
-  deleteVideo: jest.fn(),
-};
+import { UserEntity } from '../user/entities/user.entity';
+import { mockVideoService } from './__mocks__/mock.video.service'; // Mock 서비스
+import { mockVideo, mockVideos, mockUser, videoDto } from './__mocks__/mock.video.data'; // Mock 데이터
 
 describe('VideoController', () => {
   let videoController: VideoController;
 
   beforeEach(async () => {
+    jest.clearAllMocks();
     const module: TestingModule = await Test.createTestingModule({
       controllers: [VideoController],
       providers: [
@@ -38,54 +32,82 @@ describe('VideoController', () => {
     videoController = module.get<VideoController>(VideoController);
   });
 
-  describe('createVideo', () => {
-    it('비디오를 메타 데이터를 저장하고 키를 반환한다.', async () => {
-      const mockUser = { id: 1 } as any;
-      const videoDto: VideoDto = {
-        title: 'Test Video',
-        description: 'This is a test description',
-        thumbnailUrl: 'https://example.com/thumbnail.jpg',
-        hashtags: ['#test', '#video'],
-        high: 'url',
-        low: 'url',
-        duration: 300,
-        visibility: Visibility.PUBLIC,
-        videoCode: '1',
-      };
+  describe('saveMetadata', () => {
+    it('비디오 메타데이터를 저장하고 리다이렉트 URL을 반환한다.', async () => {
+      const redirectResponse = { redirectUrl: '/myChannel' };
 
-      const mockVideo: VideoEntity = {
-        id: 1,
-        title: 'test',
-        description: 'test',
-        thumbnailUrl: 'test',
-        hashtags: ['공포', '고양이'],
-        visibility: Visibility.PUBLIC,
-        duration: 10,
-        views: 0,
-        uploadedAt: new Date(),
-        updatedAt: null,
-        resolution: null,
-        channel: null,
-        likes: null,
-        videoCode: '1',
-        status: false,
-        comments: null,
-      };
-
-      jest
-        .spyOn(mockVideoService, 'saveMetadata')
-        .mockResolvedValueOnce({ key: mockVideo.videoCode });
+      mockVideoService.saveMetadata.mockResolvedValueOnce(mockVideo);
 
       const result = await videoController.saveMetadata(mockUser, videoDto);
 
       expect(mockVideoService.saveMetadata).toHaveBeenCalledWith(mockUser, videoDto);
-      expect(result).toEqual({ key: mockVideo.videoCode });
+      expect(result).toEqual(redirectResponse);
+    });
+  });
+
+  describe('getAllVideo', () => {
+    it('모든 비디오를 반환한다.', async () => {
+      mockVideoService.getAllVideo.mockResolvedValueOnce(mockVideos);
+
+      const result = await videoController.getAllVideo();
+
+      expect(mockVideoService.getAllVideo).toHaveBeenCalledTimes(1);
+      expect(result).toEqual(mockVideos);
+    });
+  });
+
+  describe('getVideo', () => {
+    it('특정 ID의 비디오를 반환한다.', async () => {
+      const mockAccessKey = 'test_access_key';
+      const mockUser = { id: 1 } as UserEntity;
+
+      mockVideoService.getVideo.mockResolvedValueOnce(mockVideo);
+
+      const result = await videoController.getVideo(mockVideo.id, mockAccessKey, mockUser);
+
+      expect(mockVideoService.getVideo).toHaveBeenCalledTimes(1);
+      expect(mockVideoService.getVideo).toHaveBeenCalledWith(
+        mockVideo.id,
+        mockUser.id,
+        mockAccessKey,
+      );
+      expect(result).toEqual(mockVideo);
+    });
+
+    it('인증되지 않은 상태에서 특정 ID의 비디오를 반환한다.', async () => {
+      const mockAccessKey = 'test_access_key';
+      const mockVideoId = mockVideo.id;
+
+      mockVideoService.getVideo.mockResolvedValueOnce(mockVideo);
+
+      const result = await videoController.getVideo(mockVideoId, mockAccessKey, undefined);
+
+      expect(mockVideoService.getVideo).toHaveBeenCalledTimes(1);
+      expect(mockVideoService.getVideo).toHaveBeenCalledWith(mockVideoId, undefined, mockAccessKey);
+      expect(result).toEqual(mockVideo);
+    });
+
+    it('존재하지 않는 비디오를 요청하면 null을 반환한다.', async () => {
+      const mockAccessKey = 'test_access_key';
+      const mockUser = { id: 1 } as UserEntity;
+      const nonExistentVideoId = 9999;
+
+      mockVideoService.getVideo.mockResolvedValueOnce(null);
+
+      const result = await videoController.getVideo(nonExistentVideoId, mockAccessKey, mockUser);
+
+      expect(mockVideoService.getVideo).toHaveBeenCalledTimes(1);
+      expect(mockVideoService.getVideo).toHaveBeenCalledWith(
+        nonExistentVideoId,
+        mockUser.id,
+        mockAccessKey,
+      );
+      expect(result).toBeNull();
     });
   });
 
   describe('updateVideo', () => {
-    it('선택적으로 업데이트된 비디오를 반환한다', async () => {
-      const mockUser = { id: 1 } as any;
+    it('비디오 정보를 업데이트하고 결과를 반환한다.', async () => {
       const updateDto: UpdateVideoDto = {
         title: 'Updated Title',
         description: 'Updated description',
@@ -93,83 +115,82 @@ describe('VideoController', () => {
         hashtags: ['#updated', '#video'],
         visibility: Visibility.PRIVATE,
       };
-      const mockUpdatedVideo = { id: 1, ...updateDto } as VideoEntity;
 
-      jest.spyOn(mockVideoService, 'updateVideo').mockResolvedValueOnce(mockUpdatedVideo);
+      const updatedVideo = { ...mockVideo, ...updateDto };
+      mockVideoService.updateVideo.mockResolvedValueOnce(updatedVideo);
 
-      const result = await videoController.updateVideo(mockUser, 1, updateDto);
+      const result = await videoController.updateVideo(mockUser, mockVideo.id, updateDto);
 
-      expect(mockVideoService.updateVideo).toHaveBeenCalledWith(mockUser, 1, updateDto);
-      expect(result).toEqual(mockUpdatedVideo);
-    });
-
-    it('필드 일부만 업데이트하고 반환한다', async () => {
-      const mockUser = { id: 1 } as any;
-      const updateDto: UpdateVideoDto = {
-        title: 'Partially Updated Title',
-      } as UpdateVideoDto;
-      const mockPartiallyUpdatedVideo = {
-        id: 1,
-        title: 'Partially Updated Title',
-        description: 'Original description',
-        thumbnailUrl: 'https://example.com/original-thumbnail.jpg',
-        hashtags: ['#original'],
-        visibility: Visibility.PUBLIC,
-      } as VideoEntity;
-
-      jest.spyOn(mockVideoService, 'updateVideo').mockResolvedValueOnce(mockPartiallyUpdatedVideo);
-
-      const result = await videoController.updateVideo(mockUser, 1, updateDto);
-
-      expect(mockVideoService.updateVideo).toHaveBeenCalledWith(mockUser, 1, updateDto);
-      expect(result).toEqual(mockPartiallyUpdatedVideo);
-    });
-  });
-
-  describe('getAllVideo', () => {
-    it('모든 비디오를 반환한다', async () => {
-      const mockVideos: VideoEntity[] = [
-        { id: 1, title: 'Video 1', visibility: Visibility.PUBLIC } as VideoEntity,
-        { id: 2, title: 'Video 2', visibility: Visibility.PRIVATE } as VideoEntity,
-      ];
-
-      jest.spyOn(mockVideoService, 'getAllVideo').mockResolvedValueOnce(mockVideos);
-
-      const result = await videoController.getAllVideo();
-
-      expect(mockVideoService.getAllVideo).toHaveBeenCalled();
-      expect(result).toEqual(mockVideos);
-    });
-  });
-
-  describe('getVideo', () => {
-    it('특정 ID의 비디오를 반환한다', async () => {
-      const mockVideo = {
-        id: 1,
-        title: 'Test Video',
-        visibility: Visibility.PUBLIC,
-      } as VideoEntity;
-
-      jest.spyOn(mockVideoService, 'getVideo').mockResolvedValueOnce(mockVideo);
-
-      const result = await videoController.getVideo(1);
-
-      expect(mockVideoService.getVideo).toHaveBeenCalledWith(1);
-      expect(result).toEqual(mockVideo);
+      expect(mockVideoService.updateVideo).toHaveBeenCalledWith(mockUser, mockVideo.id, updateDto);
+      expect(result).toEqual(updatedVideo);
     });
   });
 
   describe('deleteVideo', () => {
-    it('특정 비디오를 삭제하고 메시지를 반환한다', async () => {
-      const mockUser = { id: 1 } as any;
+    it('비디오를 삭제하고 메시지를 반환한다.', async () => {
       const mockResponse = { message: 'Video deleted successfully' };
 
-      jest.spyOn(mockVideoService, 'deleteVideo').mockResolvedValueOnce(mockResponse);
+      mockVideoService.deleteVideo.mockResolvedValueOnce(mockResponse);
 
-      const result = await videoController.deleteVideo(mockUser, 1);
+      const result = await videoController.deleteVideo(mockUser, mockVideo.id);
 
-      expect(mockVideoService.deleteVideo).toHaveBeenCalledWith(mockUser, 1);
+      expect(mockVideoService.deleteVideo).toHaveBeenCalledWith(mockUser, mockVideo.id);
       expect(result).toEqual(mockResponse);
+    });
+  });
+
+  describe('getVideoLink', () => {
+    it('비디오 링크를 반환한다.', async () => {
+      const videoLink = { link: 'https://example.com/video/1' };
+
+      mockVideoService.getVideoLink.mockResolvedValueOnce(videoLink);
+
+      const result = await videoController.getVideoLink(mockVideo.id);
+
+      expect(mockVideoService.getVideoLink).toHaveBeenCalledWith(mockVideo.id);
+      expect(result).toEqual(videoLink);
+    });
+  });
+
+  describe('getNewVideos', () => {
+    it('새로운 비디오 리스트를 반환한다.', async () => {
+      const newVideos = [mockVideos[0]];
+      const lastId = 10;
+      const take = 6;
+
+      mockVideoService.getNewVideos.mockResolvedValueOnce(newVideos);
+
+      const result = await videoController.getNewVideos(lastId, take);
+
+      expect(mockVideoService.getNewVideos).toHaveBeenCalledWith(lastId, take);
+      expect(result).toEqual(newVideos);
+    });
+  });
+
+  describe('getAllVideoOfMYChannel', () => {
+    it('특정 채널 ID와 사용자 ID로 비디오 리스트를 반환한다.', async () => {
+      const channelId = 1;
+      const myChannelVideos = [mockVideos[0]];
+
+      mockVideoService.getAllVideoOfMyChannel.mockResolvedValueOnce(myChannelVideos);
+
+      const result = await videoController.getAllVideoOfMYChannel(channelId, mockUser);
+
+      expect(mockVideoService.getAllVideoOfMyChannel).toHaveBeenCalledWith(channelId, mockUser.id);
+      expect(result).toEqual(myChannelVideos);
+    });
+  });
+
+  describe('getAllVideoOfChannel', () => {
+    it('특정 채널 ID의 비디오 리스트를 반환한다.', async () => {
+      const channelId = 1;
+
+      mockVideoService.getAllVideoOfChannel.mockResolvedValueOnce(mockVideos);
+
+      const result = await videoController.getAllVideoOfChannel(channelId);
+
+      expect(mockVideoService.getAllVideoOfChannel).toHaveBeenCalledWith(channelId);
+      expect(result).toEqual(mockVideos);
     });
   });
 });

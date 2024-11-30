@@ -22,9 +22,9 @@ export class SignUpDto {
   @IsNotEmpty({ message: '닉네임을 입력해주세요.' })
   nickname: string;
 
-  // @IsString()
-  // @IsNotEmpty({ message: '인증 코드를 입력해주세요.' })
-  // code: string;
+  @IsString()
+  @IsNotEmpty({ message: '인증 코드를 입력해주세요.' })
+  code: string;
 
   @IsString()
   @IsNotEmpty({ message: '전화번호를 입력해주세요.' })

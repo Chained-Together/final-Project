@@ -5,11 +5,12 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-
 import { JwtStrategy } from './jwt.strategy';
 import { BcryptHashingService } from 'src/interface/impl/bcrypt-hashing-service';
 import { ChannelEntity } from 'src/channel/entities/channel.entity';
 import { UserEntity } from 'src/user/entities/user.entity';
+import { GoogleStrategy } from './google.strategy';
+import { NaverStrategy } from './naver.strategy';
 
 @Module({
   imports: [
@@ -26,6 +27,8 @@ import { UserEntity } from 'src/user/entities/user.entity';
   providers: [
     AuthService,
     JwtStrategy,
+    GoogleStrategy,
+    NaverStrategy,
     {
       provide: 'HashingService',
       useClass: BcryptHashingService,

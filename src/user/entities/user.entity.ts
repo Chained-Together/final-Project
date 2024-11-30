@@ -1,7 +1,14 @@
 import { ChannelEntity } from 'src/channel/entities/channel.entity';
-import { Column, DeleteDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  DeleteDateColumn,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { LikeEntity } from '../../like/entities/like.entity';
-import { Delete } from '@nestjs/common';
 
 @Entity({
   name: 'users',
@@ -13,8 +20,8 @@ export class UserEntity {
   @Column({ type: 'varchar', nullable: false, unique: true })
   email: string;
 
-  @Column({ type: 'varchar', nullable: false })
-  password: string;
+  @Column({ type: 'varchar', nullable: true })
+  password: string; // 소셜 로그인 사용자의 경우 비밀번호는 nullable.
 
   @Column({ type: 'varchar', nullable: false })
   name: string;
@@ -25,12 +32,22 @@ export class UserEntity {
   @Column({ type: 'varchar', nullable: false, unique: true })
   phoneNumber: string;
 
+  @Column({ type: 'boolean', default: false })
+  isSocial: boolean;
+
+  @Column({ type: 'varchar', nullable: true, unique: true })
+  googleId: string;
+
+  @Column({ type: 'varchar', nullable: true, unique: true })
+  naverId: string;
+
   @DeleteDateColumn({ type: 'timestamp', nullable: true, name: 'deleted_at' })
   deletedAt: Date | null;
 
   @OneToMany(() => LikeEntity, (like) => like.user)
-  likes: LikeEntity;
+  likes: LikeEntity[];
 
   @OneToOne(() => ChannelEntity, (channel) => channel.user)
+  @JoinColumn()
   channel: ChannelEntity;
 }

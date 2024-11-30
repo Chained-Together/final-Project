@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Put } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { FindPasswordDto } from './dto/findPassword.dto';
+import { FindPasswordDto } from './dto/found-Password.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { UserEntity } from './entities/user.entity';
 import { DeleteUserDto } from './dto/delete-user.dto';
@@ -17,17 +17,12 @@ export class UserController {
     return this.userService.findEmail(createUserDto);
   }
 
-  @Post('')
-  findPassword(@Body() findPasswordDto: FindPasswordDto) {
-    return this.userService.findPassword(findPasswordDto);
-  }
-
   @Delete('')
   @UseGuards(AuthGuard('jwt'))
   deleteUserAccount(
     @UserInfo() user: UserEntity,
     @Body() deleteUserDto: DeleteUserDto
-  ){
+  ) {
     return this.userService.deleteUserAccount(user, deleteUserDto);
   }
 
@@ -40,3 +35,5 @@ export class UserController {
     return this.userService.updateUserProfile(user, updateUserDto);
   }
 }
+
+
