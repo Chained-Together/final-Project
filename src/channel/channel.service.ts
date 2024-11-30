@@ -91,4 +91,13 @@ export class ChannelService {
     const foundChannel = await this.channelRepository.findOne({ where: userId });
     return foundChannel;
   }
+
+  async findChannelByKeyword(keyword: string) {
+    const channelResult = await this.channelRepository
+      .createQueryBuilder('channel')
+      .where('channel.name LIKE :keyword', { keyword: `%${keyword}%` })
+      .getMany();
+
+    return channelResult;
+  }
 }

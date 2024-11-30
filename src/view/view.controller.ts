@@ -73,4 +73,10 @@ export class ViewController {
   showVideoPage() {
     return;
   }
+
+  @Get('/search')
+  @Render('search')
+  showSearchPage(@Query('keyword') keyword: string) {
+    return;
+  }
 }
