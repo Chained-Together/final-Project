@@ -67,8 +67,8 @@ export const mockReplyComment = {
   userId: mockUser.id,
   commentGroup: 1,
   depth: 1,
-  parentComment: 1,
-  orderNumber: 1,
+  parentCommentId: 1,
+  orderNumber: 2,
   createdAt: new Date(),
   updatedAt: new Date(),
 };
