@@ -38,7 +38,7 @@ export class UserService {
       throw new UnauthorizedException('본인확인 정보가 일치하지 않습니다.');
     }
   }
-  //todo 11/27 : 회원탈퇴 / 회원정보 수정 / 해당기능 프론트 버튼에 연결
+
   async deleteUserAccount( user: UserEntity ,deleteUserDto: DeleteUserDto ) {
     try {
       await this.findUserEmail(deleteUserDto)
