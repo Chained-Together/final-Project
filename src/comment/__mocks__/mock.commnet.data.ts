@@ -47,6 +47,10 @@ export const mockComment = {
   content: mockCommentDto.content,
   videoId: 1,
   userId: mockUser.id,
+  commentGroup: 1,
+  depth: 0,
+  parentComment: 0,
+  orderNumber: 1,
   createdAt: new Date(),
   updatedAt: new Date(),
 };
@@ -58,10 +62,13 @@ export const mockUpdatedComment = {
 
 export const mockReplyComment = {
   id: 2,
-  content: 'Reply Comment',
+  content: mockCommentDto.content,
   videoId: 1,
   userId: mockUser.id,
-  parentCommentId: 1,
+  commentGroup: 1,
+  depth: 1,
+  parentComment: 1,
+  orderNumber: 1,
   createdAt: new Date(),
   updatedAt: new Date(),
 };
@@ -69,4 +76,61 @@ export const mockReplyComment = {
 export const mockCommentResponse = {
   success: true,
   message: 'Comment deleted',
+};
+export const mockCommentCreationDto: CommentDto = {
+  content: 'This is a test comment',
+};
+
+export const mockCommentCreationResponse = {
+  id: 1,
+  userId: mockUser.id,
+  content: mockCommentCreationDto.content,
+  videoId: 1,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+};
+export const mockCommentList = [
+  {
+    id: 1,
+    content: 'First comment',
+    userId: mockUser.id,
+    videoId: 1,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: 2,
+    content: 'Second comment',
+    userId: mockUser.id,
+    videoId: 1,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+];
+export const mockUpdatedCommentData = {
+  id: 1,
+  content: 'Updated comment content',
+  userId: mockUser.id,
+  videoId: 1,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+};
+
+export const mockCommentDeletionResponse = {
+  success: true,
+  message: 'Comment deleted successfully',
+};
+
+export const mockReplyCreationDto: CommentDto = {
+  content: 'This is a test reply',
+};
+
+export const mockReplyResponse = {
+  id: 2,
+  userId: mockUser.id,
+  content: mockReplyCreationDto.content,
+  parentCommentId: 1,
+  videoId: 1,
+  createdAt: new Date(),
+  updatedAt: new Date(),
 };
