@@ -27,9 +27,21 @@
           <i class="fa-solid fa-bolt"></i>
           <a class="bungee-spice-regular">Loopfiy</a>
         </div>
-        <div class="search_container">
-          <input class="search_input" type="text" placeholder="Search" />
-        </div>
+        <form id="searchForm">
+          <div class="search_container">
+            <input
+              class="search_input"
+              type="text"
+              id="searchInput"
+              name="search"
+              placeholder="Search"
+            />
+          </div>
+          <div class="searchBtn">
+            <button class="searchbutton" id="searchBtn" type="submit">Search</button>
+          </div>
+        </form>
+
         <div class="loginBtn">
           <a href="/login" class="button">Sign In</a>
         </div>
@@ -72,6 +84,7 @@
   <script src="/public/scripts/alarm.js"></script>
   <script src="/public/scripts/past-notifications.js"></script>
   <script src="/public/scripts/notifications-popup.js"></script>
+  <script src="/public/scripts/search.js"></script>
 </body>
 
 </html>

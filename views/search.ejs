@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="kr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>검색 결과</title>
+    <link rel="stylesheet" href="/public/styles/search.css" />
+  </head>
+  <body>
+    <div id="searchContainer">
+      <form id="searchForm">
+        <input type="text" id="searchInput" placeholder="검색어를 입력하세요..." />
+        <button type="submit" id="searchBtn">검색</button>
+      </form>
+    </div>
+
+    <div id="resultsContainer">
+      <h1>검색 결과</h1>
+
+      <div id="tabs">
+        <button class="tab active" data-tab="videos">동영상</button>
+        <button class="tab" data-tab="channel">채널</button>
+      </div>
+
+      <div id="videosContainer" class="tab-content active">
+        <h2>동영상</h2>
+        <div id="videoResultsContainer" class="grid-container"></div>
+      </div>
+
+      <div id="channelContainer" class="tab-content">
+        <h2>채널</h2>
+        <div id="channelResultsContainer" class="grid-container"></div>
+      </div>
+    </div>
+
+    <script src="/public/scripts/search.js"></script>
+  </body>
+</html>

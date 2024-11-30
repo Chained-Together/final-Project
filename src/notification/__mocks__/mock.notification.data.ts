@@ -15,8 +15,13 @@ export const mockUser: UserEntity = {
   likes: null,
   channel: null,
   isSocial: false,
+<<<<<<< Updated upstream
   googleId: 'google@google.com',
   naverId: 'naverId@naver.com',
+=======
+  googleId: null,
+  naverId: null,
+>>>>>>> Stashed changes
 };
 
 export const mockNotification: NotificationEntity = {
