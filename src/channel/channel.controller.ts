@@ -50,7 +50,7 @@ export class ChannelController {
   }
 
   @Get('/search/:keyword')
-  findChannelByKeword(@Param('keyword') keyword: string) {
+  findChannelByKeyword(@Param('keyword') keyword: string) {
     return this.channelService.findChannelByKeyword(keyword);
   }
 }

@@ -99,7 +99,7 @@ export class VideoController {
   }
 
   @Get('/search/:keyword')
-  findVideoByKeword(@Param('keyword') keyword: string) {
+  findVideoByKeyword(@Param('keyword') keyword: string) {
     return this.videoService.findVideoByKeyword(keyword);
   }
 }
