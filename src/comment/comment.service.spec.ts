@@ -7,25 +7,12 @@ import { Repository } from 'typeorm';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { CommentDto } from './dto/comment.dto';
 import { UserEntity } from '../user/entities/user.entity';
+import { mockCommentRepository, mockVideoRepository } from './__mocks__/mock.comment.service';
 
 describe('CommentService', () => {
   let service: CommentService;
   let commentRepository: Repository<CommentEntity>;
   let videoRepository: Repository<VideoEntity>;
-
-  const mockCommentRepository = {
-    create: jest.fn(),
-    save: jest.fn(),
-    find: jest.fn(),
-    findOne: jest.fn(),
-    update: jest.fn(),
-    delete: jest.fn(),
-    findOneBy: jest.fn(),
-  };
-
-  const mockVideoRepository = {
-    find: jest.fn(),
-  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -81,7 +68,7 @@ describe('CommentService', () => {
   });
 
   describe('댓글 목록 조회', () => {
-    it('댓글 목록 조회 성공 검증', async () => {
+    it('댓글 목록 조회 성공 검증', async (service) => {
       const videoId = 1;
       const comments = [
         {

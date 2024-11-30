@@ -2,14 +2,13 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ResolutionController } from './resolution.controller';
 import { ResolutionService } from './resolution.service';
 import { UpdateMetadataDto } from './dto/update-resolution.dto';
+import { mockResolutionService } from './__mocks__/mock.resolution.service';
+import { mockResolutionResponse, mockUpdateMetadataDto } from './__mocks__/mock.resolution.data';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 describe('ResolutionController', () => {
   let resolutionController: ResolutionController;
   let resolutionService: ResolutionService;
-
-  const mockResolutionService = {
-    updateResolution: jest.fn(),
-  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -31,28 +30,34 @@ describe('ResolutionController', () => {
       expect(resolutionController).toBeDefined();
     });
 
-    it('동영상에 해당하는 고화질 URL과 저화질 URL을 추가해야한다.', async () => {
-      const mockUpdateMetaDataDTO: UpdateMetadataDto = {
-        highResolutionUrl: 'testHighResolutionURL',
-        lowResolutionUrl: 'testLowResolutionURL',
-        metadata: {
-          videoCode: 'testVideoCode',
-          duration: 10,
-        },
-      };
-      const mockResolution = 'mockResolution';
+    it('성공적으로 메타데이터를 업데이트해야 합니다.', async () => {
+      mockResolutionService.updateResolution.mockResolvedValue(mockResolutionResponse);
 
-      mockResolutionService.updateResolution.mockResolvedValue(mockResolution);
-
-      const result = await resolutionController.updateMetadata(mockUpdateMetaDataDTO);
+      const result = await resolutionController.updateMetadata(mockUpdateMetadataDto);
 
       expect(resolutionService.updateResolution).toHaveBeenCalledWith(
-        mockUpdateMetaDataDTO.metadata.videoCode,
-        mockUpdateMetaDataDTO.metadata.duration,
-        mockUpdateMetaDataDTO.highResolutionUrl,
-        mockUpdateMetaDataDTO.lowResolutionUrl,
+        mockUpdateMetadataDto.metadata.videoCode,
+        mockUpdateMetadataDto.metadata.duration,
+        mockUpdateMetadataDto.highResolutionUrl,
+        mockUpdateMetadataDto.lowResolutionUrl,
       );
-      expect(result).toEqual(mockResolution);
+      expect(result).toEqual(mockResolutionResponse);
+    });
+    it('서비스에서 오류가 발생하면 HttpException을 던져야 합니다.', async () => {
+      mockResolutionService.updateResolution.mockRejectedValue(
+        new Error('Failed to process metadata'),
+      );
+
+      await expect(resolutionController.updateMetadata(mockUpdateMetadataDto)).rejects.toThrow(
+        new HttpException('Failed to process metadata', HttpStatus.INTERNAL_SERVER_ERROR),
+      );
+
+      expect(resolutionService.updateResolution).toHaveBeenCalledWith(
+        mockUpdateMetadataDto.metadata.videoCode,
+        mockUpdateMetadataDto.metadata.duration,
+        mockUpdateMetadataDto.highResolutionUrl,
+        mockUpdateMetadataDto.lowResolutionUrl,
+      );
     });
   });
 });
