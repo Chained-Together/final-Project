@@ -17,6 +17,9 @@ export const mockUser: UserEntity = {
   deletedAt: null,
   likes: [],
   channel: null,
+  isSocial: false,
+  googleId: 'google@google.com',
+  naverId: 'naverId@naver.com',
 };
 
 // Channel Mock 데이터
@@ -26,6 +29,7 @@ export const mockChannel: ChannelEntity = {
   profileImage: 'test',
   video: null,
   user: null,
+  createdAt: new Date(),
 };
 
 // Video Mock 데이터

@@ -15,7 +15,7 @@ export const mockUser: UserEntity = {
   likes: null,
   channel: null,
   isSocial: false,
-  googleId: 'test@test.com',
+  googleId: 'google@google.com',
   naverId: 'naverId@naver.com',
 };
 
