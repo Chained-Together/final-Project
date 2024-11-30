@@ -247,7 +247,7 @@ export class VideoService {
     return { url, visibility: foundVideo.visibility };
   }
 
-  async findVideoByKeyword(keyword) {
+  async findVideoByKeyword(keyword: string) {
     const videoResult = await this.videoRepository
       .createQueryBuilder('video')
       .where('video.title LIKE :keyword', { keyword: `%${keyword}%` })
