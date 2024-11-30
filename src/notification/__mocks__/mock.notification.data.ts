@@ -14,6 +14,9 @@ export const mockUser: UserEntity = {
   deletedAt: new Date(),
   likes: null,
   channel: null,
+  isSocial: false,
+  googleId: 'test@test.com',
+  naverId: 'naverId@naver.com',
 };
 
 export const mockNotification: NotificationEntity = {
