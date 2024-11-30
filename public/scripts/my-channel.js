@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   const channelNameElement = document.getElementById('channelName');
   const profileImageElement = document.getElementById('profileImage');
   const thumbnailsContainer = document.getElementById('thumbnailsContainer');
+  const liveButton = document.getElementById('liveVideo');
+
   if (!token) {
     channelNameElement.textContent = '로그인이 필요합니다.';
     return;
@@ -103,6 +105,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     } else {
       window.location.href = '/login';
     }
+  });
+
+  liveButton.addEventListener('click', () => {
+    window.location.href = '/liveVideo';
   });
 
   const profileButton = document.getElementById('profileButton');
