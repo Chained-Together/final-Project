@@ -19,43 +19,53 @@ export class ResolutionService {
     highResolutionUrl: string,
     lowResolutionUrl: string,
   ): Promise<ResolutionEntity> {
-    try {
-      console.log('updateResolution 호출됨');
-      console.log('전달받은 videoCode:', videoCode);
-      console.log('전달받은 duration:', duration);
-      console.log('전달받은 highResolutionUrl:', highResolutionUrl);
-      console.log('전달받은 highResolutionUrl:', lowResolutionUrl);
+    console.log('updateResolution 호출됨');
+    console.log('전달받은 videoCode:', videoCode);
+    console.log('전달받은 duration:', duration);
+    console.log('전달받은 highResolutionUrl:', highResolutionUrl);
+    console.log('전달받은 highResolutionUrl:', lowResolutionUrl);
 
-      // 1. 비디오 찾기
-      const findVideo = await this.videoRepository.findOne({ where: { videoCode } });
+    // 1. 비디오 찾기
+    const findVideo = await this.videoRepository.findOne({ where: { videoCode } });
 
-      if (!findVideo) {
-        console.error('비디오를 찾을 수 없습니다. videoCode:', videoCode);
-        throw new NotFoundException('해당하는 코드와 일치하는 영상이 존재하지 않습니다.');
-      }
-
-      console.log('찾은 비디오 데이터:', findVideo);
-
-      // 2. 해상도 업데이트
-      await this.resolutionRepository.update(
-        {
-          video: { id: findVideo.id }, // 관계 매핑
-        },
-        { high: highResolutionUrl, low: lowResolutionUrl },
-      );
-
-      await this.videoRepository.update({ id: findVideo.id }, { duration: duration, status: true });
-
-      const findResolution = await this.resolutionRepository.findOne({
-        where: { video: { id: findVideo.id } },
-      });
-
-      console.log('저장된 해상도 데이터:', findResolution);
-
-      return findResolution;
-    } catch (error) {
-      console.error('updateResolution 처리 중 오류 발생:', error.message);
-      throw error; // 예외를 그대로 던져 호출한 곳에서 처리할 수 있도록 유지
+    if (!findVideo) {
+      console.error('비디오를 찾을 수 없습니다. videoCode:', videoCode);
+      throw new NotFoundException('해당하는 코드와 일치하는 영상이 존재하지 않습니다.');
     }
+
+    console.log('찾은 비디오 데이터:', findVideo);
+
+    // 2. 해상도 업데이트
+    const resolutionUpdateResult = await this.resolutionRepository.update(
+      {
+        video: { id: findVideo.id }, // 관계 매핑
+      },
+      { high: highResolutionUrl, low: lowResolutionUrl },
+    );
+
+    if (resolutionUpdateResult.affected === 0) {
+      throw new Error('해상도 정보를 업데이트할 수 없습니다.');
+    }
+
+    const videoUpdateResult = await this.videoRepository.update(
+      { id: findVideo.id },
+      { duration: duration, status: true },
+    );
+
+    if (videoUpdateResult.affected === 0) {
+      throw new Error('비디오 메타데이터를 업데이트할 수 없습니다.');
+    }
+
+    const findResolution = await this.resolutionRepository.findOne({
+      where: { video: { id: findVideo.id } },
+    });
+
+    console.log('저장된 해상도 데이터:', findResolution);
+
+    if (!findResolution) {
+      throw new Error('업데이트된 해상도를 찾을 수 없습니다.');
+    }
+
+    return findResolution;
   }
 }

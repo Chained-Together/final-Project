@@ -1,11 +1,23 @@
-import { CreateUserDto } from '../dto/create-user.dto';
-import { ChannelEntity } from '../../channel/entities/channel.entity';
-import { LikeEntity } from '../../like/entities/like.entity';
-import { UserEntity } from '../entities/user.entity';
-import { VideoEntity } from '../../video/entities/video.entity';
-import { DeleteUserDto } from '../dto/delete-user.dto';
-import { CommentDto } from '../../comment/dto/comment.dto';
+import { UserEntity } from '../../user/entities/user.entity';
+import { CommentDto } from '../dto/comment.dto';
 import { mockChannel, mockLike } from '../../video/__mocks__/mock.video.data';
+
+export const mockCreateUserDto = {
+  name: 'Test User',
+  phoneNumber: '010-1234-5678',
+};
+
+export const mockUserResponse = {
+  email: 'testuser@example.com',
+  verified: true,
+};
+
+export const mockInvalidCreateUserDto = {
+  name: 'Invalid User',
+  phoneNumber: '010-9876-5432',
+};
+
+export const mockErrorMessage = '해당하는 사용자가 없습니다.';
 
 export const mockUser: UserEntity = {
   id: 1,
