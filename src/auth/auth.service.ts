@@ -33,6 +33,7 @@ export class AuthService {
       throw new BadRequestException('이미 사용중인 이메일입니다.');
     }
 
+    // TODO : 클라에서 처리하는게 어떨지
     if (signUpDto.password !== signUpDto.confirmedPassword) {
       throw new BadRequestException('비밀번호가 일치 하지 않습니다.');
     }
@@ -66,6 +67,10 @@ export class AuthService {
       nickname: signUpDto.nickname,
       phoneNumber: signUpDto.phoneNumber,
     });
+
+    return {
+      message: '회원가입에 성공했습니다.',
+    };
   }
 
   async logIn(loginDto: LoginDto) {

@@ -45,7 +45,7 @@ export class UserEntity {
   deletedAt: Date | null;
 
   @OneToMany(() => LikeEntity, (like) => like.user)
-  likes: LikeEntity;
+  likes: LikeEntity[];
 
   @OneToOne(() => ChannelEntity, (channel) => channel.user)
   @JoinColumn()
