@@ -73,4 +73,10 @@ export class ViewController {
   showVideoPage() {
     return;
   }
+
+  @Get('/liveVideo')
+  @Render('liveVideo')
+  showLiveVideo() {
+    return;
+  }
 }
