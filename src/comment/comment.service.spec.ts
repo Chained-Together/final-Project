@@ -1,12 +1,12 @@
-import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import { UserEntity } from 'src/user/entities/user.entity';
-import { VideoEntity } from 'src/video/entities/video.entity';
-import { Repository } from 'typeorm';
 import { CommentService } from './comment.service';
-import { CommentDto } from './dto/comment.dto';
 import { CommentEntity } from './entities/comment.entity';
+import { VideoEntity } from 'src/video/entities/video.entity';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { CommentDto } from './dto/comment.dto';
+import { UserEntity } from '../user/entities/user.entity';
 
 describe('CommentService', () => {
   let service: CommentService;

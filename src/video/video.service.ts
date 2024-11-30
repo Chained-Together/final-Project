@@ -2,7 +2,6 @@ import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/co
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ChannelEntity } from '../channel/entities/channel.entity';
-
 import { ResolutionEntity } from 'src/resolution/entities/resolution.entity';
 import { UserEntity } from 'src/user/entities/user.entity';
 import { UpdateVideoDto } from './dto/update.video.dto';
@@ -128,13 +127,13 @@ export class VideoService {
     });
 
     if (!foundVideo) {
-      return { statusCode: 404, message: '존재하지 않는 비디오입니다.' };
+      throw new NotFoundException('존재하지 않는 비디오입니다.');
     }
 
     const { visibility, channel, accessKey: storedAccessKey } = foundVideo;
 
     if (visibility === Visibility.PRIVATE && channel.user.id !== userId) {
-      return { statusCode: 401, message: '비공개 비디오에 접근할 수 없습니다.' };
+      throw new UnauthorizedException('비공개 비디오에 접근할 수 없습니다.');
     }
 
     if (
@@ -142,7 +141,7 @@ export class VideoService {
       channel.user.id !== userId &&
       storedAccessKey !== accessKey
     ) {
-      return { statusCode: 403, message: '올바른 링크가 아니면 접근할 수 없습니다.' };
+      throw new UnauthorizedException('올바른 링크가 아니면 접근할 수 없습니다.');
     }
 
     return foundVideo;
