@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { ChannelEntity } from '../channel/entities/channel.entity';
 import { ResolutionEntity } from 'src/resolution/entities/resolution.entity';
 import { UserEntity } from 'src/user/entities/user.entity';
@@ -245,5 +245,19 @@ export class VideoService {
     }
 
     return { url, visibility: foundVideo.visibility };
+  }
+
+  async findVideoByKeyword(keyword) {
+    const videoResult = await this.videoRepository
+      .createQueryBuilder('video')
+      .where('video.title LIKE :keyword', { keyword: `%${keyword}%` })
+      .orWhere('video.hashtags @> :keywordArray', { keywordArray: JSON.stringify([keyword]) })
+      .getMany();
+
+    if (!videoResult.length) {
+      return { message: '검색 결과가 없습니다.' };
+    }
+
+    return videoResult;
   }
 }

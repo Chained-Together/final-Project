@@ -97,4 +97,9 @@ export class VideoController {
   getVideoLink(@Param('id') id: number) {
     return this.videoService.getVideoLink(id);
   }
+
+  @Get('/search/:keyword')
+  findVideoByKeword(@Param('keyword') keyword: string) {
+    return this.videoService.findVideoByKeyword(keyword);
+  }
 }

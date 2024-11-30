@@ -4,6 +4,10 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { VideoEntity } from './entities/video.entity';
 import { Repository } from 'typeorm';
 import { ChannelEntity } from '../channel/entities/channel.entity';
+<<<<<<< Updated upstream
+=======
+import { UserEntity } from '../user/entities/user.entity';
+>>>>>>> Stashed changes
 import { Visibility } from './video.visibility.enum';
 import { NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { ResolutionEntity } from '../resolution/entities/resolution.entity';

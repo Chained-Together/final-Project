@@ -79,4 +79,11 @@ export class ViewController {
   showLiveVideo() {
     return;
   }
+
+
+  @Get('/search')
+  @Render('search')
+  showSearchPage(@Query('keyword') keyword: string) {
+    return;
+  }
 }
