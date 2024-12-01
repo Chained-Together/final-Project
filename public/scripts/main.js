@@ -48,7 +48,7 @@ let lastVideoId = null; // 마지막 데이터의 id
 
 // 서버에서 비디오 데이터 가져오기
 async function fetchVideos(lastId) {
-  const url = lastId ? `video/many/${lastId}/6` : 'video/many/1/12'; // RESTful URL
+  const url = lastId ? `video/many/${lastId}/6` : 'video/many/1/12';
   const response = await fetch(url, { method: 'GET' });
 
   if (!response.ok) {
@@ -179,7 +179,7 @@ const createLogoutButton = () => {
   logoutButton.addEventListener('click', () => {
     localStorage.removeItem('token');
     alert('로그아웃 되었습니다.');
-    window.location.href = '/main';
+    window.location.href = '/';
   });
 
   return logoutButton;
@@ -231,6 +231,8 @@ accountBtn.addEventListener('click', () => {
       logoutBtn.remove();
     }
   } else {
-    window.location.href = '/main';
+    window.location.href = '/';
   }
 });
+
+

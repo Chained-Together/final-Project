@@ -74,6 +74,8 @@ uploadBtn.addEventListener('click', async () => {
         redirect: 'follow',
         body: JSON.stringify(metadataPayload),
       });
+      console.log(`메타데이터: ${metadataResponse}`);
+      
     if (metadataResponse.redirected) {
   alert('메타데이터 전송 성공');
   window.location.href = metadataResponse.url;
