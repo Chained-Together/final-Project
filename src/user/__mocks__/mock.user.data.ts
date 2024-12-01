@@ -1,78 +1,100 @@
-import { CreateUserDto } from '../dto/create-user.dto';
-import { ChannelEntity } from '../../channel/entities/channel.entity';
-import { LikeEntity } from '../../like/entities/like.entity';
 import { UserEntity } from '../entities/user.entity';
-import { VideoEntity } from '../../video/entities/video.entity';
-import { DeleteUserDto } from '../dto/delete-user.dto';
+import { CommentDto } from '../../comment/dto/comment.dto';
+import { mockLike } from '../../video/__mocks__/mock.video.data';
 
-export const mockCreateUserDto: CreateUserDto = {
+export const mockUser: UserEntity = {
+  id: 1,
+  email: 'testuser@example.com',
+  password: 'hashedPassword123',
   name: 'Test User',
+  nickname: 'testnickname',
   phoneNumber: '010-1234-5678',
+  isSocial: false,
+  googleId: null,
+  naverId: null,
+  deletedAt: null,
+  likes: [mockLike],
+  channel: null,
 };
 
-export const mockUserResponse = {
-  email: 'test@example.com',
-  verified: true,
+export const mockCommentDto: CommentDto = {
+  content: 'Test Comment',
 };
 
-export const mockInvalidCreateUserDto: CreateUserDto = {
-  name: 'Invalid User',
-  phoneNumber: '010-9876-5432',
+export const mockUpdatedCommentDto: CommentDto = {
+  content: 'Updated Comment',
 };
 
-export const mockErrorMessage = '해당하는 사용자가 없습니다.';
-
-export const mockVideo: VideoEntity = {
+export const mockComment = {
   id: 1,
-  title: 'Test Video',
-  description: 'Test Description',
-  thumbnailUrl: 'https://example.com/thumbnail.jpg',
-  hashtags: ['#test', '#video'],
-  visibility: null,
-  duration: 300,
-  views: 100,
-  uploadedAt: new Date(),
-  updatedAt: new Date(),
-  resolution: null,
-  channel: null, // 관계는 이후에 설정
-  likes: [],
-  videoCode: 'testCode',
-  status: true,
-  comments: null,
-  accessKey: null,
-};
-
-export const mockChannel: ChannelEntity = {
-  id: 1,
-  name: 'Testname',
-  profileImage: 'https://example.com/channel.jpg',
+  content: mockCommentDto.content,
+  videoId: 1,
+  userId: mockUser.id,
   createdAt: new Date(),
-  video: null,
-  user: null,
+  updatedAt: new Date(),
 };
 
-export const mockLike: LikeEntity = {
-  id: 1,
-  user: null,
-  video: mockVideo,
+export const mockUpdatedComment = {
+  ...mockComment,
+  content: mockUpdatedCommentDto.content,
 };
 
+export const mockReplyComment = {
+  id: 2,
+  content: 'Reply Comment',
+  videoId: 1,
+  userId: mockUser.id,
+  parentCommentId: 1,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+};
+
+export const mockCommentResponse = {
+  success: true,
+  message: 'Comment deleted',
+};
+// ./__mocks__/mock.user.data.ts
+
+
+// Mock User Entity
 export const mockUserEntity: UserEntity = {
   id: 1,
   email: 'test@example.com',
-  password: 'hashedPassword',
-  name: 'TestUser',
-  nickname: 'TestM',
-  phoneNumber: '010-1234-1234',
+  password: 'hashedpassword',
+  name: 'Test User',
+  nickname: 'testuser',
+  phoneNumber: '010-1234-5678',
   deletedAt: null,
-  likes: [mockLike],
-  channel: mockChannel,
+  likes: [],
+  channel: null,
   isSocial: false,
-  googleId: 'google@google.com',
-  naverId: 'naverId@naver.com',
+  googleId: null,
+  naverId: null,
 };
 
-export const mockDeleteUserDto: DeleteUserDto = {
-  email: 'invalid@example.com',
+// Mock Create User DTO
+export const mockCreateUserDto = {
+  email: 'test@example.com',
   password: 'password',
+  confirmedPassword: 'password',
+  name: 'Test User',
+  nickname: 'testuser',
+  phoneNumber: '010-1234-5678',
 };
+
+// Mock Invalid Create User DTO
+export const mockInvalidCreateUserDto = {
+  email: '',
+  password: '',
+  confirmedPassword: '',
+  name: '',
+  nickname: '',
+  phoneNumber: '',
+};
+
+// Mock Delete User DTO
+export const mockDeleteUserDto = {
+  email: 'test@example.com',
+  password: 'password123',
+};
+

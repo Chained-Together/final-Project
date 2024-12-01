@@ -325,9 +325,36 @@ margin-top: 10px;
     transform 0.2s ease;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
   cursor: pointer;
+  margin-top: 30px;
 }
 
 .button:hover {
+  background-color: #ffa600;
+  transform: scale(1.05);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+}
+
+.searchbutton {
+  display: inline-block;
+  width: 200px;
+  height: 50px;
+  line-height: 50px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background-color: #ff2a00;
+  text-decoration: none;
+  border-radius: 10px;
+  text-align: center;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.searchbutton:hover {
   background-color: #ffa600;
   transform: scale(1.05);
   box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);

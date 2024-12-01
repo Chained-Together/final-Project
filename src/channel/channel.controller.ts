@@ -48,4 +48,9 @@ export class ChannelController {
   async removeChannel(@UserInfo() user: UserEntity): Promise<ChannelEntity> {
     return this.channelService.removeChannel(user);
   }
+
+  @Get('/search/:keyword')
+  findChannelByKeyword(@Param('keyword') keyword: string) {
+    return this.channelService.findChannelByKeyword(keyword);
+  }
 }

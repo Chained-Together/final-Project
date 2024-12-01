@@ -1,38 +1,21 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CommentController } from './comment.controller';
 import { CommentService } from './comment.service';
-import { UserEntity } from 'src/user/entities/user.entity';
 import { AuthGuard } from '@nestjs/passport';
-import { CommentDto } from './dto/comment.dto';
+import {
+  mockComment,
+  mockCommentDto,
+  mockCommentResponse,
+  mockReplyComment,
+  mockUpdatedComment,
+  mockUser,
+} from './__mocks__/mock.commnet.data';
+import { mockCommentService } from './__mocks__/mock.comment.service';
 
 describe('CommentController', () => {
   let commentController: CommentController;
   let commentService: CommentService;
 
-  const mockCommentService = {
-    createComment: jest.fn(),
-    findAll: jest.fn(),
-    findOne: jest.fn(),
-    updateComment: jest.fn(),
-    removeComment: jest.fn(),
-    createReply: jest.fn(),
-  };
-
-  const mockUser: UserEntity = {
-    id: 1,
-    email: 'test@test.com',
-    password: 'password',
-    name: 'name',
-    nickname: 'nickname',
-    phoneNumber: '010-0000-0000',
-    likes:null,
-    channel:null
-  };
-
-  // as 는 any 또는 unknown 타입일 때만 사용ㅈ
-  
-
-  
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [CommentController],
@@ -44,7 +27,9 @@ describe('CommentController', () => {
       ],
     })
       .overrideGuard(AuthGuard('jwt'))
-      .useValue({ canActivate: () => true })
+      .useValue({
+        canActivate: jest.fn(() => true),
+      })
       .compile();
 
     commentController = module.get<CommentController>(CommentController);
@@ -55,78 +40,104 @@ describe('CommentController', () => {
     expect(commentController).toBeDefined();
   });
 
-  describe('댓글 생성', () => {
-    it('댓글 생성 메서드 검증', async () => {
-      const commentDto: CommentDto = { content: 'Content' };
-      const videoId: number = 1;
+  describe('createComment', () => {
+    it('댓글을 생성해야 합니다.', async () => {
+      mockCommentService.createComment.mockResolvedValue(mockComment);
 
-      await commentController.createComment(videoId, mockUser, commentDto);
+      const result = await commentController.createComment(
+        mockComment.videoId,
+        mockUser,
+        mockCommentDto,
+      );
 
-      expect(commentService.createComment).toHaveBeenCalledWith(commentDto, mockUser, videoId);
+      expect(result).toEqual(mockComment);
+      expect(mockCommentService.createComment).toHaveBeenCalledWith(
+        mockCommentDto,
+        mockUser,
+        mockComment.videoId,
+      );
     });
   });
 
-  describe('댓글 전체 조회', () => {
-    it('댓글 전체 조회 메서드 검증', async () => {
-      const videoId: number = 1;
-      await commentController.findAll(videoId);
+  describe('findAll', () => {
+    it('비디오에 대한 모든 댓글을 반환해야 합니다.', async () => {
+      mockCommentService.findAll.mockResolvedValue([mockComment]);
 
-      expect(commentService.findAll).toHaveBeenCalledWith(videoId);
+      const result = await commentController.findAll(mockComment.videoId);
+
+      expect(result).toEqual([mockComment]);
+      expect(mockCommentService.findAll).toHaveBeenCalledWith(mockComment.videoId);
     });
   });
 
-  describe('댓글 상세 조회', () => {
-    it('댓글 상세 조회 메서드 검증', async () => {
-      const videoId: number = 1;
-      const commentId: number = 1;
+  describe('findOne', () => {
+    it('특정 댓글을 반환해야 합니다.', async () => {
+      mockCommentService.findOne.mockResolvedValue(mockComment);
 
-      await commentController.findOne(videoId, commentId);
+      const result = await commentController.findOne(mockComment.videoId, mockComment.id);
 
-      expect(commentService.findOne).toHaveBeenCalledWith(videoId, commentId);
+      expect(result).toEqual(mockComment);
+      expect(mockCommentService.findOne).toHaveBeenCalledWith(mockComment.videoId, mockComment.id);
     });
   });
 
-  describe('댓글 수정', () => {
-    it('댓글 수정 메서드 검증', async () => {
-      const commentDto: CommentDto = { content: 'Content' };
-      const videoId: number = 1;
-      const commentId: number = 1;
+  describe('updateComment', () => {
+    it('댓글을 업데이트해야 합니다.', async () => {
+      mockCommentService.updateComment.mockResolvedValue(mockUpdatedComment);
 
-      await commentController.updateComment(videoId, commentId, commentDto, mockUser);
+      const result = await commentController.updateComment(
+        mockComment.videoId,
+        mockComment.id,
+        mockUpdatedComment,
+        mockUser,
+      );
 
-      expect(commentService.updateComment).toHaveBeenCalledWith(
-        videoId,
-        commentId,
-        commentDto,
+      expect(result).toEqual(mockUpdatedComment);
+      expect(mockCommentService.updateComment).toHaveBeenCalledWith(
+        mockComment.videoId,
+        mockComment.id,
+        mockUpdatedComment,
         mockUser,
       );
     });
   });
 
-  describe('댓글 삭제', () => {
-    it('댓글 삭제 메서드 검증', async () => {
-      const videoId: number = 1;
-      const commentId: number = 1;
+  describe('removeComment', () => {
+    it('댓글을 삭제하고 성공 메시지를 반환해야 합니다.', async () => {
+      mockCommentService.removeComment.mockResolvedValue(mockCommentResponse);
 
-      await commentController.removeComment(videoId, commentId, mockUser);
+      const result = await commentController.removeComment(
+        mockComment.videoId,
+        mockComment.id,
+        mockUser,
+      );
 
-      expect(commentService.removeComment).toHaveBeenCalledWith(videoId, commentId, mockUser);
+      expect(result).toEqual(mockCommentResponse);
+      expect(mockCommentService.removeComment).toHaveBeenCalledWith(
+        mockComment.videoId,
+        mockComment.id,
+        mockUser,
+      );
     });
   });
 
-  describe('답글 생성', () => {
-    it('답글 생성 메서드 검증', async () => {
-      const commentDto: CommentDto = { content: 'Content' };
-      const videoId: number = 1;
-      const commentId: number = 1;
+  describe('createReply', () => {
+    it('대댓글을 생성해야 합니다.', async () => {
+      mockCommentService.createReply.mockResolvedValue(mockReplyComment);
 
-      await commentController.createReply(videoId, commentId, mockUser, commentDto);
-
-      expect(commentService.createReply).toHaveBeenCalledWith(
-        videoId,
-        commentId,
+      const result = await commentController.createReply(
+        mockReplyComment.videoId,
+        mockReplyComment.parentComment,
         mockUser,
-        commentDto,
+        mockCommentDto,
+      );
+
+      expect(result).toEqual(mockReplyComment);
+      expect(mockCommentService.createReply).toHaveBeenCalledWith(
+        mockReplyComment.videoId,
+        mockReplyComment.parentComment,
+        mockUser,
+        mockCommentDto,
       );
     });
   });

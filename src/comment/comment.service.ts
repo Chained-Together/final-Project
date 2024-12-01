@@ -95,7 +95,7 @@ export class CommentService {
     const result = await this.commentRepository.delete({ id: commentId });
 
     if (result.affected === 1) {
-      return { success: true, message: '댓글이 성공적으로 삭제 되었습니다.' };
+      return { success: true, message: 'Comment deleted successfully' };
     } else {
       throw new BadRequestException('댓글을 삭제하는 중에 에러가 발생 했습니다.');
     }

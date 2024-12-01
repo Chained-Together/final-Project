@@ -40,11 +40,11 @@ export class PasswordService {
       where: { email: email },
     });
 
-    console.log(user.email);
-
     if (!user) {
       throw new NotFoundException('User not found');
     }
+
+    console.log(user.email);
 
     // 토큰 생성
     const rawToken = crypto.randomBytes(32).toString('hex');

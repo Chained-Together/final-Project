@@ -193,4 +193,17 @@ describe('VideoController', () => {
       expect(result).toEqual(mockVideos);
     });
   });
+
+  describe('findVideoByKeyword', () => {
+    it('검색된 비디오를 반환한다.', async () => {
+      const mockKeyword = 'Video'
+
+      mockVideoService.findVideoByKeyword.mockResolvedValueOnce(mockVideos);
+
+      const result = await videoController.findVideoByKeyword(mockKeyword);
+
+      expect(mockVideoService.findVideoByKeyword).toHaveBeenCalledWith(mockKeyword);
+      expect(result).toEqual(mockVideos);
+    });
+  });
 });

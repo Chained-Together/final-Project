@@ -3,44 +3,16 @@ import { ResolutionService } from './resolution.service';
 import { ResolutionEntity } from './entities/resolution.entity';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { NotFoundException } from '@nestjs/common';
-import { UpdateMetadataDto } from './dto/update-resolution.dto';
 import { VideoEntity } from 'src/video/entities/video.entity';
+import { mockResolutionRepository, mockVideoRepository } from './__mocks__/mock.resolution.service';
+import { mockUpdateMetadataDto, mockVideo } from './__mocks__/mock.resolution.data';
+import { NotFoundException } from '@nestjs/common';
+import { mockResolution } from '../video/__mocks__/mock.video.data';
 
 describe('ResolutionService', () => {
   let resolutionService: ResolutionService;
   let resolutionRepository: Repository<ResolutionEntity>;
   let videoRepository: Repository<VideoEntity>;
-
-  const mockResolutionRepository = {
-    update: jest.fn(),
-    findOne: jest.fn(),
-  };
-
-  const mockVideoRepository = {
-    findOne: jest.fn(),
-    update: jest.fn(),
-  };
-
-  const mockVideo = {
-    id: 1,
-  };
-
-  const mockUpdateMetaDataDTO: UpdateMetadataDto = {
-    highResolutionUrl: 'testHighResolutionURL',
-    lowResolutionUrl: 'testLowResolutionURL',
-    metadata: {
-      videoCode: 'testVideoCode',
-      duration: 10,
-    },
-  };
-
-  const mockResolution = {
-    id: 1,
-    high: 'testHighResolutionURL',
-    low: 'testLowResolutionURL',
-    video: { id: 1 },
-  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -65,54 +37,111 @@ describe('ResolutionService', () => {
   });
 
   describe('updateResolution', () => {
-    it('비디오를 찾을 수 없다면 NotFoundException 반환', async () => {
+    it('비디오를 찾을 수 없으면 NotFoundException을 던져야 한다.', async () => {
       mockVideoRepository.findOne.mockResolvedValue(null);
 
       await expect(
         resolutionService.updateResolution(
-          mockUpdateMetaDataDTO.metadata.videoCode,
-          mockUpdateMetaDataDTO.metadata.duration,
-          mockUpdateMetaDataDTO.highResolutionUrl,
-          mockUpdateMetaDataDTO.lowResolutionUrl,
+          mockUpdateMetadataDto.metadata.videoCode,
+          mockUpdateMetadataDto.metadata.duration,
+          mockUpdateMetadataDto.highResolutionUrl,
+          mockUpdateMetadataDto.lowResolutionUrl,
         ),
       ).rejects.toThrow(NotFoundException);
+
+      expect(videoRepository.findOne).toHaveBeenCalledWith({
+        where: { videoCode: mockUpdateMetadataDto.metadata.videoCode },
+      });
+      expect(resolutionRepository.update).not.toHaveBeenCalled();
+      expect(videoRepository.update).not.toHaveBeenCalled();
     });
 
-    it('해당하는 비디오가 있다면 비디오의 길이랑 고화질, 저화질 URL을 업데이트 한다', async () => {
+    it('해상도 업데이트가 실패하면 예외를 던져야 한다.', async () => {
       mockVideoRepository.findOne.mockResolvedValue(mockVideo);
+      mockResolutionRepository.update.mockResolvedValue({ affected: 0 }); // 실패 시뮬레이션
 
-      mockResolutionRepository.update.mockResolvedValue({ affected: 1 });
+      await expect(
+        resolutionService.updateResolution(
+          mockUpdateMetadataDto.metadata.videoCode,
+          mockUpdateMetadataDto.metadata.duration,
+          mockUpdateMetadataDto.highResolutionUrl,
+          mockUpdateMetadataDto.lowResolutionUrl,
+        ),
+      ).rejects.toThrow('해상도 정보를 업데이트할 수 없습니다.');
 
-      mockVideoRepository.update.mockResolvedValue({ affected: 1 });
-
-      mockResolutionRepository.findOne.mockResolvedValue(mockResolution);
-
-      const result = await resolutionService.updateResolution(
-        mockUpdateMetaDataDTO.metadata.videoCode,
-        mockUpdateMetaDataDTO.metadata.duration,
-        mockUpdateMetaDataDTO.highResolutionUrl,
-        mockUpdateMetaDataDTO.lowResolutionUrl,
-      );
-
-      expect(result).toEqual(mockResolution);
       expect(videoRepository.findOne).toHaveBeenCalledWith({
-        where: { videoCode: mockUpdateMetaDataDTO.metadata.videoCode },
+        where: { videoCode: mockUpdateMetadataDto.metadata.videoCode },
       });
       expect(resolutionRepository.update).toHaveBeenCalledWith(
+        { video: { id: mockVideo.id } },
         {
-          video: { id: mockVideo.id },
+          high: mockUpdateMetadataDto.highResolutionUrl,
+          low: mockUpdateMetadataDto.lowResolutionUrl,
         },
+      );
+      expect(videoRepository.update).not.toHaveBeenCalled();
+    });
+
+    it('비디오 메타데이터 업데이트가 실패하면 예외를 던져야 한다.', async () => {
+      mockVideoRepository.findOne.mockResolvedValue(mockVideo);
+      mockResolutionRepository.update.mockResolvedValue({ affected: 1 }); // 성공 시뮬레이션
+      mockVideoRepository.update.mockResolvedValue({ affected: 0 }); // 실패 시뮬레이션
+
+      await expect(
+        resolutionService.updateResolution(
+          mockUpdateMetadataDto.metadata.videoCode,
+          mockUpdateMetadataDto.metadata.duration,
+          mockUpdateMetadataDto.highResolutionUrl,
+          mockUpdateMetadataDto.lowResolutionUrl,
+        ),
+      ).rejects.toThrow('비디오 메타데이터를 업데이트할 수 없습니다.');
+
+      expect(videoRepository.findOne).toHaveBeenCalledWith({
+        where: { videoCode: mockUpdateMetadataDto.metadata.videoCode },
+      });
+      expect(resolutionRepository.update).toHaveBeenCalledWith(
+        { video: { id: mockVideo.id } },
         {
-          high: mockUpdateMetaDataDTO.highResolutionUrl,
-          low: mockUpdateMetaDataDTO.lowResolutionUrl,
+          high: mockUpdateMetadataDto.highResolutionUrl,
+          low: mockUpdateMetadataDto.lowResolutionUrl,
         },
       );
       expect(videoRepository.update).toHaveBeenCalledWith(
         { id: mockVideo.id },
-        { duration: mockUpdateMetaDataDTO.metadata.duration },
+        { duration: mockUpdateMetadataDto.metadata.duration, status: true },
+      );
+    });
+
+    it('해상도와 비디오 메타데이터 업데이트가 성공하면 업데이트된 데이터를 반환해야 한다.', async () => {
+      mockVideoRepository.findOne.mockResolvedValue(mockVideo);
+      mockResolutionRepository.update.mockResolvedValue({ affected: 1 });
+      mockVideoRepository.update.mockResolvedValue({ affected: 1 });
+      mockResolutionRepository.findOne.mockResolvedValue(mockResolution);
+
+      const result = await resolutionService.updateResolution(
+        mockUpdateMetadataDto.metadata.videoCode,
+        mockUpdateMetadataDto.metadata.duration,
+        mockUpdateMetadataDto.highResolutionUrl,
+        mockUpdateMetadataDto.lowResolutionUrl,
+      );
+
+      expect(result).toEqual(mockResolution);
+      expect(videoRepository.findOne).toHaveBeenCalledWith({
+        where: { videoCode: mockUpdateMetadataDto.metadata.videoCode },
+      });
+      expect(resolutionRepository.update).toHaveBeenCalledWith(
+        { video: { id: mockVideo.id } },
+        {
+          high: mockUpdateMetadataDto.highResolutionUrl,
+          low: mockUpdateMetadataDto.lowResolutionUrl,
+        },
+      );
+      expect(videoRepository.update).toHaveBeenCalledWith(
+        { id: mockVideo.id },
+        { duration: mockUpdateMetadataDto.metadata.duration, status: true },
       );
       expect(resolutionRepository.findOne).toHaveBeenCalledWith({
-        where: { video: { id: mockResolution.video.id } },
+        where: { video: { id: mockVideo.id } },
       });
     });
   });
