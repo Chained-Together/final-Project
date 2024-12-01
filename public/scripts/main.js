@@ -234,3 +234,15 @@ accountBtn.addEventListener('click', () => {
     window.location.href = '/main';
   }
 });
+
+const searchForm = document.getElementById('searchForm');
+const searchInput = document.getElementById('searchInput');
+searchForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const keyword = searchInput.value.trim();
+  if (!keyword) {
+    alert('검색어를 입력해주세요.');
+    return;
+  }
+  window.location.href = `/search?keyword=${encodeURIComponent(keyword)}`;
+});

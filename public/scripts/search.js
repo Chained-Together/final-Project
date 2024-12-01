@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   console.log('videoResultsContainer:', videoResultsContainer);
   console.log('channelResultsContainer:', channelResultsContainer);
+  console.log('searchInput', searchInput);
 
   if (!videoResultsContainer || !channelResultsContainer) {
     console.error('필수 DOM 요소를 찾을 수 없습니다.');
