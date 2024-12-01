@@ -5,9 +5,8 @@ import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { VideoEntity } from 'src/video/entities/video.entity';
 import { mockResolutionRepository, mockVideoRepository } from './__mocks__/mock.resolution.service';
-import { mockUpdateMetadataDto } from './__mocks__/mock.resolution.data';
+import { mockUpdateMetadataDto, mockVideo } from './__mocks__/mock.resolution.data';
 import { NotFoundException } from '@nestjs/common';
-import { mockVideo } from '../user/__mocks__/mock.user.data';
 import { mockResolution } from '../video/__mocks__/mock.video.data';
 
 describe('ResolutionService', () => {

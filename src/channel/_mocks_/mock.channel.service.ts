@@ -1,3 +1,5 @@
+import { Response } from 'express';
+
 export const mockChannelService = {
     createChannel: jest.fn(),
     getChannel: jest.fn(),
@@ -32,5 +34,8 @@ export const mockChannelService = {
     save: jest.fn(),
   };
 
+  export const mockResponse: Partial<Response> = {
+    redirect: jest.fn(),
+  };
 
-  
+  //TODO: mockResponse 타입 수정
