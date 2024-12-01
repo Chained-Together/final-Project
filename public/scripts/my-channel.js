@@ -133,7 +133,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     channelEditButton.addEventListener('click', () => {
       window.location.href = '/edit-mychannel';
     });
-
     return channelEditButton;
   };
   profileButton.addEventListener('click', () => {

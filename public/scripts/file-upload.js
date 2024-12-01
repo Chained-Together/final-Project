@@ -65,15 +65,17 @@ uploadBtn.addEventListener('click', async () => {
     if (uploadResponse.ok) {
       alert('파일 업로드 성공!');
     }
-    const metadataResponse = await fetch('http://localhost:3000/video', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      redirect: 'follow',
-      body: JSON.stringify(metadataPayload),
-    });
+      const metadataResponse = await fetch('http://localhost:3000/video', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        redirect: 'follow',
+        body: JSON.stringify(metadataPayload),
+      });
+      console.log(`메타데이터: ${metadataResponse}`);
+      
     if (metadataResponse.redirected) {
       alert('메타데이터 전송 성공');
       window.location.href = metadataResponse.url;

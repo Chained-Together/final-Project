@@ -1,0 +1,68 @@
+
+    <nav class="navbar bg-body-tertiary">
+      <div class="container-fluid">
+        <div class="left-section log">
+          <img
+            id="toggleButton"
+            src="public\images\menu-30.png"
+            alt="Toggle Header"
+            style="cursor: pointer"
+          />
+          <i class="fa-solid fa-bolt"></i>
+          <a class="bungee-spice-regular">Loopfiy</a>
+        </div>
+
+        <form class="d-flex" role="search">
+          <div class="search_container">
+            <input class="search_input" type="text" placeholder="Search" />
+          </div>
+          <button class="search-btn">
+            <img src="public\images\search-50.png" alt="" />
+          </button>
+        </form>
+
+        <div class="right-section"></div>
+        <a href="/login">
+          <button class="login-btn">
+            <img src="public\images\user-50.png" alt="" />
+            로그인
+          </button>
+        </a>
+      </div>
+    </nav>
+
+    <header class="LoopfiyBar" id="toggleHeader" style="display: none">
+      <div class="sidebar-menu-btn-box">
+        <button class="sidebar-menu-btn">
+          <img src="public\images\home-50.png" alt="" />
+          홈
+        </button>
+
+        <button class="sidebar-menu-btn">
+          <img src="public\images\reminder-50.png" alt="" />
+          알림
+        </button>
+
+        <a href="/myChannel">
+          <button class="sidebar-menu-btn">
+            <img src="public\images\user-50.png" alt="" />
+            내 채널
+          </button>
+        </a>
+      </div>
+
+      <div class="sidebar-menu-btn-box logout-box">
+        <button class="sidebar-logout-btn">로그아웃</button>
+      </div>
+    </header>
+
+    <script>
+      document.getElementById('toggleButton').addEventListener('click', function () {
+        const header = document.getElementById('toggleHeader');
+        if (header.style.display === 'none' || header.style.display === '') {
+          header.style.display = 'block'; // 보이기
+        } else {
+          header.style.display = 'none'; // 숨기기
+        }
+      });
+    </script>

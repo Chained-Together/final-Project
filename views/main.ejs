@@ -21,36 +21,14 @@
     <script src="https://kit.fontawesome.com/6a4db89020.js" crossorigin="anonymous"></script>
   </head>
   <body>
-    <header>
-      <nav class="LoopfiyBar">
-        <div class="log">
-          <i class="fa-solid fa-bolt"></i>
-          <a class="bungee-spice-regular">Loopfiy</a>
-        </div>
-        <form id="searchForm">
-          <div class="search_container">
-            <input
-              class="search_input"
-              type="text"
-              id="searchInput"
-              name="search"
-              placeholder="Search"
-            />
-          </div>
-          <div class="searchBtn">
-            <button class="searchbutton" id="searchBtn" type="submit">Search</button>
-          </div>
-        </form>
+    <%- include( 'nav.ejs' ) %>
+    
+    <div id="videoBox" class="video-box container">
 
-        <div class="loginBtn">
-          <a href="/login" class="button">Sign In</a>
-        </div>
-      </nav>
-    </header>
-    <div class="container">
-      <div class="main">
-        <a href="/create-channel" class="link">test용 채널</a>
-      </div>
+    </div>
+
+          
+    <!-- <div class="container">
       <div class="header-buttons">
         <div class="profile-btn" id="profileBtn">
           <img src="profileImageElement.src" alt="프로필 사진" class="profileImage" />
@@ -58,7 +36,7 @@
         <div class="account-btn" id="accountBtn">
           <img src="profileImageElement.src" alt="계정 사진" class="profileImage" />
         </div>
-      </div>
+      </div> -->
 
       <div class="shortform-grid"></div>
 
@@ -66,6 +44,7 @@
         Loading more videos...
       </div>
     </div>
+
     <div id="notificationPopup"
       style="display: none; position: fixed; top: 20%; left: 50%; transform: translate(-50%, 0); background: white; width: 80%; max-width: 400px; height: 50%; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); overflow-y: auto; z-index: 1000;">
       <div id="notificationList"></div>
@@ -88,4 +67,3 @@
 </body>
 
 </html>
->>>>>>> dev

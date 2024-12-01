@@ -47,7 +47,7 @@ loginForm.addEventListener('submit', async (event) => {
     
     localStorage.setItem('pastNotifications', JSON.stringify(notifications));
 
-    window.location.href = '/main';
+    window.location.href = '/';
   } catch (error) {
     console.error(error);
     alert(`로그인 중 오류 발생: ${error.message}`);
