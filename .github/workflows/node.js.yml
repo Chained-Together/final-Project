@@ -17,7 +17,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x, 20.x, 22.x]
+        node-version: [18.x, 20.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -51,7 +51,7 @@ jobs:
           docker stop my-app-container
           docker rm my-app-container
 
-      # Docker 이미지 푸시 
+      # Docker 이미지 푸시
       - name: Push Docker image to Docker Hub
         run: |
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
