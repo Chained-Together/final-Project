@@ -20,7 +20,7 @@ export class ChannelController {
     @Res() res: Response,
   ) {
     await this.channelService.createChannel(channelDto, user);
-    return res.redirect('/main');
+    return res.redirect('/');
   }
 
   @Get('/:channelId')

@@ -185,14 +185,7 @@ const createLogoutButton = () => {
   return logoutButton;
 };
 
-  const logoutBtn = document.getElementById('logoutBtn')
-  logoutBtn.addEventListener('click', () => {
-    localStorage.removeItem('token');
-    alert('로그아웃 되었습니다.');
-    window.location.href = '/';
 
-    return logoutBtn;
-  });
 
 const createNotificationButton = () => {
   const notificationButton = document.createElement('button');

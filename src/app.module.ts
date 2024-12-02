@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import * as Joi from 'joi';
@@ -47,7 +47,8 @@ const typeOrmModuleOptions = {
       NotificationEntity,
     ],
     synchronize: configService.get<boolean>('DB_SYNC'),
-    logging: true,
+    logging: ['query', 'error', 'schema', 'warn', 'info'],
+    maxQueryExecutionTime: 150,
   }),
   inject: [ConfigService],
 };
@@ -82,6 +83,15 @@ const typeOrmModuleOptions = {
     EventEmitterModule.forRoot(),
   ],
   controllers: [AppController, ViewController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: 'LOGGER',
+      useFactory: (configService: ConfigService) => {
+        return new Logger(AppModule.name);
+      },
+      inject: [ConfigService],
+    },
+  ],
 })
 export class AppModule {}
