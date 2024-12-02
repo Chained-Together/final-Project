@@ -23,7 +23,6 @@ import {
   mockVideoDto,
   mockVideos,
 } from './__mocks__/mock.video.data';
-import { object } from 'joi';
 
 describe('VideoService', () => {
   let videoService: VideoService;
@@ -272,7 +271,6 @@ describe('VideoService', () => {
 
   describe('비디오 검색 시', () => {
     it('검색된 비디오를 반환한다.', async () => {
-
       const mockQueryBuilder = {
         where: jest.fn().mockReturnThis(),
         orWhere: jest.fn().mockReturnThis(),
@@ -281,19 +279,16 @@ describe('VideoService', () => {
       mockVideoRepository.createQueryBuilder.mockReturnValue(mockQueryBuilder);
 
       const result = await videoService.findVideoByKeyword('Test');
-      expect(mockQueryBuilder.where).toHaveBeenCalledWith(
-        'video.title LIKE :keyword',
-        { keyword: '%Test%' },
-      );
-      expect(mockQueryBuilder.orWhere).toHaveBeenCalledWith(
-        'video.hashtags @> :keywordArray',
-        { keywordArray: JSON.stringify(['Test']) },
-      );
+      expect(mockQueryBuilder.where).toHaveBeenCalledWith('video.title LIKE :keyword', {
+        keyword: '%Test%',
+      });
+      expect(mockQueryBuilder.orWhere).toHaveBeenCalledWith('video.hashtags @> :keywordArray', {
+        keywordArray: JSON.stringify(['Test']),
+      });
       expect(mockQueryBuilder.getMany).toHaveBeenCalled();
-  
+
       // 결과 검증
       expect(result).toEqual(mockVideos);
     });
-
   });
 });
