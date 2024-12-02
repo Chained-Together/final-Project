@@ -76,7 +76,7 @@ if (
   if (token) {
     localStorage.setItem('token', token); // JWT 토큰을 저장
 
-    window.location.href = '/main'; // 메인 페이지로 리다이렉트
+    window.location.href = '/'; // 메인 페이지로 리다이렉트
   } else {
     console.error('토큰이 전달되지 않았습니다.');
   }
