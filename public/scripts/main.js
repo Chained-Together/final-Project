@@ -94,7 +94,7 @@ function appendVideos(container, videos) {
   videos.forEach((video) => {
     const videoElement = createVideoElement(video);
     if (videoElement) {
-      $(container).append(videoElement);
+      $('.container').append(videoElement);
     }
   });
 }
@@ -184,6 +184,15 @@ const createLogoutButton = () => {
 
   return logoutButton;
 };
+
+  const logoutBtn = document.getElementById('logoutBtn')
+  logoutBtn.addEventListener('click', () => {
+    localStorage.removeItem('token');
+    alert('로그아웃 되었습니다.');
+    window.location.href = '/';
+
+    return logoutBtn;
+  });
 
 const createNotificationButton = () => {
   const notificationButton = document.createElement('button');
