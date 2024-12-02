@@ -32,12 +32,12 @@ jobs:
         run: |
           docker build -t my-app .
 
-      # # Docker 이미지 푸시 (선택적)
-      # - name: Push Docker image to Docker Hub
-      #   env:
-      #     DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      #     DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      #   run: |
-      #     docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-      #     docker tag my-app $DOCKER_USERNAME/my-app:latest
-      #     docker push $DOCKER_USERNAME/my-app:latest
+      # Docker 이미지 푸시 (선택적)
+      - name: Push Docker image to Docker Hub
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+          docker tag my-app $DOCKER_USERNAME/my-app:latest
+          docker push $DOCKER_USERNAME/my-app:latest
