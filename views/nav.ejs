@@ -89,9 +89,6 @@
     window.location.href = '/';
   });
 
-  const notificationBtn = document.getElementById('notificationBtn');
-  notificationBtn.addEventListener('click', openNotificationPopup);
-
 
   const setImageSrc = (src) => {
     document.querySelectorAll('#profileImage').forEach((img) => (img.src = src));
@@ -128,9 +125,6 @@
           createChannelLink.style.display = 'none';
 
         }
-
-
-
 
       } catch (error) {
         console.error('오류:', error);
