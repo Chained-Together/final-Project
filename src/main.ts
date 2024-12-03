@@ -1,3 +1,13 @@
+import apmModule from 'elastic-apm-node';
+
+const apm = apmModule;
+
+apm.start({
+  serviceName: 'nestjs-app', // APM에서 표시될 서비스 이름
+  serverUrl: 'http://localhost:8200', // APM 서버 URL
+  environment: 'development', // 환경: production, staging, development
+  active: true, // APM 활성화
+});
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { join } from 'path';

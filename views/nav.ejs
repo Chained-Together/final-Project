@@ -37,20 +37,33 @@
       알림
     </button>
 
+    <div id="notificationPopup"
+      style="display: none; position: fixed; top: 20%; left: 50%; transform: translate(-50%, 0); background: black; width: 80%; max-width: 400px; height: 50%; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); overflow-y: auto; z-index: 1000;">
+      <div id="notificationList"></div>
+      <button id="closePopupBtn" style="position: absolute; bottom: 8px; right: 50%;">닫기</button>
+    </div>
+
     <a href="/myChannel">
-      <button class="sidebar-menu-btn">
+      <button class="sidebar-menu-btn" id="myChannelLink">
         <img src="public\images\user-50.png" alt="" id="profileImage" />
         내 채널
       </button>
     </a>
 
     <a href="/create-channel">
-      <button class="sidebar-menu-btn">
+      <button class="sidebar-menu-btn" id="createChannelLink">
         <img src="public\images\user-50.png" alt="" />
         채널 만들기
       </button>
     </a>
   </div>
+
+  <a href="/login" id="loginLink" style="display: none;">
+    <button class="sidebar-menu-btn">
+      <img src="public\images\user-50.png" alt="" />
+      로그인
+    </button>
+  </a>
 
   <div class="sidebar-menu-btn-box logout-box">
     <button id="logoutBtn" class="sidebar-logout-btn">로그아웃</button>
@@ -69,7 +82,14 @@
 
   const urlParams = new URLSearchParams(window.location.search);
   const token = localStorage.getItem('token') || urlParams.get('token');
+  if (!token) {
+    document.getElementById('myChannelLink').style.display = 'none';
+    document.getElementById('createChannelLink').style.display = 'none';
+    document.getElementById('notificationBtn').style.display = 'none'
+    document.getElementById('logoutBtn').style.display = 'none'
 
+    document.getElementById('loginLink').style.display = 'block';
+  }
 
   const loginButton = document.getElementById('loginButton');
   const loginLink = document.getElementById('loginLink');
@@ -162,7 +182,7 @@
   };
 
   function displayNotification(notification) {
-    console.log('표시할 알림:', notification);
+
     const notificationList = document.getElementById('notificationList');
     const item = document.createElement('div');
     item.className = 'notification-item';
@@ -200,11 +220,6 @@
     storedNotifications = combinedNotifications;
   }
 
-  function closeNotificationPopup() {
-    const popup = document.getElementById('notificationPopup');
-    popup.style.display = 'none';
-  }
-
   async function handleNotificationSwipe(item) {
     const id = parseInt(item.dataset.id, 10);
 
@@ -224,9 +239,14 @@
 
     console.log(`알림 ${id} 제거 완료`);
   }
-
+  ;
   document.getElementById('notificationBtn').addEventListener('click', () => {
     openNotificationPopup();
+  });
+
+  document.getElementById('closePopupBtn').addEventListener('click', () => {
+    const popup = document.getElementById('notificationPopup');
+    popup.style.display = 'none'; // 팝업창 숨기기
   });
 
 

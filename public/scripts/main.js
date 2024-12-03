@@ -1,4 +1,3 @@
-import { openNotificationPopup, closeNotificationPopup } from './notifications-popup.js';
 document.addEventListener('DOMContentLoaded', async () => {
   const urlParams = new URLSearchParams(window.location.search);
   const token = localStorage.getItem('token') || urlParams.get('token');
@@ -169,8 +168,6 @@ initialize();
 
 //   return notificationButton;
 // };
-
-document.getElementById('closePopupButton').addEventListener('click', closeNotificationPopup);
 
 accountBtn.addEventListener('click', () => {
   const token = localStorage.getItem('token');

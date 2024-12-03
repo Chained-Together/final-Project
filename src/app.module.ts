@@ -27,6 +27,9 @@ import { PasswordResetTokenEntity } from './password/entities/password.reset.tok
 import { NotificationModule } from './notification/notification.module';
 import { NotificationEntity } from './notification/entities/notification.entity';
 import { EventEmitter2, EventEmitterModule } from '@nestjs/event-emitter';
+import { ApmInterceptor } from './interceptors/apm.interceptor';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+
 const typeOrmModuleOptions = {
   useFactory: async (configService: ConfigService): Promise<TypeOrmModuleOptions> => ({
     namingStrategy: new SnakeNamingStrategy(),
@@ -91,6 +94,10 @@ const typeOrmModuleOptions = {
         return new Logger(AppModule.name);
       },
       inject: [ConfigService],
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ApmInterceptor,
     },
   ],
 })
