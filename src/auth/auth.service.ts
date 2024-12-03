@@ -60,7 +60,7 @@ export class AuthService {
 
     const hashedPassword = await this.bcryptHashingService.hash(signUpDto.password);
 
-    await this.userRepository.save({
+    const newUser = await this.userRepository.save({
       email: signUpDto.email,
       password: hashedPassword,
       name: signUpDto.name,
@@ -68,6 +68,7 @@ export class AuthService {
       phoneNumber: signUpDto.phoneNumber,
     });
 
+    // return newUser;
     return {
       message: '회원가입에 성공했습니다.',
     };
@@ -96,6 +97,7 @@ export class AuthService {
   }
   private async verifyCode(code: string, req: Request): Promise<boolean> {
     return code === req.session.code;
+    // return code === '1';
   }
 
   async googleLogin(req: any): Promise<{ access_token: string }> {

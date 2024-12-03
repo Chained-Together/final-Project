@@ -1,0 +1,46 @@
+config:
+  target: http://localhost:3000
+  phases:
+    - duration: 10
+      arrivalRate: 5 # 초당 10개의 요청
+  logLevel: 'debug'
+
+scenarios:
+  - name: signUpToSaveMetaData
+    flow:
+      # 1. 회원가입
+      - post:
+          url: /auth/signup
+          json:
+            email: 'user{{ $randomNumber(1, 10000000) }}@test.com'
+            password: 'test1234'
+            confirmedPassword: 'test1234'
+            name: 'test{{ $randomNumber(1, 10000000) }}'
+            nickname: 'nickname{{ $randomNumber(1, 10000000) }}'
+            code: '1' # 서버에서 허용하는 값으로 수정
+            phoneNumber: '{{ $randomNumber(1000000000, 9999999999) }}'
+          capture:
+            - json: '$.email' # 응답에서 인증 코드를 추출
+              as: email
+
+      - think: 10
+
+      - post:
+          url: /auth/login
+          json:
+            email: '{{email}}'
+            password: 'test1234'
+          capture:
+            - header: 'authorization'
+              as: 'token'
+
+      - think: 15
+
+      - post:
+          url: '/channel'
+          followRedirect: false
+          headers:
+            Authorization: 'Bearer {{token}}'
+          json:
+            name: 'name{{ $randomNumber(1, 10000) }}'
+            profileImage: 'test{{ $randomNumber(1, 10000) }}'
