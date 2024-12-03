@@ -25,9 +25,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # - name: Build Docker image
-      #   run: |
-      #     docker build -t my-app .
+      - uses: actions/checkout@v4
 
       - name: AWS IAM 사용자 설정
         uses: aws-actions/configure-aws-credentials@v2
@@ -38,16 +36,21 @@ jobs:
 
       - name: Login To Amazon ECR
         id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
+        uses: aws-actions/amazon-ecr-login@v2
 
-      - name: push image to Amazon ECR
-        uses: actions/checkout@v4
-        id: build-image
+      - name: Build and push Docker image to Amazon ECR
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f ./server/Dockerfile.prod ./server
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_NAME }}
           IMAGE_TAG: ${{ github.sha }}
-          run: |
-            docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f ./server/Dockerfile.prod ./server 
-            docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-            echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+      - name: Debug ECR Variables
+        run: |
+          echo "ECR_REGISTRY: $ECR_REGISTRY"
+          echo "ECR_REPOSITORY: $ECR_REPOSITORY"
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_NAME }}
