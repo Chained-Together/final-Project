@@ -6,20 +6,20 @@
       <a class="bungee-spice-regular">Loopfiy</a>
     </div>
 
-    <form class="d-flex" role="search">
+    <form id="searchForm" class="d-flex" role="search">
       <div class="search_container">
-        <input class="search_input" type="text" placeholder="Search" />
+        <input id="searchInput" class="search_input" type="text" placeholder="Search" aria-label="Search" />
       </div>
-      <button class="search-btn">
-        <img src="public\images\search-50.png" alt="" />
+      <button type="submit" class="search-btn">
+        <img src="public/images/search-50.png" alt="Search Icon" />
       </button>
     </form>
 
     <div class="right-section"></div>
-    <a href="/login">
-      <button class="login-btn">
-        <img src="public\images\user-50.png" alt="" />
-        로그인
+    <a href="/login" id="loginLink">
+      <button class="login-btn" id="loginButton">
+        <img src="public\images\user-50.png" alt="" id="profileImage" />
+        <span id="buttonText">로그인</span>
       </button>
     </a>
   </div>
@@ -32,14 +32,14 @@
       홈
     </button>
 
-    <button class="sidebar-menu-btn">
+    <button class="sidebar-menu-btn" id="notificationBtn">
       <img src="public\images\reminder-50.png" alt="" />
       알림
     </button>
 
     <a href="/myChannel">
       <button class="sidebar-menu-btn">
-        <img src="public\images\user-50.png" alt="" />
+        <img src="public\images\user-50.png" alt="" id="profileImage" />
         내 채널
       </button>
     </a>
@@ -58,23 +58,176 @@
 </header>
 
 <script>
-  
+
 
   document.getElementById('toggleButton').addEventListener('click', function () {
+
     const header = document.getElementById('toggleHeader');
-    if (header.style.display === 'none' || header.style.display === '') {
-      header.style.display = 'block'; // 보이기
-    } else {
-      header.style.display = 'none'; // 숨기기
-    }
+    header.style.display = header.style.display === 'none' || header.style.display === '' ? 'block' : 'none';
   });
 
-  const logoutBtn = document.getElementById('logoutBtn')
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const token = localStorage.getItem('token') || urlParams.get('token');
+
+
+  const loginButton = document.getElementById('loginButton');
+  const loginLink = document.getElementById('loginLink');
+  const buttonText = document.getElementById('buttonText');
+
+
+  if (token) {
+    buttonText.textContent = '내 계정';
+    loginLink.href = '/reset-password';
+  }
+
+
+  const logoutBtn = document.getElementById('logoutBtn');
   logoutBtn.addEventListener('click', () => {
     localStorage.removeItem('token');
     alert('로그아웃 되었습니다.');
     window.location.href = '/';
-
-    return logoutBtn;
   });
+
+
+  const setImageSrc = (src) => {
+    document.querySelectorAll('#profileImage').forEach((img) => (img.src = src));
+  };
+
+
+  if (urlParams.get('token') && !localStorage.getItem('token')) {
+    localStorage.setItem('token', urlParams.get('token'));
+    console.log('URL에서 토큰을 로컬 스토리지에 저장 완료:', urlParams.get('token'));
+  }
+
+  const DEFAULT_PROFILE_IMAGE = "public/images/user-50.png";
+
+  if (!token) {
+    setImageSrc(DEFAULT_PROFILE_IMAGE);
+  } else {
+    (async () => {
+      try {
+        const response = await fetch('/channel', {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('프로필 정보를 가져오지 못했습니다.');
+        }
+
+        const profileData = await response.json();
+        setImageSrc(profileData.profileImage || DEFAULT_PROFILE_IMAGE);
+        const createChannelLink = document.querySelector('a[href="/create-channel"]');
+        if (profileData.profileImage) {
+          createChannelLink.style.display = 'none';
+
+        }
+
+      } catch (error) {
+        console.error('오류:', error);
+        setImageSrc(DEFAULT_PROFILE_IMAGE);
+      }
+    })();
+
+
+  }
+
+  let storedNotifications = JSON.parse(localStorage.getItem('pastNotifications')) || [];
+
+  const eventSource = new EventSource(`http://localhost:3000/notifications/stream?token=${token}`);
+
+  eventSource.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+    console.log('받은 알림 :', data.message);
+
+    storedNotifications.unshift(data.message);
+    localStorage.setItem('pastNotifications', JSON.stringify(storedNotifications));
+
+    displayNotification(data.message);
+  };
+
+  eventSource.onopen = () => {
+    console.log('sse 연결완료');
+  };
+
+  eventSource.onclose = () => {
+    console.log('sse 연결종료');
+  };
+
+  eventSource.onerror = (error) => {
+    console.error('SSE Error:', error);
+  };
+
+  function displayNotification(notification) {
+    console.log('표시할 알림:', notification);
+    const notificationList = document.getElementById('notificationList');
+    const item = document.createElement('div');
+    item.className = 'notification-item';
+    item.textContent = notification.message;
+    item.dataset.id = notification.id;
+
+    notificationList.appendChild(item);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    storedNotifications.forEach((notification) => displayNotification(notification));
+  });
+
+
+  function openNotificationPopup() {
+    const popup = document.getElementById('notificationPopup');
+    popup.style.display = 'block';
+
+    const notificationList = document.getElementById('notificationList');
+    notificationList.innerHTML = '';
+
+    const combinedNotifications = [...storedNotifications];
+
+    combinedNotifications
+      .sort((a, b) => b.id - a.id)
+      .forEach((notification) => {
+        const item = document.createElement('div');
+        item.className = 'notification-item';
+        item.textContent = notification.message;
+        item.dataset.id = notification.id;
+        item.addEventListener('click', () => handleNotificationSwipe(item));
+        notificationList.appendChild(item);
+      });
+
+    storedNotifications = combinedNotifications;
+  }
+
+  function closeNotificationPopup() {
+    const popup = document.getElementById('notificationPopup');
+    popup.style.display = 'none';
+  }
+
+  async function handleNotificationSwipe(item) {
+    const id = parseInt(item.dataset.id, 10);
+
+    const response = await fetch(`/notifications/${id}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    });
+
+    if (!response.ok) {
+      ('삭제 실패!');
+    }
+
+    storedNotifications = storedNotifications.filter((notification) => notification.id !== id);
+    localStorage.setItem('pastNotifications', JSON.stringify(storedNotifications));
+
+    item.remove();
+
+    console.log(`알림 ${id} 제거 완료`);
+  }
+
+  document.getElementById('notificationBtn').addEventListener('click', () => {
+    openNotificationPopup();
+  });
+
+
 </script>
