@@ -48,6 +48,7 @@
     "class-validator": "^0.14.1",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
+    "elastic-apm-node": "^4.8.1",
     "express-session": "^1.18.1",
     "joi": "^17.13.3",
     "mock-res": "^0.6.0",
