@@ -4,15 +4,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const videoResultsContainer = document.getElementById('videoResultsContainer');
   const channelResultsContainer = document.getElementById('channelResultsContainer');
 
-  console.log('videoResultsContainer:', videoResultsContainer);
-  console.log('channelResultsContainer:', channelResultsContainer);
-  console.log('searchInput', searchInput);
-
-  if (!videoResultsContainer || !channelResultsContainer) {
-    console.error('필수 DOM 요소를 찾을 수 없습니다.');
-    return;
-  }
-
   // 검색 이벤트 처리
   searchForm.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -23,6 +14,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     window.location.href = `/search?keyword=${encodeURIComponent(keyword)}`;
   });
+
+  if (!videoResultsContainer || !channelResultsContainer) {
+    console.error('필수 DOM 요소를 찾을 수 없습니다.');
+    return;
+  }
 
   // URL에서 검색어 추출
   const params = new URLSearchParams(window.location.search);

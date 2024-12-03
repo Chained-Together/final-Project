@@ -6,20 +6,20 @@
       <a class="bungee-spice-regular">Loopfiy</a>
     </div>
 
-    <form class="d-flex" role="search">
+    <form id="searchForm" class="d-flex" role="search">
       <div class="search_container">
-        <input class="search_input" type="text" placeholder="Search" />
+        <input id="searchInput" class="search_input" type="text" placeholder="Search" aria-label="Search" />
       </div>
-      <button class="search-btn">
-        <img src="public\images\search-50.png" alt="" />
+      <button type="submit" class="search-btn">
+        <img src="public/images/search-50.png" alt="Search Icon" />
       </button>
     </form>
 
     <div class="right-section"></div>
-    <a href="/login">
-      <button class="login-btn">
-        <img src="public\images\user-50.png" alt="" />
-        로그인
+    <a href="/login" id="loginLink">
+      <button class="login-btn" id="loginButton">
+        <img src="public\images\user-50.png" alt="" id="profileImage" />
+        <span id="buttonText">로그인</span>
       </button>
     </a>
   </div>
@@ -32,14 +32,14 @@
       홈
     </button>
 
-    <button class="sidebar-menu-btn">
+    <button class="sidebar-menu-btn" id="notificationBtn">
       <img src="public\images\reminder-50.png" alt="" />
       알림
     </button>
 
     <a href="/myChannel">
       <button class="sidebar-menu-btn">
-        <img src="public\images\user-50.png" alt="" />
+        <img src="public\images\user-50.png" alt="" id="profileImage" />
         내 채널
       </button>
     </a>
@@ -58,23 +58,88 @@
 </header>
 
 <script>
-  
+
 
   document.getElementById('toggleButton').addEventListener('click', function () {
+
     const header = document.getElementById('toggleHeader');
-    if (header.style.display === 'none' || header.style.display === '') {
-      header.style.display = 'block'; // 보이기
-    } else {
-      header.style.display = 'none'; // 숨기기
-    }
+    header.style.display = header.style.display === 'none' || header.style.display === '' ? 'block' : 'none';
   });
 
-  const logoutBtn = document.getElementById('logoutBtn')
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const token = localStorage.getItem('token') || urlParams.get('token');
+
+
+  const loginButton = document.getElementById('loginButton');
+  const loginLink = document.getElementById('loginLink');
+  const buttonText = document.getElementById('buttonText');
+
+
+  if (token) {
+    buttonText.textContent = '내 계정';
+    loginLink.href = '/reset-password';
+  }
+
+
+  const logoutBtn = document.getElementById('logoutBtn');
   logoutBtn.addEventListener('click', () => {
     localStorage.removeItem('token');
     alert('로그아웃 되었습니다.');
     window.location.href = '/';
-
-    return logoutBtn;
   });
+
+  const notificationBtn = document.getElementById('notificationBtn');
+  notificationBtn.addEventListener('click', openNotificationPopup);
+
+
+  const setImageSrc = (src) => {
+    document.querySelectorAll('#profileImage').forEach((img) => (img.src = src));
+  };
+
+
+  if (urlParams.get('token') && !localStorage.getItem('token')) {
+    localStorage.setItem('token', urlParams.get('token'));
+    console.log('URL에서 토큰을 로컬 스토리지에 저장 완료:', urlParams.get('token'));
+  }
+
+  const DEFAULT_PROFILE_IMAGE = "public/images/user-50.png";
+
+  if (!token) {
+    setImageSrc(DEFAULT_PROFILE_IMAGE);
+  } else {
+    (async () => {
+      try {
+        const response = await fetch('/channel', {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('프로필 정보를 가져오지 못했습니다.');
+        }
+
+        const profileData = await response.json();
+        setImageSrc(profileData.profileImage || DEFAULT_PROFILE_IMAGE);
+        const createChannelLink = document.querySelector('a[href="/create-channel"]');
+        if (profileData.profileImage) {
+          createChannelLink.style.display = 'none';
+
+        }
+
+
+
+
+      } catch (error) {
+        console.error('오류:', error);
+        setImageSrc(DEFAULT_PROFILE_IMAGE);
+      }
+    })();
+
+
+  }
+
+
 </script>

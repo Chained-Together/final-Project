@@ -148,66 +148,27 @@ async function initialize() {
 // 초기 실행
 initialize();
 
-const profileBtn = document.getElementById('profileBtn');
-profileBtn.addEventListener('click', () => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    window.location.href = '/myChannel';
-  } else {
-    window.location.href = '/login';
-  }
-});
+// const createNotificationButton = () => {
+//   const notificationButton = document.createElement('button');
+//   notificationButton.textContent = '알림';
+//   notificationButton.id = 'notificationBtn';
+//   notificationButton.style = `
+//       position: absolute;
+//       top: 70px;
+//       right: 90px;
+//       background-color: #fff;
+//       color: #000;
+//       border: none;
+//       padding: 10px 20px;
+//       border-radius: 5px;
+//       cursor: pointer;
+//       z-index: 1000;
+//     `;
 
-const accountBtn = document.getElementById('accountBtn');
-const createLogoutButton = () => {
-  const logoutButton = document.createElement('button');
-  logoutButton.textContent = '로그아웃';
-  logoutButton.id = 'logoutBtn';
-  logoutButton.style = `
-      position: absolute;
-      top: 40px;
-      right: 90px;
-      background-color: #fff;
-      color: #000;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      z-index: 1000;
-    `;
+//   notificationButton.addEventListener('click', openNotificationPopup);
 
-  logoutButton.addEventListener('click', () => {
-    localStorage.removeItem('token');
-    alert('로그아웃 되었습니다.');
-    window.location.href = '/';
-  });
-
-  return logoutButton;
-};
-
-
-
-const createNotificationButton = () => {
-  const notificationButton = document.createElement('button');
-  notificationButton.textContent = '알림';
-  notificationButton.id = 'notificationButtonBtn';
-  notificationButton.style = `
-      position: absolute;
-      top: 70px;
-      right: 90px;
-      background-color: #fff;
-      color: #000;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      z-index: 1000;
-    `;
-
-  notificationButton.addEventListener('click', openNotificationPopup);
-
-  return notificationButton;
-};
+//   return notificationButton;
+// };
 
 document.getElementById('closePopupButton').addEventListener('click', closeNotificationPopup);
 
@@ -236,5 +197,3 @@ accountBtn.addEventListener('click', () => {
     window.location.href = '/';
   }
 });
-
-
