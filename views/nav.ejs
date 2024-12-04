@@ -48,7 +48,6 @@
       알림
     </button>
     <div id="notificationPopup" style="
-
         display: none;
         position: fixed;
         top: 20%;
@@ -82,7 +81,6 @@
             background-color 0.3s ease,
             transform 0.2s ease;
         ">
-
         닫기
       </button>
     </div>
@@ -141,7 +139,6 @@
     logoutBtn.addEventListener('click', () => {
       localStorage.removeItem('token');
       localStorage.removeItem('pastNotifications');
-
       alert('로그아웃 되었습니다.');
       window.location.href = '/';
     });
@@ -306,4 +303,3 @@
     window.location.href = '/';
   });
 </script>
-
