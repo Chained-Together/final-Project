@@ -20,6 +20,7 @@ scenarios:
             nickname: 'nickname{{ $randomNumber(1, 10000) }}'
             code: '1' # 서버에서 허용하는 값으로 수정
             phoneNumber: '{{ $randomNumber(1000000000, 9999999999) }}'
+          log: true
           capture:
             - json: '$.email' # 응답에서 인증 코드를 추출
               as: email

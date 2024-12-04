@@ -57,3 +57,10 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 # PostgreSQL 데이터베이스 파일 무시
 postgresql-data/
+
+# SSL 파일 무시
+certs/
+
+/development.env
+development.env
+development.env.txt

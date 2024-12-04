@@ -48,5 +48,5 @@ jobs:
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_NAME }}
           IMAGE_TAG: ${{ github.sha }}
 
-    # deploy:
-    #   needs: build
+
+    

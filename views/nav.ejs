@@ -1,14 +1,25 @@
 <nav class="navbar bg-body-tertiary">
   <div class="container-fluid">
     <div class="left-section log">
-      <img id="toggleButton" src="public\images\menu-30.png" alt="Toggle Header" style="cursor: pointer" />
+      <img
+        id="toggleButton"
+        src="public\images\menu-30.png"
+        alt="Toggle Header"
+        style="cursor: pointer"
+      />
       <i class="fa-solid fa-bolt"></i>
       <a class="bungee-spice-regular">Loopfiy</a>
     </div>
 
     <form id="searchForm" class="d-flex" role="search">
       <div class="search_container">
-        <input id="searchInput" class="search_input" type="text" placeholder="Search" aria-label="Search" />
+        <input
+          id="searchInput"
+          class="search_input"
+          type="text"
+          placeholder="Search"
+          aria-label="Search"
+        />
       </div>
       <button type="submit" class="search-btn">
         <img src="public/images/search-50.png" alt="Search Icon" />
@@ -27,7 +38,7 @@
 
 <header class="LoopfiyBar" id="toggleHeader" style="display: none">
   <div class="sidebar-menu-btn-box">
-    <button class="sidebar-menu-btn">
+    <button class="sidebar-menu-btn" id="home">
       <img src="public\images\home-50.png" alt="" />
       홈
     </button>
@@ -36,11 +47,44 @@
       <img src="public\images\reminder-50.png" alt="" />
       알림
     </button>
+    <div id="notificationPopup" style="
 
-    <div id="notificationPopup"
-      style="display: none; position: fixed; top: 20%; left: 50%; transform: translate(-50%, 0); background: black; width: 80%; max-width: 400px; height: 50%; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); overflow-y: auto; z-index: 1000;">
+        display: none;
+        position: fixed;
+        top: 20%;
+        left: 50%;
+        transform: translate(-50%, 0);
+        background: #333333;
+        width: 100%;
+        max-width: 400px;
+        height: 50%;
+        border: 2px solid #ccc;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        overflow-y: auto;
+        z-index: 1000;
+      ">
       <div id="notificationList"></div>
-      <button id="closePopupBtn" style="position: absolute; bottom: 8px; right: 50%;">닫기</button>
+      <button id="closePopupBtn" style="
+          position: fixed;
+          left: 50%;
+          transform: translateX(-50%);
+          padding: 10px 20px;
+          background-color: #ffa600;
+          color: #ffffff;
+          border: none;
+          border-radius: 8px;
+          font-size: 14px;
+          font-weight: bold;
+          cursor: pointer;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+          transition:
+            background-color 0.3s ease,
+            transform 0.2s ease;
+        ">
+
+        닫기
+      </button>
     </div>
 
     <a href="/myChannel">
@@ -58,69 +102,61 @@
     </a>
   </div>
 
-  <a href="/login" id="loginLink" style="display: none;">
-    <button class="sidebar-menu-btn">
-      <img src="public\images\user-50.png" alt="" />
-      로그인
-    </button>
-  </a>
-
   <div class="sidebar-menu-btn-box logout-box">
-    <button id="logoutBtn" class="sidebar-logout-btn">로그아웃</button>
+    <button id="logoutBtn" class="sidebar-logout-btn"><span id="logoutText">로그아웃</span></button>
   </div>
 </header>
 
 <script>
-
-
   document.getElementById('toggleButton').addEventListener('click', function () {
-
     const header = document.getElementById('toggleHeader');
-    header.style.display = header.style.display === 'none' || header.style.display === '' ? 'block' : 'none';
+    header.style.display =
+      header.style.display === 'none' || header.style.display === '' ? 'block' : 'none';
   });
-
 
   const urlParams = new URLSearchParams(window.location.search);
   const token = localStorage.getItem('token') || urlParams.get('token');
+
+  const logoutBtn = document.getElementById('logoutBtn');
+  const logoutText = document.getElementById('logoutText');
   if (!token) {
     document.getElementById('myChannelLink').style.display = 'none';
     document.getElementById('createChannelLink').style.display = 'none';
-    document.getElementById('notificationBtn').style.display = 'none'
-    document.getElementById('logoutBtn').style.display = 'none'
+    document.getElementById('notificationBtn').style.display = 'none';
+    if (logoutText) logoutText.textContent = '로그인';
 
-    document.getElementById('loginLink').style.display = 'block';
+    logoutBtn.addEventListener('click', () => {
+      window.location.href = '/login';
+    });
   }
 
   const loginButton = document.getElementById('loginButton');
   const loginLink = document.getElementById('loginLink');
   const buttonText = document.getElementById('buttonText');
 
-
   if (token) {
     buttonText.textContent = '내 계정';
     loginLink.href = '/reset-password';
+
+    logoutBtn.addEventListener('click', () => {
+      localStorage.removeItem('token');
+      localStorage.removeItem('pastNotifications');
+
+      alert('로그아웃 되었습니다.');
+      window.location.href = '/';
+    });
   }
-
-
-  const logoutBtn = document.getElementById('logoutBtn');
-  logoutBtn.addEventListener('click', () => {
-    localStorage.removeItem('token');
-    alert('로그아웃 되었습니다.');
-    window.location.href = '/';
-  });
-
 
   const setImageSrc = (src) => {
     document.querySelectorAll('#profileImage').forEach((img) => (img.src = src));
   };
-
 
   if (urlParams.get('token') && !localStorage.getItem('token')) {
     localStorage.setItem('token', urlParams.get('token'));
     console.log('URL에서 토큰을 로컬 스토리지에 저장 완료:', urlParams.get('token'));
   }
 
-  const DEFAULT_PROFILE_IMAGE = "public/images/user-50.png";
+  const DEFAULT_PROFILE_IMAGE = 'public/images/user-50.png';
 
   if (!token) {
     setImageSrc(DEFAULT_PROFILE_IMAGE);
@@ -143,16 +179,12 @@
         const createChannelLink = document.querySelector('a[href="/create-channel"]');
         if (profileData.profileImage) {
           createChannelLink.style.display = 'none';
-
         }
-
       } catch (error) {
         console.error('오류:', error);
         setImageSrc(DEFAULT_PROFILE_IMAGE);
       }
     })();
-
-
   }
 
   let storedNotifications = JSON.parse(localStorage.getItem('pastNotifications')) || [];
@@ -182,7 +214,6 @@
   };
 
   function displayNotification(notification) {
-
     const notificationList = document.getElementById('notificationList');
     const item = document.createElement('div');
     item.className = 'notification-item';
@@ -195,7 +226,6 @@
   document.addEventListener('DOMContentLoaded', () => {
     storedNotifications.forEach((notification) => displayNotification(notification));
   });
-
 
   function openNotificationPopup() {
     const popup = document.getElementById('notificationPopup');
@@ -213,7 +243,31 @@
         item.className = 'notification-item';
         item.textContent = notification.message;
         item.dataset.id = notification.id;
+        item.style.backgroundColor = 'rgba(249, 249, 249, 0.5)';
+        item.style.border = '1px solid #ccc';
+        item.style.borderRadius = '8px';
+        item.style.padding = '10px';
+        item.style.margin = '8px auto';
+        item.style.fontSize = '15px';
+        item.style.color = '#333';
+        item.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+        item.style.cursor = 'pointer';
+        item.style.transition = 'background-color 0.3s ease';
+        item.style.width = '95%';
+
+        // 호버 효과 추가
+        item.addEventListener('mouseover', () => {
+          item.style.transition = 'background-color 0.3s ease, transform 0.3s ease'; // 색상과 크기 애니메이션
+          item.style.backgroundColor = '#e9e9e9'; // 색상 변경
+          item.style.transform = 'scale(1.05)'; // 요소 크기 확대
+        });
+        item.addEventListener('mouseout', () => {
+          item.style.backgroundColor = '#f9f9f9';
+          item.style.transform = 'scale(1)';
+        });
+
         item.addEventListener('click', () => handleNotificationSwipe(item));
+
         notificationList.appendChild(item);
       });
 
@@ -239,7 +293,6 @@
 
     console.log(`알림 ${id} 제거 완료`);
   }
-  ;
   document.getElementById('notificationBtn').addEventListener('click', () => {
     openNotificationPopup();
   });
@@ -249,5 +302,8 @@
     popup.style.display = 'none'; // 팝업창 숨기기
   });
 
-
+  document.getElementById('home').addEventListener('click', () => {
+    window.location.href = '/';
+  });
 </script>
+
