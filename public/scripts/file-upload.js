@@ -46,15 +46,6 @@ uploadBtn.addEventListener('click', async () => {
     const { presignedUrl, key } = await response.json();
     console.log('프리사인 URL', presignedUrl, key);
 
-    const metadataPayload = {
-      title: titleInput.value || null,
-      description: descriptionInput.value || null,
-      thumbnailUrl: thumbnailUrlInput.value || null,
-      hashtags: hashtagsInput.value ? hashtagsInput.value.split(',') : [],
-      visibility: visibilityInput.value || null,
-      videoCode: key,
-    };
-
     const uploadResponse = await fetch(presignedUrl, {
       method: 'PUT',
       body: file,
@@ -65,17 +56,27 @@ uploadBtn.addEventListener('click', async () => {
     if (uploadResponse.ok) {
       alert('파일 업로드 성공!');
     }
-      const metadataResponse = await fetch('http://localhost:3000/video', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        redirect: 'follow',
-        body: JSON.stringify(metadataPayload),
-      });
-      console.log(`메타데이터: ${metadataResponse}`);
-      
+
+    const metadataPayload = {
+      title: titleInput.value || null,
+      description: descriptionInput.value || null,
+      thumbnailUrl: thumbnailUrlInput.value || null,
+      hashtags: hashtagsInput.value ? hashtagsInput.value.split(',') : [],
+      visibility: visibilityInput.value || null,
+      videoCode: key,
+    };
+
+    const metadataResponse = await fetch('http://localhost:3000/video', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      redirect: 'follow',
+      body: JSON.stringify(metadataPayload),
+    });
+    console.log(`메타데이터: ${metadataResponse}`);
+
     if (metadataResponse.redirected) {
       alert('메타데이터 전송 성공');
       window.location.href = metadataResponse.url;
