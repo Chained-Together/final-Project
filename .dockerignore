@@ -2,5 +2,7 @@ artillery --version.git
 node_modules
 dist
 ymls
-docker-compose.yaml
 reports
+.git
+docker-compose.yaml
+docker-compose
