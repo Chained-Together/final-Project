@@ -33,7 +33,6 @@ export class AuthService {
       throw new BadRequestException('이미 사용중인 이메일입니다.');
     }
 
-    // TODO : 클라에서 처리하는게 어떨지
     if (signUpDto.password !== signUpDto.confirmedPassword) {
       throw new BadRequestException('비밀번호가 일치 하지 않습니다.');
     }
@@ -68,7 +67,6 @@ export class AuthService {
       phoneNumber: signUpDto.phoneNumber,
     });
 
-    // return newUser;
     return {
       message: '회원가입에 성공했습니다.',
     };
@@ -97,7 +95,6 @@ export class AuthService {
   }
   private async verifyCode(code: string, req: Request): Promise<boolean> {
     return code === req.session.code;
-    // return code === '1';
   }
 
   async googleLogin(req: any): Promise<{ access_token: string }> {
@@ -121,11 +118,9 @@ export class AuthService {
         isSocial: true,
         nickname: displayName,
         phoneNumber: `010-${num}-${num1}`,
-        // accessToken: accessToken,
       });
       await this.userRepository.save(user);
     } else {
-      // user.accessToken = accessToken; //기존 소셜로그인 사용자 업데이트
       await this.userRepository.save(user);
     }
 
