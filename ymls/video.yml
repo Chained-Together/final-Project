@@ -2,14 +2,13 @@ config:
   target: http://localhost:3000
   phases:
     - duration: 10
-      arrivalRate: 1
+      arrivalRate: 20
   logLevel: 'debug'
   processor: './function.js'
 
 scenarios:
   - name: signUpToSaveMetaData
     flow:
-      # 1. 회원가입
       - post:
           url: /auth/signup
           json:
@@ -18,15 +17,15 @@ scenarios:
             confirmedPassword: 'test1234'
             name: 'test{{ $randomNumber(1, 10000) }}'
             nickname: 'nickname{{ $randomNumber(1, 10000) }}'
-            code: '1' # 서버에서 허용하는 값으로 수정
+            code: '1'
             phoneNumber: '{{ $randomNumber(1000000000, 9999999999) }}'
+          log: true
           capture:
-            - json: '$.email' # 응답에서 인증 코드를 추출
+            - json: '$.email'
               as: email
 
       - think: 15
 
-      # 3. 추가 요청 (로그인)
       - post:
           url: /auth/login
           json:
@@ -85,11 +84,3 @@ scenarios:
             videoCode: '{{ key }}'
             hashtags: ['hashtag{{ $randomNumber(1, 10000) }}']
             visibility: 'public'
-
-      - think: 15
-      - get:
-          url: /video/many/0/6
-
-      - think: 15
-      - get:
-          url: /video/search/video{{ $randomNumber(1, 10000) }}

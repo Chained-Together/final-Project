@@ -47,10 +47,7 @@
       <img src="public\images\reminder-50.png" alt="" />
       알림
     </button>
-
-    <div
-      id="notificationPopup"
-      style="
+    <div id="notificationPopup" style="
         display: none;
         position: fixed;
         top: 20%;
@@ -65,14 +62,10 @@
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         overflow-y: auto;
         z-index: 1000;
-      "
-    >
+      ">
       <div id="notificationList"></div>
-      <button
-        id="closePopupBtn"
-        style="
-          position: absolute;
-          bottom: 16px;
+      <button id="closePopupBtn" style="
+          position: fixed;
           left: 50%;
           transform: translateX(-50%);
           padding: 10px 20px;
@@ -87,8 +80,7 @@
           transition:
             background-color 0.3s ease,
             transform 0.2s ease;
-        "
-      >
+        ">
         닫기
       </button>
     </div>
@@ -146,6 +138,7 @@
 
     logoutBtn.addEventListener('click', () => {
       localStorage.removeItem('token');
+      localStorage.removeItem('pastNotifications');
       alert('로그아웃 되었습니다.');
       window.location.href = '/';
     });

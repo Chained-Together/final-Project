@@ -1,0 +1,480 @@
+{
+  "aggregate": {
+    "counters": {
+      "vusers.created_by_name.searchVideoAndChannel": 10,
+      "vusers.created": 10,
+      "http.requests": 20,
+      "http.codes.200": 20,
+      "http.responses": 20,
+      "http.downloaded_bytes": 460,
+      "plugins.metrics-by-endpoint./video/search/video{{ $randomNumber(1, 10000) }}.codes.200": 10,
+      "plugins.metrics-by-endpoint./channel/search/channel{{ $randomNumber(1, 10000) }}.codes.200": 10,
+      "vusers.failed": 0,
+      "vusers.completed": 10
+    },
+    "rates": {
+      "http.request_rate": 2
+    },
+    "firstCounterAt": 1733317731891,
+    "firstHistogramAt": 1733317732025,
+    "lastCounterAt": 1733317740935,
+    "lastHistogramAt": 1733317740935,
+    "firstMetricAt": 1733317731891,
+    "lastMetricAt": 1733317740935,
+    "period": 1733317740000,
+    "summaries": {
+      "http.response_time": {
+        "min": 2,
+        "max": 109,
+        "count": 20,
+        "mean": 10.3,
+        "p50": 5,
+        "median": 5,
+        "p75": 7,
+        "p90": 7.9,
+        "p95": 8.9,
+        "p99": 8.9,
+        "p999": 8.9
+      },
+      "http.response_time.2xx": {
+        "min": 2,
+        "max": 109,
+        "count": 20,
+        "mean": 10.3,
+        "p50": 5,
+        "median": 5,
+        "p75": 7,
+        "p90": 7.9,
+        "p95": 8.9,
+        "p99": 8.9,
+        "p999": 8.9
+      },
+      "plugins.metrics-by-endpoint.response_time./video/search/video{{ $randomNumber(1, 10000) }}": {
+        "min": 6,
+        "max": 109,
+        "count": 10,
+        "mean": 17.6,
+        "p50": 7,
+        "median": 7,
+        "p75": 7.9,
+        "p90": 8.9,
+        "p95": 8.9,
+        "p99": 8.9,
+        "p999": 8.9
+      },
+      "plugins.metrics-by-endpoint.response_time./channel/search/channel{{ $randomNumber(1, 10000) }}": {
+        "min": 2,
+        "max": 5,
+        "count": 10,
+        "mean": 2.9,
+        "p50": 3,
+        "median": 3,
+        "p75": 3,
+        "p90": 3,
+        "p95": 3,
+        "p99": 3,
+        "p999": 3
+      },
+      "vusers.session_length": {
+        "min": 14.2,
+        "max": 144.1,
+        "count": 10,
+        "mean": 28.5,
+        "p50": 15.3,
+        "median": 15.3,
+        "p75": 16.6,
+        "p90": 17.3,
+        "p95": 17.3,
+        "p99": 17.3,
+        "p999": 17.3
+      }
+    },
+    "histograms": {
+      "http.response_time": {
+        "min": 2,
+        "max": 109,
+        "count": 20,
+        "mean": 10.3,
+        "p50": 5,
+        "median": 5,
+        "p75": 7,
+        "p90": 7.9,
+        "p95": 8.9,
+        "p99": 8.9,
+        "p999": 8.9
+      },
+      "http.response_time.2xx": {
+        "min": 2,
+        "max": 109,
+        "count": 20,
+        "mean": 10.3,
+        "p50": 5,
+        "median": 5,
+        "p75": 7,
+        "p90": 7.9,
+        "p95": 8.9,
+        "p99": 8.9,
+        "p999": 8.9
+      },
+      "plugins.metrics-by-endpoint.response_time./video/search/video{{ $randomNumber(1, 10000) }}": {
+        "min": 6,
+        "max": 109,
+        "count": 10,
+        "mean": 17.6,
+        "p50": 7,
+        "median": 7,
+        "p75": 7.9,
+        "p90": 8.9,
+        "p95": 8.9,
+        "p99": 8.9,
+        "p999": 8.9
+      },
+      "plugins.metrics-by-endpoint.response_time./channel/search/channel{{ $randomNumber(1, 10000) }}": {
+        "min": 2,
+        "max": 5,
+        "count": 10,
+        "mean": 2.9,
+        "p50": 3,
+        "median": 3,
+        "p75": 3,
+        "p90": 3,
+        "p95": 3,
+        "p99": 3,
+        "p999": 3
+      },
+      "vusers.session_length": {
+        "min": 14.2,
+        "max": 144.1,
+        "count": 10,
+        "mean": 28.5,
+        "p50": 15.3,
+        "median": 15.3,
+        "p75": 16.6,
+        "p90": 17.3,
+        "p95": 17.3,
+        "p99": 17.3,
+        "p999": 17.3
+      }
+    }
+  },
+  "intermediate": [
+    {
+      "counters": {
+        "vusers.created_by_name.searchVideoAndChannel": 9,
+        "vusers.created": 9,
+        "http.requests": 18,
+        "http.codes.200": 18,
+        "http.responses": 18,
+        "http.downloaded_bytes": 414,
+        "plugins.metrics-by-endpoint./video/search/video{{ $randomNumber(1, 10000) }}.codes.200": 9,
+        "plugins.metrics-by-endpoint./channel/search/channel{{ $randomNumber(1, 10000) }}.codes.200": 9,
+        "vusers.failed": 0,
+        "vusers.completed": 9
+      },
+      "rates": {
+        "http.request_rate": 2
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1733317731891,
+      "firstHistogramAt": 1733317732025,
+      "lastCounterAt": 1733317739907,
+      "lastHistogramAt": 1733317739907,
+      "firstMetricAt": 1733317731891,
+      "lastMetricAt": 1733317739907,
+      "period": "1733317730000",
+      "summaries": {
+        "http.response_time": {
+          "min": 2,
+          "max": 109,
+          "count": 18,
+          "mean": 10.8,
+          "p50": 5,
+          "median": 5,
+          "p75": 7,
+          "p90": 7.9,
+          "p95": 8.9,
+          "p99": 8.9,
+          "p999": 8.9
+        },
+        "http.response_time.2xx": {
+          "min": 2,
+          "max": 109,
+          "count": 18,
+          "mean": 10.8,
+          "p50": 5,
+          "median": 5,
+          "p75": 7,
+          "p90": 7.9,
+          "p95": 8.9,
+          "p99": 8.9,
+          "p999": 8.9
+        },
+        "plugins.metrics-by-endpoint.response_time./video/search/video{{ $randomNumber(1, 10000) }}": {
+          "min": 6,
+          "max": 109,
+          "count": 9,
+          "mean": 18.8,
+          "p50": 7.9,
+          "median": 7.9,
+          "p75": 7.9,
+          "p90": 8.9,
+          "p95": 8.9,
+          "p99": 8.9,
+          "p999": 8.9
+        },
+        "plugins.metrics-by-endpoint.response_time./channel/search/channel{{ $randomNumber(1, 10000) }}": {
+          "min": 2,
+          "max": 5,
+          "count": 9,
+          "mean": 2.9,
+          "p50": 3,
+          "median": 3,
+          "p75": 3,
+          "p90": 3,
+          "p95": 3,
+          "p99": 3,
+          "p999": 3
+        },
+        "vusers.session_length": {
+          "min": 14.3,
+          "max": 144.1,
+          "count": 9,
+          "mean": 30.1,
+          "p50": 16.3,
+          "median": 16.3,
+          "p75": 16.9,
+          "p90": 17.3,
+          "p95": 17.3,
+          "p99": 17.3,
+          "p999": 17.3
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 2,
+          "max": 109,
+          "count": 18,
+          "mean": 10.8,
+          "p50": 5,
+          "median": 5,
+          "p75": 7,
+          "p90": 7.9,
+          "p95": 8.9,
+          "p99": 8.9,
+          "p999": 8.9
+        },
+        "http.response_time.2xx": {
+          "min": 2,
+          "max": 109,
+          "count": 18,
+          "mean": 10.8,
+          "p50": 5,
+          "median": 5,
+          "p75": 7,
+          "p90": 7.9,
+          "p95": 8.9,
+          "p99": 8.9,
+          "p999": 8.9
+        },
+        "plugins.metrics-by-endpoint.response_time./video/search/video{{ $randomNumber(1, 10000) }}": {
+          "min": 6,
+          "max": 109,
+          "count": 9,
+          "mean": 18.8,
+          "p50": 7.9,
+          "median": 7.9,
+          "p75": 7.9,
+          "p90": 8.9,
+          "p95": 8.9,
+          "p99": 8.9,
+          "p999": 8.9
+        },
+        "plugins.metrics-by-endpoint.response_time./channel/search/channel{{ $randomNumber(1, 10000) }}": {
+          "min": 2,
+          "max": 5,
+          "count": 9,
+          "mean": 2.9,
+          "p50": 3,
+          "median": 3,
+          "p75": 3,
+          "p90": 3,
+          "p95": 3,
+          "p99": 3,
+          "p999": 3
+        },
+        "vusers.session_length": {
+          "min": 14.3,
+          "max": 144.1,
+          "count": 9,
+          "mean": 30.1,
+          "p50": 16.3,
+          "median": 16.3,
+          "p75": 16.9,
+          "p90": 17.3,
+          "p95": 17.3,
+          "p99": 17.3,
+          "p999": 17.3
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.searchVideoAndChannel": 1,
+        "vusers.created": 1,
+        "http.requests": 2,
+        "http.codes.200": 2,
+        "http.responses": 2,
+        "http.downloaded_bytes": 46,
+        "plugins.metrics-by-endpoint./video/search/video{{ $randomNumber(1, 10000) }}.codes.200": 1,
+        "plugins.metrics-by-endpoint./channel/search/channel{{ $randomNumber(1, 10000) }}.codes.200": 1,
+        "vusers.failed": 0,
+        "vusers.completed": 1
+      },
+      "rates": {
+        "http.request_rate": 2
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1733317740921,
+      "firstHistogramAt": 1733317740931,
+      "lastCounterAt": 1733317740935,
+      "lastHistogramAt": 1733317740935,
+      "firstMetricAt": 1733317740921,
+      "lastMetricAt": 1733317740935,
+      "period": "1733317740000",
+      "summaries": {
+        "http.response_time": {
+          "min": 3,
+          "max": 7,
+          "count": 2,
+          "mean": 5,
+          "p50": 3,
+          "median": 3,
+          "p75": 3,
+          "p90": 3,
+          "p95": 3,
+          "p99": 3,
+          "p999": 3
+        },
+        "http.response_time.2xx": {
+          "min": 3,
+          "max": 7,
+          "count": 2,
+          "mean": 5,
+          "p50": 3,
+          "median": 3,
+          "p75": 3,
+          "p90": 3,
+          "p95": 3,
+          "p99": 3,
+          "p999": 3
+        },
+        "plugins.metrics-by-endpoint.response_time./video/search/video{{ $randomNumber(1, 10000) }}": {
+          "min": 7,
+          "max": 7,
+          "count": 1,
+          "mean": 7,
+          "p50": 7,
+          "median": 7,
+          "p75": 7,
+          "p90": 7,
+          "p95": 7,
+          "p99": 7,
+          "p999": 7
+        },
+        "plugins.metrics-by-endpoint.response_time./channel/search/channel{{ $randomNumber(1, 10000) }}": {
+          "min": 3,
+          "max": 3,
+          "count": 1,
+          "mean": 3,
+          "p50": 3,
+          "median": 3,
+          "p75": 3,
+          "p90": 3,
+          "p95": 3,
+          "p99": 3,
+          "p999": 3
+        },
+        "vusers.session_length": {
+          "min": 14.2,
+          "max": 14.2,
+          "count": 1,
+          "mean": 14.2,
+          "p50": 14.2,
+          "median": 14.2,
+          "p75": 14.2,
+          "p90": 14.2,
+          "p95": 14.2,
+          "p99": 14.2,
+          "p999": 14.2
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 3,
+          "max": 7,
+          "count": 2,
+          "mean": 5,
+          "p50": 3,
+          "median": 3,
+          "p75": 3,
+          "p90": 3,
+          "p95": 3,
+          "p99": 3,
+          "p999": 3
+        },
+        "http.response_time.2xx": {
+          "min": 3,
+          "max": 7,
+          "count": 2,
+          "mean": 5,
+          "p50": 3,
+          "median": 3,
+          "p75": 3,
+          "p90": 3,
+          "p95": 3,
+          "p99": 3,
+          "p999": 3
+        },
+        "plugins.metrics-by-endpoint.response_time./video/search/video{{ $randomNumber(1, 10000) }}": {
+          "min": 7,
+          "max": 7,
+          "count": 1,
+          "mean": 7,
+          "p50": 7,
+          "median": 7,
+          "p75": 7,
+          "p90": 7,
+          "p95": 7,
+          "p99": 7,
+          "p999": 7
+        },
+        "plugins.metrics-by-endpoint.response_time./channel/search/channel{{ $randomNumber(1, 10000) }}": {
+          "min": 3,
+          "max": 3,
+          "count": 1,
+          "mean": 3,
+          "p50": 3,
+          "median": 3,
+          "p75": 3,
+          "p90": 3,
+          "p95": 3,
+          "p99": 3,
+          "p999": 3
+        },
+        "vusers.session_length": {
+          "min": 14.2,
+          "max": 14.2,
+          "count": 1,
+          "mean": 14.2,
+          "p50": 14.2,
+          "median": 14.2,
+          "p75": 14.2,
+          "p90": 14.2,
+          "p95": 14.2,
+          "p99": 14.2,
+          "p999": 14.2
+        }
+      }
+    }
+  ]
+}
