@@ -1,78 +1,226 @@
 <!doctype html>
-<html lang="kr">
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/public/images/argon/apple-icon.png" />
+    <link rel="icon" type="image/png" href="/public/images/argon/favicon.png" />
+    <title>Argon Dashboard 3 PRO by Creative Tim</title>
+    <!--     Fonts and icons     -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700"
+      rel="stylesheet"
+    />
+    <!-- Nucleo Icons -->
+    <link
+      href="https://demos.creative-tim.com/argon-dashboard-pro/assets/css/nucleo-icons.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://demos.creative-tim.com/argon-dashboard-pro/assets/css/nucleo-svg.css"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome Icons -->
+    <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+    <!-- CSS Files -->
+    <link id="pagestyle" href="/public/styles/argon/argon-dashboard.css?v=2.1.0" rel="stylesheet" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Loopfiy</title>
-  <link rel="stylesheet" href="/public/styles/signup.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Gasoek+One&family=Jua&display=swap" rel="stylesheet" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Gamja+Flower&family=Gasoek+One&family=Hi+Melody&family=Jua&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="/public/styles/global.css" />
-  <script src="https://kit.fontawesome.com/6a4db89020.js" crossorigin="anonymous"></script>
-</head>
+  <body class="">
+    <div class="container position-sticky z-index-sticky top-0">
+      <div class="row">
+        <div class="col-12"></div>
+      </div>
+    </div>
+    <main class="main-content mt-0">
+      <section>
+        <div class="page-header min-vh-100">
+          <div class="container">
+            <div class="row">
+              <div class="col-xl-4 col-lg-5 col-md-7 d-flex flex-column mx-lg-0 mx-auto">
+                <div class="card card-plain">
+                  <div class="card-header pb-0 text-left">
+                    <h4 class="font-weight-bolder">Sign Up</h4>
+                  </div>
+                  <div class="card-body pb-3">
+                    <form role="form" id="signupForm" action="/auth/signup" method="POST">
+                      <label for="email">이메일</label>
+                      <div class="mb-3">
+                        <input
+                          id="email"
+                          type="text"
+                          class="form-control"
+                          placeholder="이메일"
+                          aria-label="Email"
+                          required
+                        />
+                        <span class="error-message"></span>
+                      </div>
 
-<body>
-  <header>
-    <nav class="LoopfiyBar">
-      <div class="log">
-        <i class="fa-solid fa-bolt"></i>
-        <a href="/" class="bungee-spice-regular">Loopfiy</a>
-      </div>
-    </nav>
-  </header>
-  <div id="maintitle">
-    <h2 class="jua-regular">Loopfiy</h2>
-  </div>
+                      <label for="code">인증 번호</label>
+                      <div class="mb-3">
+                        <button class="btn btn-primary mb-0" id="sendVerificationCodeBtn">
+                          인증번호 발송
+                        </button>
+                        <input
+                          id="code"
+                          type="text"
+                          class="form-control"
+                          placeholder="인증번호"
+                          aria-label="Email"
+                          required
+                        />
+                        <span class="error-message"></span>
+                      </div>
 
-  <div id="signupPopup">
-    <form id="signupForm" action="/auth/signup" method="POST">
-      <div>
-        <label class="jua-regular" for="email">이메일:</label>
-        <input type="text" id="email" name="email" placeholder="이메일을 입력하세요" required />
-        <span class="error-message"></span>
-      </div>
-      <div>
-        <button class="jua-regular" type="verifyCodeBtn" id="sendVerificationCodeBtn">인증번호 요청</button>
-      </div>
-      <div>
-        <label class="jua-regular" for="password">비밀번호:</label>
-        <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" required />
-        <span class="error-message"></span>
-      </div>
-      <div>
-        <label class="jua-regular" for="confirmedPassword">비밀번호 확인:</label>
-        <input type="password" id="confirmedPassword" name="confirmedPassword" placeholder="비밀번호를 다시 입력하세요" required />
-        <span class="error-message"></span>
-      </div>
-      <div>
-        <label class="jua-regular" for="name">이름:</label>
-        <input type="text" id="name" name="name" placeholder="이름을 입력하세요" required />
-        <span class="error-message"></span>
-      </div>
-      <div>
-        <label class="jua-regular" for="nickname">닉네임:</label>
-        <input type="text" id="nickname" name="nickname" placeholder="닉네임을 입력하세요" required />
-        <span class="error-message"></span>
-      </div>
-      <div>
-        <label class="jua-regular" for="nickname">인증번호:</label>
-        <input type="text" id="code" name="code" placeholder="인증번호를 입력하세요" required />
-        <span class="error-message"></span>
-      </div>
-      <div>
-        <label class="jua-regular" for="phoneNumber">전화번호:</label>
-        <input type="text" id="phoneNumber" name="phoneNumber" placeholder="전화번호를 입력하세요" required />
-        <span class="error-message"></span>
-      </div>
-      <button class="jua-regular" type="submit" id="submitBtn">가입하기</button>
-    </form>
-  </div>
-  <script src="/public/scripts/signup.js"></script>
-</body>
+                      <label for="name">이름</label>
+                      <div class="mb-3">
+                        <input
+                          id="name"
+                          type="text"
+                          class="form-control"
+                          placeholder="이름"
+                          aria-label="Name"
+                          required
+                        />
+                        <span class="error-message"></span>
+                      </div>
 
+                      <label for="nickname">닉네임</label>
+                      <div class="mb-3">
+                        <input
+                          id="nickname"
+                          type="text"
+                          class="form-control"
+                          placeholder="닉네임"
+                          aria-label="Name"
+                          required
+                        />
+                        <span class="error-message"></span>
+                      </div>
+
+                      <label for="password">비밀번호</label>
+                      <div class="mb-3">
+                        <input
+                          id="password"
+                          type="text"
+                          class="form-control"
+                          placeholder="비밀번호"
+                          aria-label="Password"
+                          required
+                        />
+                        <span class="error-message"></span>
+                      </div>
+
+                      <label for="confirmedPassword">비밀번호 확인</label>
+                      <div class="mb-3">
+                        <input
+                          id="confirmedPassword"
+                          type="text"
+                          class="form-control"
+                          placeholder="비밀번호 확인"
+                          aria-label="Password"
+                          required
+                        />
+                        <span class="error-message"></span>
+                      </div>
+
+                      <label for="phoneNumber">전화번호</label>
+                      <div class="mb-3">
+                        <input
+                          id="phoneNumber"
+                          type="text"
+                          class="form-control"
+                          placeholder="전화번호"
+                          aria-label="Password"
+                          required
+                        />
+                        <span class="error-message"></span>
+                      </div>
+                      <div class="form-check form-check-info text-left">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          value=""
+                          id="flexCheckDefault"
+                          checked
+                        />
+                        <label class="form-check-label" for="flexCheckDefault">
+                          I agree the
+                          <a href="../../../pages/privacy.html" class="text-dark font-weight-bolder"
+                            >Terms and Conditions</a
+                          >
+                        </label>
+                      </div>
+                      <div class="text-center">
+                        <button
+                          type="submit"
+                          class="btn btn-primary w-100 mt-4 mb-0"
+                          id="submitBtn"
+                        >
+                          가입하기
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="card-footer text-center pt-0 px-sm-4 px-1">
+                    <p class="mb-4 mx-auto">
+                      Already have an account?
+                      <a
+                        href="../../../pages/sign-in/sign-in-cover.html"
+                        class="text-primary font-weight-bold"
+                        >Sign in</a
+                      >
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="col-6 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 end-0 text-center justify-content-center flex-column"
+              >
+                <div
+                  class="position-relative bg-gradient-primary h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center overflow-hidden"
+                  style="
+                    background-image: url('https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/signup-ill.jpg');
+                    background-size: cover;
+                  "
+                >
+                  <span class="mask bg-primary opacity-4"></span>
+                  <h4 class="mt-5 text-white font-weight-bolder position-relative">
+                    Your journey starts here
+                  </h4>
+                  <p class="text-white position-relative">
+                    Just as it takes a company to sustain a product, it takes a community to sustain
+                    a protocol.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <!--   Core JS Files   -->
+    <script src="/public/scripts/argon/core/popper.min.js"></script>
+    <script src="/public/scripts/argon/core/bootstrap.min.js"></script>
+    <script src="/public/scripts/argon/plugins/perfect-scrollbar.min.js"></script>
+    <script src="/public/scripts/argon/plugins/smooth-scrollbar.min.js"></script>
+    <!-- Kanban scripts -->
+    <script src="/public/scripts/argon/plugins/dragula/dragula.min.js"></script>
+    <script src="/public/scripts/argon/plugins/jkanban/jkanban.js"></script>
+    <script>
+      var win = navigator.platform.indexOf('Win') > -1;
+      if (win && document.querySelector('#sidenav-scrollbar')) {
+        var options = {
+          damping: '0.5',
+        };
+        Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+      }
+    </script>
+    <!-- Github buttons -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
+    <script src="/public/scripts/argon/argon-dashboard.min.js?v=2.1.0"></script>
+    <script src="/public/scripts/signup.js"></script>
+  </body>
 </html>
