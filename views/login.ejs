@@ -826,19 +826,19 @@
               <div class="text-center text-muted mb-4">
                 <small>Or sign in with credentials</small>
               </div>
-              <form role="form" class="text-start">
+              <form id="loginForm" class="text-start">
                 <div class="mb-3">
-                  <input type="email" class="form-control" placeholder="Email" aria-label="Email">
+                  <input id="email" type="email" class="form-control" placeholder="Email" aria-label="Email">
                 </div>
                 <div class="mb-3">
-                  <input type="password" class="form-control" placeholder="Password" aria-label="Password">
+                  <input id="password" type="password" class="form-control" placeholder="Password" aria-label="Password">
                 </div>
                 <div class="form-check form-switch">
                   <input class="form-check-input" type="checkbox" id="rememberMe">
                   <label class="form-check-label" for="rememberMe">Remember me</label>
                 </div>
                 <div class="text-center">
-                  <button type="button" class="btn btn-primary w-100 my-4 mb-2">로그인</button>
+                  <button type="submit" class="btn btn-primary w-100 my-4 mb-2">로그인</button>
                 </div>
                 <div class="mb-2 position-relative text-center">
                   <p class="text-sm font-weight-bold mb-2 text-secondary text-border d-inline z-index-2 bg-white px-3">
@@ -859,7 +859,6 @@
 <!-- -------- START FOOTER 3 w/ COMPANY DESCRIPTION WITH LINKS & SOCIAL ICONS & COPYRIGHT ------- -->
 <footer class="footer py-5">
   <div class="container">
-    <form id="loginForm">
         <div class="row">
       <div class="col-lg-8 mb-4 mx-auto text-center">
         <a href="javascript:;" target="_blank" class="text-secondary me-xl-5 me-3 mb-sm-0 mb-2">
@@ -899,7 +898,6 @@
         </a>
       </div>
     </div>
-    </form>
     <div class="row">
       <div class="col-8 mx-auto text-center mt-1">
         <p class="mb-0 text-secondary">
