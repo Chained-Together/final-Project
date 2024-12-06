@@ -812,11 +812,11 @@
             <div class="card-header bg-transparent">
               <h5 class="text-dark text-center mt-2 mb-3">Sign in</h5>
               <div class="btn-wrapper text-center">
-                <a href="javascript:;" class="btn btn-neutral btn-icon btn-sm mb-0">
+                <a id="naver-connect" class="btn btn-neutral btn-icon btn-sm mb-0">
                   <img class="w-30" src="/public/images/argon/logos/github.svg">
-                  Github
+                  Naver
                 </a>
-                <a href="javascript:;" class="btn btn-neutral btn-icon btn-sm mb-0">
+                <a id="google-connect" class="btn btn-neutral btn-icon btn-sm mb-0">
                   <img class="w-30" src="/public/images/argon/logos/google.svg">
                   Google</span>
                 </a>
@@ -838,7 +838,7 @@
                   <label class="form-check-label" for="rememberMe">Remember me</label>
                 </div>
                 <div class="text-center">
-                  <button type="button" class="btn btn-primary w-100 my-4 mb-2">Sign in</button>
+                  <button type="button" class="btn btn-primary w-100 my-4 mb-2">로그인</button>
                 </div>
                 <div class="mb-2 position-relative text-center">
                   <p class="text-sm font-weight-bold mb-2 text-secondary text-border d-inline z-index-2 bg-white px-3">
@@ -846,7 +846,7 @@
                   </p>
                 </div>
                 <div class="text-center">
-                  <button type="button" class="btn bg-gradient-dark w-100 mt-2 mb-4">Sign up</button>
+                  <button type="button" class="btn bg-gradient-dark w-100 mt-2 mb-4">회원 가입</button>
                 </div>
               </form>
             </div>
@@ -859,7 +859,8 @@
 <!-- -------- START FOOTER 3 w/ COMPANY DESCRIPTION WITH LINKS & SOCIAL ICONS & COPYRIGHT ------- -->
 <footer class="footer py-5">
   <div class="container">
-    <div class="row">
+    <form id="loginForm">
+        <div class="row">
       <div class="col-lg-8 mb-4 mx-auto text-center">
         <a href="javascript:;" target="_blank" class="text-secondary me-xl-5 me-3 mb-sm-0 mb-2">
           Company
@@ -898,6 +899,7 @@
         </a>
       </div>
     </div>
+    </form>
     <div class="row">
       <div class="col-8 mx-auto text-center mt-1">
         <p class="mb-0 text-secondary">
@@ -932,6 +934,7 @@
 <script async defer src="https://buttons.github.io/buttons.js"></script>
 <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
 <script src="/public/scripts/argon/argon-dashboard.min.js?v=2.1.0"></script>
+<script src="/public/scripts/login.js"></script>
 </body>
 
 </html>
