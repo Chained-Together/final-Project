@@ -1,3 +1,15 @@
+// ID loginForm
+// ID email
+// ID password
+// ID google-connect
+// ID Naver-connect
+// button[type=submit]
+// <script src="/public/scripts/login.js"></script>
+// <link id="pagestyle" href="/public/styles/argon/argon-dashboard.css?v=2.1.0" rel="stylesheet" />
+//   <form id="findInfo">
+//     <a href="#">이메일 찾기</a>
+//     <a href="/findInfo">비밀번호 찾기</a>
+//   </form>
 const loginForm = document.getElementById('loginForm');
 loginForm.addEventListener('submit', async (event) => {
   event.preventDefault();
@@ -44,7 +56,7 @@ loginForm.addEventListener('submit', async (event) => {
     }
 
     const notifications = await notificationResponse.json();
-    
+
     localStorage.setItem('pastNotifications', JSON.stringify(notifications));
 
     window.location.href = '/';
