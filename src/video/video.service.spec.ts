@@ -9,7 +9,9 @@ import { Visibility } from './video.visibility.enum';
 import { NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { ResolutionEntity } from '../resolution/entities/resolution.entity';
 import {
+  getRepository,
   mockChannelRepository,
+  mockQueryBuilder,
   mockResolutionRepository,
   mockVideoRepository,
 } from './__mocks__/mock.video.service';
@@ -271,23 +273,21 @@ describe('VideoService', () => {
 
   describe('비디오 검색 시', () => {
     it('검색된 비디오를 반환한다.', async () => {
-      const mockQueryBuilder = {
-        where: jest.fn().mockReturnThis(),
-        orWhere: jest.fn().mockReturnThis(),
-        getMany: jest.fn().mockResolvedValue(mockVideos),
-      };
-      mockVideoRepository.createQueryBuilder.mockReturnValue(mockQueryBuilder);
+      mockQueryBuilder.getMany.mockResolvedValue(mockVideos);
 
       const result = await videoService.findVideoByKeyword('Test');
       expect(mockQueryBuilder.where).toHaveBeenCalledWith('video.title LIKE :keyword', {
         keyword: '%Test%',
       });
+      expect(mockQueryBuilder.andWhere).toHaveBeenCalledWith('video.status = :status', {
+        status: Visibility.PUBLIC,
+      });
+
       expect(mockQueryBuilder.orWhere).toHaveBeenCalledWith('video.hashtags @> :keywordArray', {
         keywordArray: JSON.stringify(['Test']),
       });
       expect(mockQueryBuilder.getMany).toHaveBeenCalled();
 
-      // 결과 검증
       expect(result).toEqual(mockVideos);
     });
   });
