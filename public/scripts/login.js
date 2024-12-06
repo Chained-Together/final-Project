@@ -71,7 +71,7 @@ document.getElementById('google-connect').addEventListener('click', (event) => {
   window.location.href = '/auth/google';
 });
 
-document.getElementById('Naver-connect').addEventListener('click', (event) => {
+document.getElementById('naver-connect').addEventListener('click', (event) => {
   event.preventDefault();
   // 네이버 소셜 로그인 엔드포인트로 리다이렉트
   window.location.href = '/auth/naver';
