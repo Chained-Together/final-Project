@@ -1,4 +1,3 @@
-import { showPopup } from './video-edit-popup.js';
 document.addEventListener('DOMContentLoaded', async () => {
   const token = localStorage.getItem('token');
   const channelNameElement = document.getElementById('channelName');
@@ -31,12 +30,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       method: 'GET',
     });
     console.log(channelData.id);
+    console.log(videoResponse);
 
     if (!videoResponse.ok) {
       throw new Error('비디오를 로드하지 못했습니다.');
     }
     const videoData = await videoResponse.json();
-    console.log('비디오 데이터:', videoData);
 
     thumbnailsContainer.innerHTML = '';
 
@@ -61,7 +60,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       videoData.forEach((video) => {
         const card = document.createElement('div');
-        card.classList.add('video-card', 'thumbnail'); // "thumsbnail" 클래스 추가
+        card.classList.add('video-card', 'thumbnail'); // "thumbnail" 클래스 추가
         card.id = video.id;
 
         const img = document.createElement('img');

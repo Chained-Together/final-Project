@@ -45,5 +45,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // 모달의 "메인페이지로 돌아가기" 버튼 동작
 document.getElementById('go-to-main-btn').addEventListener('click', () => {
-  window.location.href = '/main'; // 메인 페이지로 이동
+  window.location.href = '/'; // 메인 페이지로 이동
 });

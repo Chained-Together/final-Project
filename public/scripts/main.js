@@ -64,10 +64,11 @@ function createVideoElement(video) {
     return null;
   }
 
-  const shortformItem = document.createElement('div');
-  shortformItem.className = 'shortform-item';
+  const shortFormItem = document.createElement('div');
+  shortFormItem.className = 'shortForm-item';
+  console.log(shortFormItem);
 
-  shortformItem.addEventListener('click', () => {
+  shortFormItem.addEventListener('click', () => {
     window.location.href = `/view-video?id=${video.id}`;
   });
 
@@ -75,17 +76,17 @@ function createVideoElement(video) {
     const placeholderVideo = document.createElement('div');
     placeholderVideo.className = 'placeholder-video';
     placeholderVideo.style.backgroundImage = `url('${video.thumbnailUrl}')`;
-    shortformItem.appendChild(placeholderVideo);
+    shortFormItem.appendChild(placeholderVideo);
   }
 
   if (video.title) {
     const placeholderTitle = document.createElement('div');
     placeholderTitle.className = 'placeholder-title';
     placeholderTitle.textContent = video.title;
-    shortformItem.appendChild(placeholderTitle);
+    shortFormItem.appendChild(placeholderTitle);
   }
 
-  return shortformItem;
+  return shortFormItem;
 }
 
 // 비디오 데이터를 추가 렌더링
@@ -100,12 +101,12 @@ function appendVideos(container, videos) {
 
 // 초기 로드 및 스크롤 처리
 async function initialize() {
-  const shortformGrid = document.querySelector('.shortform-grid');
+  const shortFormGrid = document.querySelector('.shortForm-grid');
 
   try {
     // 초기 데이터 로드
     const initialVideos = await fetchVideos();
-    appendVideos(shortformGrid, initialVideos);
+    appendVideos(shortFormGrid, initialVideos);
 
     // 마지막 비디오 ID 저장
     if (initialVideos.length > 0) {
@@ -115,16 +116,16 @@ async function initialize() {
     // 스크롤 이벤트 추가
     $(window).on('scroll', async () => {
       const scroll = $(window).scrollTop();
-      const clientesScroll = $(window).height();
+      const clientsScroll = $(window).height();
       const height = $(document).height();
 
-      if (scroll + clientesScroll >= height - 10 && !isFetching) {
+      if (scroll + clientsScroll >= height - 10 && !isFetching) {
         isFetching = true;
 
         try {
           const newVideos = await fetchVideos(lastVideoId);
           if (newVideos.length > 0) {
-            appendVideos(shortformGrid, newVideos);
+            appendVideos(shortFormGrid, newVideos);
 
             // 마지막 비디오 ID 업데이트
             lastVideoId = newVideos[newVideos.length - 1].id;

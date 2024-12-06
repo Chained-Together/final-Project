@@ -8,7 +8,7 @@ export const mockVideoService = {
   getNewVideos: jest.fn(),
   getAllVideoOfMyChannel: jest.fn(),
   getAllVideoOfChannel: jest.fn(),
-  findVideoByKeyword:jest.fn(),
+  findVideoByKeyword: jest.fn(),
 };
 
 export const mockVideoRepository = {
@@ -18,7 +18,7 @@ export const mockVideoRepository = {
   findOne: jest.fn(),
   update: jest.fn(),
   delete: jest.fn(),
-  createQueryBuilder: jest.fn()
+  createQueryBuilder: jest.fn(() => mockQueryBuilder),
 };
 
 export const mockChannelRepository = {
@@ -29,3 +29,13 @@ export const mockResolutionRepository = {
   create: jest.fn(),
   save: jest.fn(),
 };
+
+export const mockQueryBuilder = {
+  where: jest.fn().mockReturnThis(),
+  orWhere: jest.fn().mockReturnThis(),
+  andWhere: jest.fn().mockReturnThis(),
+  getMany: jest.fn().mockResolvedValue([]),
+};
+
+export const getRepository = jest.fn(() => mockVideoRepository);
+export const Repository = jest.fn(() => mockVideoRepository);
