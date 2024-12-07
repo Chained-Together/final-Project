@@ -1,39 +1,9 @@
-//   (async () => {
-//     const video = document.getElementById('videoPlayer');
-
-//     // HLS URL
-//     const hlsUrl = 'https://d14nrh74c56e9d.cloudfront.net/2_1733562897298/2_1733562897298.m3u8';
-
-//     console.log('HLS URL:', hlsUrl);
-
-//     if (Hls.isSupported()) {
-//         const hls = new Hls();
-//         hls.loadSource(hlsUrl);
-//         hls.attachMedia(video);
-
-//         hls.on(Hls.Events.MANIFEST_PARSED, () => {
-//             console.log('HLS manifest loaded. Starting playback...');
-//             video.play();
-//         });
-
-//         hls.on(Hls.Events.ERROR, (event, data) => {
-//             console.error('HLS.js Error:', data);
-//         });
-//     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-//         video.src = hlsUrl;
-//         video.addEventListener('loadedmetadata', () => {
-//             video.play();
-//         });
-//     } else {
-//         console.error('HLS.js는 이 브라우저에서 지원되지 않습니다.');
-//     }
-// })();
-
 (async () => {
   const video = document.getElementById('videoPlayer');
 
   // HLS URL
-  const hlsUrl = 'https://d14nrh74c56e9d.cloudfront.net/2_1733563876025/2_1733563876025.m3u8';
+  const hlsUrl = 'https://d14nrh74c56e9d.cloudfront.net/2_1733582249469/2_1733582249469.m3u8';
+  // const hlsUrl = 'http://localhost:3000/proxy/2_1733563876025/2_1733563876025.m3u8';
 
   console.log('HLS URL:', hlsUrl);
 
@@ -54,6 +24,8 @@
     // 에러 핸들링
     hls.on(Hls.Events.ERROR, (event, data) => {
       console.error('HLS.js Error:', data);
+      console.log(data.details);
+      console.log('Fatal error:', data.fatal);
       const errorMsg = document.createElement('div');
       errorMsg.textContent = `HLS.js Error: ${data.details}`;
       errorMsg.style.color = 'red';

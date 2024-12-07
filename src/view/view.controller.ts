@@ -79,9 +79,10 @@ export class ViewController {
   showSearchPage(@Query('keyword') keyword: string) {
     return;
   }
-  @Get('/hls')
-  @Render('hls')
-  showhls() {
+
+  @Get('/stream')
+  @Render('stream')
+  showstream() {
     return;
   }
 }
