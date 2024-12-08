@@ -4,7 +4,6 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { PasswordResetTokenEntity } from './entities/password.reset.token.entity';
 import { UserEntity } from '../user/entities/user.entity';
 import { MailerService } from '@nestjs-modules/mailer';
-import { HashingService } from '../interface/hashing-interface';
 import {
   mockHashingService,
   mockMailerService,
@@ -12,13 +11,13 @@ import {
   mockUserRepository,
 } from './__mocks__/mock.password.service';
 import {
-  mockUser,
-  mockPasswordResetToken,
   mockExpiredToken,
-  mockUsedToken,
+  mockPasswordResetToken,
   mockResetPasswordRequestDto,
-  mockUpdatePasswordDto,
   mockUpdatedUser,
+  mockUpdatePasswordDto,
+  mockUsedToken,
+  mockUser,
 } from './__mocks__/mock.password.data';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 
