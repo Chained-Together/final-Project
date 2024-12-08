@@ -129,7 +129,6 @@ export const mockUpdatedVideo: VideoEntity = {
 // Resolution Mock 데이터
 export const mockResolution: ResolutionEntity = {
   id: 1,
-  high: '임의 링크',
-  low: '임의 링크',
+  videoUrl: '임의 링크',
   video: mockVideo,
 };

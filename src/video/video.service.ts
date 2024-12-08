@@ -70,8 +70,7 @@ export class VideoService {
     const savedVideo = await this.videoRepository.save(video);
 
     const resolution = this.resolutionRepository.create({
-      high,
-      low,
+      videoUrl: null,
       video: savedVideo,
     });
 
@@ -130,7 +129,7 @@ export class VideoService {
       throw new NotFoundException('존재하지 않는 비디오입니다.');
     }
 
-    const { visibility, channel, accessKey: storedAccessKey } = foundVideo;
+    const { visibility, channel, accessKey: storedAccessKey, resolution } = foundVideo;
 
     if (visibility === Visibility.PRIVATE && channel.user.id !== userId) {
       throw new UnauthorizedException('비공개 비디오에 접근할 수 없습니다.');
@@ -143,8 +142,15 @@ export class VideoService {
     ) {
       throw new UnauthorizedException('올바른 링크가 아니면 접근할 수 없습니다.');
     }
+    
+    if(!resolution.videoUrl){
+      throw new NotFoundException('해당하는 비디오URL을 찾을수없습니다.')
+    }
 
-    return foundVideo;
+    return {
+      foundVideo,
+      videoUrl: resolution.videoUrl,
+    };
   }
 
   async updateVideo(

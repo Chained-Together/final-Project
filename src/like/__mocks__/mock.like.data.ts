@@ -23,8 +23,7 @@ export const mockUser: UserEntity = {
 
 export const mockResolution: ResolutionEntity = {
   id: 1,
-  high: 'https://example.com/high-res.mp4',
-  low: 'https://example.com/low-res.mp4',
+  videoUrl: 'https://example.com/high-res.mp4',
   video: null, // 연결된 비디오 추가 예정
 };
 

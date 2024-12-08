@@ -11,18 +11,16 @@ export class ResolutionController {
     try {
       console.log('받은 데이터:', body);
 
-      const { highResolutionUrl, lowResolutionUrl, metadata } = body;
+      const { videoUrl, metadata } = body;
 
-      console.log('High Resolution URL:', highResolutionUrl);
-      console.log('Low Resolution URL:', lowResolutionUrl);
+      console.log('Video URL:', videoUrl);
       console.log('Metadata:', metadata.videoCode);
       console.log('Metadata:', metadata.duration);
 
       return this.resolutionService.updateResolution(
         metadata.videoCode,
         metadata.duration,
-        highResolutionUrl,
-        lowResolutionUrl,
+        videoUrl,
       );
     } catch (error) {
       console.error('오류 발생:', error);

@@ -57,7 +57,7 @@ export class VideoController {
     @Param('id') id: number,
     @Query('accessKey') accessKey?: string,
     @UserInfo() user?: UserEntity,
-  ): Promise<VideoEntity | object> {
+  ): Promise<VideoEntity | object | { videoUrl: string }> {
     return this.videoService.getVideo(id, user?.id, accessKey);
   }
 
