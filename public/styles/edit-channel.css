@@ -1,4 +1,115 @@
 /* 채널 수정 컨테이너 스타일 */
+.modal {
+  display: none;
+  position: fixed;
+  top: 30%;
+  left: 35%;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 모달 콘텐츠 박스 */
+.modal-content {
+  background-color: #ffffff; /* 흰색 배경 */
+  padding: 20px; /* 내용 여백 */
+  border-radius: 10px; /* 모서리 둥글게 */
+  width: 90%; /* 반응형: 화면 너비의 90% */
+  max-width: 500px; /* 최대 너비 제한 */
+  position: relative;
+}
+
+/* 닫기 버튼 */
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #555; /* 닫기 버튼 색상 */
+  transition: color 0.3s ease;
+}
+
+.close-button:hover {
+  color: #000; /* 호버 시 색상 변경 */
+}
+
+/* 레이블 */
+.popup-label {
+  font-size: 14px;
+  font-weight: bold;
+  margin: 10px 0 5px;
+  display: block;
+  color: #333; /* 텍스트 색상 */
+}
+
+/* 입력 필드 */
+.popup-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd; /* 테두리 */
+  border-radius: 5px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+/* 텍스트 영역 */
+.popup-textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd; /* 테두리 */
+  border-radius: 5px;
+  font-size: 14px;
+  box-sizing: border-box;
+  resize: vertical; /* 세로 크기 조정 가능 */
+}
+
+/* 저장 버튼 */
+.popup-save-button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff; /* 파란색 배경 */
+  color: #ffffff; /* 흰색 텍스트 */
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.popup-save-button:hover {
+  background-color: #0056b3; /* 호버 시 더 어두운 파란색 */
+}
+
+.channel-info h2 {
+  font-size: 4rem;
+  color: #ffffff; /* 채널 이름 강조 */
+  position: absolute;
+  top: 55%;
+  left: 40%;
+  font-family: 'Jua', sans-serif;
+}
+
+.channel-info button {
+  padding: 10px 20px;
+  margin: 10px;
+  top: 90%;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Jua', sans-serif;
+}
+
 .channel-edit-container {
   margin-top: 20px;
   text-align: center;
@@ -32,6 +143,7 @@
   position: absolute;
   right: 10px;
   border: none;
+  margin-top: 5px;
   padding: 5px 10px;
   border-radius: 5px;
   cursor: pointer;
@@ -39,32 +151,81 @@
 }
 
 .video-card .editBtn {
-  top: 215px;
+  top: 450px;
   background-color: #007bff;
   color: #fff;
 }
 
 .video-card .deleteBtn {
-  top: 185px;
+  top: 415px;
   background-color: #dc3545;
   color: #fff;
 }
 
-/* 프로필 편집 버튼 스타일 */
-#channelEditBtn {
+#accountEditBtn {
   position: absolute;
-  top: 30px; /* 계정 버튼 아래로 배치 */
-  right: 100px;
-  background-color: #fff;
-  color: #000;
-  border: none;
+
+  top: 90%;
+  left: 77.5%;
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
   z-index: 1000;
+  transform: scale(1.5);
+  transition: transform 0.2s ease;
 }
 
 .bungee-spice-regular {
   font-family: 'Bungee Spice', sans-serif;
   font-weight: 400;
+}
+
+.done-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+.done-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.done-btn {
+  background: linear-gradient(135deg, #ff512f, #dd2476);
+  border: none;
+  position: absolute;
+  top: 90%;
+  left: 57.5%;
+  width: 140px;
+  height: 45px;
+  border-radius: 8px;
+  color: #f8f8f8;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    transform 0.2s ease;
+}
+
+.profile-edit-btn {
+  background: linear-gradient(135deg, #ff512f, #dd2476);
+  border: none;
+  position: absolute;
+  top: 90%;
+  left: 35%;
+  width: 140px;
+  height: 45px;
+  border-radius: 8px;
+  color: #f8f8f8;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    transform 0.2s ease;
 }
