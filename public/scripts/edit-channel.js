@@ -1,12 +1,10 @@
-import { showPopup } from './video-edit-popup.js';
-
 document.addEventListener('DOMContentLoaded', async () => {
   const token = localStorage.getItem('token');
   const channelNameElement = document.getElementById('channelName');
-  const profileImageElement = document.getElementById('profileImage');
+  const profileImageElement = document.getElementById('profile');
   const thumbnailsContainer = document.getElementById('thumbnailsContainer');
   const channelEditContainer = document.createElement('div');
-  channelEditContainer.classList.add('channel-edit-container');
+  // channelEditContainer.classList.add('channel-edit-container');
   document.body.insertBefore(channelEditContainer, thumbnailsContainer);
 
   if (!token) {
@@ -30,15 +28,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     channelNameElement.textContent = channelData.name || '알 수 없음';
     profileImageElement.src = channelData.profileImage || '/path/to/default-profile.png';
 
-    // 채널 수정 UI 생성
-    createChannelEditUI(
-      channelEditContainer,
-      channelData,
-      token,
-      channelNameElement,
-      profileImageElement,
-    );
-
     // 비디오 로드
     const videoResponse = await fetch(`/video/edit/${channelData.id}`, {
       method: 'GET',
@@ -61,65 +50,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     channelNameElement.textContent = '정보를 로드하는 중 오류가 발생했습니다.';
   }
 });
-
-const createChannelEditUI = (
-  container,
-  channelData,
-  token,
-  channelNameElement,
-  profileImageElement,
-) => {
-  const channelTitleLabel = document.createElement('label');
-  channelTitleLabel.textContent = '채널 제목:';
-  container.appendChild(channelTitleLabel);
-
-  const channelTitleInput = document.createElement('input');
-  channelTitleInput.type = 'text';
-  channelTitleInput.value = channelData.name || '';
-  container.appendChild(channelTitleInput);
-
-  const profileUrlLabel = document.createElement('label');
-  profileUrlLabel.textContent = '프로필 URL:';
-  container.appendChild(profileUrlLabel);
-
-  const profileUrlInput = document.createElement('input');
-  profileUrlInput.type = 'text';
-  profileUrlInput.value = channelData.profileImage || '';
-  container.appendChild(profileUrlInput);
-
-  const saveButton = document.createElement('button');
-  saveButton.textContent = '수정';
-  container.appendChild(saveButton);
-
-  saveButton.addEventListener('click', async () => {
-    try {
-      const payload = {
-        name: channelTitleInput.value,
-        profileImage: profileUrlInput.value,
-      };
-
-      const updateResponse = await fetch('/channel', {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (!updateResponse.ok) {
-        throw new Error('채널 정보를 업데이트하지 못했습니다.');
-      }
-
-      alert('채널 정보가 성공적으로 업데이트되었습니다.');
-      channelNameElement.textContent = payload.name;
-      profileImageElement.src = payload.profileImage;
-    } catch (error) {
-      console.error('채널 수정 중 오류 발생:', error);
-      alert('채널 정보를 수정하는 중 오류가 발생했습니다.');
-    }
-  });
-};
 
 const createVideoCard = (video, container, token) => {
   const card = document.createElement('div');
@@ -156,7 +86,6 @@ const createVideoCard = (video, container, token) => {
     window.location.href = `/view-video?id=${video.id}`;
   });
 
-  // 편집/삭제 버튼 추가
   const editBtn = document.createElement('button');
   editBtn.textContent = '편집';
   editBtn.classList.add('editBtn');
@@ -192,34 +121,154 @@ const createVideoCard = (video, container, token) => {
   container.appendChild(card);
 };
 
-const profileButton = document.getElementById('profileButton');
+function showPopup(thumbnail) {
+  const modal = document.getElementById('editModal');
+  const thumbnailInput = document.getElementById('thumbnailInput');
+  const titleInput = document.getElementById('titleInput');
+  const descriptionInput = document.getElementById('descriptionInput');
+  const hashtagInput = document.getElementById('hashtagInput');
+  const visibilityInput = document.getElementById('visibilityInput');
 
-profileButton.addEventListener('click', () => {
-  let channelEditBtn = document.getElementById('channelEditBtn');
+  // 팝업 데이터 초기화
+  thumbnailInput.value = thumbnail.querySelector('img').src;
+  titleInput.value = thumbnail.querySelector('h3').textContent;
+  descriptionInput.value = thumbnail.querySelector('p').textContent;
 
-  if (!channelEditBtn) {
-    channelEditBtn = createChannelEditButton();
-
-    profileButton.parentElement.insertBefore(channelEditBtn, profileButton);
+  const hashtagContainer = thumbnail.querySelector('.hashtag-container');
+  if (hashtagContainer) {
+    const hashtags = Array.from(hashtagContainer.querySelectorAll('p')).map((tag) =>
+      tag.textContent.trim(),
+    );
+    hashtagInput.value = hashtags.join(', ');
   } else {
-    channelEditBtn.remove();
+    hashtagInput.value = '';
   }
-});
 
-const createChannelEditButton = () => {
-  const channelEditButton = document.createElement('button');
-  channelEditButton.textContent = '편집 완료';
-  channelEditButton.id = 'channelEditBtn';
-  channelEditButton.style.padding = '8px 12px';
-  channelEditButton.style.backgroundColor = '#ffa600';
-  channelEditButton.style.color = '#fff';
-  channelEditButton.style.border = 'none';
-  channelEditButton.style.borderRadius = '5px';
-  channelEditButton.style.cursor = 'pointer';
+  visibilityInput.value = thumbnail.dataset.visibility;
 
-  channelEditButton.addEventListener('click', () => {
-    window.location.href = '/myChannel';
+  // 팝업 열기
+  modal.style.display = 'block';
+
+  // 닫기 버튼 처리
+  document.getElementById('closeModal').addEventListener('click', () => {
+    modal.style.display = 'none';
   });
 
-  return channelEditButton;
-};
+  // 수정 버튼 처리
+  document.getElementById('updateButton').addEventListener('click', async () => {
+    try {
+      thumbnail.querySelector('img').src = thumbnailInput.value;
+      thumbnail.querySelector('h3').textContent = titleInput.value;
+      thumbnail.querySelector('p').textContent = descriptionInput.value;
+
+      if (hashtagContainer) {
+        hashtagContainer.innerHTML = '';
+        const newHashtags = hashtagInput.value.split(',').map((tag) => tag.trim());
+        newHashtags.forEach((tag) => {
+          const span = document.createElement('p');
+          span.textContent = `#${tag}`;
+          hashtagContainer.appendChild(span);
+        });
+      }
+
+      thumbnail.dataset.visibility = visibilityInput.value;
+
+      const videoId = thumbnail.id;
+      const token = localStorage.getItem('token');
+      const payload = {
+        title: titleInput.value,
+        description: descriptionInput.value,
+        thumbnailUrl: thumbnailInput.value,
+        hashtags: hashtagInput.value.split(',').map((tag) => tag.trim()),
+        visibility: visibilityInput.value,
+      };
+
+      const response = await fetch(`http://localhost:3000/video/${videoId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || '수정 요청에 실패했습니다.');
+      }
+
+      alert('수정되었습니다!');
+      modal.style.display = 'none';
+    } catch (error) {
+      console.error('수정 중 오류 발생:', error);
+      alert('수정 중 오류가 발생했습니다.');
+    }
+  });
+}
+document.getElementById('editDoneBtn').addEventListener('click', () => {
+  window.location.href = '/myChannel';
+});
+
+document.getElementById('accountEditBtn').addEventListener('click', () => {
+  window.location.href = '/';
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const profileEditBtn = document.getElementById('profileEditBtn'); // 프로필 수정 버튼
+  const profileEditModal = document.getElementById('profileEditModal'); // 모달
+  const closeProfileEditModal = document.getElementById('closeProfileEditModal'); // 닫기 버튼
+  const saveProfileEdit = document.getElementById('saveProfileEdit'); // 저장 버튼
+  const profileImageInput = document.getElementById('profileImageInput'); // 이미지 입력
+  const profileNameInput = document.getElementById('profileNameInput'); // 이름 입력
+  const profileImageElement = document.getElementById('profile'); // 프로필 이미지 표시
+  const channelNameElement = document.getElementById('channelName'); // 프로필 이름 표시
+
+  profileEditBtn.addEventListener('click', () => {
+    profileImageInput.value = profileImageElement.src;
+    profileNameInput.value = channelNameElement.textContent;
+    profileEditModal.style.display = 'block';
+  });
+
+  closeProfileEditModal.addEventListener('click', () => {
+    profileEditModal.style.display = 'none';
+  });
+
+  window.addEventListener('click', (event) => {
+    if (event.target === profileEditModal) {
+      profileEditModal.style.display = 'none';
+    }
+  });
+
+  saveProfileEdit.addEventListener('click', async () => {
+    try {
+      profileImageElement.src = profileImageInput.value;
+      channelNameElement.textContent = profileNameInput.value;
+
+      const token = localStorage.getItem('token');
+      const payload = {
+        profileImage: profileImageInput.value,
+        name: profileNameInput.value,
+      };
+
+      const response = await fetch('/channel/profile', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || '프로필 수정 요청에 실패했습니다.');
+      }
+
+      alert('프로필이 수정되었습니다!');
+      profileEditModal.style.display = 'none';
+    } catch (error) {
+      console.error('프로필 수정 중 오류 발생:', error);
+      alert('프로필 수정 중 오류가 발생했습니다.');
+    }
+  });
+});

@@ -170,28 +170,28 @@ initialize();
 //   return notificationButton;
 // };
 
-accountBtn.addEventListener('click', () => {
-  const token = localStorage.getItem('token');
+// accountBtn.addEventListener('click', () => {
+//   const token = localStorage.getItem('token');
 
-  if (token) {
-    let logoutBtn = document.getElementById('logoutBtn');
-    let notificationButton = document.getElementById('notificationButton');
+//   if (token) {
+//     let logoutBtn = document.getElementById('logoutBtn');
+//     let notificationButton = document.getElementById('notificationButton');
 
-    if (!logoutBtn) {
-      logoutBtn = createLogoutButton();
-      logoutBtn.id = 'logoutBtn';
-      document.body.appendChild(logoutBtn);
-    }
+//     if (!logoutBtn) {
+//       logoutBtn = createLogoutButton();
+//       logoutBtn.id = 'logoutBtn';
+//       document.body.appendChild(logoutBtn);
+//     }
 
-    if (!notificationButton) {
-      notificationButton = createNotificationButton();
-      notificationButton.id = 'notificationButton';
-      document.body.appendChild(notificationButton);
-    } else {
-      notificationButton.remove();
-      logoutBtn.remove();
-    }
-  } else {
-    window.location.href = '/';
-  }
-});
+//     if (!notificationButton) {
+//       notificationButton = createNotificationButton();
+//       notificationButton.id = 'notificationButton';
+//       document.body.appendChild(notificationButton);
+//     } else {
+//       notificationButton.remove();
+//       logoutBtn.remove();
+//     }
+//   } else {
+//     window.location.href = '/';
+//   }
+// });
