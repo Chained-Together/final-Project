@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   sendVerificationCodeBtn.addEventListener('click', async () => {
     const email = emailInput.value.trim();
+    console.log(email);
 
     if (!validateField(emailInput, /^[^\s@]+@[^\s@]+\.[^\s@]+$/, '유효한 이메일을 입력하세요.')) {
       return;
