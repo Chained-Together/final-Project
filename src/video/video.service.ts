@@ -131,6 +131,7 @@ export class VideoService {
 
     const { visibility, channel, accessKey: storedAccessKey, resolution } = foundVideo;
 
+    console.log('resolution', resolution);
     if (visibility === Visibility.PRIVATE && channel.user.id !== userId) {
       throw new UnauthorizedException('비공개 비디오에 접근할 수 없습니다.');
     }
@@ -142,9 +143,9 @@ export class VideoService {
     ) {
       throw new UnauthorizedException('올바른 링크가 아니면 접근할 수 없습니다.');
     }
-    
-    if(!resolution.videoUrl){
-      throw new NotFoundException('해당하는 비디오URL을 찾을수없습니다.')
+
+    if (!resolution.videoUrl) {
+      throw new NotFoundException('해당하는 비디오URL을 찾을수없습니다.');
     }
 
     return {

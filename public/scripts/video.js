@@ -595,6 +595,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   const token = localStorage.getItem('token') || null;
   const thumbnailsContainer = document.getElementById('thumbnailsContainer');
   const video = document.getElementById('videoPlayer');
+  const qualityToggleBtn = document.getElementById('qualityToggleBtn');
+  const qualityOptions = document.getElementById('qualityOptions');
 
   if (!videoId) {
     console.error('비디오 ID가 없습니다.');
@@ -619,12 +621,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (videoData?.message) {
       throw new Error(videoData.message);
     }
+    console.log('videoData', videoData);
 
     globalVideoData = videoData;
 
     // HLS.js를 사용해 비디오 재생
-    const hlsUrl = videoData?.resolution.videoUrl;
+    const hlsUrl = videoData?.videoUrl;
     console.log('HLS URL:', hlsUrl);
+    if (!hlsUrl) {
+      throw new Error('비디오 URL이 없습니다.');
+    }
 
     if (Hls.isSupported()) {
       // HLS.js 사용
@@ -745,7 +751,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     await updateLikeCount();
 
-    //  댓글 초기화 함수
+    // 댓글 초기화 함수
     const initializeComments = async () => {
       const commentsContainer = document.createElement('div');
       commentsContainer.id = 'commentsContainer';
@@ -1012,20 +1018,20 @@ position: relative;
       const renderReply = (reply, container) => {
         const replyElement = document.createElement('div');
         replyElement.style = `
-          padding: 10px;
-          margin-bottom: 5px;
-          background-color: #555; /* 대댓글 배경 */
-          border: 1px solid #666; /* 대댓글 테두리 */
-          border-radius: 5px; /* 둥근 모서리 */
-          color: #fff; /* 글씨 색상 */
-          font-size: 14px;
-        `;
+    padding: 10px;
+    margin-bottom: 5px;
+    background-color: #555; /* 대댓글 배경 */
+    border: 1px solid #666; /* 대댓글 테두리 */
+    border-radius: 5px; /* 둥근 모서리 */
+    color: #fff; /* 글씨 색상 */
+    font-size: 14px;
+  `;
 
         replyElement.innerHTML = `
-          <p style="margin: 0;"><strong>${reply.userId}</strong></p>
-          <p style="margin: 5px 0;">${reply.content}</p>
-          <small style="color: #aaa;">${new Date(reply.createdAt).toLocaleString()}</small>
-        `;
+    <p style="margin: 0;"><strong>${reply.userId}</strong></p>
+    <p style="margin: 5px 0;">${reply.content}</p>
+    <small style="color: #aaa;">${new Date(reply.createdAt).toLocaleString()}</small>
+  `;
 
         // 대댓글 수정 버튼
         const editReplyBtn = document.createElement('button');
@@ -1119,39 +1125,7 @@ position: relative;
       await loadComments(currentPage);
     };
 
-    // 댓글 섹션 초기화
-    // const initializeComments = async () => {
-    //   const commentsContainer = document.createElement('div');
-    //   commentsContainer.id = 'commentsContainer';
-    //   commentsContainer.style = `
-    //         margin-top: 20px;
-    //         width: 80%;
-    //         padding: 20px;
-    //         border-radius: 10px;
-    //         background-color: #f9f9f9;
-    //       `;
-    //   thumbnailsContainer.appendChild(commentsContainer);
-
-    //   const loadComments = async (page = 1) => {
-    //     try {
-    //       const response = await fetch(`/videos/${videoId}/comments?page=${page}`);
-    //       if (!response.ok) throw new Error('댓글을 불러오는 데 실패했습니다.');
-    //       const { data: comments } = await response.json();
-    //       commentsContainer.innerHTML = '';
-    //       comments.forEach((comment) => {
-    //         const commentElement = document.createElement('div');
-    //         commentElement.textContent = `${comment.userId}: ${comment.content}`;
-    //         commentsContainer.appendChild(commentElement);
-    //       });
-    //     } catch (error) {
-    //       console.error('댓글 로드 오류:', error);
-    //     }
-    //   };
-
-    //   await loadComments();
-    // };
-
-    // await initializeComments();
+    await initializeComments();
   } catch (error) {
     console.error('오류:', error);
     thumbnailsContainer.innerHTML = `<p>${error.message}</p>`;
