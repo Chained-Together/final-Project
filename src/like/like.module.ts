@@ -8,6 +8,7 @@ import { ChannelEntity } from 'src/channel/entities/channel.entity';
 import { NotificationEntity } from 'src/notification/entities/notification.entity';
 import { UserEntity } from 'src/user/entities/user.entity';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { likeRepository } from 'src/interface/impl/like.repository';
 
 @Module({
   imports: [
@@ -15,6 +16,13 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
     EventEmitter2,
   ],
   controllers: [LikeController],
-  providers: [LikeService, NotificationService],
+  providers: [
+    LikeService,
+    NotificationService,
+    {
+      provide: 'ILikeRepository',
+      useClass: likeRepository,
+    },
+  ],
 })
 export class LikeModule {}
