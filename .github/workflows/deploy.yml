@@ -129,6 +129,7 @@ jobs:
       # 8. Docker 이미지를 Amazon ECR에 푸시
       - name: Push Docker image to ECR
         run: |
+          docker tag $ECR_REPOSITORY:latest ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:latest
           docker push ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:$DOCKER_IMAGE_TAG
 
       # 9. Elastic Beanstalk 애플리케이션 버전 생성
