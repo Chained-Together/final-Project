@@ -1,70 +1,148 @@
+# name: Deploy to Elastic Beanstalk
+
+# on:
+#   push:
+#     branches:
+#       - dev # dev 브랜치에 푸시될 때 트리거
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+
+#     env:
+#       AWS_REGION: ap-northeast-2 # AWS 리전 (예: ap-northeast-2)
+#       ECR_REPOSITORY: 'your-ecr-repository-name'
+#       EB_ENV_NAME: Loopfiy-env-1
+#       AWS_ACCESS_KEY_ID: ${{ secrets.EB_AWS_ACCESS_KEY_ID }}
+#       AWS_SECRET_ACCESS_KEY: ${{ secrets.EB_AWS_SECRET_ACCESS_KEY }}
+
+#     steps:
+#       # 1. Checkout 코드
+#       - name: Checkout Repository
+#         uses: actions/checkout@v3
+
+#       # 2. Configure AWS credentials
+#       - name: Configure AWS Credentials
+#         uses: aws-actions/configure-aws-credentials@v2
+#         with:
+#           aws-access-key-id: ${{ secrets.EB_AWS_ACCESS_KEY_ID }}
+#           aws-secret-access-key: ${{ secrets.EB_AWS_SECRET_ACCESS_KEY }}
+#           aws-region: ap-northeast-2
+
+#       # 3. Ensure ECR Repository Exists
+#       - name: Create ECR Repository if it does not exist
+#         run: |
+#           aws ecr describe-repositories --repository-names $ECR_REPOSITORY || \
+#           aws ecr create-repository --repository-name $ECR_REPOSITORY --region ap-northeast-2
+#         env:
+#           AWS_REGION: ap-northeast-2
+#           ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
+
+#       # 4. Install Dependencies
+#       - name: Install Dependencies
+#         run: |
+#           npm ci
+
+#       # 5. Run Tests
+#       - name: Run Tests
+#         run: |
+#           npm test
+
+#       # 6. Log in to Amazon ECR
+#       - name: Login to Amazon ECR
+#         id: login-ecr
+#         uses: aws-actions/amazon-ecr-login@v1
+
+#       # 7. Build Docker image
+#       - name: Build Docker image
+#         run: |
+#           docker build -t $ECR_REPOSITORY:latest .
+
+#       # 8. Push Docker image to ECR
+#       - name: Push Docker image to ECR
+#         run: |
+#           docker tag $ECR_REPOSITORY:latest ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:latest
+#           docker push ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:latest
+
+#       # 9. Deploy updated image to Elastic Beanstalk
+#       - name: Deploy to Elastic Beanstalk
+#         run: |
+#           aws elasticbeanstalk update-environment --environment-name $EB_ENV_NAME --version-label ${{ github.run_number }}-${{ github.sha }}
+
 name: Deploy to Elastic Beanstalk
 
 on:
   push:
     branches:
-      - dev # dev 브랜치에 푸시될 때 트리거
+      - dev # dev 브랜치에 코드가 푸시될 때 트리거
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     env:
-      AWS_REGION: ap-northeast-2 # AWS 리전 (예: ap-northeast-2)
-      ECR_REPOSITORY: 'your-ecr-repository-name'
-      EB_ENV_NAME: Loopfiy-env-1
-      AWS_ACCESS_KEY_ID: ${{ secrets.EB_AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.EB_AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: ap-northeast-2 # AWS 리전 (예: 서울 리전)
+      ECR_REPOSITORY: 'your-ecr-repository-name' # 사용할 Amazon ECR 리포지토리 이름
+      EB_APP_NAME: 'your-elasticbeanstalk-app-name' # Elastic Beanstalk 애플리케이션 이름
+      EB_ENV_NAME: 'Loopfiy-env-1' # Elastic Beanstalk 환경 이름
+      DOCKER_IMAGE_TAG: ${{ github.run_number }}-${{ github.sha }} # Docker 이미지 태그 (런 번호와 커밋 SHA를 사용해 고유 태그 생성)
+      AWS_ACCESS_KEY_ID: ${{ secrets.EB_AWS_ACCESS_KEY_ID }} # GitHub Secrets에 저장된 AWS Access Key
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.EB_AWS_SECRET_ACCESS_KEY }} # GitHub Secrets에 저장된 AWS Secret Key
 
     steps:
-      # 1. Checkout 코드
+      # 1. GitHub 리포지토리 코드 체크아웃
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      # 2. Configure AWS credentials
+      # 2. AWS 자격 증명 설정
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.EB_AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.EB_AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-northeast-2
+          aws-region: ap-northeast-2 # AWS 리전 설정
 
-      # 3. Ensure ECR Repository Exists
+      # 3. Amazon ECR 리포지토리가 존재하지 않을 경우 생성
       - name: Create ECR Repository if it does not exist
         run: |
           aws ecr describe-repositories --repository-names $ECR_REPOSITORY || \
           aws ecr create-repository --repository-name $ECR_REPOSITORY --region ap-northeast-2
-        env:
-          AWS_REGION: ap-northeast-2
-          ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
 
-      # 4. Install Dependencies
+      # 4. 의존성 설치
       - name: Install Dependencies
-        run: |
-          npm ci
+        run: npm ci # CI 환경에서 의존성 설치
 
-      # 5. Run Tests
+      # 5. 테스트 실행
       - name: Run Tests
-        run: |
-          npm test
+        run: npm test # 프로젝트 테스트 실행
 
-      # 6. Log in to Amazon ECR
+      # 6. Amazon ECR에 로그인
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      # 7. Build Docker image
+      # 7. Docker 이미지 빌드
       - name: Build Docker image
         run: |
-          docker build -t $ECR_REPOSITORY:latest .
+          docker build -t $ECR_REPOSITORY:$DOCKER_IMAGE_TAG 
+          docker tag $ECR_REPOSITORY:$DOCKER_IMAGE_TAG ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:$DOCKER_IMAGE_TAG
 
-      # 8. Push Docker image to ECR
+      # 8. Docker 이미지를 Amazon ECR에 푸시
       - name: Push Docker image to ECR
         run: |
-          docker tag $ECR_REPOSITORY:latest ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:latest
-          docker push ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:latest
+          docker push ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:$DOCKER_IMAGE_TAG
 
-      # 9. Deploy updated image to Elastic Beanstalk
+      # 9. Elastic Beanstalk 애플리케이션 버전 생성
+      - name: Create Elastic Beanstalk Application Version
+        run: |
+          aws elasticbeanstalk create-application-version \
+            --application-name $EB_APP_NAME \
+            --version-label $DOCKER_IMAGE_TAG \
+            --source-bundle S3Bucket=$ECR_REPOSITORY,S3Key=$DOCKER_IMAGE_TAG
+
+      # 10. Elastic Beanstalk에 최신 버전 배포
       - name: Deploy to Elastic Beanstalk
         run: |
-          aws elasticbeanstalk update-environment --environment-name $EB_ENV_NAME --version-label ${{ github.run_number }}-${{ github.sha }}
+          aws elasticbeanstalk update-environment \
+            --environment-name $EB_ENV_NAME \
+            --version-label $DOCKER_IMAGE_TAG
