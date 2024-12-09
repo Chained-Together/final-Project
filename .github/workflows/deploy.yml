@@ -73,7 +73,7 @@ jobs:
           environment_name: elastic-beanstalk-dev
           version_label: $DOCKER_IMAGE_TAG
           region: ${{ secrets.AWS_REGION }}
-          existing_bucket_name: elastic-beanstalk-deploy-zip
+          existing_bucket_name: elastic-beanstalk-deploy-zip1
           deployment_package: deploy/deploy.zip
 
       # - name: Deploy to Elastic Beanstalk
