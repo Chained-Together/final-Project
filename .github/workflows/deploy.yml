@@ -67,7 +67,7 @@ jobs:
           echo '{
             "AWSEBDockerrunVersion": "1",
             "Image": {
-              "Name": "'${{ secrets. }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${ECR_REPOSITORY}:${DOCKER_IMAGE_TAG}'",
+              "Name": "'${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${ECR_REPOSITORY}:${DOCKER_IMAGE_TAG}'",
               "Update": "true"
             },
             "Ports": [
