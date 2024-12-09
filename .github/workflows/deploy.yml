@@ -121,11 +121,10 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      # 7. Docker 이미지 빌드
+      # 도커 이미지 빌드 : 수정완료
       - name: Build Docker image
         run: |
-          docker build -t $ECR_REPOSITORY:$DOCKER_IMAGE_TAG 
-          docker tag $ECR_REPOSITORY:$DOCKER_IMAGE_TAG ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:$DOCKER_IMAGE_TAG
+          docker build -t $ECR_REPOSITORY:latest
 
       # 8. Docker 이미지를 Amazon ECR에 푸시
       - name: Push Docker image to ECR
