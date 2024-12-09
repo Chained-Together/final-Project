@@ -149,3 +149,121 @@
 #           cluster: ${{ secrets.ECS_CLUSTER_NAME }}
 #           service: ${{ secrets.ECS_SERVICE_NAME }}
 #           image: ${{ steps.build-and-push.outputs.IMAGE_URI }}
+
+
+# name: Deploy to Elastic Beanstalk
+
+# on:
+#   push:
+#     branches:
+#       - dev
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+
+#     env:
+#       AWS_REGION: ap-northeast-2
+#       ECR_REPOSITORY: 'your-ecr-repository-name'
+#       EB_APP_NAME: 'your-elasticbeanstalk-app-name'
+#       EB_ENV_NAME: 'Loopfiy-env-2'
+#       DOCKER_IMAGE_TAG: ${{ github.run_number }}-${{ github.sha }}
+#       AWS_ACCESS_KEY_ID: ${{ secrets.EB_AWS_ACCESS_KEY_ID }}
+#       AWS_SECRET_ACCESS_KEY: ${{ secrets.EB_AWS_SECRET_ACCESS_KEY }}
+
+#     steps:
+#       - name: Checkout Repository
+#         uses: actions/checkout@v3
+
+#       - name: Configure AWS Credentials
+#         uses: aws-actions/configure-aws-credentials@v2
+#         with:
+#           aws-access-key-id: ${{ secrets.EB_AWS_ACCESS_KEY_ID }}
+#           aws-secret-access-key: ${{ secrets.EB_AWS_SECRET_ACCESS_KEY }}
+#           aws-region: ap-northeast-2
+
+#       - name: Login to Amazon ECR
+#         id: login-ecr
+#         uses: aws-actions/amazon-ecr-login@v1
+
+#       - name: Build Docker image
+#         run: |
+#           docker build -t $ECR_REPOSITORY:latest .
+
+#       - name: Push Docker image to ECR
+#         run: |
+#           docker tag $ECR_REPOSITORY:latest ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:latest
+#           docker push ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:latest
+
+#       - name: Create Dockerrun.aws.json
+#         run: |
+#           echo '{
+#             "AWSEBDockerrunVersion": "1",
+#             "Image": {
+#               "Name": "'${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${ECR_REPOSITORY}:${DOCKER_IMAGE_TAG}'",
+#               "Update": "true"
+#             },
+#             "Ports": [
+#               {
+#                 "ContainerPort": "80"
+#               }
+#             ]
+#           }' > Dockerrun.aws.json
+
+      # - name: Generate deployment package
+      #   run: |
+      #     mkdir -p deploy
+      #     cp Dockerrun.aws.json deploy/Dockerrun.aws.json
+      #     cp -r .ebextensions deploy/.ebextensions
+      #     cd deploy && zip -r deploy.zip .
+
+    #   - name: Generate deployment package
+    #     run: |
+    #       mkdir -p deploy
+    #       cp Dockerrun.aws.json deploy/Dockerrun.aws.json
+    #       zip -r deploy/deploy.zip deploy/Dockerrun.aws.json
+
+    #   - name: Upload Deployment Package to S3
+    #     run: |
+    #       aws s3 cp deploy/deploy.zip s3:///elastic-beanstalk-deploy-zip1/deploy.zip --region ap-northeast-2
+
+    #     # 9. Elastic Beanstalk 애플리케이션 버전 생성
+    #   - name: Create Elastic Beanstalk Application Version
+    #     run: |
+    #       aws elasticbeanstalk create-application-version \
+    #         --application-name $EB_APP_NAME \
+    #         --version-label $DOCKER_IMAGE_TAG \
+    #         --source-bundle S3Bucket=elastic-beanstalk-deploy-zip1,S3Key=deploy.zip \
+    #         --region ap-northeast-2
+
+    #   # 10. Elastic Beanstalk 환경 업데이트
+    #   - name: Update Elastic Beanstalk Environment
+    #     run: |
+    #       aws elasticbeanstalk update-environment \
+    #         --environment-name $EB_ENV_NAME \
+    #         --version-label $DOCKER_IMAGE_TAG \
+    #         --region ap-northeast-2
+
+      # - name: Deploy to EB #9
+      #   uses: einaregilsson/beanstalk-deploy@v22
+      #   with:
+      #     aws_access_key: ${{ secrets.EB_AWS_ACCESS_KEY_ID }}
+      #     aws_secret_key: ${{ secrets.EB_AWS_SECRET_ACCESS_KEY }}
+      #     application_name: loopfiy
+      #     environment_name: Loopfiy-env-2
+      #     version_label: $DOCKER_IMAGE_TAG
+      #     region: ${{ secrets.AWS_REGION }}
+      #     existing_bucket_name: elastic-beanstalk-deploy-zip1
+      #     deployment_package: deploy/deploy.zip
+      #     use_existing_version_if_available: true
+
+      # - name: Deploy to Elastic Beanstalk
+      #   run: |
+      #     aws elasticbeanstalk create-application-version \
+      #       --application-name "$EB_APP_NAME" \
+      #       --version-label "$DOCKER_IMAGE_TAG" \
+      #       --source-bundle fileb://$(pwd)/Dockerrun.aws.json
+
+      #     aws elasticbeanstalk update-environment \
+      #       --environment-name "$EB_ENV_NAME" \
+      #       --version-label "$DOCKER_IMAGE_TAG"
