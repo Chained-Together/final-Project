@@ -3,11 +3,7 @@ import { IsString, IsNotEmpty } from 'class-validator';
 export class UpdateMetadataDto {
   @IsString()
   @IsNotEmpty()
-  highResolutionUrl: string;
-
-  @IsString()
-  @IsNotEmpty()
-  lowResolutionUrl: string;
+  videoUrl: string;
 
   @IsNotEmpty()
   metadata: {

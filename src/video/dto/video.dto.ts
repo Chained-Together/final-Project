@@ -35,13 +35,13 @@ export class VideoDto {
   @IsNumber()
   duration: number;
 
-  @IsOptional()
-  @IsString()
-  high: string;
+  // @IsOptional()
+  // @IsString()
+  // high: string;
 
-  @IsOptional()
-  @IsString()
-  low: string;
+  // @IsOptional()
+  // @IsString()
+  // low: string;
 
   @IsNotEmpty()
   @IsEnum(Visibility)

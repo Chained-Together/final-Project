@@ -38,8 +38,7 @@ describe('ResolutionController', () => {
       expect(resolutionService.updateResolution).toHaveBeenCalledWith(
         mockUpdateMetadataDto.metadata.videoCode,
         mockUpdateMetadataDto.metadata.duration,
-        mockUpdateMetadataDto.highResolutionUrl,
-        mockUpdateMetadataDto.lowResolutionUrl,
+        mockUpdateMetadataDto.videoUrl
       );
       expect(result).toEqual(mockResolutionResponse);
     });
@@ -55,8 +54,7 @@ describe('ResolutionController', () => {
       expect(resolutionService.updateResolution).toHaveBeenCalledWith(
         mockUpdateMetadataDto.metadata.videoCode,
         mockUpdateMetadataDto.metadata.duration,
-        mockUpdateMetadataDto.highResolutionUrl,
-        mockUpdateMetadataDto.lowResolutionUrl,
+        mockUpdateMetadataDto.videoUrl
       );
     });
   });

@@ -16,14 +16,12 @@ export class ResolutionService {
   async updateResolution(
     videoCode: string,
     duration: number,
-    highResolutionUrl: string,
-    lowResolutionUrl: string,
+    videoUrl: string,
   ): Promise<ResolutionEntity> {
     console.log('updateResolution 호출됨');
     console.log('전달받은 videoCode:', videoCode);
     console.log('전달받은 duration:', duration);
-    console.log('전달받은 highResolutionUrl:', highResolutionUrl);
-    console.log('전달받은 highResolutionUrl:', lowResolutionUrl);
+    console.log('전달받은 videoUrl:', videoUrl);
 
     // 1. 비디오 찾기
     const findVideo = await this.videoRepository.findOne({ where: { videoCode } });
@@ -38,9 +36,9 @@ export class ResolutionService {
     // 2. 해상도 업데이트
     const resolutionUpdateResult = await this.resolutionRepository.update(
       {
-        video: { id: findVideo.id }, // 관계 매핑
+        video: { id: findVideo.id },
       },
-      { high: highResolutionUrl, low: lowResolutionUrl },
+      { videoUrl: videoUrl },
     );
 
     if (resolutionUpdateResult.affected === 0) {

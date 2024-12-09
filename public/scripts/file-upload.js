@@ -53,6 +53,7 @@ uploadBtn.addEventListener('click', async () => {
         'Content-Type': file.type,
       },
     });
+
     if (uploadResponse.ok) {
       alert('파일 업로드 성공!');
     }
