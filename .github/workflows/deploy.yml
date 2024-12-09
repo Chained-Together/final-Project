@@ -124,7 +124,7 @@ jobs:
       # 도커 이미지 빌드 : 수정완료
       - name: Build Docker image
         run: |
-          docker build -t $ECR_REPOSITORY:latest
+          docker build -t $ECR_REPOSITORY:latest .
 
       # 8. Docker 이미지를 Amazon ECR에 푸시
       - name: Push Docker image to ECR
