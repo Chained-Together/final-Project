@@ -9,6 +9,12 @@ export class channelRepository implements IChannelRepository {
     @InjectRepository(ChannelEntity)
     private readonly repository: Repository<ChannelEntity>,
   ) {}
+  findChannelByVideoJoinUser(videoId: number): Promise<ChannelEntity> {
+    return this.repository.findOne({
+      where: { video: { id: videoId } },
+      relations: ['user'],
+    });
+  }
   save(channel: ChannelEntity): Promise<ChannelEntity> {
     return this.repository.save(channel);
   }
