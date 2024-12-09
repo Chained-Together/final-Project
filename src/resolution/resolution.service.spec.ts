@@ -44,8 +44,7 @@ describe('ResolutionService', () => {
         resolutionService.updateResolution(
           mockUpdateMetadataDto.metadata.videoCode,
           mockUpdateMetadataDto.metadata.duration,
-          mockUpdateMetadataDto.highResolutionUrl,
-          mockUpdateMetadataDto.lowResolutionUrl,
+          mockUpdateMetadataDto.videoUrl,
         ),
       ).rejects.toThrow(NotFoundException);
 
@@ -64,8 +63,7 @@ describe('ResolutionService', () => {
         resolutionService.updateResolution(
           mockUpdateMetadataDto.metadata.videoCode,
           mockUpdateMetadataDto.metadata.duration,
-          mockUpdateMetadataDto.highResolutionUrl,
-          mockUpdateMetadataDto.lowResolutionUrl,
+          mockUpdateMetadataDto.videoUrl,
         ),
       ).rejects.toThrow('해상도 정보를 업데이트할 수 없습니다.');
 
@@ -75,8 +73,7 @@ describe('ResolutionService', () => {
       expect(resolutionRepository.update).toHaveBeenCalledWith(
         { video: { id: mockVideo.id } },
         {
-          high: mockUpdateMetadataDto.highResolutionUrl,
-          low: mockUpdateMetadataDto.lowResolutionUrl,
+          videoUrl: mockUpdateMetadataDto.videoUrl,
         },
       );
       expect(videoRepository.update).not.toHaveBeenCalled();
@@ -91,8 +88,7 @@ describe('ResolutionService', () => {
         resolutionService.updateResolution(
           mockUpdateMetadataDto.metadata.videoCode,
           mockUpdateMetadataDto.metadata.duration,
-          mockUpdateMetadataDto.highResolutionUrl,
-          mockUpdateMetadataDto.lowResolutionUrl,
+          mockUpdateMetadataDto.videoUrl,
         ),
       ).rejects.toThrow('비디오 메타데이터를 업데이트할 수 없습니다.');
 
@@ -102,8 +98,7 @@ describe('ResolutionService', () => {
       expect(resolutionRepository.update).toHaveBeenCalledWith(
         { video: { id: mockVideo.id } },
         {
-          high: mockUpdateMetadataDto.highResolutionUrl,
-          low: mockUpdateMetadataDto.lowResolutionUrl,
+          videoUrl: mockUpdateMetadataDto.videoUrl,
         },
       );
       expect(videoRepository.update).toHaveBeenCalledWith(
@@ -121,8 +116,7 @@ describe('ResolutionService', () => {
       const result = await resolutionService.updateResolution(
         mockUpdateMetadataDto.metadata.videoCode,
         mockUpdateMetadataDto.metadata.duration,
-        mockUpdateMetadataDto.highResolutionUrl,
-        mockUpdateMetadataDto.lowResolutionUrl,
+        mockUpdateMetadataDto.videoUrl,
       );
 
       expect(result).toEqual(mockResolution);
@@ -132,8 +126,7 @@ describe('ResolutionService', () => {
       expect(resolutionRepository.update).toHaveBeenCalledWith(
         { video: { id: mockVideo.id } },
         {
-          high: mockUpdateMetadataDto.highResolutionUrl,
-          low: mockUpdateMetadataDto.lowResolutionUrl,
+          videoUrl: mockUpdateMetadataDto.videoUrl,
         },
       );
       expect(videoRepository.update).toHaveBeenCalledWith(

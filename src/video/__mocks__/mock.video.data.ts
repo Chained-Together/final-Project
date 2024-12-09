@@ -76,8 +76,6 @@ export const videoDto: VideoDto = {
   description: 'This is a test description',
   thumbnailUrl: 'https://example.com/thumbnail.jpg',
   hashtags: ['#test', '#video'],
-  high: 'url',
-  low: 'url',
   duration: 300,
   visibility: Visibility.PUBLIC,
   videoCode: '1',
@@ -91,8 +89,6 @@ export const mockVideoDto: VideoDto = {
   duration: null,
   hashtags: ['공포', '강아지'],
   visibility: Visibility.PUBLIC,
-  high: '임의 링크',
-  low: '임의 링크',
   videoCode: '1',
 };
 

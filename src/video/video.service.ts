@@ -38,17 +38,8 @@ export class VideoService {
   }
 
   async saveMetadata(user: UserEntity, videoDto: VideoDto): Promise<object> {
-    const {
-      title,
-      description,
-      thumbnailUrl,
-      hashtags,
-      duration,
-      visibility,
-      high,
-      low,
-      videoCode,
-    } = videoDto;
+    const { title, description, thumbnailUrl, hashtags, duration, visibility, videoCode } =
+      videoDto;
 
     const foundChannel = await this.findChannelByUserId(user.id);
 
