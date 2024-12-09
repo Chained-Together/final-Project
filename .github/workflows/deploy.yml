@@ -72,7 +72,7 @@ jobs:
 
       - name: Upload Deployment Package to S3
         run: |
-          aws s3 cp deploy/deploy.zip s3://your-s3-bucket-name/deploy.zip --region $AWS_REGION
+          aws s3 cp deploy/deploy.zip s3://your-s3-bucket-name/deploy.zip --region ap-northeast-2
 
         # 9. Elastic Beanstalk 애플리케이션 버전 생성
       - name: Create Elastic Beanstalk Application Version
@@ -81,7 +81,7 @@ jobs:
             --application-name $EB_APP_NAME \
             --version-label $DOCKER_IMAGE_TAG \
             --source-bundle S3Bucket=your-s3-bucket-name,S3Key=deploy.zip \
-            --region $AWS_REGION
+            --region ap-northeast-2
 
       # 10. Elastic Beanstalk 환경 업데이트
       - name: Update Elastic Beanstalk Environment
@@ -89,7 +89,7 @@ jobs:
           aws elasticbeanstalk update-environment \
             --environment-name $EB_ENV_NAME \
             --version-label $DOCKER_IMAGE_TAG \
-            --region $AWS_REGION
+            --region ap-northeast-2
 
       # - name: Deploy to EB #9
       #   uses: einaregilsson/beanstalk-deploy@v22
