@@ -133,7 +133,7 @@ jobs:
           docker push ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:latest
 
       # 9. Elastic Beanstalk 애플리케이션 버전 생성
-       - name: Create Dockerrun.aws.json
+      - name: Create Dockerrun.aws.json
         run: |
           echo '{
             "AWSEBDockerrunVersion": "1",
@@ -147,7 +147,6 @@ jobs:
               }
             ]
           }' > Dockerrun.aws.json
-
 
       # 10. Elastic Beanstalk에 최신 버전 배포
       - name: Deploy to Elastic Beanstalk
