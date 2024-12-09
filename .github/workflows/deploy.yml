@@ -14,7 +14,7 @@ jobs:
       ECR_REPOSITORY: 'your-ecr-repository-name' # 사용할 Amazon ECR 리포지토리 이름
       EB_APP_NAME: 'your-elasticbeanstalk-app-name' # Elastic Beanstalk 애플리케이션 이름
       EB_ENV_NAME: 'Loopfiy-env-1' # Elastic Beanstalk 환경 이름
-      DOCKER_IMAGE_TAG: ${{ github.run_number }}-${{ github.sha }} # Docker 이미지 태그 (런 번호와 커밋 SHA를 사용해 고유 태그 생성)
+      DOCKER_IMAGE_TAG: '${{ github.run_number }}-${{ github.sha }}' # Docker 이미지 태그 (런 번호와 커밋 SHA를 사용해 고유 태그 생성)
       AWS_ACCESS_KEY_ID: ${{ secrets.EB_AWS_ACCESS_KEY_ID }} # GitHub Secrets에 저장된 AWS Access Key
       AWS_SECRET_ACCESS_KEY: ${{ secrets.EB_AWS_SECRET_ACCESS_KEY }} # GitHub Secrets에 저장된 AWS Secret Key
 
@@ -67,7 +67,7 @@ jobs:
           echo '{
             "AWSEBDockerrunVersion": "1",
             "Image": {
-              "Name": "'${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${ECR_REPOSITORY}:${DOCKER_IMAGE_TAG}'",
+              "Name": "'${{ secrets. }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${ECR_REPOSITORY}:${DOCKER_IMAGE_TAG}'",
               "Update": "true"
             },
             "Ports": [
