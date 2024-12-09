@@ -69,8 +69,8 @@ jobs:
         with:
           aws_access_key: ${{ secrets.EB_AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.EB_AWS_SECRET_ACCESS_KEY }}
-          application_name: elastic-beanstalk
-          environment_name: elastic-beanstalk-dev
+          application_name: loopfiy
+          environment_name: Loopfiy-env-1
           version_label: $DOCKER_IMAGE_TAG
           region: ${{ secrets.AWS_REGION }}
           existing_bucket_name: elastic-beanstalk-deploy-zip1
