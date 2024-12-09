@@ -10,6 +10,8 @@ import { NotificationEntity } from 'src/notification/entities/notification.entit
 import { UserEntity } from 'src/user/entities/user.entity';
 
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { commentRepository } from 'src/interface/impl/comment.repositroy';
+import { VideoRepository } from 'src/interface/impl/video.repository';
 
 @Module({
   imports: [
@@ -23,6 +25,17 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
     EventEmitter2,
   ],
   controllers: [CommentController],
-  providers: [CommentService, NotificationService],
+  providers: [
+    CommentService,
+    NotificationService,
+    {
+      provide: 'ICommentRepository',
+      useClass: commentRepository,
+    },
+    {
+      provide: 'IVideoRepository',
+      useClass: VideoRepository,
+    },
+  ],
 })
 export class CommentModule {}
