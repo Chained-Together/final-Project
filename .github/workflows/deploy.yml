@@ -67,4 +67,4 @@ jobs:
       # 9. Deploy updated image to Elastic Beanstalk
       - name: Deploy to Elastic Beanstalk
         run: |
-          aws elasticbeanstalk update-environment --environment-name $EB_ENV_NAME --version-label latest
+          aws elasticbeanstalk update-environment --environment-name $EB_ENV_NAME --version-label ${{ github.run_number }}-${{ github.sha }}
