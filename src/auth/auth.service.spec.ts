@@ -8,7 +8,13 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { Request } from 'express';
 import { SignUpDto } from './dto/signUp.dto';
-import { mockHashingService, mockJwtService, mockUserRepository } from './__mocks__/mock.auth.service';
+import {
+  mockHashingService,
+  mockJwtService,
+  mockUserRepository,
+  mockChannelService,
+} from './__mocks__/mock.auth.service';
+import { ChannelService } from 'src/channel/channel.service';
 
 describe('AuthService', () => {
   let authService: AuthService;
@@ -50,6 +56,10 @@ describe('AuthService', () => {
         {
           provide: JwtService,
           useValue: mockJwtService,
+        },
+        {
+          provide: ChannelService,
+          useValue: mockChannelService,
         },
       ],
     }).compile();
