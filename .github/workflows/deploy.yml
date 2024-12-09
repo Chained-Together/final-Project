@@ -156,10 +156,9 @@ jobs:
           DOCKER_IMAGE_TAG: ${{ github.sha }}
         run: |
           aws elasticbeanstalk create-application-version \
-            --application-name $EB_APP_NAME \
-            --version-label $DOCKER_IMAGE_TAG \
-            --process \
+            --application-name "$EB_APP_NAME" \
+            --version-label "$DOCKER_IMAGE_TAG" \
             --source-bundle fileb://Dockerrun.aws.json
           aws elasticbeanstalk update-environment \
-            --environment-name $EB_ENV_NAME \
-            --version-label $DOCKER_IMAGE_TAG
+            --environment-name "$EB_ENV_NAME" \
+            --version-label "$DOCKER_IMAGE_TAG"
