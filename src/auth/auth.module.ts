@@ -11,6 +11,7 @@ import { ChannelEntity } from 'src/channel/entities/channel.entity';
 import { UserEntity } from 'src/user/entities/user.entity';
 import { GoogleStrategy } from './google.strategy';
 import { NaverStrategy } from './naver.strategy';
+import { userRepository } from 'src/interface/impl/user.repository';
 
 @Module({
   imports: [
@@ -33,6 +34,10 @@ import { NaverStrategy } from './naver.strategy';
       provide: 'HashingService',
       useClass: BcryptHashingService,
     },
+    {
+      provide: 'IUserRepository',
+      useClass: userRepository,
+    }
   ],
 })
 export class AuthModule {}

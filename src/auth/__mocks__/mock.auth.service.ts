@@ -1,5 +1,11 @@
 export const mockUserRepository = {
-  findOne: jest.fn(),
+  findByEmail: jest.fn(),
+  findByNickname: jest.fn(),
+  findByPhoneNumber: jest.fn(),
+  findByGoogleId: jest.fn(),
+  findByNaverId: jest.fn(),
+  createByGoogleId: jest.fn(),
+  createByNaverId: jest.fn(),
   save: jest.fn(),
 };
 
