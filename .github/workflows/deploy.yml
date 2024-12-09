@@ -57,6 +57,7 @@ jobs:
             ]
           }' > Dockerrun.aws.json
 
+      #9
       # - name: Generate deployment package
       #   run: |
       #     mkdir -p deploy
