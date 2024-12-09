@@ -20,6 +20,27 @@ jobs:
       - run: npm ci
       - run: npm test
 
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate deployment package
+        run: zip -r deploy.zip . -x '*.git*'
+
+      - name: Deploy to Elastic Beanstalk
+        uses: einaregilsson/beanstalk-deploy@v22
+        with:
+          aws_access_key: ${{ secrets.EB_AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.EB_AWS_SECRET_ACCESS_KEY }}
+          application_name: loopfiy
+          environment_name: Loopfiy-env-1
+          version_label: ${{ github.run_number }}-${{ github.sha }}
+          region: ap-northeast-2
+          deployment_package: deploy.zip
+
   # build-and-push:
   #   needs: test
   #   runs-on: ubuntu-latest
@@ -47,9 +68,6 @@ jobs:
   #         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
   #         ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_NAME }}
   #         IMAGE_TAG: ${{ github.sha }}
-
-
-
 # 이건 예비용(CD까지 되어있음)
 # name: CI/CD Pipeline
 
