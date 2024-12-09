@@ -83,7 +83,6 @@ jobs:
             --source-bundle S3Bucket=elastic-beanstalk-deploy-zip1,S3Key=deploy.zip \
             --region ap-northeast-2
 
-      # 10. Elastic Beanstalk 환경 업데이트
       - name: Update Elastic Beanstalk Environment
         run: |
           aws elasticbeanstalk update-environment \
