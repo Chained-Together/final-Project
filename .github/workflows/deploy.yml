@@ -66,9 +66,7 @@ jobs:
 
       - name: Generate deployment package
         run: |
-          mkdir -p deploy
-          cp Dockerrun.aws.json deploy/Dockerrun.aws.json
-          zip -r deploy/deploy.zip deploy/Dockerrun.aws.json
+          zip deploy.zip Dockerrun.aws.json
 
       - name: Upload Deployment Package to S3
         run: |
