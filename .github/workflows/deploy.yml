@@ -133,16 +133,34 @@ jobs:
           docker push ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:latest
 
       # 9. Elastic Beanstalk 애플리케이션 버전 생성
-      - name: Create Elastic Beanstalk Application Version
+       - name: Create Dockerrun.aws.json
+        run: |
+          echo '{
+            "AWSEBDockerrunVersion": "1",
+            "Image": {
+              "Name": "'${{ secrets.EB_AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.EB_AWS_REGION }}.amazonaws.com/${ECR_REPOSITORY}:${DOCKER_IMAGE_TAG}'",
+              "Update": "true"
+            },
+            "Ports": [
+              {
+                "ContainerPort": "80"
+              }
+            ]
+          }' > Dockerrun.aws.json
+
+
+      # 10. Elastic Beanstalk에 최신 버전 배포
+      - name: Deploy to Elastic Beanstalk
+        env:
+          EB_APP_NAME: loopfiy
+          EB_ENV_NAME: Loopfiy-env-1
+          DOCKER_IMAGE_TAG: ${{ github.sha }}
         run: |
           aws elasticbeanstalk create-application-version \
             --application-name $EB_APP_NAME \
             --version-label $DOCKER_IMAGE_TAG \
-            --source-bundle S3Bucket=$ECR_REPOSITORY,S3Key=$DOCKER_IMAGE_TAG
-
-      # 10. Elastic Beanstalk에 최신 버전 배포
-      - name: Deploy to Elastic Beanstalk
-        run: |
+            --process \
+            --source-bundle fileb://Dockerrun.aws.json
           aws elasticbeanstalk update-environment \
             --environment-name $EB_ENV_NAME \
             --version-label $DOCKER_IMAGE_TAG
