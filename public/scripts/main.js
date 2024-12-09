@@ -1,4 +1,3 @@
-import { openNotificationPopup, closeNotificationPopup } from './notifications-popup.js';
 document.addEventListener('DOMContentLoaded', async () => {
   const urlParams = new URLSearchParams(window.location.search);
   const token = localStorage.getItem('token') || urlParams.get('token');
@@ -48,7 +47,7 @@ let lastVideoId = null; // 마지막 데이터의 id
 
 // 서버에서 비디오 데이터 가져오기
 async function fetchVideos(lastId) {
-  const url = lastId ? `video/many/${lastId}/6` : 'video/many/1/12'; // RESTful URL
+  const url = lastId ? `video/many/${lastId}/6` : 'video/many/1/12';
   const response = await fetch(url, { method: 'GET' });
 
   if (!response.ok) {
@@ -65,10 +64,11 @@ function createVideoElement(video) {
     return null;
   }
 
-  const shortformItem = document.createElement('div');
-  shortformItem.className = 'shortform-item';
+  const shortFormItem = document.createElement('div');
+  shortFormItem.className = 'shortForm-item';
+  console.log(shortFormItem);
 
-  shortformItem.addEventListener('click', () => {
+  shortFormItem.addEventListener('click', () => {
     window.location.href = `/view-video?id=${video.id}`;
   });
 
@@ -76,17 +76,17 @@ function createVideoElement(video) {
     const placeholderVideo = document.createElement('div');
     placeholderVideo.className = 'placeholder-video';
     placeholderVideo.style.backgroundImage = `url('${video.thumbnailUrl}')`;
-    shortformItem.appendChild(placeholderVideo);
+    shortFormItem.appendChild(placeholderVideo);
   }
 
   if (video.title) {
     const placeholderTitle = document.createElement('div');
     placeholderTitle.className = 'placeholder-title';
     placeholderTitle.textContent = video.title;
-    shortformItem.appendChild(placeholderTitle);
+    shortFormItem.appendChild(placeholderTitle);
   }
 
-  return shortformItem;
+  return shortFormItem;
 }
 
 // 비디오 데이터를 추가 렌더링
@@ -94,19 +94,19 @@ function appendVideos(container, videos) {
   videos.forEach((video) => {
     const videoElement = createVideoElement(video);
     if (videoElement) {
-      $(container).append(videoElement);
+      $('.container').append(videoElement);
     }
   });
 }
 
 // 초기 로드 및 스크롤 처리
 async function initialize() {
-  const shortformGrid = document.querySelector('.shortform-grid');
+  const shortFormGrid = document.querySelector('.shortForm-grid');
 
   try {
     // 초기 데이터 로드
     const initialVideos = await fetchVideos();
-    appendVideos(shortformGrid, initialVideos);
+    appendVideos(shortFormGrid, initialVideos);
 
     // 마지막 비디오 ID 저장
     if (initialVideos.length > 0) {
@@ -116,16 +116,16 @@ async function initialize() {
     // 스크롤 이벤트 추가
     $(window).on('scroll', async () => {
       const scroll = $(window).scrollTop();
-      const clientesScroll = $(window).height();
+      const clientsScroll = $(window).height();
       const height = $(document).height();
 
-      if (scroll + clientesScroll >= height - 10 && !isFetching) {
+      if (scroll + clientsScroll >= height - 10 && !isFetching) {
         isFetching = true;
 
         try {
           const newVideos = await fetchVideos(lastVideoId);
           if (newVideos.length > 0) {
-            appendVideos(shortformGrid, newVideos);
+            appendVideos(shortFormGrid, newVideos);
 
             // 마지막 비디오 ID 업데이트
             lastVideoId = newVideos[newVideos.length - 1].id;
@@ -148,89 +148,50 @@ async function initialize() {
 // 초기 실행
 initialize();
 
-const profileBtn = document.getElementById('profileBtn');
-profileBtn.addEventListener('click', () => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    window.location.href = '/myChannel';
-  } else {
-    window.location.href = '/login';
-  }
-});
+// const createNotificationButton = () => {
+//   const notificationButton = document.createElement('button');
+//   notificationButton.textContent = '알림';
+//   notificationButton.id = 'notificationBtn';
+//   notificationButton.style = `
+//       position: absolute;
+//       top: 70px;
+//       right: 90px;
+//       background-color: #fff;
+//       color: #000;
+//       border: none;
+//       padding: 10px 20px;
+//       border-radius: 5px;
+//       cursor: pointer;
+//       z-index: 1000;
+//     `;
 
-const accountBtn = document.getElementById('accountBtn');
-const createLogoutButton = () => {
-  const logoutButton = document.createElement('button');
-  logoutButton.textContent = '로그아웃';
-  logoutButton.id = 'logoutBtn';
-  logoutButton.style = `
-      position: absolute;
-      top: 40px;
-      right: 90px;
-      background-color: #fff;
-      color: #000;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      z-index: 1000;
-    `;
+//   notificationButton.addEventListener('click', openNotificationPopup);
 
-  logoutButton.addEventListener('click', () => {
-    localStorage.removeItem('token');
-    alert('로그아웃 되었습니다.');
-    window.location.href = '/main';
-  });
+//   return notificationButton;
+// };
 
-  return logoutButton;
-};
+// accountBtn.addEventListener('click', () => {
+//   const token = localStorage.getItem('token');
 
-const createNotificationButton = () => {
-  const notificationButton = document.createElement('button');
-  notificationButton.textContent = '알림';
-  notificationButton.id = 'notificationButtonBtn';
-  notificationButton.style = `
-      position: absolute;
-      top: 70px;
-      right: 90px;
-      background-color: #fff;
-      color: #000;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      z-index: 1000;
-    `;
+//   if (token) {
+//     let logoutBtn = document.getElementById('logoutBtn');
+//     let notificationButton = document.getElementById('notificationButton');
 
-  notificationButton.addEventListener('click', openNotificationPopup);
+//     if (!logoutBtn) {
+//       logoutBtn = createLogoutButton();
+//       logoutBtn.id = 'logoutBtn';
+//       document.body.appendChild(logoutBtn);
+//     }
 
-  return notificationButton;
-};
-
-document.getElementById('closePopupButton').addEventListener('click', closeNotificationPopup);
-
-accountBtn.addEventListener('click', () => {
-  const token = localStorage.getItem('token');
-
-  if (token) {
-    let logoutBtn = document.getElementById('logoutBtn');
-    let notificationButton = document.getElementById('notificationButton');
-
-    if (!logoutBtn) {
-      logoutBtn = createLogoutButton();
-      logoutBtn.id = 'logoutBtn';
-      document.body.appendChild(logoutBtn);
-    }
-
-    if (!notificationButton) {
-      notificationButton = createNotificationButton();
-      notificationButton.id = 'notificationButton';
-      document.body.appendChild(notificationButton);
-    } else {
-      notificationButton.remove();
-      logoutBtn.remove();
-    }
-  } else {
-    window.location.href = '/main';
-  }
-});
+//     if (!notificationButton) {
+//       notificationButton = createNotificationButton();
+//       notificationButton.id = 'notificationButton';
+//       document.body.appendChild(notificationButton);
+//     } else {
+//       notificationButton.remove();
+//       logoutBtn.remove();
+//     }
+//   } else {
+//     window.location.href = '/';
+//   }
+// });

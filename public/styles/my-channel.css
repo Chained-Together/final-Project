@@ -1,26 +1,115 @@
-header {
-  width: 100%; 
+/* my-channel.css */
+
+.channel-info h2 {
+  font-size: 4rem;
+  color: #ffffff; /* 채널 이름 강조 */
+  position: absolute;
+  top: 55%;
+  left: 40%;
+  font-family: 'Jua', sans-serif;
 }
 
-.log {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 10px; 
+.channel-info button {
+  padding: 10px 20px;
+  margin: 10px;
+  top: 90%;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Jua', sans-serif;
 }
 
-.log i {
-  font-size: 30px;
-  color: #fe6c17;
+/* 오류 메시지 */
+.error {
+  text-align: center;
+  color: #ff3333; /* 밝은 빨간색 */
+  font-size: 1rem;
+  margin-top: 10px;
 }
 
-.log a {
-  font-size: 30px;
-  color: #ffffff;
-  text-decoration: none;
+/* 반응형 */
+@media (max-width: 768px) {
+  header .log a {
+    font-size: 1rem;
+  }
+
+  .channel-info p {
+    font-size: 1.5rem;
+    position: absolute;
+    top: 10%;
+  }
+
+  .channel-info button {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
 }
 
-.bungee-spice-regular {
-  font-family: 'Bungee Spice', sans-serif;
-  font-weight: 400;
+/* 버튼 기본 스타일 */
+.edit-Btn,
+.upload-Btn,
+.live-btn {
+  width: 140px;
+  height: 45px;
+  border: none;
+  border-radius: 25px;
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+/* 버튼 호버 효과 */
+.edit-Btn:hover,
+.upload-Btn:hover,
+.live-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+.edit-Btn:active,
+.upload-Btn:active,
+.live-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.edit-Btn {
+  background: transparent;
+  border: 2px solid #ffffff;
+  position: absolute;
+  margin-top: 70%;
+  left: 35%;
+  width: 140px;
+  height: 45px;
+  border-radius: 25px;
+  color: #f8f8f8;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    transform 0.2s ease;
+}
+
+.upload-Btn {
+  background: linear-gradient(135deg, #ff512f, #dd2476);
+  position: absolute;
+  margin-top: 70%;
+  left: 57.5%;
+}
+
+.live-btn {
+  background: linear-gradient(135deg, #ff512f, #dd2476);
+  position: absolute;
+  margin-top: 70%;
+  left: 80%;
 }

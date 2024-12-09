@@ -7,6 +7,8 @@ import { LoginDto } from './dto/login.dto';
 import { SignUpDto } from './dto/signUp.dto';
 import { UserEntity } from 'src/user/entities/user.entity';
 import { Request } from 'express';
+import { ChannelService } from 'src/channel/channel.service';
+import { profile } from 'console';
 
 @Injectable()
 export class AuthService {
@@ -16,6 +18,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     @Inject('HashingService')
     private readonly bcryptHashingService: HashingService,
+    private readonly channelService: ChannelService,
   ) {}
 
   async signUp(signUpDto: SignUpDto, req: Request) {
@@ -33,7 +36,6 @@ export class AuthService {
       throw new BadRequestException('이미 사용중인 이메일입니다.');
     }
 
-    // TODO : 클라에서 처리하는게 어떨지
     if (signUpDto.password !== signUpDto.confirmedPassword) {
       throw new BadRequestException('비밀번호가 일치 하지 않습니다.');
     }
@@ -60,13 +62,15 @@ export class AuthService {
 
     const hashedPassword = await this.bcryptHashingService.hash(signUpDto.password);
 
-    await this.userRepository.save({
+    const newUser = await this.userRepository.save({
       email: signUpDto.email,
       password: hashedPassword,
       name: signUpDto.name,
       nickname: signUpDto.nickname,
       phoneNumber: signUpDto.phoneNumber,
     });
+
+    await this.createChannel(signUpDto.nickname, newUser);
 
     return {
       message: '회원가입에 성공했습니다.',
@@ -119,11 +123,10 @@ export class AuthService {
         isSocial: true,
         nickname: displayName,
         phoneNumber: `010-${num}-${num1}`,
-        // accessToken: accessToken,
       });
       await this.userRepository.save(user);
+      await this.createChannel(user.nickname, user);
     } else {
-      // user.accessToken = accessToken; //기존 소셜로그인 사용자 업데이트
       await this.userRepository.save(user);
     }
 
@@ -158,6 +161,7 @@ export class AuthService {
         phoneNumber: `010-${num}-${num1}`,
         isSocial: true,
       });
+      await this.createChannel(user.nickname, user);
       await this.userRepository.save(user);
     } else {
       user.email = email;
@@ -174,5 +178,12 @@ export class AuthService {
 
     const access_token = this.jwtService.sign(payload);
     return { access_token };
+  }
+
+  private async createChannel(name, user) {
+    const channel = {
+      name: name,
+    };
+    this.channelService.createChannel(channel, user);
   }
 }

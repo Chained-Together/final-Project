@@ -23,8 +23,6 @@ loginForm.addEventListener('submit', async (event) => {
 
     const token = await response.headers.get('Authorization');
 
-    console.log('난 로그인 토큰이야', token);
-
     if (token) {
       localStorage.setItem('token', token);
     } else {
@@ -44,10 +42,10 @@ loginForm.addEventListener('submit', async (event) => {
     }
 
     const notifications = await notificationResponse.json();
-    
+
     localStorage.setItem('pastNotifications', JSON.stringify(notifications));
 
-    window.location.href = '/main';
+    window.location.href = '/';
   } catch (error) {
     console.error(error);
     alert(`로그인 중 오류 발생: ${error.message}`);
@@ -59,25 +57,29 @@ document.getElementById('google-connect').addEventListener('click', (event) => {
   window.location.href = '/auth/google';
 });
 
-document.getElementById('Naver-connect').addEventListener('click', (event) => {
+document.getElementById('naver-connect').addEventListener('click', (event) => {
   event.preventDefault();
   // 네이버 소셜 로그인 엔드포인트로 리다이렉트
   window.location.href = '/auth/naver';
 });
 
-// 소셜 로그인 후 콜백에서 토큰 처리 (예시)
+// 소셜 로그인 후 콜백에서 토큰 처리
 if (
   window.location.pathname.includes('/google/callback') ||
   window.location.pathname.includes('/naver/callback')
 ) {
   const urlParams = new URLSearchParams(window.location.search);
   const token = urlParams.get('token');
-  console.log('IMMMMMMMMMTOKEN', token);
   if (token) {
-    localStorage.setItem('token', token); // JWT 토큰을 저장
+    localStorage.setItem('token', token);
 
-    window.location.href = '/main'; // 메인 페이지로 리다이렉트
+    window.location.href = '/';
   } else {
     console.error('토큰이 전달되지 않았습니다.');
   }
 }
+
+document.getElementById('signupBtn').addEventListener('click', (event) => {
+  event.preventDefault();
+  window.location.href = '/signup';
+});

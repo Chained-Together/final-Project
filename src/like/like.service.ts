@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { LikeEntity } from './entities/like.entity';
@@ -14,8 +14,12 @@ export class LikeService {
     private readonly likeRepository: Repository<LikeEntity>,
     private readonly notificationService: NotificationService,
   ) {}
-  // TODO : 예외처리하기
   async toggleLike(userId: number, videoId: number) {
+
+    if (!userId || !videoId) {
+      throw new BadRequestException('유저 ID와 비디오 ID는 필수입니다.');
+    }
+    
     const findLike = await this.likeRepository.findOne({
       where: {
         user: { id: userId },
@@ -40,6 +44,10 @@ export class LikeService {
       relations: ['user'],
     });
 
+    if (!foundChannel) {
+      throw new NotFoundException('비디오와 연결된 채널을 찾을 수 없습니다.');
+    }
+
     await this.notificationService.emitNotification(message, videoId);
 
     return await this.likeRepository.save({
@@ -49,6 +57,11 @@ export class LikeService {
   }
 
   async getLikes(videoId: number) {
+
+    if (!videoId) {
+      throw new BadRequestException('비디오 ID는 필수입니다.');
+    }
+
     const getLikes = await this.likeRepository.count({
       where: { video: { id: videoId } },
     });

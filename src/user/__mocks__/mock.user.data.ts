@@ -1,11 +1,6 @@
-import { CreateUserDto } from '../dto/create-user.dto';
-import { ChannelEntity } from '../../channel/entities/channel.entity';
-import { LikeEntity } from '../../like/entities/like.entity';
 import { UserEntity } from '../entities/user.entity';
-import { VideoEntity } from '../../video/entities/video.entity';
-import { DeleteUserDto } from '../dto/delete-user.dto';
 import { CommentDto } from '../../comment/dto/comment.dto';
-import { mockChannel, mockLike } from '../../video/__mocks__/mock.video.data';
+import { mockLike } from '../../video/__mocks__/mock.video.data';
 
 export const mockUser: UserEntity = {
   id: 1,
@@ -19,7 +14,7 @@ export const mockUser: UserEntity = {
   naverId: null,
   deletedAt: null,
   likes: [mockLike],
-  channel: mockChannel,
+  channel: null,
 };
 
 export const mockCommentDto: CommentDto = {
@@ -58,3 +53,48 @@ export const mockCommentResponse = {
   success: true,
   message: 'Comment deleted',
 };
+// ./__mocks__/mock.user.data.ts
+
+
+// Mock User Entity
+export const mockUserEntity: UserEntity = {
+  id: 1,
+  email: 'test@example.com',
+  password: 'hashedpassword',
+  name: 'Test User',
+  nickname: 'testuser',
+  phoneNumber: '010-1234-5678',
+  deletedAt: null,
+  likes: [],
+  channel: null,
+  isSocial: false,
+  googleId: null,
+  naverId: null,
+};
+
+// Mock Create User DTO
+export const mockCreateUserDto = {
+  email: 'test@example.com',
+  password: 'password',
+  confirmedPassword: 'password',
+  name: 'Test User',
+  nickname: 'testuser',
+  phoneNumber: '010-1234-5678',
+};
+
+// Mock Invalid Create User DTO
+export const mockInvalidCreateUserDto = {
+  email: '',
+  password: '',
+  confirmedPassword: '',
+  name: '',
+  nickname: '',
+  phoneNumber: '',
+};
+
+// Mock Delete User DTO
+export const mockDeleteUserDto = {
+  email: 'test@example.com',
+  password: 'password123',
+};
+

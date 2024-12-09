@@ -24,10 +24,6 @@ describe('ChannelService', () => {
     channelService = module.get<ChannelService>(ChannelService);
   });
 
- 
-  
- 
-
   it('should be defined', () => {
     expect(channelService).toBeDefined();
   });
@@ -52,6 +48,7 @@ describe('ChannelService', () => {
       });
       expect(mockChannelRepository.create).toHaveBeenCalledWith({
         ...channelDto,
+        user: mockUser
       });
       expect(mockChannelRepository.save).toHaveBeenCalledWith(mockChannel);
       expect(result).toEqual(mockChannel);

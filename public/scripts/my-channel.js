@@ -1,10 +1,9 @@
-import { showPopup } from './video-edit-popup.js';
 document.addEventListener('DOMContentLoaded', async () => {
-  const token = localStorage.getItem('token');
   const channelNameElement = document.getElementById('channelName');
-  const profileImageElement = document.getElementById('profileImage');
+  const profileImageElement = document.getElementById('profile');
   const thumbnailsContainer = document.getElementById('thumbnailsContainer');
   const liveButton = document.getElementById('liveVideo');
+  const uploadBtn = document.getElementById('uploadBtn');
 
   if (!token) {
     channelNameElement.textContent = '로그인이 필요합니다.';
@@ -31,12 +30,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       method: 'GET',
     });
     console.log(channelData.id);
+    console.log(videoResponse);
 
     if (!videoResponse.ok) {
       throw new Error('비디오를 로드하지 못했습니다.');
     }
     const videoData = await videoResponse.json();
-    console.log('비디오 데이터:', videoData);
 
     thumbnailsContainer.innerHTML = '';
 
@@ -61,7 +60,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       videoData.forEach((video) => {
         const card = document.createElement('div');
-        card.classList.add('video-card', 'thumbnail'); // "thumsbnail" 클래스 추가
+        card.classList.add('video-card', 'thumbnail'); // "thumbnail" 클래스 추가
         card.id = video.id;
 
         const img = document.createElement('img');
@@ -97,7 +96,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     channelNameElement.textContent = '정보를 로드하는 중 오류가 발생했습니다.';
   }
 
-  const uploadBtn = document.getElementById('uploadBtn');
   uploadBtn.addEventListener('click', () => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -111,38 +109,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.location.href = '/liveVideo';
   });
 
-  const profileButton = document.getElementById('profileButton');
-  console.log('Profile Button:', profileButton);
-  const createChannelEditButton = () => {
-    const channelEditButton = document.createElement('button');
-    channelEditButton.textContent = '채널 편집';
-    channelEditButton.id = 'channelEditBtn';
-    channelEditButton.style = `
-      position: absolute;
-      top: 30px;
-      right: 100px;
-      background-color: #fff;
-      color: #000;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      z-index: 1000;
-    `;
+  const editBtn = document.getElementById('editBtn');
 
-    channelEditButton.addEventListener('click', () => {
-      window.location.href = '/edit-mychannel';
-    });
-
-    return channelEditButton;
-  };
-  profileButton.addEventListener('click', () => {
-    let channelEditBtn = document.getElementById('channelEditBtn');
-    if (!channelEditBtn) {
-      channelEditBtn = createChannelEditButton();
-      document.body.appendChild(channelEditBtn);
-    } else {
-      channelEditBtn.remove();
-    }
+  editBtn.addEventListener('click', () => {
+    window.location.href = '/edit-mychannel';
   });
 });

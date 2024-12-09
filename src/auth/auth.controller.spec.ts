@@ -5,15 +5,11 @@ import { SignUpDto } from './dto/signUp.dto';
 import { LoginDto } from './dto/login.dto';
 import { Response } from 'express';
 import { Request } from 'express';
+import { mockAuthService } from './__mocks__/mock.auth.service';
 
 describe('AuthController', () => {
   let authController: AuthController;
   let authService: AuthService;
-
-  const mockAuthService = {
-    signUp: jest.fn(),
-    logIn: jest.fn(),
-  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -51,12 +47,18 @@ describe('AuthController', () => {
         headers: {
           authorization: 'Bearer mockToken',
         },
-        body: signUpDto,
       };
 
-      await authController.singUp(signUpDto, mockRequest as Request);
-
-      expect(authService.signUp).toHaveBeenCalledWith(signUpDto);
+      jest.spyOn(authService, 'signUp').mockResolvedValue({
+        message: '회원가입에 성공했습니다.',
+      });
+  
+      const result = await authController.singUp(signUpDto, mockRequest as Request);
+  
+      expect(authService.signUp).toHaveBeenCalledWith(signUpDto, mockRequest);
+      expect(result).toEqual({
+        message: '회원가입에 성공했습니다.',
+      });
     });
   });
 

@@ -4,6 +4,11 @@ import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import session from 'express-session';
+import * as dotenv from 'dotenv';
+
+const envFile = process.env.NODE_ENV === 'production' ? '.env' : 'development.env';
+dotenv.config({ path: envFile });
+
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 

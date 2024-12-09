@@ -11,3 +11,8 @@ export const mockHashingService = {
   hash: jest.fn(),
   compare: jest.fn(),
 };
+
+export const mockAuthService = {
+  signUp: jest.fn(),
+  logIn: jest.fn(),
+};

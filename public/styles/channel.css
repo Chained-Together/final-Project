@@ -1,23 +1,24 @@
 body {
-  font-family: 'Arial', sans-serif;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
-  background: linear-gradient(135deg, rgb(31, 31, 31), #cbcbcb);
-  color: #ffffff;
+  background-color: #242424; /* 연한 회색 */
+}
+.channel-info {
+  text-align: center;
+  width: 700px;
+  height: 250px;
+  position: absolute;
+  top: 7%;
+  left: 20%;
+  font-family: 'Jua', sans-serif;
 }
 
 .profile-btn {
   position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 50px;
-  height: 50px;
+  top: 15%;
+  right: 65%;
+  width: 250px;
+  height: 250px;
   border-radius: 50%;
-  overflow: hidden; 
+  overflow: hidden;
   border: 2px solid rgba(255, 255, 255, 0.8);
   cursor: pointer;
   background-color: rgba(255, 255, 255, 0.1);
@@ -36,6 +37,7 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
 @media (max-width: 480px) {
@@ -59,17 +61,25 @@ body {
 
 .video-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* 반응형으로 자동 조정 */
+  grid-template-columns: repeat(4, 1fr);
   gap: 20px;
-  width: 80%;
-  margin-top: 20px;
+  padding-left: 200px;
+  padding-right: 200px;
+  padding-top: 70px;
+  width: 100%;
+  position: absolute;
+  top: 40%;
+  background-color: #242424;
+
+  justify-content: center; /* 그리드 항목을 수평 가운데 정렬 */
+  align-content: center; /* 그리드의 수직 방향 콘텐츠 정렬 */
 }
 
 .video-card {
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  text-align: left;
+  text-align: center; /* 기본 텍스트 정렬은 가운데 */
   overflow: hidden;
   transition: transform 0.2s ease-in-out;
   cursor: pointer;
@@ -77,6 +87,9 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 300px;
+  height: 500px;
+  font-family: 'Jua', sans-serif;
 }
 
 .video-card:hover {
@@ -85,14 +98,14 @@ body {
 
 .video-card img {
   width: 100%;
-  height: 150px;
+  height: 80%;
   object-fit: cover;
   border-radius: 8px;
   margin-bottom: 10px;
 }
 
 .video-card h3 {
-  font-size: 16px;
+  font-size: 20px;
   font-weight: bold;
   margin: 5px 0;
   color: #333;
@@ -100,15 +113,28 @@ body {
 }
 
 .video-card p {
-  font-size: 14px;
+  font-size: 17px;
   color: #555;
-  text-align: center;
+  text-align: left;
   margin: 5px 0;
+  width: 100%;
 }
 
 .video-card .hashtags {
-  font-size: 12px;
+  font-size: 15px;
   color: #777;
-  text-align: center;
+  text-align: left;
   margin: 5px 0;
+  width: 100%;
+}
+
+.hashtag-container {
+  text-align: left;
+  width: 100%;
+}
+
+.hashtag-container p {
+  margin: 5px 0;
+  font-size: 15px;
+  color: #777;
 }
