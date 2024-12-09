@@ -28,8 +28,8 @@ services:
     ports:
       - '3000:3000' # 애플리케이션 포트
     environment:
-      DB_HOST: database-1.cho8264gqbrw.ap-northeast-2.rds.amazonaws.com
+      DB_HOST: pg-3041fi.vpc-pub-cdb-kr.ntruss.com
       DB_PORT: 5432
-      DB_USER: postgres
-      DB_PASS: aaaa4321
-      DB_NAME: final_project
+      DB_USER: chainedtogether
+      DB_PASS: aaaa4321!
+      DB_NAME: loopfiy
