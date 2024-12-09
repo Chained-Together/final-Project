@@ -155,6 +155,10 @@ jobs:
           EB_ENV_NAME: Loopfiy-env-1
           DOCKER_IMAGE_TAG: ${{ github.sha }}
         run: |
+          echo "Application Name: $EB_APP_NAME"
+          echo "Environment Name: $EB_ENV_NAME"
+          echo "Version Label: $DOCKER_IMAGE_TAG"
+
           aws elasticbeanstalk create-application-version \
             --application-name "$EB_APP_NAME" \
             --version-label "$DOCKER_IMAGE_TAG" \
