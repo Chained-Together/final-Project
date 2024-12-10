@@ -8,9 +8,13 @@ export const mockChannelService = {
   findChannelByKeyword: jest.fn(),
   findOne: jest.fn(),
 };
+export const mockQueryBuilder = {
+  where: jest.fn().mockReturnThis(),
+  getMany: jest.fn().mockResolvedValue(mockChannels),
+};
 
 export const mockChannelRepository = {
-  createQueryBuilder: jest.fn(),
+  createQueryBuilder: jest.fn().mockReturnValue(mockQueryBuilder),
   findChannelByUserId: jest.fn(),
   findChannelByChannelId: jest.fn(),
   findChannelByName: jest.fn(),
@@ -19,9 +23,4 @@ export const mockChannelRepository = {
   deleteChannel: jest.fn(),
   findChannelByKeyword: jest.fn(),
   save: jest.fn(),
-};
-
-export const mockQueryBuilder = {
-  where: jest.fn().mockReturnThis(),
-  getMany: jest.fn().mockResolvedValue(mockChannels),
 };
