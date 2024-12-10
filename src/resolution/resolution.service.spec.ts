@@ -44,6 +44,7 @@ describe('ResolutionService', () => {
         resolutionService.updateResolution(
           mockUpdateMetadataDto.metadata.videoCode,
           mockUpdateMetadataDto.metadata.duration,
+          mockUpdateMetadataDto.metadata.thumbnail,
           mockUpdateMetadataDto.videoUrl,
         ),
       ).rejects.toThrow(NotFoundException);
@@ -63,6 +64,7 @@ describe('ResolutionService', () => {
         resolutionService.updateResolution(
           mockUpdateMetadataDto.metadata.videoCode,
           mockUpdateMetadataDto.metadata.duration,
+          mockUpdateMetadataDto.metadata.thumbnail,
           mockUpdateMetadataDto.videoUrl,
         ),
       ).rejects.toThrow('해상도 정보를 업데이트할 수 없습니다.');
@@ -88,6 +90,7 @@ describe('ResolutionService', () => {
         resolutionService.updateResolution(
           mockUpdateMetadataDto.metadata.videoCode,
           mockUpdateMetadataDto.metadata.duration,
+          mockUpdateMetadataDto.metadata.thumbnail,
           mockUpdateMetadataDto.videoUrl,
         ),
       ).rejects.toThrow('비디오 메타데이터를 업데이트할 수 없습니다.');
@@ -103,7 +106,11 @@ describe('ResolutionService', () => {
       );
       expect(videoRepository.update).toHaveBeenCalledWith(
         { id: mockVideo.id },
-        { duration: mockUpdateMetadataDto.metadata.duration, status: true },
+        {
+          duration: mockUpdateMetadataDto.metadata.duration,
+          status: true,
+          thumbnailUrl: mockUpdateMetadataDto.metadata.thumbnail,
+        },
       );
     });
 
@@ -116,6 +123,7 @@ describe('ResolutionService', () => {
       const result = await resolutionService.updateResolution(
         mockUpdateMetadataDto.metadata.videoCode,
         mockUpdateMetadataDto.metadata.duration,
+        mockUpdateMetadataDto.metadata.thumbnail,
         mockUpdateMetadataDto.videoUrl,
       );
 
@@ -131,7 +139,11 @@ describe('ResolutionService', () => {
       );
       expect(videoRepository.update).toHaveBeenCalledWith(
         { id: mockVideo.id },
-        { duration: mockUpdateMetadataDto.metadata.duration, status: true },
+        {
+          duration: mockUpdateMetadataDto.metadata.duration,
+          status: true,
+          thumbnailUrl: mockUpdateMetadataDto.metadata.thumbnail,
+        },
       );
       expect(resolutionRepository.findOne).toHaveBeenCalledWith({
         where: { video: { id: mockVideo.id } },

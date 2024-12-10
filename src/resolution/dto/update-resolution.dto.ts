@@ -9,5 +9,6 @@ export class UpdateMetadataDto {
   metadata: {
     videoCode: string;
     duration: number;
+    thumbnail: string;
   };
 }

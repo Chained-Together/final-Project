@@ -16,12 +16,14 @@ export class ResolutionService {
   async updateResolution(
     videoCode: string,
     duration: number,
+    thumbnail: string,
     videoUrl: string,
   ): Promise<ResolutionEntity> {
     console.log('updateResolution 호출됨');
     console.log('전달받은 videoCode:', videoCode);
     console.log('전달받은 duration:', duration);
     console.log('전달받은 videoUrl:', videoUrl);
+    console.log('전달받은 thumbnail:', thumbnail);
 
     // 1. 비디오 찾기
     const findVideo = await this.videoRepository.findOne({ where: { videoCode } });
@@ -47,7 +49,7 @@ export class ResolutionService {
 
     const videoUpdateResult = await this.videoRepository.update(
       { id: findVideo.id },
-      { duration: duration, status: true },
+      { duration: duration, status: true, thumbnailUrl: thumbnail },
     );
 
     if (videoUpdateResult.affected === 0) {

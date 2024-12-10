@@ -18,9 +18,8 @@ export class VideoDto {
   @IsString()
   description: string;
 
-  @IsNotEmpty()
-  @IsString()
-  thumbnailUrl: string;
+  // @IsString()
+  // thumbnailUrl: string;
 
   @IsNotEmpty()
   @IsString()

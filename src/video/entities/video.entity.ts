@@ -26,7 +26,7 @@ export class VideoEntity {
   @Column({ type: 'varchar', nullable: false })
   description: string;
 
-  @Column({ type: 'varchar', nullable: false, name: 'thumbnail_url' })
+  @Column({ type: 'varchar', default: null, name: 'thumbnail_url' })
   thumbnailUrl: string;
 
   @Column({ type: 'jsonb', nullable: false })
