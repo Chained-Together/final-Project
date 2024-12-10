@@ -58,8 +58,7 @@ describe('ResolutionService', () => {
 
     it('해상도 업데이트가 실패하면 예외를 던져야 한다.', async () => {
       mockVideoRepository.findOne.mockResolvedValue(mockVideo);
-      mockResolutionRepository.update.mockResolvedValue({ affected: 0 }); // 실패 시뮬레이션
-
+      mockResolutionRepository.update.mockResolvedValue({ affected: 0 });
       await expect(
         resolutionService.updateResolution(
           mockUpdateMetadataDto.metadata.videoCode,
@@ -84,8 +83,8 @@ describe('ResolutionService', () => {
 
     it('비디오 메타데이터 업데이트가 실패하면 예외를 던져야 한다.', async () => {
       mockVideoRepository.findOne.mockResolvedValue(mockVideo);
-      mockResolutionRepository.update.mockResolvedValue({ affected: 1 }); // 성공 시뮬레이션
-      mockVideoRepository.update.mockResolvedValue({ affected: 0 }); // 실패 시뮬레이션
+      mockResolutionRepository.update.mockResolvedValue({ affected: 1 });
+      mockVideoRepository.update.mockResolvedValue({ affected: 0 });
 
       await expect(
         resolutionService.updateResolution(
