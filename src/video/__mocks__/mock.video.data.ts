@@ -74,7 +74,6 @@ export const mockVideos: VideoEntity[] = [
 export const videoDto: VideoDto = {
   title: 'Test Video',
   description: 'This is a test description',
-  thumbnailUrl: 'https://example.com/thumbnail.jpg',
   hashtags: ['#test', '#video'],
   duration: 300,
   visibility: Visibility.PUBLIC,
@@ -85,7 +84,6 @@ export const videoDto: VideoDto = {
 export const mockVideoDto: VideoDto = {
   title: 'test',
   description: 'test',
-  thumbnailUrl: 'test',
   duration: null,
   hashtags: ['공포', '강아지'],
   visibility: Visibility.PUBLIC,

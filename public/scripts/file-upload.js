@@ -4,7 +4,6 @@ const titleInput = document.getElementById('title');
 const descriptionInput = document.getElementById('video-description');
 const hashtagsInput = document.getElementById('hashtags');
 const visibilityInput = document.getElementById('visibility');
-const thumbnailUrlInput = document.getElementById('thumbnailUrl');
 const token = localStorage.getItem('token');
 
 // 페이지가 로드될 때 저장된 값을 복원
@@ -61,11 +60,11 @@ uploadBtn.addEventListener('click', async () => {
     const metadataPayload = {
       title: titleInput.value || null,
       description: descriptionInput.value || null,
-      thumbnailUrl: thumbnailUrlInput.value || null,
       hashtags: hashtagsInput.value ? hashtagsInput.value.split(',') : [],
       visibility: visibilityInput.value || null,
       videoCode: key,
     };
+    console.log('metadataPayload', metadataPayload);
 
     const metadataResponse = await fetch('http://localhost:3000/video', {
       method: 'POST',

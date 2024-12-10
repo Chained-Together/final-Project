@@ -16,10 +16,12 @@ export class ResolutionController {
       console.log('Video URL:', videoUrl);
       console.log('Metadata:', metadata.videoCode);
       console.log('Metadata:', metadata.duration);
+      console.log('Thumbnail:', metadata.thumbnail);
 
       return this.resolutionService.updateResolution(
         metadata.videoCode,
         metadata.duration,
+        metadata.thumbnail,
         videoUrl,
       );
     } catch (error) {

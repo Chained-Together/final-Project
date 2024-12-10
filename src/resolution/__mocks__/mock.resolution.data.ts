@@ -3,6 +3,7 @@ export const mockUpdateMetadataDto = {
   metadata: {
     videoCode: 'VID12345',
     duration: 10,
+    thumbnail: 'thumbnail',
   },
 };
 
@@ -19,6 +20,7 @@ export const mockResolution = {
     id: 1,
     videoCode: 'VID12345',
     duration: 10,
+    thumbnail: 'thumbnail',
   },
 };
 
@@ -26,5 +28,6 @@ export const mockVideo = {
   id: 1,
   videoCode: 'VID12345',
   duration: 10,
+  thumbnail: 'thumbnail',
   resolution: mockResolution,
 };
