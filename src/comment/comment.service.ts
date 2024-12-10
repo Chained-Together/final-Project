@@ -84,7 +84,9 @@ export class CommentService {
     await this.verifyComment(user.id, commentId, videoId);
 
     const checkComment = await this.commentRepository.findCommentByCommentId(commentId);
-
+    if (!checkComment) {
+      throw new NotFoundException('해당하는 댓글이 존재하지 않습니다.');
+    }
     const checkReply = await this.commentRepository.findReplyByCommentGroup(
       checkComment.commentGroup,
     );

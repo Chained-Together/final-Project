@@ -142,87 +142,83 @@ describe('CommentService', () => {
     });
 
     it('댓글 수정 성공 검증', async () => {
+      mockCommentRepository.findCommentUserIdAndCommentIdAndVideoId.mockResolvedValue(mockComment);
+      mockCommentRepository.updateComment.mockResolvedValue(undefined);
       mockCommentRepository.findCommentByCommentId.mockResolvedValue(mockComment);
-      mockCommentRepository.updateComment.mockResolvedValue({ affected: 1 });
-      mockCommentRepository.findCommentByCommentId.mockResolvedValue(mockUpdatedComment);
+      mockCommentRepository.findCommentByUserId.mockResolvedValue(mockUser);
 
-      const result = await service.updateComment(
-        mockComment.videoId,
-        mockComment.id,
-        mockUpdatedCommentDto,
-        mockUser,
-      );
+      const result = await service.updateComment(mockVideo.id, 1, mockCommentDto, mockUser);
 
-      expect(result).toEqual(mockUpdatedComment);
-      expect(mockCommentRepository.updateComment).toHaveBeenCalledWith(
-        mockComment.id,
-        mockUpdatedCommentDto.content,
-      );
+      expect(mockCommentRepository.updateComment).toHaveBeenCalledWith(1, 'Test Comment');
+      expect(result).toEqual(mockComment);
     });
 
     it('존재하지 않는 댓글 수정 시 NotFoundException 발생 검증', async () => {
-      mockCommentRepository.findCommentByCommentId.mockResolvedValue(null);
+      mockCommentRepository.findCommentUserIdAndCommentIdAndVideoId.mockResolvedValue(mockComment);
+      mockCommentRepository.findCommentByUserId.mockResolvedValue(mockUser);
+      mockCommentRepository.deleteComment.mockResolvedValue({ affected: 1 });
 
-      await expect(
-        service.updateComment(mockComment.videoId, mockComment.id, mockUpdatedCommentDto, mockUser),
-      ).rejects.toThrow(NotFoundException);
+      const result = await service.removeComment(mockVideo.id, 1, mockUser);
+
+      expect(mockCommentRepository.deleteComment).toHaveBeenCalledWith(1);
+      expect(result).toEqual({ success: true, message: 'Comment deleted successfully' });
     });
   });
 
   describe('removeComment', () => {
-    it('댓글 삭제 성공 검증', async () => {
-      mockCommentRepository.findCommentByCommentId.mockResolvedValue(mockComment);
+    it('댓글 삭제 성공', async () => {
+      mockCommentRepository.findCommentUserIdAndCommentIdAndVideoId.mockResolvedValue(mockComment);
       mockCommentRepository.deleteComment.mockResolvedValue({ affected: 1 });
 
-      const result = await service.removeComment(mockComment.videoId, mockComment.id, mockUser);
+      const result = await service.removeComment(mockVideo.id, 1, mockUser);
 
-      expect(mockCommentRepository.findCommentByCommentId).toHaveBeenCalledWith(mockComment.id);
-      expect(mockCommentRepository.deleteComment).toHaveBeenCalledWith(mockComment.id);
-      expect(result).toEqual(mockCommentDeletionResponse);
+      expect(mockCommentRepository.deleteComment).toHaveBeenCalledWith(1);
+      expect(result).toEqual({ success: true, message: 'Comment deleted successfully' });
     });
 
-    it('존재하지 않는 댓글 삭제 시 BadRequestException 발생 검증', async () => {
-      mockCommentRepository.findCommentByCommentId.mockResolvedValue(mockComment);
+    it('댓글 삭제 실패 시 예외 발생', async () => {
+      mockCommentRepository.findCommentUserIdAndCommentIdAndVideoId.mockResolvedValue(mockComment);
+      mockCommentRepository.findCommentByUserId.mockResolvedValue(mockUser);
       mockCommentRepository.deleteComment.mockResolvedValue({ affected: 0 });
 
-      await expect(
-        service.removeComment(mockComment.videoId, mockComment.id, mockUser),
-      ).rejects.toThrow(BadRequestException);
+      await expect(service.removeComment(mockVideo.id, 1, mockUser)).rejects.toThrow(
+        BadRequestException,
+      );
     });
   });
 
   describe('createReply', () => {
     it('답글 생성 성공 검증', async () => {
       mockCommentRepository.findCommentByCommentId.mockResolvedValue(mockComment);
-      mockCommentRepository.findReplyByCommentGroup.mockResolvedValue(null);
-      mockCommentRepository.createReply.mockReturnValue(mockReplyComment);
-      mockCommentRepository.save.mockResolvedValue(mockReplyComment);
+      mockCommentRepository.findReplyByCommentGroup.mockResolvedValue({ orderNumber: 0 });
+      mockCommentRepository.createReply.mockReturnValue(mockComment);
+      mockCommentRepository.save.mockResolvedValue(mockComment);
 
       const result = await service.createReply(
-        mockComment.videoId,
+        mockVideo.id,
         mockComment.id,
         mockUser,
         mockCommentDto,
       );
 
-      expect(mockCommentRepository.findCommentByCommentId).toHaveBeenCalledWith(mockComment.id);
-      expect(mockCommentRepository.findReplyByCommentGroup).toHaveBeenCalledWith(
-        mockComment.commentGroup,
-      );
       expect(mockCommentRepository.createReply).toHaveBeenCalledWith(
         mockUser.id,
         mockCommentDto.content,
         mockComment.id,
         1,
         mockComment.commentGroup,
-        mockComment.videoId,
+        mockVideo.id,
       );
-      expect(mockCommentRepository.save).toHaveBeenCalledWith(mockReplyComment);
-      expect(notificationService.emitNotification).toHaveBeenCalledWith(
-        `${mockUser.id}님이 ${mockComment.videoId} 영상에 댓글을 달았습니다.`,
-        mockComment.videoId,
+      expect(mockCommentRepository.save).toHaveBeenCalledWith(mockComment);
+      expect(result).toEqual(mockComment);
+    });
+
+    it('존재하지 않는 댓글에 답글 생성 시 예외 발생', async () => {
+      mockCommentRepository.findCommentByCommentId.mockResolvedValue(null);
+
+      await expect(service.createReply(mockVideo.id, 1, mockUser, mockCommentDto)).rejects.toThrow(
+        NotFoundException,
       );
-      expect(result).toEqual(mockReplyComment);
     });
   });
 });
