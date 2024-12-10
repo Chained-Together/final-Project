@@ -7,6 +7,8 @@ import { LoginDto } from './dto/login.dto';
 import { SignUpDto } from './dto/signUp.dto';
 import { UserEntity } from 'src/user/entities/user.entity';
 import { Request } from 'express';
+import { ChannelService } from 'src/channel/channel.service';
+import { profile } from 'console';
 
 @Injectable()
 export class AuthService {
@@ -16,6 +18,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     @Inject('HashingService')
     private readonly bcryptHashingService: HashingService,
+    private readonly channelService: ChannelService,
   ) {}
 
   async signUp(signUpDto: SignUpDto, req: Request) {
@@ -66,6 +69,8 @@ export class AuthService {
       nickname: signUpDto.nickname,
       phoneNumber: signUpDto.phoneNumber,
     });
+
+    await this.createChannel(signUpDto.nickname, newUser);
 
     return {
       message: '회원가입에 성공했습니다.',
@@ -120,6 +125,7 @@ export class AuthService {
         phoneNumber: `010-${num}-${num1}`,
       });
       await this.userRepository.save(user);
+      await this.createChannel(user.nickname, user);
     } else {
       await this.userRepository.save(user);
     }
@@ -155,6 +161,7 @@ export class AuthService {
         phoneNumber: `010-${num}-${num1}`,
         isSocial: true,
       });
+      await this.createChannel(user.nickname, user);
       await this.userRepository.save(user);
     } else {
       user.email = email;
@@ -171,5 +178,12 @@ export class AuthService {
 
     const access_token = this.jwtService.sign(payload);
     return { access_token };
+  }
+
+  private async createChannel(name, user) {
+    const channel = {
+      name: name,
+    };
+    this.channelService.createChannel(channel, user);
   }
 }

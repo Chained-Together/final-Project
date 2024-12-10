@@ -82,7 +82,7 @@
   --bs-body-line-height: 1.5;
   --bs-body-color: #67748e;
   --bs-body-color-rgb: 103, 116, 142;
-  --bs-body-bg: #fff;
+  --bs-body-bg: #292727;
   --bs-body-bg-rgb: 255, 255, 255;
   --bs-emphasis-color: #000;
   --bs-emphasis-color-rgb: 0, 0, 0;
@@ -95,7 +95,7 @@
   --bs-tertiary-bg: #f8f9fa;
   --bs-tertiary-bg-rgb: 248, 249, 250;
   --bs-heading-color: #344767;
-  --bs-link-color: #5e72e4;
+  --bs-link-color: #ffffff;
   --bs-link-color-rgb: 94, 114, 228;
   --bs-link-decoration: none;
   --bs-link-hover-color: rgb(35.2579787234, 61.375, 210.2420212766);
@@ -169,7 +169,7 @@
   --bs-light-border-subtle: #495057;
   --bs-dark-border-subtle: #343a40;
   --bs-heading-color: inherit;
-  --bs-link-color: rgb(158.4, 170.4, 238.8);
+  --bs-link-color: rgb(0, 0, 0);
   --bs-link-hover-color: rgb(177.72, 187.32, 242.04);
   --bs-link-color-rgb: 158, 170, 239;
   --bs-link-hover-color-rgb: 178, 187, 242;
@@ -4727,7 +4727,7 @@ fieldset:disabled .btn {
 
 .nav {
   --bs-nav-link-padding-x: 1rem;
-  --bs-nav-link-padding-y: 0.5rem;
+  --bs-nav-link-padding-y: 1rem;
   --bs-nav-link-font-weight: ;
   --bs-nav-link-color: var(--bs-link-color);
   --bs-nav-link-hover-color: var(--bs-link-hover-color);
@@ -23611,7 +23611,7 @@ hr.horizontal.gray-light {
     animation-fill-mode: both;
     animation-duration: 1.5s;
     transform: scale(0.6);
-    background: #fff;
+    background: black;
     left: 18% !important;
     position: absolute;
   }

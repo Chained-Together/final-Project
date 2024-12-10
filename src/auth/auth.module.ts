@@ -11,6 +11,8 @@ import { ChannelEntity } from 'src/channel/entities/channel.entity';
 import { UserEntity } from 'src/user/entities/user.entity';
 import { GoogleStrategy } from './google.strategy';
 import { NaverStrategy } from './naver.strategy';
+import { ChannelService } from 'src/channel/channel.service';
+import { ChannelModule } from 'src/channel/channel.module';
 
 @Module({
   imports: [
@@ -22,6 +24,7 @@ import { NaverStrategy } from './naver.strategy';
       inject: [ConfigService],
     }),
     TypeOrmModule.forFeature([UserEntity, ChannelEntity]),
+    ChannelModule,
   ],
   controllers: [AuthController],
   providers: [
@@ -29,6 +32,7 @@ import { NaverStrategy } from './naver.strategy';
     JwtStrategy,
     GoogleStrategy,
     NaverStrategy,
+    ChannelService,
     {
       provide: 'HashingService',
       useClass: BcryptHashingService,

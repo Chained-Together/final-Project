@@ -1,97 +1,22 @@
-header {
-  width: 100%;
-}
-
-.log {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 10px;
-}
-
-.log i {
-  font-size: 30px;
-  color: #fe6c17;
-}
-
-.log a {
-  font-size: 30px;
-  color: #ffffff;
-  text-decoration: none;
-}
-
-.bungee-spice-regular {
-  font-family: 'Bungee Spice', sans-serif;
-  font-weight: 400;
-}
-
 /* my-channel.css */
 
-/* 기본 설정 */
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Jua', sans-serif;
-  background-color: #1e1e1e; /* 어두운 배경 */
-  color: #ffffff; /* 기본 텍스트 흰색 */
-  overflow-x: hidden;
-}
-
-/* 프로필 버튼 */
-.profile-btn {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  border-radius: 50%;
-  overflow: hidden;
-  width: 50px;
-  height: 50px;
-  border: 2px solid #ffcc00; /* 노란색 테두리 */
-  cursor: pointer;
-}
-
-.profile-btn img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* 채널 정보 */
-.channel-info {
-  text-align: center;
-  padding: 30px 20px;
-}
-
 .channel-info h2 {
-  font-size: 2rem;
-  color: #ffcc00; /* 채널 이름 강조 */
+  font-size: 4rem;
+  color: #ffffff; /* 채널 이름 강조 */
+  position: absolute;
+  top: 55%;
+  left: 40%;
+  font-family: 'Jua', sans-serif;
 }
 
 .channel-info button {
-  background-color: #333333;
-  color: #ffffff;
-  border: 1px solid #444444;
   padding: 10px 20px;
   margin: 10px;
+  top: 90%;
   border-radius: 5px;
   cursor: pointer;
   transition: all 0.3s ease;
-}
-
-.channel-info button:hover {
-  background-color: #444444; /* 약간 밝게 */
-  color: #ffcc00; /* 텍스트 강조 */
-}
-
-/* 비디오 프리뷰 */
-#preview {
-  width: 100%;
-  max-width: 600px;
-  height: auto;
-  border: 2px solid #444444;
-  margin: 20px auto;
-  display: block;
-  border-radius: 10px;
+  font-family: 'Jua', sans-serif;
 }
 
 /* 오류 메시지 */
@@ -102,47 +27,89 @@ body {
   margin-top: 10px;
 }
 
-/* 비디오 리스트 */
-.video-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 20px;
-  padding: 20px;
-}
-
-.video-list div {
-  background-color: #2b2b2b;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
-}
-
-.video-list div:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
-}
-
-.video-list img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
 /* 반응형 */
 @media (max-width: 768px) {
   header .log a {
     font-size: 1rem;
   }
 
-  .channel-info h2 {
+  .channel-info p {
     font-size: 1.5rem;
+    position: absolute;
+    top: 10%;
   }
 
   .channel-info button {
     padding: 8px 16px;
     font-size: 0.9rem;
   }
+}
+
+/* 버튼 기본 스타일 */
+.edit-Btn,
+.upload-Btn,
+.live-btn {
+  width: 140px;
+  height: 45px;
+  border: none;
+  border-radius: 25px;
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+/* 버튼 호버 효과 */
+.edit-Btn:hover,
+.upload-Btn:hover,
+.live-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+.edit-Btn:active,
+.upload-Btn:active,
+.live-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.edit-Btn {
+  background: transparent;
+  border: 2px solid #ffffff;
+  position: absolute;
+  margin-top: 70%;
+  left: 35%;
+  width: 140px;
+  height: 45px;
+  border-radius: 25px;
+  color: #f8f8f8;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    transform 0.2s ease;
+}
+
+.upload-Btn {
+  background: linear-gradient(135deg, #ff512f, #dd2476);
+  position: absolute;
+  margin-top: 70%;
+  left: 57.5%;
+}
+
+.live-btn {
+  background: linear-gradient(135deg, #ff512f, #dd2476);
+  position: absolute;
+  margin-top: 70%;
+  left: 80%;
 }
