@@ -109,7 +109,7 @@ describe('ResolutionService', () => {
         {
           duration: mockUpdateMetadataDto.metadata.duration,
           status: true,
-          thumbnail: mockUpdateMetadataDto.metadata.thumbnail,
+          thumbnailUrl: mockUpdateMetadataDto.metadata.thumbnail,
         },
       );
     });
@@ -142,7 +142,7 @@ describe('ResolutionService', () => {
         {
           duration: mockUpdateMetadataDto.metadata.duration,
           status: true,
-          thumbnail: mockUpdateMetadataDto.metadata.thumbnail,
+          thumbnailUrl: mockUpdateMetadataDto.metadata.thumbnail,
         },
       );
       expect(resolutionRepository.findOne).toHaveBeenCalledWith({
