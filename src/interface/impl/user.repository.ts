@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { IUserRepository } from '../IUserRepository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from 'src/user/entities/user.entity';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { UpdateUserDto } from 'src/user/dto/updata-User.dto';
 
 @Injectable()
 export class userRepository implements IUserRepository {
@@ -10,6 +11,22 @@ export class userRepository implements IUserRepository {
     @InjectRepository(UserEntity)
     private readonly repository: Repository<UserEntity>,
   ) {}
+  findUserByNameAndPhoneNumber(name: string, phoneNumber: string): Promise<UserEntity | null> {
+    return this.repository.findOne({
+      where: { name, phoneNumber },
+    });
+  }
+  deleteUser(userId: number): Promise<DeleteResult> {
+    return this.repository.softDelete({ id: userId });
+  }
+  findUserByUserId(userId: number): Promise<UserEntity | null> {
+    return this.repository.findOne({
+      where: { id: userId },
+    });
+  }
+  updateUser(userId: number, updateData: UpdateUserDto): Promise<UpdateResult> {
+    return this.repository.update(userId, updateData);
+  }
   createByNaverId(email: string, nickname: string, naverId: string, num: number, num1: number) {
     return this.repository.create({
       email,
