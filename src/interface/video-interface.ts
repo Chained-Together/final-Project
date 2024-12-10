@@ -25,4 +25,5 @@ export interface IVideoRepository {
   deleteVideo(videoId: number): Promise<DeleteResult>;
   findByKeyword(keyword: string): Promise<VideoEntity[]>;
   findNewVideos(lastId: number, take: number): Promise<VideoEntity[]>;
+  findVideoByVideoCode(videoCode: string): Promise<VideoEntity>;
 }
