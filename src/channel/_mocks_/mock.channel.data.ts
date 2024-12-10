@@ -4,6 +4,7 @@ import { LikeEntity } from '../../like/entities/like.entity';
 import { ChannelEntity } from '../../channel/entities/channel.entity';
 import { ChannelDto } from '../dto/channel.dto';
 import { Visibility } from '../../video/video.visibility.enum';
+import { CommentDto } from 'src/comment/dto/comment.dto';
 
 export const mockUser: UserEntity = {
   id: 1,
@@ -82,7 +83,7 @@ export const mockUpdatedVideo: VideoEntity = {
   updatedAt: new Date(),
   resolution: null,
   channel: mockChannel,
-  likes: [], // 업데이트 후 빈 배열
+  likes: [],
   videoCode: '1',
   status: false,
   comments: null,
@@ -112,3 +113,5 @@ export const mockChannels = [
   { id: 1, name: 'Test Channel 1' },
   { id: 2, name: 'Test Channel 2' },
 ];
+
+export const commentDto: CommentDto = { content: 'Updated comment' };
