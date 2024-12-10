@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
 import { ChannelEntity } from '../channel/entities/channel.entity';
@@ -8,33 +8,23 @@ import { UpdateVideoDto } from './dto/update.video.dto';
 import { VideoDto } from './dto/video.dto';
 import { VideoEntity } from './entities/video.entity';
 import { Visibility } from './video.visibility.enum';
+import { IVideoRepository } from 'src/interface/video-interface';
+import { IChannelRepository } from 'src/interface/channel-interface';
+import { IResolutionRepository } from 'src/interface/resolution-interface';
 
 @Injectable()
 export class VideoService {
   constructor(
-    @InjectRepository(VideoEntity)
-    private videoRepository: Repository<VideoEntity>,
-    @InjectRepository(ChannelEntity)
-    private channelRepository: Repository<ChannelEntity>,
-    @InjectRepository(ResolutionEntity)
-    private resolutionRepository: Repository<ResolutionEntity>,
+    @Inject('IVideoRepository')
+    private videoRepository: IVideoRepository,
+    @Inject('IChannelRepository')
+    private channelRepository: IChannelRepository,
+    @Inject('IResolutionRepository')
+    private resolutionRepository: IResolutionRepository,
   ) {}
 
   async getNewVideos(lastId: number, take: number) {
-    const query = this.videoRepository
-      .createQueryBuilder('videos')
-      .where('videos.visibility = :visibility', { visibility: 'public' })
-      .andWhere('videos.status = :status', { status: true })
-      .orderBy('videos.id', 'ASC')
-      .take(take);
-
-    if (lastId) {
-      query.andWhere('videos.id > :lastId', { lastId });
-    }
-
-    const newVideos = await query.getMany();
-
-    return newVideos;
+    return this.videoRepository.findNewVideos(lastId, take);
   }
 
   async saveMetadata(user: UserEntity, videoDto: VideoDto): Promise<object> {
@@ -54,28 +44,23 @@ export class VideoService {
 
     const accessKey = visibility === Visibility.UNLISTED ? this.generateAccessKey() : null;
 
-    console.log(accessKey);
-    const video = this.videoRepository.create({
+    const video = this.videoRepository.createVideo(
       title,
       description,
-      thumbnailUrl: thumbnailUrl,
+      thumbnailUrl,
       hashtags,
       duration,
       visibility,
-      channel: foundChannel,
+      foundChannel,
       videoCode,
       accessKey,
-    });
+    );
 
-    const savedVideo = await this.videoRepository.save(video);
+    const savedVideo = await this.videoRepository.saveVideo(video);
 
-    const resolution = this.resolutionRepository.create({
-      high,
-      low,
-      video: savedVideo,
-    });
+    const resolution = this.resolutionRepository.createResolution(high, low, savedVideo);
 
-    await this.resolutionRepository.save(resolution);
+    await this.resolutionRepository.saveResolution(resolution);
 
     return {
       key: videoCode,
@@ -92,28 +77,21 @@ export class VideoService {
   }
 
   async getAllVideo(): Promise<VideoEntity[]> {
-    return this.videoRepository.find();
+    return this.videoRepository.findAllVideo();
   }
 
   async getAllVideoOfChannel(channelId: number): Promise<VideoEntity[]> {
-    console.log('Channel ID:', channelId);
-    return this.videoRepository.find({
-      where: { channel: { id: channelId }, visibility: Visibility.PUBLIC },
-    });
+    return this.videoRepository.findAllVideoByChannelAndVisibility(channelId);
   }
 
   async getAllVideoOfMyChannel(channelId: number, userId: number): Promise<VideoEntity[]> {
-    const foundChannel = await this.channelRepository.findOne({
-      where: { id: channelId, user: { id: userId } },
-    });
+    const foundChannel = await this.channelRepository.findChannelByUserId(userId);
 
     if (!foundChannel) {
       throw new UnauthorizedException('해당 채널의 소유자가 아닙니다.');
     }
 
-    return this.videoRepository.find({
-      where: { channel: { id: channelId } },
-    });
+    return this.videoRepository.findAllVideoByChannelId(channelId);
   }
 
   async getVideo(
@@ -121,10 +99,7 @@ export class VideoService {
     userId?: number,
     accessKey?: string,
   ): Promise<VideoEntity | object> {
-    const foundVideo = await this.videoRepository.findOne({
-      where: { id: videoId },
-      relations: ['channel', 'resolution'],
-    });
+    const foundVideo = await this.videoRepository.findVideoWithChannelAndResolution(videoId);
 
     if (!foundVideo) {
       throw new NotFoundException('존재하지 않는 비디오입니다.');
@@ -158,9 +133,9 @@ export class VideoService {
 
     const updateData = await this.updateDetails(updateVideoDto, foundVideo);
 
-    await this.videoRepository.update({ id: videoId }, updateData);
+    await this.videoRepository.updateVideo(videoId, updateData);
 
-    const updatedVideo = await this.videoRepository.findOne({ where: { id: videoId } });
+    const updatedVideo = await this.videoRepository.findVideoByVideoId(videoId);
     return updatedVideo;
   }
 
@@ -169,17 +144,13 @@ export class VideoService {
 
     await this.findVideoById(videoId);
 
-    await this.videoRepository.delete({
-      id: videoId,
-    });
+    await this.videoRepository.deleteVideo(videoId);
 
     return { message: '동영상이 삭제되었습니다.' };
   }
 
   private async findChannelByUserId(id) {
-    const foundChannel = await this.channelRepository.findOne({
-      where: { user: { id: id } },
-    });
+    const foundChannel = await this.channelRepository.findChannelByUserId(id);
     if (!foundChannel) {
       throw new UnauthorizedException('채널이 존재하지 않습니다.');
     }
@@ -187,9 +158,7 @@ export class VideoService {
   }
 
   private async findVideoById(id) {
-    const foundVideo = await this.videoRepository.findOne({
-      where: { id: id },
-    });
+    const foundVideo = await this.videoRepository.findVideoByVideoId(id);
     if (!foundVideo) {
       throw new NotFoundException('존재 하지 않는 비디오 입니다.');
     }
@@ -248,12 +217,7 @@ export class VideoService {
   }
 
   async findVideoByKeyword(keyword: string) {
-    const videoResult = await this.videoRepository
-      .createQueryBuilder('video')
-      .where('video.title LIKE :keyword', { keyword: `%${keyword}%` })
-      .orWhere('video.hashtags @> :keywordArray', { keywordArray: JSON.stringify([keyword]) })
-      .andWhere('video.status = :status', { status: Visibility.PUBLIC })
-      .getMany();
+    const videoResult = await this.videoRepository.findByKeyword(keyword);
 
     if (!videoResult.length) {
       return { message: '검색 결과가 없습니다.' };
