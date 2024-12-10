@@ -1,10 +1,10 @@
-import { VideoEntity } from 'src/video/entities/video.entity';
-import { IVideoRepository } from '../video-interface';
-import { DeleteResult, Repository, SelectQueryBuilder, UpdateResult } from 'typeorm';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ChannelEntity } from 'src/channel/entities/channel.entity';
+import { VideoEntity } from 'src/video/entities/video.entity';
 import { Visibility } from 'src/video/video.visibility.enum';
-import { Injectable } from '@nestjs/common';
+import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { IVideoRepository } from '../video-interface';
 
 @Injectable()
 export class VideoRepository implements IVideoRepository {
@@ -12,6 +12,9 @@ export class VideoRepository implements IVideoRepository {
     @InjectRepository(VideoEntity)
     private readonly repository: Repository<VideoEntity>,
   ) {}
+  findVideoByVideoCode(videoCode: string): Promise<VideoEntity> {
+    return this.repository.findOne({ where: { videoCode } });
+  }
   findAllVideo(): Promise<VideoEntity[]> {
     return this.repository.find();
   }

@@ -1,16 +1,12 @@
 import { Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository } from 'typeorm';
-import { ChannelEntity } from '../channel/entities/channel.entity';
-import { ResolutionEntity } from 'src/resolution/entities/resolution.entity';
+import { IChannelRepository } from 'src/interface/channel-interface';
+import { IResolutionRepository } from 'src/interface/resolution-interface';
+import { IVideoRepository } from 'src/interface/video-interface';
 import { UserEntity } from 'src/user/entities/user.entity';
 import { UpdateVideoDto } from './dto/update.video.dto';
 import { VideoDto } from './dto/video.dto';
 import { VideoEntity } from './entities/video.entity';
 import { Visibility } from './video.visibility.enum';
-import { IVideoRepository } from 'src/interface/video-interface';
-import { IChannelRepository } from 'src/interface/channel-interface';
-import { IResolutionRepository } from 'src/interface/resolution-interface';
 
 @Injectable()
 export class VideoService {
