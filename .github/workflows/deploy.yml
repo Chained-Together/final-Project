@@ -89,7 +89,7 @@ jobs:
             --version-label $DOCKER_IMAGE_TAG \
             --region ap-northeast-2
 
-      # - name: Deploy to EB #9
+      # - name: Deploy to EB #10
       #   uses: einaregilsson/beanstalk-deploy@v22
       #   with:
       #     aws_access_key: ${{ secrets.EB_AWS_ACCESS_KEY_ID }}
