@@ -11,7 +11,7 @@ jobs:
 
     env:
       AWS_REGION: ap-northeast-2
-      ECR_REPOSITORY: 'your-ecr-repository-name'
+      ECR_REPOSITORY: 'elastick-beanstalk'
       EB_APP_NAME: 'loopfiy'
       EB_ENV_NAME: 'Loopfiy-env-2'
       DOCKER_IMAGE_TAG: ${{ github.run_number }}-${{ github.sha }}
