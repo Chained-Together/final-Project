@@ -1,11 +1,7 @@
 import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { LikeEntity } from './entities/like.entity';
-import { NotificationService } from '../notification/notification.service';
-import { ChannelEntity } from 'src/channel/entities/channel.entity';
 import { IChannelRepository } from 'src/interface/channel-interface';
 import { ILikeRepository } from 'src/interface/like-interface';
+import { NotificationService } from '../notification/notification.service';
 
 @Injectable()
 //TODO : toggleLike 메서드 분리하기
@@ -51,6 +47,4 @@ export class LikeService {
 
     return await this.likeRepository.countLike(videoId);
   }
-
-  private;
 }
