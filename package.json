@@ -6,11 +6,11 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "nest build",
+    "build": "npx nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "cross-env NODE_ENV=development nest start --watch",
-    "start:prod": "cross-env NODE_ENV=production nest start",
+    "start:prod": "npx cross-env NODE_ENV=production node dist/main.js",
     "start:debug": "nest start --debug --watch",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
@@ -64,7 +64,8 @@
     "rxjs": "^7.8.1",
     "typeorm": "^0.3.20",
     "typeorm-naming-strategies": "^4.1.0",
-    "uuid": "^11.0.3"
+    "uuid": "^11.0.3",
+    "@nestjs/cli": "^10.0.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
