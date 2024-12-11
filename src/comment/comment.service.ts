@@ -91,6 +91,9 @@ export class CommentService {
       checkComment.commentGroup,
     );
 
+    //변수만들기
+    
+
     const newOrderNumber = (checkReply?.orderNumber ?? 1) + 1;
 
     const createReply = this.commentRepository.createReply(

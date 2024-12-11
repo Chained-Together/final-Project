@@ -1,3 +1,5 @@
+import { sign } from 'crypto';
+
 export const mockUserRepository = {
   findByEmail: jest.fn(),
   findByNickname: jest.fn(),

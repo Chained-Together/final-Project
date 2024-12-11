@@ -88,14 +88,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const videoCard = document.createElement('div');
-    videoCard.className = 'video-card'; // 스타일 적용 클래스
+    videoCard.className = 'video-card';
     videoCard.addEventListener('click', () => {
       window.location.href = `/view-video?id=${video.id}`;
     });
 
     if (video.thumbnailUrl) {
       const thumbnail = document.createElement('img');
-      thumbnail.className = 'video-thumbnail'; // 썸네일 스타일 클래스
+      thumbnail.className = 'video-thumbnail';
       thumbnail.src = video.thumbnailUrl;
       thumbnail.alt = video.title || 'Video Thumbnail';
       videoCard.appendChild(thumbnail);
@@ -103,9 +103,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (video.description) {
       const description = document.createElement('p');
-      description.className = 'video-description'; // 설명 스타일 클래스
+      description.className = 'video-description';
       description.textContent = video.description;
       videoCard.appendChild(description);
+    }
+
+    if (video.hashtags && Array.isArray(video.hashtags)) {
+      const hashtagContainer = document.createElement('div');
+      hashtagContainer.className = 'video-hashtags';
+
+      video.hashtags.forEach((tag) => {
+        const hashtag = document.createElement('span');
+        hashtag.className = 'hashtag';
+        hashtag.textContent = `#${tag.trim()}`; // 태그 앞에 # 추가
+        hashtagContainer.appendChild(hashtag);
+      });
+
+      videoCard.appendChild(hashtagContainer);
     }
 
     videoResultsContainer.appendChild(videoCard);
@@ -124,8 +138,9 @@ document.addEventListener('DOMContentLoaded', () => {
       channelElement.classList.add('channel-item');
       channelElement.innerHTML = `
         <div class="channel-card">
-          <h3>${channel.name}</h3>
           <img src="${channel.profileImage}" alt="${channel.name}" />
+          <h3>${channel.name}</h3>
+        
         </div>
         
       `;
@@ -147,12 +162,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.querySelectorAll('.tab').forEach((tab) => {
   tab.addEventListener('click', () => {
-    document.querySelectorAll('.tab-content').forEach((content) => {
-      content.classList.remove('active');
-    });
+    document.querySelectorAll('.tab').forEach((t) => t.classList.remove('active'));
+
+    document
+      .querySelectorAll('.tab-content')
+      .forEach((content) => content.classList.remove('active'));
+    tab.classList.add('active');
 
     const target = document.getElementById(`${tab.dataset.tab}Container`);
-    console.log('활성화된 컨테이너:', target);
-    target.classList.add('active');
+    if (target) {
+      target.classList.add('active');
+    }
   });
 });

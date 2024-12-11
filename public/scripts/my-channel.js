@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', async () => {
-  const token = localStorage.getItem('token');
   const channelNameElement = document.getElementById('channelName');
-  const profileImageElement = document.getElementById('profileImage');
+  const profileImageElement = document.getElementById('profile');
   const thumbnailsContainer = document.getElementById('thumbnailsContainer');
   const liveButton = document.getElementById('liveVideo');
+  const uploadBtn = document.getElementById('uploadBtn');
 
   if (!token) {
     channelNameElement.textContent = '로그인이 필요합니다.';
@@ -96,7 +96,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     channelNameElement.textContent = '정보를 로드하는 중 오류가 발생했습니다.';
   }
 
-  const uploadBtn = document.getElementById('uploadBtn');
   uploadBtn.addEventListener('click', () => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -110,37 +109,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.location.href = '/liveVideo';
   });
 
-  const profileButton = document.getElementById('profileButton');
-  console.log('Profile Button:', profileButton);
-  const createChannelEditButton = () => {
-    const channelEditButton = document.createElement('button');
-    channelEditButton.textContent = '채널 편집';
-    channelEditButton.id = 'channelEditBtn';
-    channelEditButton.style = `
-      position: absolute;
-      top: 30px;
-      right: 100px;
-      background-color: #fff;
-      color: #000;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      z-index: 1000;
-    `;
+  const editBtn = document.getElementById('editBtn');
 
-    channelEditButton.addEventListener('click', () => {
-      window.location.href = '/edit-mychannel';
-    });
-    return channelEditButton;
-  };
-  profileButton.addEventListener('click', () => {
-    let channelEditBtn = document.getElementById('channelEditBtn');
-    if (!channelEditBtn) {
-      channelEditBtn = createChannelEditButton();
-      document.body.appendChild(channelEditBtn);
-    } else {
-      channelEditBtn.remove();
-    }
+  editBtn.addEventListener('click', () => {
+    window.location.href = '/edit-mychannel';
   });
 });

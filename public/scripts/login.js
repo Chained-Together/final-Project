@@ -1,15 +1,3 @@
-// ID loginForm
-// ID email
-// ID password
-// ID google-connect
-// ID Naver-connect
-// button[type=submit]
-// <script src="/public/scripts/login.js"></script>
-// <link id="pagestyle" href="/public/styles/argon/argon-dashboard.css?v=2.1.0" rel="stylesheet" />
-//   <form id="findInfo">
-//     <a href="#">이메일 찾기</a>
-//     <a href="/findInfo">비밀번호 찾기</a>
-//   </form>
 const loginForm = document.getElementById('loginForm');
 loginForm.addEventListener('submit', async (event) => {
   event.preventDefault();
@@ -34,8 +22,6 @@ loginForm.addEventListener('submit', async (event) => {
     }
 
     const token = await response.headers.get('Authorization');
-
-    console.log('난 로그인 토큰이야', token);
 
     if (token) {
       localStorage.setItem('token', token);
@@ -77,19 +63,23 @@ document.getElementById('naver-connect').addEventListener('click', (event) => {
   window.location.href = '/auth/naver';
 });
 
-// 소셜 로그인 후 콜백에서 토큰 처리 (예시)
+// 소셜 로그인 후 콜백에서 토큰 처리
 if (
   window.location.pathname.includes('/google/callback') ||
   window.location.pathname.includes('/naver/callback')
 ) {
   const urlParams = new URLSearchParams(window.location.search);
   const token = urlParams.get('token');
-  console.log('IMMMMMMMMMTOKEN', token);
   if (token) {
-    localStorage.setItem('token', token); // JWT 토큰을 저장
+    localStorage.setItem('token', token);
 
-    window.location.href = '/'; // 메인 페이지로 리다이렉트
+    window.location.href = '/';
   } else {
     console.error('토큰이 전달되지 않았습니다.');
   }
 }
+
+document.getElementById('signupBtn').addEventListener('click', (event) => {
+  event.preventDefault();
+  window.location.href = '/signup';
+});

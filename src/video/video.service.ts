@@ -24,17 +24,7 @@ export class VideoService {
   }
 
   async saveMetadata(user: UserEntity, videoDto: VideoDto): Promise<object> {
-    const {
-      title,
-      description,
-      thumbnailUrl,
-      hashtags,
-      duration,
-      visibility,
-      high,
-      low,
-      videoCode,
-    } = videoDto;
+    const { title, description, hashtags, duration, visibility, videoCode } = videoDto;
 
     const foundChannel = await this.findChannelByUserId(user.id);
 
@@ -43,7 +33,6 @@ export class VideoService {
     const video = this.videoRepository.createVideo(
       title,
       description,
-      thumbnailUrl,
       hashtags,
       duration,
       visibility,
@@ -55,6 +44,10 @@ export class VideoService {
     const savedVideo = await this.videoRepository.saveVideo(video);
 
     const resolution = this.resolutionRepository.createResolution(high, low, savedVideo);
+    // const resolution = this.resolutionRepository.create({
+    //   videoUrl: null,
+    //   video: savedVideo,
+    // });
 
     await this.resolutionRepository.saveResolution(resolution);
 
@@ -101,8 +94,9 @@ export class VideoService {
       throw new NotFoundException('존재하지 않는 비디오입니다.');
     }
 
-    const { visibility, channel, accessKey: storedAccessKey } = foundVideo;
+    const { visibility, channel, accessKey: storedAccessKey, resolution } = foundVideo;
 
+    console.log('resolution', resolution);
     if (visibility === Visibility.PRIVATE && channel.user.id !== userId) {
       throw new UnauthorizedException('비공개 비디오에 접근할 수 없습니다.');
     }
@@ -115,7 +109,14 @@ export class VideoService {
       throw new UnauthorizedException('올바른 링크가 아니면 접근할 수 없습니다.');
     }
 
-    return foundVideo;
+    if (!resolution.videoUrl) {
+      throw new NotFoundException('해당하는 비디오URL을 찾을수없습니다.');
+    }
+
+    return {
+      foundVideo,
+      videoUrl: resolution.videoUrl,
+    };
   }
 
   async updateVideo(

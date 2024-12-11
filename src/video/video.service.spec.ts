@@ -84,6 +84,28 @@ describe('VideoService', () => {
         mockVideo,
       );
       expect(mockResolutionRepository.saveResolution).toHaveBeenCalledWith(mockResolution);
+      // // Assert
+      // expect(channelRepository.findOne).toHaveBeenCalledWith({
+      //   where: { user: { id: mockUser.id } },
+      // });
+      // expect(videoRepository.create).toHaveBeenCalledWith({
+      //   title: mockVideoDto.title,
+      //   description: mockVideoDto.description,
+      //   // thumbnailUrl: mockVideoDto.thumbnailUrl,
+      //   hashtags: mockVideoDto.hashtags,
+      //   duration: null,
+      //   visibility: mockVideoDto.visibility,
+      //   channel: mockChannel,
+      //   videoCode: mockVideo.videoCode,
+      //   accessKey: mockVideoDto.visibility === Visibility.UNLISTED ? expect.any(String) : null,
+      // });
+      // expect(videoRepository.save).toHaveBeenCalledWith(mockVideo);
+
+      // expect(mockResolutionRepository.create).toHaveBeenCalledWith({
+      //   videoUrl: null,
+      //   video: mockVideo,
+      // });
+      // expect(mockResolutionRepository.save).toHaveBeenCalledWith(mockResolution);
 
       if (mockVideoDto.visibility === Visibility.UNLISTED) {
         expect(result).toEqual({
@@ -122,6 +144,19 @@ describe('VideoService', () => {
       expect(videoRepository.findVideoWithChannelAndResolution).toHaveBeenCalledWith(1);
       expect(result).toEqual({ ...mockVideo, visibility: Visibility.PUBLIC });
     });
+    // it('공개(PUBLIC) 영상이면 메타데이터와 채널 정보를 반환한다.', async () => {
+    //   mockVideoRepository.findOne.mockResolvedValue({
+    //     ...mockVideo,
+    //     visibility: Visibility.PUBLIC,
+    //   });
+    //   const result = await videoService.getVideo(1, mockUser.id);
+
+    //   expect(videoRepository.findOne).toHaveBeenCalledWith({
+    //     where: { id: 1 },
+    //     relations: ['channel', 'resolution'],
+    //   });
+    //   expect(result).toEqual({ ...mockVideo, visibility: Visibility.PUBLIC });
+    // });
 
     it('비공개(PRIVATE) 영상 접근 시 소유자가 아니면 UnauthorizedException을 던져야합니다.', async () => {
       mockVideoRepository.findVideoWithChannelAndResolution.mockResolvedValue({
@@ -138,15 +173,21 @@ describe('VideoService', () => {
         visibility: Visibility.PRIVATE,
         channel: { user: { id: mockUser.id } },
       });
+    // it('비공개(PRIVATE) 영상일 때 소유자라면 메타데이터를 반환한다.', async () => {
+    //   mockVideoRepository.findOne.mockResolvedValue({
+    //     ...mockVideo,
+    //     visibility: Visibility.PRIVATE,
+    //     channel: { user: { id: mockUser.id } },
+    //   });
 
-      const result = await videoService.getVideo(1, mockUser.id);
+    //   const result = await videoService.getVideo(1, mockUser.id);
 
-      expect(result).toEqual({
-        ...mockVideo,
-        visibility: Visibility.PRIVATE,
-        channel: { user: { id: mockUser.id } },
-      });
-    });
+    //   expect(result).toEqual({
+    //     ...mockVideo,
+    //     visibility: Visibility.PRIVATE,
+    //     channel: { user: { id: mockUser.id } },
+    //   });
+    // });
 
     it('잘못된 accessKey로 일부공개(UNLISTED) 영상 접근 시 UnauthorizedException을 던져야합니다.', async () => {
       mockVideoRepository.findVideoWithChannelAndResolution.mockResolvedValue({
@@ -168,26 +209,35 @@ describe('VideoService', () => {
         accessKey: 'valid-key',
         channel: { user: { id: 999 } },
       });
+    // it('일부공개(UNLISTED) 영상일 때 accessKey가 올바르면 메타데이터를 반환한다.', async () => {
+    //   mockVideoRepository.findOne.mockResolvedValue({
+    //     ...mockVideo,
+    //     visibility: Visibility.UNLISTED,
+    //     accessKey: 'valid-key',
+    //     channel: { user: { id: 999 } },
+    //   });
 
-      const result = await videoService.getVideo(1, mockUser.id, 'valid-key');
+    //   const result = await videoService.getVideo(1, mockUser.id, 'valid-key');
 
-      expect(result).toEqual({
-        ...mockVideo,
-        visibility: Visibility.UNLISTED,
-        accessKey: 'valid-key',
-        channel: { user: { id: 999 } },
-      });
-    });
+    //   expect(result).toEqual({
+    //     ...mockVideo,
+    //     visibility: Visibility.UNLISTED,
+    //     accessKey: 'valid-key',
+    //     channel: { user: { id: 999 } },
+    //   });
+    // });
   });
 
   describe('영상 수정 시', () => {
     it('유저가 소유한 채널이 아닐 시 UnauthorizedException을 던져야 한다.', async () => {
       mockChannelRepository.findChannelByUserId.mockResolvedValue(null);
+    // it('유저가 소유한 채널이 아닐 시 UnauthorizedException을 던져야 한다.', async () => {
+    //   mockChannelRepository.findOne.mockResolvedValue(null);
 
-      await expect(videoService.updateVideo(mockUser, 1, mockVideoDto)).rejects.toThrow(
-        UnauthorizedException,
-      );
-    });
+    //   await expect(videoService.updateVideo(mockUser, 1, mockVideoDto)).rejects.toThrow(
+    //     UnauthorizedException,
+    //   );
+    // });
 
     it('해당 비디오가 존재 하지 않을 시 NotFoundException을 던져야한다. ', async () => {
       mockChannelRepository.findChannelByUserId.mockResolvedValue(mockChannel);

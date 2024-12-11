@@ -40,8 +40,8 @@ describe('ResolutionService', () => {
         resolutionService.updateResolution(
           mockUpdateMetadataDto.metadata.videoCode,
           mockUpdateMetadataDto.metadata.duration,
-          mockUpdateMetadataDto.highResolutionUrl,
-          mockUpdateMetadataDto.lowResolutionUrl,
+          mockUpdateMetadataDto.metadata.thumbnail,
+          mockUpdateMetadataDto.videoUrl,
         ),
       ).rejects.toThrow(NotFoundException);
 
@@ -59,13 +59,21 @@ describe('ResolutionService', () => {
         resolutionService.updateResolution(
           mockUpdateMetadataDto.metadata.videoCode,
           mockUpdateMetadataDto.metadata.duration,
-          mockUpdateMetadataDto.highResolutionUrl,
-          mockUpdateMetadataDto.lowResolutionUrl,
+          mockUpdateMetadataDto.metadata.thumbnail,
+          mockUpdateMetadataDto.videoUrl,
         ),
       ).rejects.toThrow('해상도 정보를 업데이트할 수 없습니다.');
 
       expect(videoRepository.findVideoByVideoCode).toHaveBeenCalledWith(
         mockUpdateMetadataDto.metadata.videoCode,
+        // expect(videoRepository.findOne).toHaveBeenCalledWith({
+        //   where: { videoCode: mockUpdateMetadataDto.metadata.videoCode },
+        // });
+        // expect(resolutionRepository.update).toHaveBeenCalledWith(
+        //   { video: { id: mockVideo.id } },
+        //   {
+        //     videoUrl: mockUpdateMetadataDto.videoUrl,
+        //   },
       );
       expect(resolutionRepository.updateResolution).toHaveBeenCalledWith(
         mockVideo.id,
@@ -84,8 +92,8 @@ describe('ResolutionService', () => {
         resolutionService.updateResolution(
           mockUpdateMetadataDto.metadata.videoCode,
           mockUpdateMetadataDto.metadata.duration,
-          mockUpdateMetadataDto.highResolutionUrl,
-          mockUpdateMetadataDto.lowResolutionUrl,
+          mockUpdateMetadataDto.metadata.thumbnail,
+          mockUpdateMetadataDto.videoUrl,
         ),
       ).rejects.toThrow('비디오 메타데이터를 업데이트할 수 없습니다.');
 
@@ -101,6 +109,20 @@ describe('ResolutionService', () => {
         duration: mockUpdateMetadataDto.metadata.duration,
         status: true,
       });
+      expect(resolutionRepository.update).toHaveBeenCalledWith(
+        { video: { id: mockVideo.id } },
+        {
+          videoUrl: mockUpdateMetadataDto.videoUrl,
+        },
+      );
+      expect(videoRepository.update).toHaveBeenCalledWith(
+        { id: mockVideo.id },
+        {
+          duration: mockUpdateMetadataDto.metadata.duration,
+          status: true,
+          thumbnailUrl: mockUpdateMetadataDto.metadata.thumbnail,
+        },
+      );
     });
 
     it('해상도와 비디오 메타데이터 업데이트가 성공하면 업데이트된 데이터를 반환해야 한다.', async () => {
@@ -112,8 +134,8 @@ describe('ResolutionService', () => {
       const result = await resolutionService.updateResolution(
         mockUpdateMetadataDto.metadata.videoCode,
         mockUpdateMetadataDto.metadata.duration,
-        mockUpdateMetadataDto.highResolutionUrl,
-        mockUpdateMetadataDto.lowResolutionUrl,
+        mockUpdateMetadataDto.metadata.thumbnail,
+        mockUpdateMetadataDto.videoUrl,
       );
 
       expect(result).toEqual(mockResolution);
@@ -124,6 +146,22 @@ describe('ResolutionService', () => {
         mockVideo.id,
         mockUpdateMetadataDto.highResolutionUrl,
         mockUpdateMetadataDto.lowResolutionUrl,
+        // expect(videoRepository.findOne).toHaveBeenCalledWith({
+        //   where: { videoCode: mockUpdateMetadataDto.metadata.videoCode },
+        // });
+        // expect(resolutionRepository.update).toHaveBeenCalledWith(
+        //   { video: { id: mockVideo.id } },
+        //   {
+        //     videoUrl: mockUpdateMetadataDto.videoUrl,
+        //   },
+        // );
+        // expect(videoRepository.update).toHaveBeenCalledWith(
+        //   { id: mockVideo.id },
+        //   {
+        //     duration: mockUpdateMetadataDto.metadata.duration,
+        //     status: true,
+        //     thumbnailUrl: mockUpdateMetadataDto.metadata.thumbnail,
+        //   },
       );
       expect(videoRepository.updateVideo).toHaveBeenCalledWith(mockVideo.id, {
         duration: mockUpdateMetadataDto.metadata.duration,

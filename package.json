@@ -1,16 +1,16 @@
 {
   "name": "a",
   "version": "0.0.1",
-  "description": "",
+  "description": "<p align=\"center\">\r   <a href=\"http://nestjs.com/\" target=\"blank\"><img src=\"https://nestjs.com/img/logo-small.svg\" width=\"120\" alt=\"Nest Logo\" /></a>\r </p>",
   "author": "",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "nest build",
+    "build": "npx nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "cross-env NODE_ENV=development nest start --watch",
-    "start:prod": "cross-env NODE_ENV=production nest start",
+    "start:prod": "npx cross-env NODE_ENV=production node dist/main.js",
     "start:debug": "nest start --debug --watch",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
@@ -46,10 +46,11 @@
     "bcrypt": "^5.1.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
-    "dotenv": "^16.4.5",
+    "dotenv": "^16.4.7",
     "ejs": "^3.1.10",
     "elastic-apm-node": "^4.8.1",
     "express-session": "^1.18.1",
+    "http-proxy-middleware": "^3.0.3",
     "joi": "^17.13.3",
     "mock-res": "^0.6.0",
     "mongoose": "^8.8.1",
@@ -63,7 +64,8 @@
     "rxjs": "^7.8.1",
     "typeorm": "^0.3.20",
     "typeorm-naming-strategies": "^4.1.0",
-    "uuid": "^11.0.3"
+    "uuid": "^11.0.3",
+    "@nestjs/cli": "^10.0.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
@@ -113,5 +115,10 @@
     "moduleNameMapper": {
       "^src/(.*)$": "<rootDir>/$1"
     }
-  }
+  },
+  "main": ".eslintrc.js",
+  "directories": {
+    "test": "test"
+  },
+  "keywords": []
 }

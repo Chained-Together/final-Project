@@ -68,10 +68,7 @@ export const mockVideos: VideoEntity[] = [
 export const videoDto: VideoDto = {
   title: 'Test Video',
   description: 'This is a test description',
-  thumbnailUrl: 'https://example.com/thumbnail.jpg',
   hashtags: ['#test', '#video'],
-  high: 'url',
-  low: 'url',
   duration: 300,
   visibility: Visibility.PUBLIC,
   videoCode: '1',
@@ -80,12 +77,9 @@ export const videoDto: VideoDto = {
 export const mockVideoDto: VideoDto = {
   title: 'test',
   description: 'test',
-  thumbnailUrl: 'test',
   duration: null,
   hashtags: ['공포', '강아지'],
   visibility: Visibility.PUBLIC,
-  high: '임의 링크',
-  low: '임의 링크',
   videoCode: '1',
 };
 
@@ -119,7 +113,6 @@ export const mockUpdatedVideo: VideoEntity = {
 
 export const mockResolution: ResolutionEntity = {
   id: 1,
-  high: '임의 링크',
-  low: '임의 링크',
+  videoUrl: '임의 링크',
   video: mockVideo,
 };

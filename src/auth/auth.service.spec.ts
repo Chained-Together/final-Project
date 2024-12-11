@@ -1,16 +1,9 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { AuthService } from './auth.service';
-import { JwtService } from '@nestjs/jwt';
-import { HashingService } from 'src/interface/hashing-interface';
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
-import { Request } from 'express';
-import { SignUpDto } from './dto/signUp.dto';
-import {
-  mockChannelService,
-  mockHashingService,
-  mockJwtService,
-  mockUserRepository,
-} from './__mocks__/mock.auth.service';
+import { JwtService } from '@nestjs/jwt';
+import { Test, TestingModule } from '@nestjs/testing';
+import { ChannelService } from 'src/channel/channel.service';
+import { HashingService } from 'src/interface/hashing-interface';
+import { IUserRepository } from 'src/interface/IUserRepository';
 import {
   loginDTO,
   mockPayload,
@@ -19,8 +12,13 @@ import {
   signUpDto,
   wrongPassword,
 } from './__mocks__/mock.auth.data';
-import { IUserRepository } from 'src/interface/IUserRepository';
-import { ChannelService } from 'src/channel/channel.service';
+import {
+  mockChannelService,
+  mockHashingService,
+  mockJwtService,
+  mockUserRepository,
+} from './__mocks__/mock.auth.service';
+import { AuthService } from './auth.service';
 
 describe('AuthService', () => {
   let authService: AuthService;
