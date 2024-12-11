@@ -8,7 +8,7 @@ import { HashingService } from '../interface/hashing-interface';
 @Injectable()
 export class PasswordService {
   constructor(
-    @Inject('IPasswordResetTokenRepository')
+    @Inject('IPasswordResetRepository')
     private readonly tokenRepository: IPasswordResetTokenRepository,
     @Inject('IUserRepository')
     private readonly userRepository: IUserRepository,
