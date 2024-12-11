@@ -97,10 +97,10 @@ describe('ResolutionService', () => {
         mockUpdateMetadataDto.highResolutionUrl,
         mockUpdateMetadataDto.lowResolutionUrl,
       );
-      expect(videoRepository.updateVideo).toHaveBeenCalledWith(
-        { id: mockVideo.id },
-        { duration: mockUpdateMetadataDto.metadata.duration, status: true },
-      );
+      expect(videoRepository.updateVideo).toHaveBeenCalledWith(mockVideo.id, {
+        duration: mockUpdateMetadataDto.metadata.duration,
+        status: true,
+      });
     });
 
     it('해상도와 비디오 메타데이터 업데이트가 성공하면 업데이트된 데이터를 반환해야 한다.', async () => {
@@ -125,11 +125,10 @@ describe('ResolutionService', () => {
         mockUpdateMetadataDto.highResolutionUrl,
         mockUpdateMetadataDto.lowResolutionUrl,
       );
-      expect(videoRepository.updateVideo).toHaveBeenCalledWith(
-        mockVideo.id,
-        mockUpdateMetadataDto.metadata.duration,
-        true,
-      );
+      expect(videoRepository.updateVideo).toHaveBeenCalledWith(mockVideo.id, {
+        duration: mockUpdateMetadataDto.metadata.duration,
+        status: true,
+      });
       expect(resolutionRepository.findResolutionByvideoId).toHaveBeenCalledWith(mockVideo.id);
     });
   });
