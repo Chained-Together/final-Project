@@ -3,42 +3,60 @@ name: Build and Push Docker Image to AWS ECR
 on:
   push:
     branches:
-      - dev
+      - dev  # 'dev' 브랜치에 푸시될 때 실행됨
 
 env:
-  AWS_REGION: ${{ secrets.KSR_AWS_REGION }}
-  AWS_ACCESS_KEY_ID: ${{ secrets.KSR_AWS_ACCESS_KEY }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.KSR_AWS_SECRET_ACCESS_KEY }}
-  ECR_REPOSITORY: ${{ secrets.KSR_ECR_REPOSITORY_NAME }}
+  AWS_REGION: ${{ secrets.KSR_AWS_REGION }}  # AWS 리전
+  AWS_ACCESS_KEY_ID: ${{ secrets.KSR_AWS_ACCESS_KEY }}  # AWS 액세스 키 ID
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.KSR_AWS_SECRET_ACCESS_KEY }}  # AWS 비밀 액세스 키
+  ECR_REPOSITORY: ${{ secrets.KSR_ECR_REPOSITORY_NAME }}  # ECR 레포지토리 이름
 
 jobs:
   build-and-push:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # Ubuntu 최신 릴리스에서 실행
 
     steps:
-      # 1. Checkout the repository
-      - name: Checkout code
+      # 1. 저장소 체크아웃
+      - name: Checkout code  # 코드 체크아웃
         uses: actions/checkout@v4
 
-
-      # 2. Log in to Amazon ECR
-      - name: Log in to Amazon ECR
+      # 2. Amazon ECR 로그인
+      - name: Log in to Amazon ECR  # Amazon ECR에 로그인
         id: login-ecr
         run: |
           aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin 022499011115.dkr.ecr.ap-northeast-2.amazonaws.com/loopfiy-ecr
 
-      # 3. Build, tag, and push the Docker image
-      - name: Build, tag, and push Docker image
+      # 3. Docker 이미지 빌드, 태그, 푸시
+      - name: Build, tag, and push Docker image  # Docker 이미지 빌드, 태그, 푸시
         env:
           AWS_REGION: ${{ secrets.KSR_AWS_REGION }}
           AWS_ACCESS_KEY_ID: ${{ secrets.KSR_AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.KSR_AWS_SECRET_ACCESS_KEY }}
         run: |
-          # Build Docker image
+          # Docker 이미지 빌드
           docker build -t ${{ secrets.KSR_ECR_REPOSITORY_NAME }} .
 
-          # Tag Docker image
+          # 태그 생성 및 Docker 이미지 태그
           docker tag ${{ secrets.KSR_ECR_REPOSITORY_NAME }}:latest ${{ secrets.KSR_AWS_ACCESS_KEY }}.dkr.ecr.${{ secrets.KSR_AWS_REGION }}.amazonaws.com/${{ secrets.KSR_ECR_REPOSITORY_NAME }}:latest
 
+          # ECR에 로그인 후 Docker 이미지 푸시
           aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin 022499011115.dkr.ecr.ap-northeast-2.amazonaws.com/loopfiy-ecr
           docker push 022499011115.dkr.ecr.ap-northeast-2.amazonaws.com/loopfiy-ecr:latest
+
+      # 문제 해결 단계
+      - name: Issue Resolution Steps  # 문제 해결 단계
+        run: |
+          # ECR에 올바른 태그 존재 여부 확인
+          docker images
+
+          # 태그 생성 및 사용
+          docker tag <이미지ID> 022499011115.dkr.ecr.ap-northeast-2.amazonaws.com/loopfiy-ecr:latest
+
+          # 로컬 이미지 존재 확인
+          docker images
+
+          # Docker 인증 및 ECR 로그인 확인
+          aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin 022499011115.dkr.ecr.ap-northeast-2.amazonaws.com/loopfiy-ecr
+
+          # 필요 없는 이전 태그 삭제 및 재시도
+          docker rmi 022499011115.dkr.ecr.ap-northeast-2.amazonaws.com/loopfiy-ecr:이전태그
