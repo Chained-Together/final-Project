@@ -3,7 +3,10 @@ import { AuthService } from './auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { HashingService } from 'src/interface/hashing-interface';
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
+import { Request } from 'express';
+import { SignUpDto } from './dto/signUp.dto';
 import {
+  mockChannelService,
   mockHashingService,
   mockJwtService,
   mockUserRepository,
@@ -17,6 +20,7 @@ import {
   wrongPassword,
 } from './__mocks__/mock.auth.data';
 import { IUserRepository } from 'src/interface/IUserRepository';
+import { ChannelService } from 'src/channel/channel.service';
 
 describe('AuthService', () => {
   let authService: AuthService;
@@ -39,6 +43,10 @@ describe('AuthService', () => {
         {
           provide: JwtService,
           useValue: mockJwtService,
+        },
+        {
+          provide: ChannelService,
+          useValue: mockChannelService,
         },
       ],
     }).compile();

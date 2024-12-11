@@ -5,15 +5,12 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from './entities/user.entity';
-import { Repository } from 'typeorm';
-import { DeleteUserDto } from './dto/delete-user.dto';
 import { HashingService } from 'src/interface/hashing-interface';
-import { UpdateUserDto } from './dto/updata-User.dto';
-import { FindPasswordDto } from './dto/found-password.dto';
 import { IUserRepository } from 'src/interface/IUserRepository';
+import { CreateUserDto } from './dto/create-user.dto';
+import { DeleteUserDto } from './dto/delete-user.dto';
+import { UpdateUserDto } from './dto/updata-User.dto';
+import { UserEntity } from './entities/user.entity';
 @Injectable()
 export class UserService {
   constructor(

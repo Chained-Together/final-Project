@@ -6,7 +6,7 @@ import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { UpdateUserDto } from 'src/user/dto/updata-User.dto';
 
 @Injectable()
-export class userRepository implements IUserRepository {
+export class UserRepository implements IUserRepository {
   constructor(
     @InjectRepository(UserEntity)
     private readonly repository: Repository<UserEntity>,

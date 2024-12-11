@@ -1,6 +1,6 @@
 import { UserEntity } from '../../user/entities/user.entity';
-import { CommentDto } from '../dto/comment.dto';
 import { mockChannel, mockLike } from '../../video/__mocks__/mock.video.data';
+import { CommentDto } from '../dto/comment.dto';
 
 export const mockCreateUserDto = {
   name: 'Test User',

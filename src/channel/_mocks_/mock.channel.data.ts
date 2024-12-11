@@ -1,10 +1,10 @@
+import { CommentDto } from 'src/comment/dto/comment.dto';
+import { ChannelEntity } from '../../channel/entities/channel.entity';
+import { LikeEntity } from '../../like/entities/like.entity';
 import { UserEntity } from '../../user/entities/user.entity';
 import { VideoEntity } from '../../video/entities/video.entity';
-import { LikeEntity } from '../../like/entities/like.entity';
-import { ChannelEntity } from '../../channel/entities/channel.entity';
-import { ChannelDto } from '../dto/channel.dto';
 import { Visibility } from '../../video/video.visibility.enum';
-import { CommentDto } from 'src/comment/dto/comment.dto';
+import { ChannelDto } from '../dto/channel.dto';
 
 export const mockUser: UserEntity = {
   id: 1,

@@ -5,10 +5,10 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { IChannelRepository } from 'src/interface/channel-interface';
 import { UserEntity } from '../../src/user/entities/user.entity';
 import { ChannelDto } from './dto/channel.dto';
 import { ChannelEntity } from './entities/channel.entity';
-import { IChannelRepository } from 'src/interface/channel-interface';
 
 @Injectable()
 export class ChannelService {

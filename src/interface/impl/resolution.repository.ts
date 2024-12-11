@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { IResolutionRepository } from '../resolution-interface';
+import { InjectRepository } from '@nestjs/typeorm';
 import { ResolutionEntity } from 'src/resolution/entities/resolution.entity';
 import { VideoEntity } from 'src/video/entities/video.entity';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult } from 'typeorm';
+import { IResolutionRepository } from '../resolution-interface';
 
 @Injectable()
 export class ResolutionRepository implements IResolutionRepository {

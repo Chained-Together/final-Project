@@ -1,10 +1,6 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Observable, ReplaySubject } from 'rxjs';
-import { ChannelEntity } from 'src/channel/entities/channel.entity';
-import { Repository } from 'typeorm';
-import { NotificationEntity } from './entities/notification.entity';
 import { IChannelRepository } from 'src/interface/channel-interface';
 import { INotificationRepository } from 'src/interface/notification-interface';
 

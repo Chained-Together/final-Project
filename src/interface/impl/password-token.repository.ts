@@ -1,13 +1,13 @@
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { IPasswordResetTokenRepository } from '../password-interface';
 import { PasswordResetTokenEntity } from 'src/password/entities/password.reset.token.entity';
 import { Repository } from 'typeorm';
-import { Injectable } from '@nestjs/common';
+import { IPasswordResetTokenRepository } from '../password-interface';
 
 @Injectable()
 export class PasswordResetTokenRepository implements IPasswordResetTokenRepository {
   constructor(
-    @InjectRepository(PasswordResetTokenRepository)
+    @InjectRepository(PasswordResetTokenEntity)
     private readonly repository: Repository<PasswordResetTokenEntity>,
   ) {}
   createToken(userId: number, tokenHash: string, expiresAt: Date): PasswordResetTokenEntity {
@@ -17,18 +17,8 @@ export class PasswordResetTokenRepository implements IPasswordResetTokenReposito
       expiresAt,
     });
   }
-  saveToken(
-    // userId: number,
-    // tokenHash: string,
-    // expiresAt: Date
-    token: PasswordResetTokenEntity,
-  ): Promise<PasswordResetTokenEntity> {
-    return this.repository.save(
-      //   userId,
-      //   tokenHash,
-      //   expiresAt,
-      token,
-    );
+  saveToken(token: PasswordResetTokenEntity): Promise<PasswordResetTokenEntity> {
+    return this.repository.save(token);
   }
   findTokenByTokenHash(tokenHash: string): Promise<PasswordResetTokenEntity | null> {
     return this.repository.findOne({

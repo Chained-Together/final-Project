@@ -1,8 +1,8 @@
 import { InjectRepository } from '@nestjs/typeorm';
+import { ChannelEntity } from 'src/channel/entities/channel.entity';
+import { UserEntity } from 'src/user/entities/user.entity';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { IChannelRepository } from '../channel-interface';
-import { UserEntity } from 'src/user/entities/user.entity';
-import { ChannelEntity } from 'src/channel/entities/channel.entity';
 
 export class channelRepository implements IChannelRepository {
   constructor(

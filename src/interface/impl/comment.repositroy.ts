@@ -1,8 +1,8 @@
-import { CommentEntity } from 'src/comment/entities/comment.entity';
-import { UpdateResult, DeleteResult, Repository } from 'typeorm';
-import { ICommentRepository } from '../comment-interface';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { CommentEntity } from 'src/comment/entities/comment.entity';
+import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { ICommentRepository } from '../comment-interface';
 
 @Injectable()
 export class commentRepository implements ICommentRepository {

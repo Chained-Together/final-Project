@@ -12,7 +12,7 @@ export class VideoRepository implements IVideoRepository {
     @InjectRepository(VideoEntity)
     private readonly repository: Repository<VideoEntity>,
   ) {}
-  findVideoByVideoCode(videoCode: string): Promise<VideoEntity> {
+  findVideoByVideoCode(videoCode: string): Promise<VideoEntity | null> {
     return this.repository.findOne({ where: { videoCode } });
   }
   findAllVideo(): Promise<VideoEntity[]> {

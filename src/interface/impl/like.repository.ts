@@ -1,8 +1,8 @@
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { LikeEntity } from 'src/like/entities/like.entity';
 import { DeleteResult, Repository } from 'typeorm';
 import { ILikeRepository } from '../like-interface';
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class likeRepository implements ILikeRepository {

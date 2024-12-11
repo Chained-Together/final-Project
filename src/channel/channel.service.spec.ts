@@ -1,17 +1,17 @@
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { IChannelRepository } from 'src/interface/channel-interface';
+import { ChannelService } from './channel.service';
 import {
   channelDto,
-  mockChannel,
   mockChannels,
   mockCreateChannel,
   mockUpdatedChannel,
   mockUpdatedChannelDto,
-  mockUser,
 } from './_mocks_/mock.channel.data';
-import { mockChannelRepository } from './_mocks_/mock.channel.service';
-import { ChannelService } from './channel.service';
+import { mockUser } from './_mocks_/mock.channel.data';
+import { mockChannel } from './_mocks_/mock.channel.data';
+import { mockChannelRepository, mockQueryBuilder } from './_mocks_/mock.channel.service';
+import { IChannelRepository } from 'src/interface/channel-interface';
 
 describe('ChannelService', () => {
   let channelService: ChannelService;

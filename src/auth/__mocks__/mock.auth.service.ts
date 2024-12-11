@@ -22,3 +22,7 @@ export const mockAuthService = {
   signUp: jest.fn(),
   logIn: jest.fn(),
 };
+
+export const mockChannelService = {
+  createChannel: jest.fn(),
+};

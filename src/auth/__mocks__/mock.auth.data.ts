@@ -1,5 +1,5 @@
-import { SignUpDto } from '../dto/signUp.dto';
 import { Request } from 'express';
+import { SignUpDto } from '../dto/signUp.dto';
 
 export const signUpDto: SignUpDto = {
   email: 'test@test.com',

@@ -4,7 +4,6 @@ import { ILikeRepository } from 'src/interface/like-interface';
 import { NotificationService } from '../notification/notification.service';
 
 @Injectable()
-//TODO : toggleLike 메서드 분리하기
 export class LikeService {
   constructor(
     @Inject('IChannelRepository')

@@ -1,7 +1,7 @@
 import { ChannelEntity } from 'src/channel/entities/channel.entity';
 import { VideoEntity } from 'src/video/entities/video.entity';
 import { Visibility } from 'src/video/video.visibility.enum';
-import { DeleteResult, SelectQueryBuilder, UpdateResult } from 'typeorm';
+import { DeleteResult, UpdateResult } from 'typeorm';
 
 export interface IVideoRepository {
   findVideoByVideoId(videoId: number): Promise<VideoEntity>;
@@ -25,5 +25,5 @@ export interface IVideoRepository {
   deleteVideo(videoId: number): Promise<DeleteResult>;
   findByKeyword(keyword: string): Promise<VideoEntity[]>;
   findNewVideos(lastId: number, take: number): Promise<VideoEntity[]>;
-  findVideoByVideoCode(videoCode: string): Promise<VideoEntity>;
+  findVideoByVideoCode(videoCode: string): Promise<VideoEntity | null>;
 }

@@ -1,9 +1,8 @@
 import { NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { ChannelEntity } from '../channel/entities/channel.entity';
-import { ResolutionEntity } from '../resolution/entities/resolution.entity';
+import { IChannelRepository } from 'src/interface/channel-interface';
+import { IResolutionRepository } from 'src/interface/resolution-interface';
+import { IVideoRepository } from 'src/interface/video-interface';
 import {
   mockChannel,
   mockResolution,
@@ -20,12 +19,8 @@ import {
   mockResolutionRepository,
   mockVideoRepository,
 } from './__mocks__/mock.video.service';
-import { VideoEntity } from './entities/video.entity';
 import { VideoService } from './video.service';
 import { Visibility } from './video.visibility.enum';
-import { IVideoRepository } from 'src/interface/video-interface';
-import { IChannelRepository } from 'src/interface/channel-interface';
-import { IResolutionRepository } from 'src/interface/resolution-interface';
 
 describe('VideoService', () => {
   let videoService: VideoService;

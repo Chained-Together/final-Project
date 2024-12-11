@@ -1,11 +1,11 @@
+import { NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from '../user/entities/user.entity';
-import { Repository } from 'typeorm';
 import _ from 'lodash';
-import { NotFoundException } from '@nestjs/common';
 import { ExtractJwt, Strategy } from 'passport-jwt';
+import { Repository } from 'typeorm';
+import { UserEntity } from '../user/entities/user.entity';
 
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(

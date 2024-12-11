@@ -1,4 +1,4 @@
-import { Controller, Post, Body, HttpException, HttpStatus } from '@nestjs/common';
+import { Body, Controller, HttpException, HttpStatus, Post } from '@nestjs/common';
 import { UpdateMetadataDto } from './dto/update-resolution.dto';
 import { ResolutionService } from './resolution.service';
 
