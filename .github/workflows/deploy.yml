@@ -40,5 +40,5 @@ jobs:
           # Tag Docker image
           docker tag ${{ secrets.KSR_ECR_REPOSITORY_NAME }}:latest ${{ secrets.KSR_AWS_ACCESS_KEY }}.dkr.ecr.${{ secrets.KSR_AWS_REGION }}.amazonaws.com/${{ secrets.KSR_ECR_REPOSITORY_NAME }}:latest
 
-          # Push Docker image to ECR
-          docker push 022499011115.dkr.ecr.${{ secrets.KSR_AWS_REGION }}.amazonaws.com/${{ secrets.KSR_ECR_REPOSITORY_NAME }}:latest
+          aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin 022499011115.dkr.ecr.ap-northeast-2.amazonaws.com/loopfiy-ecr
+          docker push 022499011115.dkr.ecr.ap-northeast-2.amazonaws.com/loopfiy-ecr:latest
