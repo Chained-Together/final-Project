@@ -30,7 +30,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     channelNameElement.textContent = channelData.name || '알 수 없음';
     profileImageElement.src = channelData.profileImage || '/path/to/default-profile.png';
 
-    // 채널 수정 UI 생성
     createChannelEditUI(
       channelEditContainer,
       channelData,
@@ -38,8 +37,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       channelNameElement,
       profileImageElement,
     );
-
-    // 비디오 로드
     const videoResponse = await fetch(`/video/edit/${channelData.id}`, {
       method: 'GET',
       headers: {
@@ -156,7 +153,6 @@ const createVideoCard = (video, container, token) => {
     window.location.href = `/view-video?id=${video.id}`;
   });
 
-  // 편집/삭제 버튼 추가
   const editBtn = document.createElement('button');
   editBtn.textContent = '편집';
   editBtn.classList.add('editBtn');
