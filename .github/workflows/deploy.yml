@@ -1,114 +1,42 @@
-name: Deploy to Elastic Beanstalk
+name: Build and Push Docker Image to AWS ECR
 
 on:
   push:
     branches:
-      - dev
+      - main
+
+env:
+  AWS_REGION: ${{ secrets.KSR_AWS_REGION }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.KSR_AWS_ACCESS_KEY }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.KSR_AWS_SECRET_ACCESS_KEY }}
+  ECR_REPOSITORY: ${{ secrets.KSR_ECR_REPOSITORY_NAME }}
 
 jobs:
-  deploy:
+  build-and-push:
     runs-on: ubuntu-latest
 
-    env:
-      AWS_REGION: ap-northeast-2
-      ECR_REPOSITORY: 'elastick-beanstalk'
-      EB_APP_NAME: 'loopfiy'
-      EB_ENV_NAME: 'Loopfiy-env-2'
-      DOCKER_IMAGE_TAG: ${{ github.run_number }}-${{ github.sha }}
-      AWS_ACCESS_KEY_ID: ${{ secrets.EB_AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.EB_AWS_SECRET_ACCESS_KEY }}
-
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+      # 1. Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.EB_AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.EB_AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-northeast-2
-
-      - name: Login to Amazon ECR
+      # 2. Log in to Amazon ECR
+      - name: Log in to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build Docker image
+      # 3. Build, tag, and push the Docker image
+      - name: Build, tag, and push Docker image
+        env:
+          AWS_REGION: ${{ secrets.KSR_AWS_REGION }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.KSR_AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.KSR_AWS_SECRET_ACCESS_KEY }}
         run: |
-          docker build -t $ECR_REPOSITORY:latest .
+          # Build Docker image
+          docker build -t ${{ secrets.KSR_ECR_REPOSITORY_NAME }} .
 
-      - name: Push Docker image to ECR
-        run: |
-          docker tag $ECR_REPOSITORY:latest ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:latest
-          docker push ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:latest
+          # Tag Docker image
+          docker tag ${{ secrets.KSR_ECR_REPOSITORY_NAME }}:latest ${{ secrets.KSR_AWS_ACCESS_KEY }}.dkr.ecr.${{ secrets.KSR_AWS_REGION }}.amazonaws.com/${{ secrets.KSR_ECR_REPOSITORY_NAME }}:latest
 
-      - name: Create Dockerrun.aws.json
-        run: |
-          echo '{
-            "AWSEBDockerrunVersion": "1",
-            "Image": {
-              "Name": "'${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${ECR_REPOSITORY}:${DOCKER_IMAGE_TAG}'",
-              "Update": "true"
-            },
-            "Ports": [
-              {
-                "ContainerPort": "3000",
-                
-              }
-            ]
-          }' > Dockerrun.aws.json
-
-      #12
-      # - name: Generate deployment package
-      #   run: |
-      #     mkdir -p deploy
-      #     cp Dockerrun.aws.json deploy/Dockerrun.aws.json
-      #     cp -r .ebextensions deploy/.ebextensions
-      #     cd deploy && zip -r deploy.zip .
-
-      - name: Generate deployment package
-        run: |
-          zip deploy.zip Dockerrun.aws.json
-
-      - name: Upload Deployment Package to S3
-        run: |
-          aws s3 cp deploy.zip s3://elastic-beanstalk-deploy-zip1/deploy.zip --region ap-northeast-2
-
-      - name: Create Elastic Beanstalk Application Version
-        run: |
-          aws elasticbeanstalk create-application-version \
-            --application-name $EB_APP_NAME \
-            --version-label $DOCKER_IMAGE_TAG \
-            --source-bundle S3Bucket=elastic-beanstalk-deploy-zip1,S3Key=deploy.zip \
-            --region ap-northeast-2
-
-      - name: Update Elastic Beanstalk Environment
-        run: |
-          aws elasticbeanstalk update-environment \
-            --environment-name $EB_ENV_NAME \
-            --version-label $DOCKER_IMAGE_TAG \
-            --region ap-northeast-2
-
-      # - name: Deploy to EB #10
-      #   uses: einaregilsson/beanstalk-deploy@v22
-      #   with:
-      #     aws_access_key: ${{ secrets.EB_AWS_ACCESS_KEY_ID }}
-      #     aws_secret_key: ${{ secrets.EB_AWS_SECRET_ACCESS_KEY }}
-      #     application_name: loopfiy
-      #     environment_name: Loopfiy-env-2
-      #     version_label: $DOCKER_IMAGE_TAG
-      #     region: ${{ secrets.AWS_REGION }}
-      #     existing_bucket_name: elastic-beanstalk-deploy-zip1
-      #     deployment_package: deploy/deploy.zip
-      #     use_existing_version_if_available: true
-
-      # - name: Deploy to Elastic Beanstalk
-      #   run: |
-      #     aws elasticbeanstalk create-application-version \
-      #       --application-name "$EB_APP_NAME" \
-      #       --version-label "$DOCKER_IMAGE_TAG" \
-      #       --source-bundle fileb://$(pwd)/Dockerrun.aws.json
-
-      #     aws elasticbeanstalk update-environment \
-      #       --environment-name "$EB_ENV_NAME" \
-      #       --version-label "$DOCKER_IMAGE_TAG"
+          # Push Docker image to ECR
+          docker push ${{ secrets.KSR_AWS_ACCESS_KEY }}.dkr.ecr.${{ secrets.KSR_AWS_REGION }}.amazonaws.com/${{ secrets.KSR_ECR_REPOSITORY_NAME }}:latest
