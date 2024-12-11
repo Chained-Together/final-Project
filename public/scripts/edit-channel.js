@@ -28,7 +28,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     channelNameElement.textContent = channelData.name || '알 수 없음';
     profileImageElement.src = channelData.profileImage || '/path/to/default-profile.png';
 
-    // 비디오 로드
+    createChannelEditUI(
+      channelEditContainer,
+      channelData,
+      token,
+      channelNameElement,
+      profileImageElement,
+    );
     const videoResponse = await fetch(`/video/edit/${channelData.id}`, {
       method: 'GET',
       headers: {

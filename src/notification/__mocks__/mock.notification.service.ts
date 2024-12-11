@@ -5,14 +5,22 @@ export const mockNotificationService = {
 };
 
 export const mockChannelRepository = {
-  findOne: jest.fn(),
+  findChannelByUserId: jest.fn(),
+  findChannelByChannelId: jest.fn(),
+  findChannelByName: jest.fn(),
+  createChannel: jest.fn(),
+  updateChannel: jest.fn(),
+  deleteChannel: jest.fn(),
+  findChannelByKeyword: jest.fn(),
+  save: jest.fn(),
+  findChannelByVideoJoinUser: jest.fn(),
 };
 
 export const mockNotificationRepository = {
-  create: jest.fn(),
-  save: jest.fn(),
-  find: jest.fn(),
-  update: jest.fn(),
+  createNotification: jest.fn(),
+  saveNotification: jest.fn(),
+  findAllNotificationByUserId: jest.fn(),
+  updateNotification: jest.fn(),
 };
 
 export const mockEventEmitter = {

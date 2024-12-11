@@ -14,6 +14,7 @@
 </head>
 
 <body>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
   <div id="thumbnailsContainer">
     <button id="linkBtn">링크 공유</button>
@@ -30,13 +31,13 @@
   <div class="channel-btn" id="channelBtnContainer">
     <img src="profileImageElement.src" alt="채널 사진" class="profileImage" />
   </div>
-
+  <video id="videoPlayer" controls></video>
   <div id="thumbnailsContainer"></div>
   <script src="/public/scripts/video.js"></script>
   <script src="/public/scripts/link.js"></script>
   <script src="/public/scripts/quality.js"></script>
   <script src="/public/scripts/go-channel.js"></script>
- 
+
 </body>
 
 </html>

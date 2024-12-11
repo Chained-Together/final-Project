@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { UserEntity } from '../user/entities/user.entity';
 import { UserInfo } from 'src/utils/user-info.decorator';
+import { UserEntity } from '../user/entities/user.entity';
 import { CommentService } from './comment.service';
 import { CommentDto } from './dto/comment.dto';
 

@@ -2,8 +2,6 @@ import { Controller, Get, Query, Render } from '@nestjs/common';
 
 @Controller('')
 export class ViewController {
-
-
   @Get('/signin')
   @Render('signin')
   showSigninPage() {
@@ -79,6 +77,12 @@ export class ViewController {
   @Get('/search')
   @Render('search')
   showSearchPage(@Query('keyword') keyword: string) {
+    return;
+  }
+
+  @Get('/stream')
+  @Render('stream')
+  showstream() {
     return;
   }
 }

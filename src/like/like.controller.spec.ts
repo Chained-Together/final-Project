@@ -1,8 +1,8 @@
+import { ExecutionContext } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { Test, TestingModule } from '@nestjs/testing';
 import { LikeController } from './like.controller';
 import { LikeService } from './like.service';
-import { ExecutionContext } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 
 describe('LikeController', () => {
   let controller: LikeController;

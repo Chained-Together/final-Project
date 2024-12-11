@@ -9,10 +9,7 @@ export class ResolutionEntity {
   id: number;
 
   @Column({ type: 'varchar', nullable: true })
-  high: string;
-
-  @Column({ type: 'varchar', nullable: true })
-  low: string;
+  videoUrl: string;
 
   @OneToOne(() => VideoEntity, (video) => video.resolution, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'video_id', referencedColumnName: 'id' })

@@ -1,13 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserController } from './user.controller';
-import { UserService } from './user.service';
-import { mockUserService } from './__mocks__/mock.user.service';
 import {
   mockCreateUserDto,
   mockErrorMessage,
   mockInvalidCreateUserDto,
   mockUserResponse,
 } from '../comment/__mocks__/mock.commnet.data';
+import { mockUserService } from './__mocks__/mock.user.service';
+import { UserController } from './user.controller';
+import { UserService } from './user.service';
 
 describe('UserController', () => {
   let userController: UserController;

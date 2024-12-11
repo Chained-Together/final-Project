@@ -1,7 +1,7 @@
 FROM node:20-alpine
 
-WORKDIR /var/app
-RUN mkdir -p /var/app
+WORKDIR /
+
 COPY . .
 
 RUN npm install

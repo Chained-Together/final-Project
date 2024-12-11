@@ -1,3 +1,5 @@
+import { mockVideos } from 'src/channel/_mocks_/mock.channel.data';
+
 export const mockVideoService = {
   saveMetadata: jest.fn(),
   getAllVideo: jest.fn(),
@@ -12,30 +14,42 @@ export const mockVideoService = {
 };
 
 export const mockVideoRepository = {
-  create: jest.fn(),
-  save: jest.fn(),
-  find: jest.fn(),
-  findOne: jest.fn(),
-  update: jest.fn(),
-  delete: jest.fn(),
-  createQueryBuilder: jest.fn(() => mockQueryBuilder),
+  findVideoByVideoCode: jest.fn(),
+  findAllVideo: jest.fn(),
+  findAllVideoByChannelAndVisibility: jest.fn(),
+  findAllVideoByChannelId: jest.fn(),
+  findVideoWithChannelAndResolution: jest.fn(),
+  updateVideo: jest.fn(),
+  deleteVideo: jest.fn(),
+  findByKeyword: jest.fn(),
+  findNewVideos: jest.fn(),
+  createVideo: jest.fn(),
+  saveVideo: jest.fn(),
+  findVideoByVideoId: jest.fn(),
 };
 
 export const mockChannelRepository = {
-  findOne: jest.fn(),
+  createQueryBuilder: jest.fn(),
+  findChannelByUserId: jest.fn(),
+  findChannelByChannelId: jest.fn(),
+  findChannelByName: jest.fn(),
+  createChannel: jest.fn(),
+  updateChannel: jest.fn(),
+  deleteChannel: jest.fn(),
+  findChannelByKeyword: jest.fn(),
+  save: jest.fn(),
 };
 
 export const mockResolutionRepository = {
-  create: jest.fn(),
-  save: jest.fn(),
+  findResolutionByvideoId: jest.fn(),
+  updateResolution: jest.fn(),
+  createResolution: jest.fn(),
+  saveResolution: jest.fn(),
 };
 
 export const mockQueryBuilder = {
   where: jest.fn().mockReturnThis(),
   orWhere: jest.fn().mockReturnThis(),
   andWhere: jest.fn().mockReturnThis(),
-  getMany: jest.fn().mockResolvedValue([]),
+  getMany: jest.fn().mockResolvedValue(mockVideos),
 };
-
-export const getRepository = jest.fn(() => mockVideoRepository);
-export const Repository = jest.fn(() => mockVideoRepository);

@@ -1,6 +1,11 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import {
+  BadRequestException,
+  ConflictException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { IChannelRepository } from 'src/interface/channel-interface';
 import { UserEntity } from '../../src/user/entities/user.entity';
 import { ChannelDto } from './dto/channel.dto';
 import { ChannelEntity } from './entities/channel.entity';
@@ -8,30 +13,19 @@ import { ChannelEntity } from './entities/channel.entity';
 @Injectable()
 export class ChannelService {
   constructor(
-    @InjectRepository(ChannelEntity)
-    private readonly channelRepository: Repository<ChannelEntity>,
+    @Inject('IChannelRepository')
+    private readonly channelRepository: IChannelRepository,
   ) {}
 
   async createChannel(channelDto: ChannelDto, user: UserEntity): Promise<ChannelEntity> {
-    const { name, profileImage } = channelDto;
+    await this.ensureUserHasNoChannel(user.id);
+    await this.ensureChannelNameIsUnique(channelDto.name);
 
-    const isExistChannel = await this.findChannel({ user: { id: user.id } });
-
-    if (isExistChannel) {
-      throw new ConflictException(`이미 채널을 보유 중 입니다.${isExistChannel.name}`);
-    }
-
-    const found = await this.findChannel({ name });
-
-    if (found) {
-      throw new ConflictException(`입력하신 채널이름(${name})이 이미 존재합니다.`);
-    }
-
-    const createChannel = this.channelRepository.create({
-      name,
-      profileImage,
-      user: user,
-    });
+    const createChannel = this.channelRepository.createChannel(
+      channelDto.name,
+      channelDto.profileImage,
+      user,
+    );
 
     await this.channelRepository.save(createChannel);
 
@@ -39,65 +33,67 @@ export class ChannelService {
   }
 
   async getChannel(id: number): Promise<ChannelEntity> {
-    const foundChannel = await this.findChannel({ id });
-    if (!foundChannel) {
-      throw new NotFoundException('해당 채널이 존재하지 않습니다.');
-    }
-
-    return foundChannel;
+    return this.findChannelByIdOrThrow(id);
   }
 
   async getMyChannel(user: UserEntity): Promise<ChannelEntity> {
-    const foundChannel = await this.findChannel({ user: { id: user.id } });
-    if (!foundChannel) {
-      throw new NotFoundException('해당 채널이 존재하지 않습니다.');
-    }
-
-    return foundChannel;
+    return this.findChannelByUserIdOrThrow(user.id);
   }
 
   async updateChannel(user: UserEntity, channelDto: ChannelDto): Promise<ChannelEntity> {
-    const foundChannel = await this.findChannel({ user: { id: user.id } });
-    if (!foundChannel) {
-      throw new NotFoundException('해당 채널이 존재하지 않습니다.');
-    }
+    const foundChannel = await this.findChannelByUserIdOrThrow(user.id);
 
-    const updateChannel = await this.channelRepository.update(
-      { id: foundChannel.id },
-      {
-        name: channelDto.name,
-        profileImage: channelDto.profileImage,
-      },
+    await this.channelRepository.updateChannel(
+      foundChannel.id,
+      channelDto.name,
+      channelDto.profileImage,
     );
-
-    const foundUpdatedChannel = await this.findChannel({ user: { id: user.id } });
-    return foundUpdatedChannel;
+    return this.findChannelByUserIdOrThrow(user.id);
   }
 
   async removeChannel(user: UserEntity): Promise<ChannelEntity> {
-    const foundChannelById = await this.findChannel({ user: { id: user.id } });
+    const foundChannelById = await this.findChannelByUserIdOrThrow(user.id);
 
-    if (!foundChannelById) {
-      throw new NotFoundException('해당 채널이 존재하지 않습니다.');
-    }
-
-    const channelId = foundChannelById.id;
-
-    await this.channelRepository.delete({ id: channelId });
+    await this.channelRepository.deleteChannel(foundChannelById.id);
     return foundChannelById;
   }
 
-  private async findChannel(userId) {
-    const foundChannel = await this.channelRepository.findOne({ where: userId });
-    return foundChannel;
+  async findChannelByKeyword(keyword: string): Promise<ChannelEntity[]> {
+    this.validateKeyword(keyword);
+    return this.channelRepository.findChannelByKeyword(keyword);
   }
 
-  async findChannelByKeyword(keyword: string) {
-    const channelResult = await this.channelRepository
-      .createQueryBuilder('channel')
-      .where('channel.name LIKE :keyword', { keyword: `%${keyword}%` })
-      .getMany();
+  private async findChannelByUserIdOrThrow(userId: number): Promise<ChannelEntity> {
+    const foundChannel = await this.channelRepository.findChannelByUserId(userId);
+    if (!foundChannel) {
+      throw new NotFoundException('해당 채널이 존재하지 않습니다.');
+    }
+    return foundChannel;
+  }
+  private async ensureUserHasNoChannel(userId: number): Promise<void> {
+    const isExistChannel = await this.channelRepository.findChannelByUserId(userId);
+    if (isExistChannel) {
+      throw new ConflictException(`이미 채널을 보유 중 입니다. (${isExistChannel.name})`);
+    }
+  }
+  private async ensureChannelNameIsUnique(name: string): Promise<void> {
+    const found = await this.channelRepository.findChannelByName(name);
 
-    return channelResult;
+    if (found) {
+      throw new ConflictException(`입력하신 채널이름(${name})이 이미 존재합니다.`);
+    }
+  }
+
+  private async findChannelByIdOrThrow(channelId: number): Promise<ChannelEntity> {
+    const foundChannel = await this.channelRepository.findChannelByChannelId(channelId);
+    if (!foundChannel) {
+      throw new NotFoundException('해당 채널이 존재하지 않습니다.');
+    }
+    return foundChannel;
+  }
+  private async validateKeyword(keyword: string): Promise<void> {
+    if (!keyword || keyword.trim().length === 0) {
+      throw new BadRequestException('Keyword cannot be empty');
+    }
   }
 }

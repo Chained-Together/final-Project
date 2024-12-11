@@ -1,3 +1,3 @@
-const mockMailerService = {
-    sendMail: jest.fn(),
-  };
+export const mockMailerService = {
+  sendMail: jest.fn(),
+};
