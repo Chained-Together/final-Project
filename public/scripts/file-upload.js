@@ -7,7 +7,6 @@ const visibilityInput = document.getElementById('visibility');
 const thumbnailUrlInput = document.getElementById('thumbnailUrl');
 const token = localStorage.getItem('token');
 
-// 페이지가 로드될 때 저장된 값을 복원
 window.addEventListener('load', () => {
   const savedVisibility = localStorage.getItem('visibility');
   if (savedVisibility) {
@@ -15,7 +14,6 @@ window.addEventListener('load', () => {
   }
 });
 
-// 입력값이 변경될 때 localStorage에 저장
 visibilityInput.addEventListener('input', () => {
   localStorage.setItem('visibility', visibilityInput.value);
 });

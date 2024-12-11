@@ -17,20 +17,19 @@ export class AuthController {
   @Post('login')
   async logIn(@Body() loginDto: LoginDto, @Res() res: Response) {
     const result = await this.authService.logIn(loginDto);
-    //
+
     res.setHeader('Authorization', result.access_token);
 
     return res.status(200).json({
       message: '로그인 성공',
-      // 홈페이지 리턴되게
     });
   }
 
   @Get('google')
-  @UseGuards(AuthGuard('google')) // 1.구글 전략
+  @UseGuards(AuthGuard('google'))
   async googleAuth() {}
 
-  @Get('google/callback') //2.여기로 보내짐
+  @Get('google/callback')
   @UseGuards(AuthGuard('google'))
   async googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
     const token = await this.authService.googleLogin(req);
