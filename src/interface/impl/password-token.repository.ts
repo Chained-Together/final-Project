@@ -7,7 +7,7 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export class PasswordResetTokenRepository implements IPasswordResetTokenRepository {
   constructor(
-    @InjectRepository(PasswordResetTokenRepository)
+    @InjectRepository(PasswordResetTokenEntity)
     private readonly repository: Repository<PasswordResetTokenEntity>,
   ) {}
   createToken(userId: number, tokenHash: string, expiresAt: Date): PasswordResetTokenEntity {
@@ -17,18 +17,8 @@ export class PasswordResetTokenRepository implements IPasswordResetTokenReposito
       expiresAt,
     });
   }
-  saveToken(
-    // userId: number,
-    // tokenHash: string,
-    // expiresAt: Date
-    token: PasswordResetTokenEntity,
-  ): Promise<PasswordResetTokenEntity> {
-    return this.repository.save(
-      //   userId,
-      //   tokenHash,
-      //   expiresAt,
-      token,
-    );
+  saveToken(token: PasswordResetTokenEntity): Promise<PasswordResetTokenEntity> {
+    return this.repository.save(token);
   }
   findTokenByTokenHash(tokenHash: string): Promise<PasswordResetTokenEntity | null> {
     return this.repository.findOne({
