@@ -11,27 +11,21 @@ export class ResolutionRepository implements IResolutionRepository {
     @InjectRepository(ResolutionEntity)
     private readonly repository: Repository<ResolutionEntity>,
   ) {}
-  findResolutionByvideoId(videoId: number): Promise<ResolutionEntity | null> {
+  findResolutionByVideoId(videoId: number): Promise<ResolutionEntity | null> {
     return this.repository.findOne({
       where: { video: { id: videoId } },
     });
   }
-  updateResolution(
-    videoId: number,
-    highResolutionUrl: string,
-    lowResolutionUrl: string,
-  ): Promise<UpdateResult> {
+  updateResolution(videoId: number, videoUrl: string): Promise<UpdateResult> {
     return this.repository.update(
       {
         video: { id: videoId },
       },
-      { high: highResolutionUrl, low: lowResolutionUrl },
+      { videoUrl },
     );
   }
-  createResolution(high: string, low: string, video: VideoEntity): ResolutionEntity {
+  createResolution(video: VideoEntity): ResolutionEntity {
     return this.repository.create({
-      high,
-      low,
       video,
     });
   }

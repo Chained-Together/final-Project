@@ -43,7 +43,7 @@ export class VideoService {
 
     const savedVideo = await this.videoRepository.saveVideo(video);
 
-    const resolution = this.resolutionRepository.createResolution(high, low, savedVideo);
+    const resolution = this.resolutionRepository.createResolution(savedVideo);
     // const resolution = this.resolutionRepository.create({
     //   videoUrl: null,
     //   video: savedVideo,
