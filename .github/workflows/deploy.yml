@@ -24,7 +24,7 @@ jobs:
       - name: Log in to Amazon ECR
         id: login-ecr
         run: |
-          echo "${{ secrets.KSR_AWS_ACCESS_KEY_ID }}" | aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin 022499011115.dkr.ecr.ap-northeast-2.amazonaws.com/loopfiy-ecr
+          aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin 022499011115.dkr.ecr.ap-northeast-2.amazonaws.com/loopfiy-ecr
 
       # 3. Build, tag, and push the Docker image
       - name: Build, tag, and push Docker image
@@ -37,7 +37,7 @@ jobs:
           docker build -t ${{ secrets.KSR_ECR_REPOSITORY_NAME }} .
 
           # Tag Docker image
-          docker tag ${{ secrets.KSR_ECR_REPOSITORY_NAME }}:latest ${{ secrets.KSR_AWS_ACCESS_KEY_ID }}.dkr.ecr.${{ secrets.KSR_AWS_REGION }}.amazonaws.com/${{ secrets.KSR_ECR_REPOSITORY_NAME }}:latest
+          docker tag ${{ secrets.KSR_ECR_REPOSITORY_NAME }}:latest ${{ secrets.KSR_AWS_ACCESS_KEY }}.dkr.ecr.${{ secrets.KSR_AWS_REGION }}.amazonaws.com/${{ secrets.KSR_ECR_REPOSITORY_NAME }}:latest
 
           # Push Docker image to ECR
-          docker push ${{ secrets.KSR_AWS_ACCESS_KEY_ID }}.dkr.ecr.${{ secrets.KSR_AWS_REGION }}.amazonaws.com/${{ secrets.KSR_ECR_REPOSITORY_NAME }}:latest
+          docker push ${{ secrets.KSR_AWS_ACCESS_KEY }}.dkr.ecr.${{ secrets.KSR_AWS_REGION }}.amazonaws.com/${{ secrets.KSR_ECR_REPOSITORY_NAME }}:latest
