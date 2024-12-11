@@ -3,8 +3,7 @@ name: Build and Push Docker Image to AWS ECR
 on:
   push:
     branches:
-      - main
-
+      - dev
 env:
   AWS_REGION: ${{ secrets.KSR_AWS_REGION }}
   AWS_ACCESS_KEY_ID: ${{ secrets.KSR_AWS_ACCESS_KEY }}
