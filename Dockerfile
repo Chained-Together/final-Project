@@ -1,6 +1,6 @@
 FROM node:22-alpine
 # 작업 디렉토리 설정
-WORKDIR /app
+WORKDIR /
 
 # 필요한 패키지 설치
 RUN apk add --no-cache bash

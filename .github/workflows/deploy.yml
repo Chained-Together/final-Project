@@ -1,9 +1,9 @@
-name: Deploy to AWS ECR
+name: Deploy to AWS ECR and Elastic Beanstalk
 
 on:
   push:
     branches:
-      - deploy  # deploy 브랜치에 Push될 때 실행
+      - deploy
 
 env:
   AWS_REGION: ${{ secrets.KSR_AWS_REGION }}
@@ -11,23 +11,25 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.KSR_AWS_SECRET_ACCESS_KEY }}
   ECR_REPOSITORY: ${{ secrets.KSR_ECR_REPOSITORY_NAME }}
   AWS_ACCOUNT_ID: ${{ secrets.KSR_AWS_ACCOUNT_ID }}
+  EB_APP_NAME: ${{ secrets.KSR_EB_APP_NAME }}
+  EB_ENV_NAME: ${{ secrets.KSR_EB_ENV_NAME }}
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout the code
+      # 1. 코드 체크아웃
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Set up Node.js environment
+      # 2. Node.js 설정
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '22'  # 필요 시 버전을 변경하세요
+          node-version: '22'  # Node.js 22버전인데 에러발생시 버전다운 해야함
 
-      # 3. npm으로 종속성 설치
+      # 3. npm을 이용한 의존성 설치
       - name: Install dependencies
         run: npm install
 
@@ -35,23 +37,38 @@ jobs:
       - name: Run Tests
         run: npm test
 
-      # 5. ECR 로그인하기
+      # 5. AWS ECR에 로그인
       - name: Log in to Amazon ECR
         run: |
           aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
 
-      # 6. Docker 이미지 빌드하기
+      # 6. Docker 이미지 빌드
       - name: Build Docker Image
         run: |
           docker build -t ${{ env.ECR_REPOSITORY }} .
 
-      # 7. 도커이미지 태크 만들기
+      # 7. Docker 이미지 태그 설정
       - name: Tag Docker Image
         run: |
           DOCKER_IMAGE_ID=$(docker images -q ${{ env.ECR_REPOSITORY }}:latest)
           docker tag $DOCKER_IMAGE_ID ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:latest
 
-      # 8. AWS ECR에 Docker Image Push
+      # 8. ECR에 Docker 이미지 푸쉬
       - name: Push Docker Image
         run: |
           docker push ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:latest
+
+      # 9. Elastic Beanstalk CLI 설치
+      - name: Install Elastic Beanstalk CLI
+        run: |
+          sudo pip install awsebcli
+
+      # 10. Elastic Beanstalk에 배포
+      - name: Deploy to Elastic Beanstalk
+        env:
+          AWS_REGION: ${{ env.AWS_REGION }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.KSR_AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.KSR_AWS_SECRET_ACCESS_KEY }}
+        run: |
+          eb init -p docker ${{ env.EB_APP_NAME }} --region ${{ env.AWS_REGION }}
+          eb deploy ${{ env.EB_ENV_NAME }}
