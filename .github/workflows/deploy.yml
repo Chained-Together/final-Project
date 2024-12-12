@@ -55,6 +55,11 @@ jobs:
           sudo apt remove python3-urllib3
           sudo pip install awsebcli
 
+      - name: Stop and remove containers
+        run: |
+          docker ps -q --filter "ancestor=app-image:latest" | xargs -r docker stop
+          docker ps -aq --filter "ancertor=app-image:latest" | xargs -r docker rm
+
       - name: Deploy to Elastic Beanstalk
         env:
           AWS_REGION: ${{ env.AWS_REGION }}
