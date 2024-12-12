@@ -13,10 +13,9 @@
 
     <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
     <script>
+      const roomId = '<%= roomId %>';
+      const username = '<%= username %>';
       const socket = io('http://localhost:3001');
-
-      const roomId = 'room1';
-      const username = 'User1';
 
       socket.on('connect', () => {
         socket.emit('joinRoom', { roomId, username });
@@ -39,12 +38,10 @@
       });
 
       document.getElementById('send-button').addEventListener('click', () => {
-        const messageInput = document.getElementById('message-input');
-        const message = messageInput.value.trim();
-
+        const message = document.getElementById('message-input').value.trim();
         if (message) {
           socket.emit('sendMessage', { roomId, message, sender: username });
-          messageInput.value = '';
+          document.getElementById('message-input').value = '';
         }
       });
 
@@ -54,12 +51,6 @@
         messageElement.textContent = `${data.username} has left the room.`;
         chatBox.appendChild(messageElement);
         chatBox.scrollTop = chatBox.scrollHeight;
-      });
-
-      socket.on('disconnect', () => {});
-
-      socket.on('connect_error', (error) => {
-        console.error('Connection error:', error);
       });
     </script>
   </body>
