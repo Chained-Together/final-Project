@@ -3,13 +3,14 @@ name: Build and Push Docker Image to AWS ECR
 on:
   push:
     branches:
-      - dev  # 'dev' 브랜치에 푸시될 때 실행됨
+      - deploy  # 'dev' 브랜치에 푸시될 때 실행됨
 
 env:
   AWS_REGION: ${{ secrets.KSR_AWS_REGION }}  # AWS 리전
   AWS_ACCESS_KEY_ID: ${{ secrets.KSR_AWS_ACCESS_KEY }}  # AWS 액세스 키 ID
   AWS_SECRET_ACCESS_KEY: ${{ secrets.KSR_AWS_SECRET_ACCESS_KEY }}  # AWS 비밀 액세스 키
   ECR_REPOSITORY: ${{ secrets.KSR_ECR_REPOSITORY_NAME }}  # ECR 레포지토리 이름
+
 
 jobs:
   build-and-push:
@@ -56,6 +57,7 @@ jobs:
 
           # 로컬 이미지 존재 확인
           docker images
+
 
           # Docker 인증 및 ECR 로그인 확인
           aws ecr get-login-password --region ${{ secrets.KSR_AWS_REGION }} | docker login --username AWS --password-stdin 022499011115.dkr.ecr.${{ secrets.KSR_AWS_REGION }}.amazonaws.com/${{ secrets.KSR_ECR_REPOSITORY }}
