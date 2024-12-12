@@ -4,12 +4,17 @@ import { BcryptHashingService } from 'src/interface/impl/bcrypt-hashing-service'
 import { UserEntity } from './entities/user.entity';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
+import { UserRepository } from 'src/interface/impl/user.repository';
 
 @Module({
   imports: [TypeOrmModule.forFeature([UserEntity])],
   controllers: [UserController],
   providers: [
     UserService,
+    {
+      provide: 'IUserRepository',
+      useClass: UserRepository,
+    },
     {
       provide: 'HashingService',
       useClass: BcryptHashingService,

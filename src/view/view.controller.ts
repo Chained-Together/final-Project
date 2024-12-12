@@ -1,4 +1,4 @@
-import { Controller, Get, Query, Render } from '@nestjs/common';
+import { Controller, Get, Param, Query, Render } from '@nestjs/common';
 
 @Controller('')
 export class ViewController {
@@ -84,5 +84,11 @@ export class ViewController {
   @Render('stream')
   showstream() {
     return;
+  }
+
+  @Get('/chat/:roomId/:username')
+  @Render('chat')
+  showChat(@Param('roomId') roomId: string, @Param('username') username: string) {
+    return { roomId, username };
   }
 }
