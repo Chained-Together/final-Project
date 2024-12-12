@@ -58,7 +58,7 @@ jobs:
       - name: Stop and remove containers
         run: |
           docker ps -q --filter "ancestor=app-image:latest" | xargs -r docker stop
-          docker ps -aq --filter "ancertor=app-image:latest" | xargs -r docker rm
+          docker ps -aq --filter "ancestor=app-image:latest" | xargs -r docker rm
 
       - name: Deploy to Elastic Beanstalk
         env:
