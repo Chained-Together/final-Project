@@ -5,6 +5,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import session from 'express-session';
 import * as dotenv from 'dotenv';
+import { IoAdapter } from '@nestjs/platform-socket.io';
 // import { createProxyMiddleware } from 'http-proxy-middleware';
 
 const envFile = process.env.NODE_ENV === 'production' ? '.env' : 'development.env';
@@ -49,6 +50,7 @@ async function bootstrap() {
   });
   expressApp.set('view engine', 'ejs');
   expressApp.set('views', join(__dirname, '..', 'views'));
+  app.useWebSocketAdapter(new IoAdapter(app));
   console.log(join(process.cwd(), 'views'));
   app.useGlobalPipes(new ValidationPipe());
 
