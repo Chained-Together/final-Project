@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OBS Stream Control</title>
   <script>
-    // 스트리밍 상태를 확인하고 UI 업데이트
+
     async function getStreamingStatus() {
       const response = await fetch('/obs/streaming-status');
       const data = await response.json();
@@ -14,25 +14,24 @@
       document.getElementById('stream-status').innerText = status.streaming ? 'Streaming' : 'Not Streaming';
     }
 
-    // 스트리밍 시작
+
     async function startStreaming() {
       await fetch('/obs/start-streaming', { method: 'POST' });
-      getStreamingStatus(); // 상태 업데이트
+      getStreamingStatus(); 
     }
 
-    // 스트리밍 종료
     async function stopStreaming() {
       await fetch('/obs/stop-streaming', { method: 'POST' });
-      getStreamingStatus(); // 상태 업데이트
+      getStreamingStatus();
     }
 
-    // 장면 목록 가져오기
+
     async function getSceneList() {
       const response = await fetch('/obs/getSceneList');
       const data = await response.json();
       const sceneList = data.scenes || [];
       const sceneContainer = document.getElementById('scene-list');
-      sceneContainer.innerHTML = ''; // 장면 목록 초기화
+      sceneContainer.innerHTML = ''; 
 
       if (sceneList.length > 0) {
         sceneList.forEach(scene => {
@@ -45,7 +44,7 @@
       }
     }
 
-    // 현재 방송 중인 장면 가져오기
+
     async function getCurrentScene() {
       const response = await fetch('/obs/getCurrentScene');
       const data = await response.json();
@@ -53,7 +52,6 @@
       document.getElementById('current-scene').innerText = currentScene.sceneName || 'No scene selected';
     }
 
-    // 페이지 로딩 시 스트리밍 상태, 장면 목록, 현재 장면 가져오기
     window.onload = function () {
       getStreamingStatus();
       getSceneList();
@@ -115,23 +113,23 @@
 
 
   <script>
-    /* video Element */
+
     let video = null;
-    /* 샘플 m3u8 url */
+
     let videoSrc = 'http://121.181.193.159:8080/hls/stream.m3u8';
 
-    /* initVideo */
+
     const initVideo = () => {
       video = document.querySelector('#video')
     }
 
-    /* DOMContentLoaded 로드를 통해 video Element 담기*/
+
     window.addEventListener("DOMContentLoaded", () => {
       initVideo();
     })
 
 
-    /* initHls : hls를 초기화 하는 함수 */
+
     const initHls = () => {
       if (Hls.isSupported()) {
         hls = new Hls({
@@ -141,13 +139,13 @@
         hls.attachMedia(video);
         hls.startLoad();
       }
-      /* ios/safari 같은 경우에 hls가 built-in 되어있다.*/
+
       else {
         video.src = videoSrc;
       }
     }
 
-    /* DOMContentLoaded 로드를 통해 video Element 담기*/
+
     window.addEventListener("DOMContentLoaded", () => {
       initVideo();
       initHls();
