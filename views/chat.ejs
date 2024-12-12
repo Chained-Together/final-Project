@@ -3,21 +3,64 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Chat Application</title>
-    <link rel="stylesheet" href="/public/styles/chat.css" />
+    <title>Chat Room</title>
   </head>
   <body>
-    <div class="chat-container">
-      <h1>Chat Room: <%= roomId %></h1>
-      <div id="chat-box" class="chat-box"></div>
-      <input id="message-input" type="text" placeholder="Type a message..." />
-      <button id="send-button">Send</button>
-    </div>
+    <h1>Chat Room</h1>
+    <div id="chat-box" style="border: 1px solid #ccc; height: 300px; overflow-y: scroll"></div>
+    <input id="message-input" placeholder="Type your message" />
+    <button id="send-button">Send</button>
+
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
     <script>
-      const roomId = '<%= roomId %>';
-      const username = '<%= username %>';
+      const socket = io('http://localhost:3001');
+
+      const roomId = 'room1';
+      const username = 'User1';
+
+      socket.on('connect', () => {
+        socket.emit('joinRoom', { roomId, username });
+      });
+
+      socket.on('userJoined', (data) => {
+        const chatBox = document.getElementById('chat-box');
+        const messageElement = document.createElement('div');
+        messageElement.textContent = `${data.username} has joined the room.`;
+        chatBox.appendChild(messageElement);
+        chatBox.scrollTop = chatBox.scrollHeight;
+      });
+
+      socket.on('receiveMessage', (data) => {
+        const chatBox = document.getElementById('chat-box');
+        const messageElement = document.createElement('div');
+        messageElement.textContent = `${data.sender}: ${data.message}`;
+        chatBox.appendChild(messageElement);
+        chatBox.scrollTop = chatBox.scrollHeight;
+      });
+
+      document.getElementById('send-button').addEventListener('click', () => {
+        const messageInput = document.getElementById('message-input');
+        const message = messageInput.value.trim();
+
+        if (message) {
+          socket.emit('sendMessage', { roomId, message, sender: username });
+          messageInput.value = '';
+        }
+      });
+
+      socket.on('userLeft', (data) => {
+        const chatBox = document.getElementById('chat-box');
+        const messageElement = document.createElement('div');
+        messageElement.textContent = `${data.username} has left the room.`;
+        chatBox.appendChild(messageElement);
+        chatBox.scrollTop = chatBox.scrollHeight;
+      });
+
+      socket.on('disconnect', () => {});
+
+      socket.on('connect_error', (error) => {
+        console.error('Connection error:', error);
+      });
     </script>
-    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
-    <script src="/public/scripts/chat.js"></script>
   </body>
 </html>
