@@ -55,10 +55,12 @@ jobs:
           sudo apt remove python3-urllib3
           sudo pip install awsebcli
 
-      - name: Stop and remove containers
+      - name: Remove Old Containers and Images on Elastic Beanstalk Instance
         run: |
-          docker ps -q --filter "ancestor=app-image:latest" | xargs -r docker stop
-          docker ps -aq --filter "ancestor=app-image:latest" | xargs -r docker rm
+          ssh -i ~/.ssh/my-key.pem ec2-user@13.125.148.162 "
+          docker ps -q | xargs -r docker stop &&
+          docker ps -aq | xargs -r docker rm &&
+          docker images -q | xar
 
       - name: Deploy to Elastic Beanstalk
         env:
