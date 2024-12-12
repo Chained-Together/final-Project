@@ -3,32 +3,28 @@ name: Build and Push Docker Image to AWS ECR
 on:
   push:
     branches:
-      - deploy  # 'dev' 브랜치에 푸시될 때 실행됨
+      - deploy
 
 env:
-  AWS_REGION: ${{ secrets.KSR_AWS_REGION }}  # AWS 리전
-  AWS_ACCESS_KEY_ID: ${{ secrets.KSR_AWS_ACCESS_KEY }}  # AWS 액세스 키 ID
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.KSR_AWS_SECRET_ACCESS_KEY }}  # AWS 비밀 액세스 키
-  ECR_REPOSITORY: ${{ secrets.KSR_ECR_REPOSITORY_NAME }}  # ECR 레포지토리 이름
-
+  AWS_REGION: ${{ secrets.KSR_AWS_REGION }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.KSR_AWS_ACCESS_KEY }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.KSR_AWS_SECRET_ACCESS_KEY }}
+  ECR_REPOSITORY: ${{ secrets.KSR_ECR_REPOSITORY_NAME }}
 
 jobs:
   build-and-push:
-    runs-on: ubuntu-latest  # Ubuntu 최신 릴리스에서 실행
+    runs-on: ubuntu-latest
 
     steps:
-      # 1. 저장소 체크아웃
-      - name: Checkout code  # 코드 체크아웃
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Amazon ECR 로그인
-      - name: Log in to Amazon ECR  # Amazon ECR에 로그인
+      - name: Log in to Amazon ECR
         id: login-ecr
         run: |
-          aws ecr get-login-password --region ${{ secrets.KSR_AWS_REGION }} | docker login --username AWS --password-stdin 022499011115.dkr.ecr.${{ secrets.KSR_AWS_REGION }}.amazonaws.com/${{ secrets.KSR_ECR_REPOSITORY }} 
+          aws ecr get-login-password --region ${{ secrets.KSR_AWS_REGION }} | docker login --username AWS --password-stdin 022499011115.dkr.ecr.${{ secrets.KSR_AWS_REGION }}.amazonaws.com/${{ secrets.KSR_ECR_REPOSITORY }}
 
-      # 3. Docker 이미지 빌드, 태그, 푸시
-      - name: Build, tag, and push Docker image  # Docker 이미지 빌드, 태그, 푸시
+      - name: Build, tag, and push Docker image
         env:
           AWS_REGION: ${{ secrets.KSR_AWS_REGION }}
           AWS_ACCESS_KEY_ID: ${{ secrets.KSR_AWS_ACCESS_KEY }}
@@ -37,12 +33,11 @@ jobs:
           # Docker 이미지 빌드
           docker build -t ${{ secrets.KSR_ECR_REPOSITORY }} .
 
-          # 태그 생성 및 Docker 이미지 태그
+          # Docker 이미지 태그
           DOCKER_IMAGE_ID=$(docker images -q ${{ secrets.KSR_ECR_REPOSITORY }}:latest)
           docker tag $DOCKER_IMAGE_ID 022499011115.dkr.ecr.${{ secrets.KSR_AWS_REGION }}.amazonaws.com/${{ secrets.KSR_ECR_REPOSITORY }}:latest
 
-          # ECR에 로그인 후 Docker 이미지 푸시
-          aws ecr get-login-password --region ${{ secrets.KSR_AWS_REGION }} | docker login --username AWS --password-stdin 022499011115.dkr.ecr.${{ secrets.KSR_AWS_REGION }}.amazonaws.com/${{ secrets.KSR_ECR_REPOSITORY }}
+          # Docker 이미지 푸시
           docker push 022499011115.dkr.ecr.${{ secrets.KSR_AWS_REGION }}.amazonaws.com/${{ secrets.KSR_ECR_REPOSITORY }}:latest
 
       # 문제 해결 단계
