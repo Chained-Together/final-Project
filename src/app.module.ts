@@ -37,6 +37,9 @@ const typeOrmModuleOptions = {
     password: configService.get('DB_PASSWORD'),
     host: configService.get('DB_HOST'),
     port: configService.get<number>('DB_PORT'),
+    ssl: {
+      rejectUnauthorized: false,
+    },
     database: configService.get('DB_NAME'),
     entities: [
       UserEntity,
@@ -58,7 +61,7 @@ const typeOrmModuleOptions = {
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: process.env.NODE_ENV === 'production' ? '.env' : 'development.env',
+      envFilePath: '.env',
       isGlobal: true,
       validationSchema: Joi.object({
         JWT_SECRET_KEY: Joi.string().required(),

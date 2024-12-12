@@ -1,27 +1,35 @@
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { ConflictException, NotFoundException } from '@nestjs/common';
-import { Test, TestingModule } from '@nestjs/testing';;
+import { Test, TestingModule } from '@nestjs/testing';
 import { ChannelService } from './channel.service';
-import { channelDto, mockUpdatedChannelDto } from './_mocks_/mock.channel.data'
-import { ChannelEntity } from './entities/channel.entity';
+import {
+  channelDto,
+  mockChannels,
+  mockCreateChannel,
+  mockUpdatedChannel,
+  mockUpdatedChannelDto,
+} from './_mocks_/mock.channel.data';
 import { mockUser } from './_mocks_/mock.channel.data';
 import { mockChannel } from './_mocks_/mock.channel.data';
-import { mockChannelRepository, mockChannelService } from './_mocks_/mock.channel.service'
+import { mockChannelRepository, mockQueryBuilder } from './_mocks_/mock.channel.service';
+import { IChannelRepository } from 'src/interface/channel-interface';
+
 describe('ChannelService', () => {
   let channelService: ChannelService;
- 
+  let channelRepository: IChannelRepository;
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ChannelService,
         {
-          provide: getRepositoryToken(ChannelEntity),
+          provide: 'IChannelRepository',
           useValue: mockChannelRepository,
         },
       ],
     }).compile();
 
     channelService = module.get<ChannelService>(ChannelService);
+    channelRepository = module.get<IChannelRepository>('IChannelRepository');
   });
 
   it('should be defined', () => {
@@ -30,128 +38,119 @@ describe('ChannelService', () => {
 
   describe('채널 생성 시 ', () => {
     it('채널명 중복 시 ConflictException를 반환한다.', async () => {
-      mockChannelRepository.findOne.mockResolvedValue(mockChannel);
+      mockChannelRepository.findChannelByName.mockResolvedValue(mockChannel);
       await expect(channelService.createChannel(channelDto, mockUser)).rejects.toThrow(
         ConflictException,
       );
     });
 
-    it('생성한 채널을 반환한다. ', async () => {
-      mockChannelRepository.findOne.mockResolvedValue(null);
-      mockChannelRepository.create.mockReturnValue(mockChannel);
-      mockChannelRepository.save.mockResolvedValue(mockChannel);
+    it('채널을 성공적으로 생성한다.. ', async () => {
+      mockChannelRepository.findChannelByUserId.mockResolvedValue(null);
+      mockChannelRepository.findChannelByName.mockResolvedValue(null);
+      mockChannelRepository.createChannel.mockReturnValue(mockCreateChannel);
+      mockChannelRepository.save.mockResolvedValue(mockCreateChannel);
 
       const result = await channelService.createChannel(channelDto, mockUser);
 
-      expect(mockChannelRepository.findOne).toHaveBeenCalledWith({
-        where: { name: channelDto.name },
-      });
-      expect(mockChannelRepository.create).toHaveBeenCalledWith({
-        ...channelDto,
-        user: mockUser
-      });
-      expect(mockChannelRepository.save).toHaveBeenCalledWith(mockChannel);
-      expect(result).toEqual(mockChannel);
+      expect(mockChannelRepository.findChannelByUserId).toHaveBeenCalledWith(mockUser.id);
+      expect(mockChannelRepository.findChannelByName).toHaveBeenCalledWith(channelDto.name);
+      expect(mockChannelRepository.createChannel).toHaveBeenCalledWith(
+        channelDto.name,
+        channelDto.profileImage,
+        mockUser,
+      );
+      expect(mockChannelRepository.save).toHaveBeenCalledWith(mockCreateChannel);
+      expect(result).toEqual(mockCreateChannel);
     });
   });
 
-  describe('채널 상세 조회 시 ', () => {
-    it('채널이 존재 하지 않을 시 NotfoundException을 반환한다.', async () => {
-      mockChannelRepository.findOne.mockResolvedValue(null);
+  describe('채널 조회 시 ', () => {
+    it('채널이 존재 하지 않을 시 NotfoundException을 던진다.', async () => {
+      mockChannelRepository.findChannelByChannelId.mockResolvedValue(null);
 
       await expect(channelService.getChannel(1)).rejects.toThrow(NotFoundException);
     });
 
     it('채널 정보를 반환한다. ', async () => {
-      mockChannelRepository.findOne.mockResolvedValue(mockChannel);
+      mockChannelRepository.findChannelByChannelId.mockResolvedValue(mockChannel);
       const result = await channelService.getChannel(1);
 
-      expect(mockChannelRepository.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
+      expect(mockChannelRepository.findChannelByChannelId).toHaveBeenCalledWith(1);
+      expect(result).toEqual(mockChannel);
+    });
+  });
+
+  describe('내 채널 조회 시 ', () => {
+    it('채널이 존재 하지 않을 시 NotFoundException을 던진다', async () => {
+      mockChannelRepository.findChannelByUserId.mockResolvedValue(null);
+
+      await expect(channelService.getMyChannel(mockUser)).rejects.toThrow(NotFoundException);
+    });
+
+    it('내 채널 정보를 반환한다. ', async () => {
+      mockChannelRepository.findChannelByUserId.mockResolvedValue(mockChannel);
+
+      const result = await channelService.getMyChannel(mockUser);
+
+      expect(mockChannelRepository.findChannelByUserId).toHaveBeenCalledWith(mockUser.id);
       expect(result).toEqual(mockChannel);
     });
   });
 
   describe('채널 업데이트 시 ', () => {
     it('채널이 존재 하지 않을 시 NotfoundException을 반환한다.', async () => {
-      mockChannelRepository.findOne.mockResolvedValue(null);
+      mockChannelRepository.findChannelByUserId.mockResolvedValue(null);
 
       await expect(channelService.updateChannel(mockUser, channelDto)).rejects.toThrow(
         NotFoundException,
       );
     });
 
-    it('업데이트된 채널 정보를 반환한다. ', async () => {
-      mockChannelRepository.findOne.mockResolvedValue(mockChannel);
-      mockChannelRepository.update.mockResolvedValue(undefined);
+    it('업데이트된 채널 정보를 반환한다.', async () => {
+      mockChannelRepository.findChannelByUserId.mockResolvedValue(mockChannel);
+      mockChannelRepository.updateChannel.mockResolvedValue(undefined);
+      mockChannelRepository.findChannelByUserId.mockResolvedValue(mockUpdatedChannel);
 
-      const updatedChannel: ChannelEntity = {
-        ...mockChannel,
-        ...mockUpdatedChannelDto,
-      };
-      mockChannelRepository.findOne.mockResolvedValue(updatedChannel);
       const result = await channelService.updateChannel(mockUser, mockUpdatedChannelDto);
-      expect(mockChannelRepository.findOne).toHaveBeenCalledWith({
-        where: { user: {id: mockUser.id} },
-      });
-      expect(mockChannelRepository.update).toHaveBeenCalledWith(
-        { id: mockChannel.id },
-        {
-          name: mockUpdatedChannelDto.name,
-          profileImage: mockUpdatedChannelDto.profileImage,
-        },
+
+      expect(mockChannelRepository.findChannelByUserId).toHaveBeenCalledWith(mockUser.id);
+      expect(mockChannelRepository.updateChannel).toHaveBeenCalledWith(
+        mockChannel.id,
+        mockUpdatedChannelDto.name,
+        mockUpdatedChannelDto.profileImage,
       );
-      expect(result).toEqual(updatedChannel);
+      expect(result.name).toEqual(mockUpdatedChannel.name);
+      expect(result.profileImage).toEqual(mockUpdatedChannel.profileImage);
     });
   });
 
   describe('채널 삭제 시 ', () => {
     it('채널이 존재 하지 않을 시 NotfoundException을 반환한다.', async () => {
-      mockChannelRepository.findOne.mockResolvedValue(null);
+      mockChannelRepository.findChannelByUserId.mockResolvedValue(null);
 
       await expect(channelService.removeChannel(mockUser)).rejects.toThrow(NotFoundException);
     });
 
     it('삭제된 채널 정보를 반환한다. ', async () => {
-      mockChannelRepository.findOne.mockResolvedValue(mockChannel);
-      mockChannelRepository.delete.mockResolvedValue(undefined);
+      mockChannelRepository.findChannelByUserId.mockResolvedValue(mockChannel);
+      mockChannelRepository.deleteChannel.mockResolvedValue(undefined);
 
       const result = await channelService.removeChannel(mockUser);
 
-      expect(mockChannelRepository.findOne).toHaveBeenCalledWith({
-        where: {user:{id: mockUser.id} },
-      });
-      expect(mockChannelRepository.delete).toHaveBeenCalledWith({ id: mockChannel.id });
+      expect(mockChannelRepository.findChannelByUserId).toHaveBeenCalledWith(mockUser.id);
+      expect(mockChannelRepository.deleteChannel).toHaveBeenCalledWith(mockChannel.id);
       expect(result).toEqual(mockChannel);
     });
+  });
 
-    it('검색된 채널을 반환한다. ', async () => {
-     
-      const mockChannels = [
-        { id: 1, name: 'Test Channel 1' },
-        { id: 2, name: 'Test Channel 2' },
-      ];
-    
-      const mockQueryBuilder = {
-        where: jest.fn().mockReturnThis(),
-        getMany: jest.fn().mockResolvedValue(mockChannels),
-      };
-    
-      // createQueryBuilder Mock 처리
-      mockChannelRepository.createQueryBuilder.mockReturnValue(mockQueryBuilder as any);
-    
-      // 서비스 메서드 호출
+  describe('채널 검색 시', () => {
+    it('검색된 채널들을 반환한다. ', async () => {
+      mockChannelRepository.findChannelByKeyword.mockResolvedValue(mockChannels);
+
       const result = await channelService.findChannelByKeyword('Test');
-    
-      // Mock 함수 호출 여부 검증
-      expect(mockQueryBuilder.where).toHaveBeenCalledWith('channel.name LIKE :keyword', {
-        keyword: '%Test%',
-      });
-      expect(mockQueryBuilder.getMany).toHaveBeenCalled();
+
+      expect(mockChannelRepository.findChannelByKeyword).toHaveBeenCalledWith('Test');
       expect(result).toEqual(mockChannels);
-    
-      // 호출 디버깅
-      console.log(mockQueryBuilder.where.mock.calls);
-      console.log(mockQueryBuilder.getMany.mock.calls);
     });
   });
 });

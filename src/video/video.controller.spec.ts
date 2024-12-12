@@ -1,13 +1,13 @@
+import { ExecutionContext } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { Test, TestingModule } from '@nestjs/testing';
+import { UserEntity } from '../user/entities/user.entity';
+import { mockUser, mockVideo, mockVideos, videoDto } from './__mocks__/mock.video.data';
+import { mockVideoService } from './__mocks__/mock.video.service';
+import { UpdateVideoDto } from './dto/update.video.dto';
 import { VideoController } from './video.controller';
 import { VideoService } from './video.service';
-import { AuthGuard } from '@nestjs/passport';
-import { ExecutionContext } from '@nestjs/common';
-import { UpdateVideoDto } from './dto/update.video.dto';
 import { Visibility } from './video.visibility.enum';
-import { UserEntity } from '../user/entities/user.entity';
-import { mockVideoService } from './__mocks__/mock.video.service'; // Mock 서비스
-import { mockVideo, mockVideos, mockUser, videoDto } from './__mocks__/mock.video.data'; // Mock 데이터
 
 describe('VideoController', () => {
   let videoController: VideoController;
@@ -196,7 +196,7 @@ describe('VideoController', () => {
 
   describe('findVideoByKeyword', () => {
     it('검색된 비디오를 반환한다.', async () => {
-      const mockKeyword = 'Video'
+      const mockKeyword = 'Video';
 
       mockVideoService.findVideoByKeyword.mockResolvedValueOnce(mockVideos);
 

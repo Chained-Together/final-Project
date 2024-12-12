@@ -1,11 +1,11 @@
-import { UserEntity } from '../../user/entities/user.entity';
-import { VideoDto } from '../dto/video.dto';
-import { Visibility } from '../video.visibility.enum';
-import { VideoEntity } from '../entities/video.entity';
-import { LikeEntity } from '../../like/entities/like.entity';
 import { ChannelEntity } from '../../channel/entities/channel.entity';
+import { LikeEntity } from '../../like/entities/like.entity';
 import { ResolutionEntity } from '../../resolution/entities/resolution.entity';
+import { UserEntity } from '../../user/entities/user.entity';
 import { UpdateVideoDto } from '../dto/update.video.dto';
+import { VideoDto } from '../dto/video.dto';
+import { VideoEntity } from '../entities/video.entity';
+import { Visibility } from '../video.visibility.enum';
 
 export const mockUser: UserEntity = {
   id: 1,
@@ -22,7 +22,6 @@ export const mockUser: UserEntity = {
   naverId: 'naverId@naver.com',
 };
 
-// Channel Mock 데이터
 export const mockChannel: ChannelEntity = {
   id: 1,
   name: 'testTV',
@@ -32,7 +31,6 @@ export const mockChannel: ChannelEntity = {
   createdAt: new Date(),
 };
 
-// Video Mock 데이터
 export const mockVideo: VideoEntity = {
   id: 1,
   title: 'Test Video',
@@ -47,30 +45,26 @@ export const mockVideo: VideoEntity = {
   accessKey: 'secret_key',
   uploadedAt: new Date(),
   updatedAt: new Date(),
-  resolution: null, // 초기값으로 null
+  resolution: null,
   channel: mockChannel,
-  likes: [], // 초기값으로 빈 배열
-  comments: null, // 초기값으로 null
+  likes: [],
+  comments: null,
 };
 
-// Like Mock 데이터
 export const mockLike: LikeEntity = {
   id: 1,
-  user: mockUser, // mockUser 참조
-  video: mockVideo, // mockVideo 참조
+  user: mockUser,
+  video: mockVideo,
 };
 
-// Mock 관계 설정
 mockUser.likes = [mockLike];
 mockVideo.likes = [mockLike];
 
-// Video 리스트 Mock 데이터
 export const mockVideos: VideoEntity[] = [
   { ...mockVideo, id: 2, title: 'Another Video' },
   { ...mockVideo, id: 3, title: 'More Videos' },
 ];
 
-// VideoDto Mock 데이터
 export const videoDto: VideoDto = {
   title: 'Test Video',
   description: 'This is a test description',
@@ -80,7 +74,6 @@ export const videoDto: VideoDto = {
   videoCode: '1',
 };
 
-// 추가 VideoDto Mock 데이터
 export const mockVideoDto: VideoDto = {
   title: 'test',
   description: 'test',
@@ -90,7 +83,6 @@ export const mockVideoDto: VideoDto = {
   videoCode: '1',
 };
 
-// UpdateVideoDto Mock 데이터
 export const mockUpdateVideoDto: UpdateVideoDto = {
   title: 'test',
   description: 'test',
@@ -99,7 +91,6 @@ export const mockUpdateVideoDto: UpdateVideoDto = {
   visibility: Visibility.PUBLIC,
 };
 
-// Updated Video Mock 데이터
 export const mockUpdatedVideo: VideoEntity = {
   id: 1,
   title: 'test',
@@ -120,7 +111,6 @@ export const mockUpdatedVideo: VideoEntity = {
   accessKey: null,
 };
 
-// Resolution Mock 데이터
 export const mockResolution: ResolutionEntity = {
   id: 1,
   videoUrl: '임의 링크',

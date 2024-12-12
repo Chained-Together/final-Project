@@ -1,6 +1,6 @@
-import { UserEntity } from '../entities/user.entity';
 import { CommentDto } from '../../comment/dto/comment.dto';
 import { mockLike } from '../../video/__mocks__/mock.video.data';
+import { UserEntity } from '../entities/user.entity';
 
 export const mockUser: UserEntity = {
   id: 1,
@@ -53,10 +53,7 @@ export const mockCommentResponse = {
   success: true,
   message: 'Comment deleted',
 };
-// ./__mocks__/mock.user.data.ts
 
-
-// Mock User Entity
 export const mockUserEntity: UserEntity = {
   id: 1,
   email: 'test@example.com',
@@ -72,7 +69,6 @@ export const mockUserEntity: UserEntity = {
   naverId: null,
 };
 
-// Mock Create User DTO
 export const mockCreateUserDto = {
   email: 'test@example.com',
   password: 'password',
@@ -82,7 +78,6 @@ export const mockCreateUserDto = {
   phoneNumber: '010-1234-5678',
 };
 
-// Mock Invalid Create User DTO
 export const mockInvalidCreateUserDto = {
   email: '',
   password: '',
@@ -92,9 +87,7 @@ export const mockInvalidCreateUserDto = {
   phoneNumber: '',
 };
 
-// Mock Delete User DTO
 export const mockDeleteUserDto = {
   email: 'test@example.com',
   password: 'password123',
 };
-

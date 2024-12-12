@@ -1,22 +1,20 @@
 import { NotFoundException } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Test, TestingModule } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import { ChannelEntity } from 'src/channel/entities/channel.entity';
-import { Repository } from 'typeorm';
+import { IChannelRepository } from 'src/interface/channel-interface';
+import { INotificationRepository } from 'src/interface/notification-interface';
 import { mockChannel, mockNotification, mockVideo } from './__mocks__/mock.notification.data';
 import {
   mockChannelRepository,
   mockEventEmitter,
   mockNotificationRepository,
 } from './__mocks__/mock.notification.service';
-import { NotificationEntity } from './entities/notification.entity';
 import { NotificationService } from './notification.service';
 
 describe('NotificationService', () => {
   let notificationService: NotificationService;
-  let channelRepository: Repository<ChannelEntity>;
-  let notificationRepository: Repository<NotificationEntity>;
+  let channelRepository: IChannelRepository;
+  let notificationRepository: INotificationRepository;
   let eventEmitter: EventEmitter2;
 
   beforeEach(async () => {
@@ -24,11 +22,11 @@ describe('NotificationService', () => {
       providers: [
         NotificationService,
         {
-          provide: getRepositoryToken(ChannelEntity),
+          provide: 'IChannelRepository',
           useValue: mockChannelRepository,
         },
         {
-          provide: getRepositoryToken(NotificationEntity),
+          provide: 'INotificationRepository',
           useValue: mockNotificationRepository,
         },
         {
@@ -39,10 +37,8 @@ describe('NotificationService', () => {
     }).compile();
 
     notificationService = module.get<NotificationService>(NotificationService);
-    channelRepository = module.get<Repository<ChannelEntity>>(getRepositoryToken(ChannelEntity));
-    notificationRepository = module.get<Repository<NotificationEntity>>(
-      getRepositoryToken(NotificationEntity),
-    );
+    channelRepository = module.get<IChannelRepository>('IChannelRepository');
+    notificationRepository = module.get<INotificationRepository>('INotificationRepository');
     eventEmitter = module.get<EventEmitter2>(EventEmitter2);
   });
 
@@ -52,21 +48,18 @@ describe('NotificationService', () => {
 
   describe('emitNotification', () => {
     it('특정 비디오와 연결된 채널 소유자에게 알림을 전송합니다.', async () => {
-      mockChannelRepository.findOne.mockResolvedValue(mockChannel);
-      mockNotificationRepository.create.mockResolvedValue(mockNotification);
-      mockNotificationRepository.save.mockResolvedValue(mockNotification);
+      mockChannelRepository.findChannelByVideoJoinUser.mockResolvedValue(mockChannel);
+      mockNotificationRepository.createNotification.mockResolvedValue(mockNotification);
+      mockNotificationRepository.saveNotification.mockResolvedValue(mockNotification);
       mockEventEmitter.emit;
 
       await notificationService.emitNotification('message Test', 1);
 
-      expect(channelRepository.findOne).toHaveBeenCalledWith({
-        where: { video: { id: 1 } },
-        relations: ['user'],
-      });
-      expect(notificationRepository.create).toHaveBeenCalledWith({
-        message: 'message Test',
-        userId: mockChannel.user.id,
-      });
+      expect(channelRepository.findChannelByVideoJoinUser).toHaveBeenCalledWith(1);
+      expect(notificationRepository.createNotification).toHaveBeenCalledWith(
+        mockChannel.user.id,
+        'message Test',
+      );
       expect(eventEmitter.emit).toHaveBeenCalledWith(`notification:${mockChannel.user.id}`, {
         message: 'message Test',
         id: mockNotification.id,
@@ -74,7 +67,7 @@ describe('NotificationService', () => {
     });
 
     it('채널 또는 채널 소유자를 찾을 수 없다면 NotFoundException 처리합니다.', async () => {
-      mockChannelRepository.findOne.mockResolvedValue(null);
+      mockChannelRepository.findChannelByVideoJoinUser.mockResolvedValue(null);
 
       await expect(notificationService.emitNotification('message Test', 1)).rejects.toThrow(
         NotFoundException,
@@ -104,7 +97,9 @@ describe('NotificationService', () => {
 
   describe('getPastNotifications', () => {
     it('특정 사용자의 과거 알림 기록을 조회합니다.', async () => {
-      mockNotificationRepository.find.mockResolvedValue([{ id: 1, message: 'test' }]);
+      mockNotificationRepository.findAllNotificationByUserId.mockResolvedValue([
+        { id: 1, message: 'test' },
+      ]);
       const result = await notificationService.getPastNotifications(1);
       expect(result).toEqual([
         {
@@ -112,20 +107,17 @@ describe('NotificationService', () => {
           id: 1,
         },
       ]);
-      expect(notificationRepository.find).toHaveBeenCalledWith({
-        where: { userId: 1, type: false },
-        order: { createdAt: 'DESC' },
-      });
+      expect(notificationRepository.findAllNotificationByUserId).toHaveBeenCalledWith(1);
     });
   });
 
   describe('updateNotification', () => {
     it('특정 ID를 가진 알림을 읽음 처리합니다.', async () => {
-      mockNotificationRepository.update.mockResolvedValue({ id: mockVideo.id });
+      mockNotificationRepository.updateNotification.mockResolvedValue({ id: mockVideo.id });
 
       const result = await notificationService.updateNotification(1);
 
-      expect(notificationRepository.update).toHaveBeenCalledWith({ id: 1 }, { type: true });
+      expect(notificationRepository.updateNotification).toHaveBeenCalledWith(1);
       expect(result).toEqual({ message: '알림 삭제가 완료 되었습니다.' });
     });
   });

@@ -1,19 +1,17 @@
-import { Controller, Post, Body, Query } from '@nestjs/common';
-import { PasswordService } from './password.service';
-import { UpdatePasswordDto } from './dto/update-password-dto';
+import { Body, Controller, Post, Query } from '@nestjs/common';
 import { ResetPasswordRequestDto } from './dto/reset-password-request.dto';
+import { UpdatePasswordDto } from './dto/update-password-dto';
+import { PasswordService } from './password.service';
 
 @Controller('password')
 export class PasswordController {
   constructor(private readonly passwordService: PasswordService) {}
 
-  // 비밀번호 초기화 요청
   @Post('reset-request')
   async resetPasswordRequest(@Body() dto: ResetPasswordRequestDto): Promise<void> {
     await this.passwordService.resetPasswordRequest(dto.email);
   }
 
-  // 비밀번호 변경
   @Post('update')
   async updatePassword(
     @Query('token') token: string,

@@ -20,12 +20,6 @@ export class LikeController {
     const userId = user.id;
 
     return this.likeService.toggleLike(userId, videoId);
-    //TODO:트라이캐치사용 ??
-    // try {
-    //   return await this.likeService.toggleLike(videoId, userId);
-    // } catch (error) {
-    //   throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
-    // }
   }
 
   @Get(':videoId')

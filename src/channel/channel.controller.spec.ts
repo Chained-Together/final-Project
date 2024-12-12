@@ -26,19 +26,6 @@ describe('ChannelController', () => {
     ...mockChannel,
     ...channelDto,
   };
-
-  // describe('createChannel', () => {
-  //   it('채널을 생성하고 /main으로 리다이렉트한다.', async () => {
-
-  //     mockChannelService.createChannel.mockResolvedValueOnce(mockChannel);
-
-  //     await controller.createChannel(channelDto, mockUser, mockResponse);
-
-  //     expect(mockChannelService.createChannel).toHaveBeenCalledWith(channelDto, mockUser);
-  //     expect(mockResponse.redirect).toHaveBeenCalledWith('/main');
-  //   });
-
-  //TODO: mockResponse부분 수정
   describe('getChannel', () => {
     it('채널 정보를 반환한다.', async () => {
       mockChannelService.getChannel.mockResolvedValueOnce(mockChannel);

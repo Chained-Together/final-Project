@@ -42,7 +42,6 @@ describe('AuthController', () => {
         code: '1234',
       };
 
-      // Request 객체 모킹
       const mockRequest: Partial<Request> = {
         headers: {
           authorization: 'Bearer mockToken',
@@ -52,9 +51,9 @@ describe('AuthController', () => {
       jest.spyOn(authService, 'signUp').mockResolvedValue({
         message: '회원가입에 성공했습니다.',
       });
-  
+
       const result = await authController.singUp(signUpDto, mockRequest as Request);
-  
+
       expect(authService.signUp).toHaveBeenCalledWith(signUpDto, mockRequest);
       expect(result).toEqual({
         message: '회원가입에 성공했습니다.',

@@ -1,9 +1,10 @@
+import { CommentDto } from 'src/comment/dto/comment.dto';
+import { ChannelEntity } from '../../channel/entities/channel.entity';
+import { LikeEntity } from '../../like/entities/like.entity';
 import { UserEntity } from '../../user/entities/user.entity';
 import { VideoEntity } from '../../video/entities/video.entity';
-import { LikeEntity } from '../../like/entities/like.entity';
-import { ChannelEntity } from '../../channel/entities/channel.entity';
-import { ChannelDto } from '../dto/channel.dto';
 import { Visibility } from '../../video/video.visibility.enum';
+import { ChannelDto } from '../dto/channel.dto';
 
 export const mockUser: UserEntity = {
   id: 1,
@@ -21,15 +22,20 @@ export const mockUser: UserEntity = {
 };
 
 export const mockChannel: ChannelEntity = {
-    id: 1,
-    name: 'testTV',
-    profileImage: 'test',
-    video: null,
-    user: mockUser,
-    createdAt: new Date(),
-  };
+  id: 1,
+  name: 'testTV',
+  profileImage: 'test',
+  video: null,
+  user: mockUser,
+  createdAt: new Date(),
+};
 
-// Video Mock 데이터
+export const mockCreateChannel: Partial<ChannelEntity> = {
+  name: 'test',
+  profileImage: 'image',
+  user: mockUser,
+};
+
 export const mockVideo: VideoEntity = {
   id: 1,
   title: 'Test Video',
@@ -44,35 +50,26 @@ export const mockVideo: VideoEntity = {
   accessKey: 'secret_key',
   uploadedAt: new Date(),
   updatedAt: new Date(),
-  resolution: null, // 초기값으로 null
+  resolution: null,
   channel: mockChannel,
-  likes: [], // 초기값으로 빈 배열
-  comments: null, // 초기값으로 null
+  likes: [],
+  comments: null,
 };
 
-// Channel Mock 데이터
-
-
-// Like Mock 데이터
 export const mockLike: LikeEntity = {
   id: 1,
-  user: mockUser, // mockUser 참조
-  video: mockVideo, // mockVideo 참조
+  user: mockUser,
+  video: mockVideo,
 };
 
-// Mock 관계 설정
 mockUser.likes = [mockLike];
 mockVideo.likes = [mockLike];
 
-// Video 리스트 Mock 데이터
 export const mockVideos: VideoEntity[] = [
   { ...mockVideo, id: 2, title: 'Another Video' },
   { ...mockVideo, id: 3, title: 'More Videos' },
 ];
 
-
-
-// Updated Video Mock 데이터
 export const mockUpdatedVideo: VideoEntity = {
   id: 1,
   title: 'test',
@@ -86,34 +83,35 @@ export const mockUpdatedVideo: VideoEntity = {
   updatedAt: new Date(),
   resolution: null,
   channel: mockChannel,
-  likes: [], // 업데이트 후 빈 배열
+  likes: [],
   videoCode: '1',
   status: false,
   comments: null,
   accessKey: null,
 };
 
-
 export const channelDto: ChannelDto = {
-    name: 'test',
-    profileImage: 'image',
-  };
+  name: 'test',
+  profileImage: 'image',
+};
 
+export const mockUpdatedChannelDto: ChannelDto = {
+  name: 'test1',
+  profileImage: 'image',
+};
 
-  
-  export const mockUpdatedChannelDto: ChannelDto = {
-    name: 'test1',
-    profileImage: 'image',
-  };
+export const mockUpdatedChannel: ChannelEntity = {
+  id: 1,
+  name: 'change testTV',
+  profileImage: 'change test',
+  video: null,
+  user: mockUser,
+  createdAt: new Date(),
+};
 
-  export const mockUpdatedChannel: ChannelEntity = {
-    id: 1,
-    name: 'test1',
-    profileImage: 'image',
-    video: null,
-    user: mockUser,
-    createdAt: new Date(),
-  };
+export const mockChannels = [
+  { id: 1, name: 'Test Channel 1' },
+  { id: 2, name: 'Test Channel 2' },
+];
 
-
- 
+export const commentDto: CommentDto = { content: 'Updated comment' };
