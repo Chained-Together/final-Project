@@ -57,10 +57,10 @@ jobs:
 
       - name: Remove Old Containers and Images on Elastic Beanstalk Instance
         run: |
-          ssh -i ~/.ssh/my-key.pem ec2-user@13.125.148.162 "
-          docker ps -q | xargs -r docker stop &&
-          docker ps -aq | xargs -r docker rm &&
-          docker images -q | xar
+            ssh -i ~/.ssh/my-key.pem ec2-user@13.125.148.162 "
+              docker ps -q | xargs -r docker stop &&
+              docker ps -aq | xargs -r docker rm &&
+              docker images -q | xargs -r docker rmi -f
 
       - name: Deploy to Elastic Beanstalk
         env:
