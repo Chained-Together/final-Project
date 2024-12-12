@@ -13,6 +13,7 @@ import { GoogleStrategy } from './google.strategy';
 import { NaverStrategy } from './naver.strategy';
 import { ChannelService } from 'src/channel/channel.service';
 import { ChannelModule } from 'src/channel/channel.module';
+import { UserRepository } from 'src/interface/impl/user.repository';
 
 @Module({
   imports: [
@@ -36,6 +37,10 @@ import { ChannelModule } from 'src/channel/channel.module';
     {
       provide: 'HashingService',
       useClass: BcryptHashingService,
+    },
+    {
+      provide: 'IUserRepository',
+      useClass: UserRepository,
     },
   ],
 })

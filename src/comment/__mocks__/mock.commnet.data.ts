@@ -1,6 +1,6 @@
 import { UserEntity } from '../../user/entities/user.entity';
-import { CommentDto } from '../dto/comment.dto';
 import { mockChannel, mockLike } from '../../video/__mocks__/mock.video.data';
+import { CommentDto } from '../dto/comment.dto';
 
 export const mockCreateUserDto = {
   name: 'Test User',
@@ -49,7 +49,7 @@ export const mockComment = {
   userId: mockUser.id,
   commentGroup: 1,
   depth: 0,
-  parentComment: 0,
+  parentCommentId: 0,
   orderNumber: 1,
   createdAt: new Date(),
   updatedAt: new Date(),
@@ -67,8 +67,8 @@ export const mockReplyComment = {
   userId: mockUser.id,
   commentGroup: 1,
   depth: 1,
-  parentComment: 1,
-  orderNumber: 1,
+  parentCommentId: 1,
+  orderNumber: 2,
   createdAt: new Date(),
   updatedAt: new Date(),
 };

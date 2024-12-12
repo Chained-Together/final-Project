@@ -1,4 +1,4 @@
-import { IsArray, IsEnum, IsString, IsUrl } from 'class-validator';
+import { IsArray, IsEnum, IsString } from 'class-validator';
 import { Visibility } from '../video.visibility.enum';
 
 export class UpdateVideoDto {

@@ -15,7 +15,6 @@ export const mockResolutionResponse = {
 export const mockResolution = {
   id: 1,
   videoUrl: 'http://example.com/videoUrl',
-
   video: {
     id: 1,
     videoCode: 'VID12345',

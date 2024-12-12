@@ -8,15 +8,25 @@ export const mockCommentService = {
 };
 
 export const mockCommentRepository = {
-  create: jest.fn(),
+  createComment: jest.fn(),
   save: jest.fn(),
-  find: jest.fn(),
-  findOne: jest.fn(),
-  update: jest.fn(),
-  delete: jest.fn(),
-  findOneBy: jest.fn(),
+  findCommentByVideoId: jest.fn(),
+  findCommentByVideoIdAndDepth: jest.fn(),
+  findCommentByCommentId: jest.fn(),
+  findAllComment: jest.fn(),
+  findAllReplyComment: jest.fn(),
+  findCommentUserIdAndCommentIdAndVideoId: jest.fn(),
+  updateComment: jest.fn(),
+  deleteComment: jest.fn(),
+  findReplyByCommentGroup: jest.fn(),
+  createReply: jest.fn(),
+  findCommentByUserId: jest.fn(),
 };
 
 export const mockVideoRepository = {
-  find: jest.fn(),
+  findVideoByVideoId: jest.fn(),
+};
+
+export const mockNotificationService = {
+  emitNotification: jest.fn(),
 };
