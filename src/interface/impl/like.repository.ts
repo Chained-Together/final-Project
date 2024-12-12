@@ -5,7 +5,7 @@ import { DeleteResult, Repository } from 'typeorm';
 import { ILikeRepository } from '../like-interface';
 
 @Injectable()
-export class likeRepository implements ILikeRepository {
+export class LikeRepository implements ILikeRepository {
   constructor(
     @InjectRepository(LikeEntity)
     private readonly repository: Repository<LikeEntity>,

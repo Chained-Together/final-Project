@@ -2,7 +2,8 @@ import { Module } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ChannelEntity } from 'src/channel/entities/channel.entity';
-import { likeRepository } from 'src/interface/impl/like.repository';
+import { ChannelRepository } from 'src/interface/impl/channel.repository';
+import { LikeRepository } from 'src/interface/impl/like.repository';
 import { NotificationEntity } from 'src/notification/entities/notification.entity';
 import { NotificationService } from 'src/notification/notification.service';
 import { UserEntity } from 'src/user/entities/user.entity';
@@ -21,7 +22,15 @@ import { LikeService } from './like.service';
     NotificationService,
     {
       provide: 'ILikeRepository',
-      useClass: likeRepository,
+      useClass: LikeRepository,
+    },
+    {
+      provide: 'IChannelRepository',
+      useClass: ChannelRepository,
+    },
+    {
+      provide: 'INotificationRepository',
+      useClass: NotificationEntity,
     },
   ],
 })

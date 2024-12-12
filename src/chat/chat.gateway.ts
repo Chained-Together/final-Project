@@ -12,7 +12,6 @@ import {
 import { Server, Socket } from 'socket.io';
 
 @WebSocketGateway(3001, { cors: { origin: '*' } }) // WebSocket은 3001 포트
-@UseGuards(AuthGuard('jwt'))
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   private readonly logger = new Logger('ChatGateway');
   private chatRooms: Record<string, Set<string>> = {};

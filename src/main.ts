@@ -50,7 +50,6 @@ async function bootstrap() {
   });
   expressApp.set('view engine', 'ejs');
   expressApp.set('views', join(__dirname, '..', 'views'));
-  app.useWebSocketAdapter(new IoAdapter(app));
   console.log(join(process.cwd(), 'views'));
   app.useGlobalPipes(new ValidationPipe());
 

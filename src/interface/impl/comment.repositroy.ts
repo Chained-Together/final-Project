@@ -5,7 +5,7 @@ import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { ICommentRepository } from '../comment-interface';
 
 @Injectable()
-export class commentRepository implements ICommentRepository {
+export class CommentRepository implements ICommentRepository {
   constructor(
     @InjectRepository(CommentEntity)
     private readonly repository: Repository<CommentEntity>,
