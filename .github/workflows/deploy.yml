@@ -61,6 +61,7 @@ jobs:
       # 9. Elastic Beanstalk CLI 설치
       - name: Install Elastic Beanstalk CLI
         run: |
+          sudo apt remove python3-urllib3
           sudo pip install awsebcli
 
       # 10. Elastic Beanstalk에 배포
