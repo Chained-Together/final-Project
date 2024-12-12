@@ -1,0 +1,159 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OBS Stream Control</title>
+  <script>
+    // 스트리밍 상태를 확인하고 UI 업데이트
+    async function getStreamingStatus() {
+      const response = await fetch('/obs/streaming-status');
+      const data = await response.json();
+      const status = data.status;
+      document.getElementById('stream-status').innerText = status.streaming ? 'Streaming' : 'Not Streaming';
+    }
+
+    // 스트리밍 시작
+    async function startStreaming() {
+      await fetch('/obs/start-streaming', { method: 'POST' });
+      getStreamingStatus(); // 상태 업데이트
+    }
+
+    // 스트리밍 종료
+    async function stopStreaming() {
+      await fetch('/obs/stop-streaming', { method: 'POST' });
+      getStreamingStatus(); // 상태 업데이트
+    }
+
+    // 장면 목록 가져오기
+    async function getSceneList() {
+      const response = await fetch('/obs/getSceneList');
+      const data = await response.json();
+      const sceneList = data.scenes || [];
+      const sceneContainer = document.getElementById('scene-list');
+      sceneContainer.innerHTML = ''; // 장면 목록 초기화
+
+      if (sceneList.length > 0) {
+        sceneList.forEach(scene => {
+          const sceneElement = document.createElement('li');
+          sceneElement.innerText = scene.name;
+          sceneContainer.appendChild(sceneElement);
+        });
+      } else {
+        sceneContainer.innerHTML = '<li>No scenes available</li>';
+      }
+    }
+
+    // 현재 방송 중인 장면 가져오기
+    async function getCurrentScene() {
+      const response = await fetch('/obs/getCurrentScene');
+      const data = await response.json();
+      const currentScene = data.currentScene || {};
+      document.getElementById('current-scene').innerText = currentScene.sceneName || 'No scene selected';
+    }
+
+    // 페이지 로딩 시 스트리밍 상태, 장면 목록, 현재 장면 가져오기
+    window.onload = function () {
+      getStreamingStatus();
+      getSceneList();
+      getCurrentScene();
+    };
+  </script>
+</head>
+
+<body>
+  <h1>OBS Streaming Control</h1>
+  <div>
+    <p>Current Stream Status: <span id="stream-status">Loading...</span></p>
+    <button onclick="startStreaming()">Start Streaming</button>
+    <button onclick="stopStreaming()">Stop Streaming</button>
+  </div>
+
+  <div>
+    <h2>Scene List</h2>
+    <ul id="scene-list">
+       장면 목록이 이곳에 표시됩니다. -->
+<!-- </ul> -->
+<!-- </div> -->
+
+<!-- <div> -->
+<!-- <h2>Current Scene</h2> -->
+<!-- <p id="current-scene">Loading...</p> -->
+<!-- </div> -->
+<!-- </body> -->
+
+<!-- </html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script src="https://vjs.zencdn.net/8.3.0/video.min.js"></script>
+  <title>Hls Practice</title>
+  <style>
+    video {
+      max-width: 500px;
+      width: 100%;
+      max-height: 500px;
+      height: 100%;
+      object-fit: fill;
+    }
+  </style>
+</head>
+
+<body>
+  <!--
+    controls : 사용자가 비디오 컨트롤이 가능하게 할 수 있다
+    playsinline : 전체 화면 방지이다
+    autoplay : 자동재생이며 , 정책상 음소거 상태에서 가능하다.
+-->
+  <video id="video" controls playsinline autoplay></video>
+
+
+  <script>
+    /* video Element */
+    let video = null;
+    /* 샘플 m3u8 url */
+    let videoSrc = 'http://121.181.193.159:8080/hls/stream.m3u8';
+
+    /* initVideo */
+    const initVideo = () => {
+      video = document.querySelector('#video')
+    }
+
+    /* DOMContentLoaded 로드를 통해 video Element 담기*/
+    window.addEventListener("DOMContentLoaded", () => {
+      initVideo();
+    })
+
+
+    /* initHls : hls를 초기화 하는 함수 */
+    const initHls = () => {
+      if (Hls.isSupported()) {
+        hls = new Hls({
+          autoStartLoad: false,
+        });
+        hls.loadSource(videoSrc);
+        hls.attachMedia(video);
+        hls.startLoad();
+      }
+      /* ios/safari 같은 경우에 hls가 built-in 되어있다.*/
+      else {
+        video.src = videoSrc;
+      }
+    }
+
+    /* DOMContentLoaded 로드를 통해 video Element 담기*/
+    window.addEventListener("DOMContentLoaded", () => {
+      initVideo();
+      initHls();
+    })
+
+  </script>
+</body>
+
+</html>

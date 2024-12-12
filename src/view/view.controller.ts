@@ -85,4 +85,9 @@ export class ViewController {
   showstream() {
     return;
   }
+  @Get('/obs')
+  @Render('obs')
+  showsobs() {
+    return;
+  }
 }
