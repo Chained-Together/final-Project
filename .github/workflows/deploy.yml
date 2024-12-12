@@ -64,6 +64,7 @@ jobs:
           sudo apt remove python3-urllib3
           sudo pip install awsebcli
 
+          
       # 10. Elastic Beanstalk에 배포
       - name: Deploy to Elastic Beanstalk
         env:
@@ -73,3 +74,4 @@ jobs:
         run: |
           eb init -p docker ${{ env.EB_APP_NAME }} --region ${{ env.AWS_REGION }}
           eb deploy ${{ env.EB_ENV_NAME }}
+
