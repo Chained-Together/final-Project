@@ -77,8 +77,7 @@ describe('ResolutionService', () => {
       );
       expect(resolutionRepository.updateResolution).toHaveBeenCalledWith(
         mockVideo.id,
-        mockUpdateMetadataDto.highResolutionUrl,
-        mockUpdateMetadataDto.lowResolutionUrl,
+        mockUpdateMetadataDto.videoUrl,
       );
       expect(videoRepository.updateVideo).not.toHaveBeenCalled();
     });
@@ -102,34 +101,29 @@ describe('ResolutionService', () => {
       );
       expect(resolutionRepository.updateResolution).toHaveBeenCalledWith(
         mockVideo.id,
-        mockUpdateMetadataDto.highResolutionUrl,
-        mockUpdateMetadataDto.lowResolutionUrl,
+        mockUpdateMetadataDto.videoUrl,
       );
       expect(videoRepository.updateVideo).toHaveBeenCalledWith(mockVideo.id, {
         duration: mockUpdateMetadataDto.metadata.duration,
         status: true,
+        thumbnailUrl: mockUpdateMetadataDto.metadata.thumbnail,
       });
-      expect(resolutionRepository.update).toHaveBeenCalledWith(
-        { video: { id: mockVideo.id } },
-        {
-          videoUrl: mockUpdateMetadataDto.videoUrl,
-        },
+      expect(resolutionRepository.updateResolution).toHaveBeenCalledWith(
+        mockVideo.id,
+        mockUpdateMetadataDto.videoUrl,
       );
-      expect(videoRepository.update).toHaveBeenCalledWith(
-        { id: mockVideo.id },
-        {
-          duration: mockUpdateMetadataDto.metadata.duration,
-          status: true,
-          thumbnailUrl: mockUpdateMetadataDto.metadata.thumbnail,
-        },
-      );
+      expect(videoRepository.updateVideo).toHaveBeenCalledWith(mockVideo.id, {
+        duration: mockUpdateMetadataDto.metadata.duration,
+        status: true,
+        thumbnailUrl: mockUpdateMetadataDto.metadata.thumbnail,
+      });
     });
 
     it('해상도와 비디오 메타데이터 업데이트가 성공하면 업데이트된 데이터를 반환해야 한다.', async () => {
       mockVideoRepository.findVideoByVideoCode.mockResolvedValue(mockVideo);
       mockResolutionRepository.updateResolution.mockResolvedValue({ affected: 1 });
       mockVideoRepository.updateVideo.mockResolvedValue({ affected: 1 });
-      mockResolutionRepository.findResolutionByvideoId.mockResolvedValue(mockResolution);
+      mockResolutionRepository.findResolutionByVideoId.mockResolvedValue(mockResolution);
 
       const result = await resolutionService.updateResolution(
         mockUpdateMetadataDto.metadata.videoCode,
@@ -144,8 +138,7 @@ describe('ResolutionService', () => {
       );
       expect(resolutionRepository.updateResolution).toHaveBeenCalledWith(
         mockVideo.id,
-        mockUpdateMetadataDto.highResolutionUrl,
-        mockUpdateMetadataDto.lowResolutionUrl,
+        mockUpdateMetadataDto.videoUrl,
         // expect(videoRepository.findOne).toHaveBeenCalledWith({
         //   where: { videoCode: mockUpdateMetadataDto.metadata.videoCode },
         // });
@@ -166,8 +159,9 @@ describe('ResolutionService', () => {
       expect(videoRepository.updateVideo).toHaveBeenCalledWith(mockVideo.id, {
         duration: mockUpdateMetadataDto.metadata.duration,
         status: true,
+        thumbnailUrl: mockUpdateMetadataDto.metadata.thumbnail,
       });
-      expect(resolutionRepository.findResolutionByvideoId).toHaveBeenCalledWith(mockVideo.id);
+      expect(resolutionRepository.findResolutionByVideoId).toHaveBeenCalledWith(mockVideo.id);
     });
   });
 });

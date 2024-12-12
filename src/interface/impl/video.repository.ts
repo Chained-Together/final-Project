@@ -65,7 +65,6 @@ export class VideoRepository implements IVideoRepository {
   createVideo(
     title: string,
     description: string,
-    thumbnailUrl: string,
     hashtags: string[],
     duration: number,
     visibility: Visibility,
@@ -76,7 +75,6 @@ export class VideoRepository implements IVideoRepository {
     return this.repository.create({
       title,
       description,
-      thumbnailUrl,
       hashtags,
       duration,
       visibility,

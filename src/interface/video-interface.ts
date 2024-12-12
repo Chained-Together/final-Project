@@ -8,7 +8,6 @@ export interface IVideoRepository {
   createVideo(
     title: string,
     description: string,
-    thumbnailUrl: string,
     hashtags: string[],
     duration: number,
     visibility: Visibility,

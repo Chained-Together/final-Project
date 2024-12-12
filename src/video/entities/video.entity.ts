@@ -32,7 +32,7 @@ export class VideoEntity {
   @Column({ type: 'jsonb', nullable: false })
   hashtags: string[];
 
-  @Column({ type: 'enum', enum: Visibility })
+  @Column({ type: 'enum', enum: Visibility, nullable: false })
   visibility: Visibility;
 
   @Column({ type: 'int', nullable: true })

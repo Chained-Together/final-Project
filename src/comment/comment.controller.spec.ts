@@ -127,7 +127,7 @@ describe('CommentController', () => {
 
       const result = await commentController.createReply(
         mockReplyComment.videoId,
-        mockReplyComment.parentComment,
+        mockReplyComment.parentCommentId,
         mockUser,
         mockCommentDto,
       );
@@ -135,7 +135,7 @@ describe('CommentController', () => {
       expect(result).toEqual(mockReplyComment);
       expect(mockCommentService.createReply).toHaveBeenCalledWith(
         mockReplyComment.videoId,
-        mockReplyComment.parentComment,
+        mockReplyComment.parentCommentId,
         mockUser,
         mockCommentDto,
       );

@@ -41,7 +41,7 @@ export const mockChannelRepository = {
 };
 
 export const mockResolutionRepository = {
-  findResolutionByvideoId: jest.fn(),
+  findResolutionByVideoId: jest.fn(),
   updateResolution: jest.fn(),
   createResolution: jest.fn(),
   saveResolution: jest.fn(),

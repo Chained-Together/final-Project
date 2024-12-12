@@ -1,10 +1,8 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { ResolutionEntity } from './entities/resolution.entity';
-import { VideoEntity } from 'src/video/entities/video.entity';
 import { IResolutionRepository } from 'src/interface/resolution-interface';
 import { IVideoRepository } from 'src/interface/video-interface';
+import { VideoEntity } from 'src/video/entities/video.entity';
+import { ResolutionEntity } from './entities/resolution.entity';
 
 @Injectable()
 export class ResolutionService {
@@ -23,7 +21,7 @@ export class ResolutionService {
   ): Promise<ResolutionEntity> {
     const video = await this.getVideoByCode(videoCode);
     await this.updateResolutionInfo(video.id, videoUrl);
-    await this.updateVideoMetadata(video.id, duration);
+    await this.updateVideoMetadata(video.id, duration, thumbnail);
     return await this.getUpdatedResolution(video.id);
   }
 
@@ -37,35 +35,23 @@ export class ResolutionService {
   }
 
   private async updateResolutionInfo(videoId: number, videoUrl: string): Promise<void> {
-    const result = await this.resolutionRepository.updateResolution(
-      videoId,
-      videoUrl,
-      // console.log('찾은 비디오 데이터:', findVideo);
-
-      // // 2. 해상도 업데이트
-      // const resolutionUpdateResult = await this.resolutionRepository.update(
-      //   {
-      //     video: { id: findVideo.id },
-      //   },
-      //   { videoUrl: videoUrl },
-    );
+    const result = await this.resolutionRepository.updateResolution(videoId, videoUrl);
     if (result.affected === 0) {
       throw new Error('해상도 정보를 업데이트할 수 없습니다.');
     }
   }
 
-  private async updateVideoMetadata(videoId: number, duration: number): Promise<void> {
+  private async updateVideoMetadata(
+    videoId: number,
+    duration: number,
+    thumbnailUrl: string,
+  ): Promise<void> {
     const result = await this.videoRepository.updateVideo(videoId, {
       duration: duration,
       status: true,
+      thumbnailUrl: thumbnailUrl,
     });
     if (result.affected === 0) {
-      // const videoUpdateResult = await this.videoRepository.update(
-      //   { id: findVideo.id },
-      //   { duration: duration, status: true, thumbnailUrl: thumbnail },
-      // );
-
-      // if (videoUpdateResult.affected === 0) {
       throw new Error('비디오 메타데이터를 업데이트할 수 없습니다.');
     }
   }
