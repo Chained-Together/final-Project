@@ -1,32 +1,10 @@
-# version: '3.8'
-
-# services:
-#   app:
-#     build:
-#       context: .
-#       dockerfile: Dockerfile
-#     container_name: app
-#     environment:
-#       - DB_HOST= ${DB_HOST}
-#       - DB_PORT=5432
-#       - DB_USER=${DB_USERNAME}
-#       - DB_PASSWORD=${DB_PASSWORD}
-#       - DB_NAME=${DB_NAME}
-#       - PORT=${PORT}
-#       - NODE_ENV=production
-#     ports:
-#       - '3000:3000'
-#     volumes:
-#       - ./src:/app/src
-
-version: '3.8'
 services:
   app:
     image: app-image
     build:
       context: .
     ports:
-      - '3000:3000' # 애플리케이션 포트
+      - '3000:3000'
     environment:
       DB_HOST: pg-3041fi.vpc-pub-cdb-kr.ntruss.com
       DB_PORT: 5432
