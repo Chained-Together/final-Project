@@ -14,6 +14,8 @@ import { NaverStrategy } from './naver.strategy';
 import { ChannelService } from 'src/channel/channel.service';
 import { ChannelModule } from 'src/channel/channel.module';
 import { UserRepository } from 'src/interface/impl/user.repository';
+import { channelRepository } from 'src/interface/impl/channel.repository';
+import { NotificationEntity } from 'src/notification/entities/notification.entity';
 
 @Module({
   imports: [
@@ -41,6 +43,14 @@ import { UserRepository } from 'src/interface/impl/user.repository';
     {
       provide: 'IUserRepository',
       useClass: UserRepository,
+    },
+    {
+      provide: 'IChannelRepository',
+      useClass: channelRepository,
+    },
+    {
+      provide: 'INotificationRepository',
+      useClass: NotificationEntity,
     },
   ],
 })

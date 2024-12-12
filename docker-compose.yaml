@@ -19,7 +19,6 @@
 #     volumes:
 #       - ./src:/app/src
 
-version: '3.8'
 services:
   app:
     image: app-image # 이미지 이름 설정

@@ -9,6 +9,7 @@ import { UserEntity } from 'src/user/entities/user.entity';
 import { LikeEntity } from './entities/like.entity';
 import { LikeController } from './like.controller';
 import { LikeService } from './like.service';
+import { channelRepository } from 'src/interface/impl/channel.repository';
 
 @Module({
   imports: [
@@ -22,6 +23,14 @@ import { LikeService } from './like.service';
     {
       provide: 'ILikeRepository',
       useClass: likeRepository,
+    },
+    {
+      provide: 'IChannelRepository',
+      useClass: channelRepository,
+    },
+    {
+      provide: 'INotificationRepository',
+      useClass: NotificationEntity,
     },
   ],
 })
