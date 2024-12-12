@@ -11,7 +11,6 @@ export class ObsService implements OnModuleInit, OnModuleDestroy {
 
   async onModuleInit() {
     try {
-      // OBS WebSocket 연결
       await this.obs.connect('ws://localhost:4455', 'oydCbzTsb5pqy0dT');
       console.log('Connected to OBS WebSocket');
     } catch (error) {
@@ -29,7 +28,7 @@ export class ObsService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
-  // 스트리밍 시작
+
   async startStreaming(): Promise<void> {
     try {
       const response = await this.obs.call('StartStream');
@@ -40,7 +39,6 @@ export class ObsService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
-  // 스트리밍 종료
   async stopStreaming(): Promise<void> {
     try {
       const response = await this.obs.call('StopStream');
@@ -51,7 +49,7 @@ export class ObsService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
-  // 스트리밍 상태 조회
+ 
   async getStreamingStatus(): Promise<any> {
     try {
       const status = await this.obs.call('GetStreamStatus');
@@ -63,24 +61,24 @@ export class ObsService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
-  // 장면 목록 조회
+
   async getSceneList(): Promise<any[]> {
     try {
       const data = await this.obs.call('GetSceneList');
       console.log(`${data.scenes.length} Available Scenes!`);
-      return data.scenes; // 장면 목록 반환
+      return data.scenes; 
     } catch (error) {
       console.error('Error fetching scene list:', error);
       throw new Error('Error fetching scene list');
     }
   }
 
-  // 현재 방송 중인 장면 조회
+
   async getCurrentScene(): Promise<any> {
     try {
       const currentScene = await this.obs.call('GetCurrentPreviewScene');
       console.log(`Current Scene: ${currentScene.sceneName}`);
-      return currentScene; // 현재 장면 반환
+      return currentScene; 
     } catch (error) {
       console.error('Error fetching current scene:', error);
       throw new Error('Error fetching current scene');
