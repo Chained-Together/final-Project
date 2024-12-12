@@ -74,3 +74,5 @@ jobs:
           eb init -p docker ${{ env.EB_APP_NAME }} --region ${{ env.AWS_REGION }}
           eb deploy ${{ env.EB_ENV_NAME }}
 
+
+          
