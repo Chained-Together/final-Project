@@ -27,6 +27,7 @@ import { VideoEntity } from './video/entities/video.entity';
 import { VideoModule } from './video/video.module';
 import { ViewController } from './view/view.controller';
 import { ViewModule } from './view/view.module';
+import { ChatModule } from './chat/chat.module';
 
 const typeOrmModuleOptions = {
   useFactory: async (configService: ConfigService): Promise<TypeOrmModuleOptions> => ({
@@ -38,7 +39,7 @@ const typeOrmModuleOptions = {
     port: configService.get<number>('DB_PORT'),
     ssl: {
       rejectUnauthorized: false,
-      },
+    },
     database: configService.get('DB_NAME'),
     entities: [
       UserEntity,
@@ -60,7 +61,7 @@ const typeOrmModuleOptions = {
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath:'.env',
+      envFilePath: '.env',
       isGlobal: true,
       validationSchema: Joi.object({
         JWT_SECRET_KEY: Joi.string().required(),
@@ -86,6 +87,7 @@ const typeOrmModuleOptions = {
     PasswordModule,
     NotificationModule,
     EventEmitterModule.forRoot(),
+    ChatModule,
   ],
   controllers: [AppController, ViewController],
   providers: [

@@ -14,7 +14,7 @@ createChannelrlForm.addEventListener('submit', async (event) => {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      // redirect: 'follow',
+
       body: JSON.stringify({
         name: name.value,
         profileImage: profileImage.value,
@@ -33,4 +33,3 @@ createChannelrlForm.addEventListener('submit', async (event) => {
     alert(`채널 생성 중 오류 발생: ${error.message}`);
   }
 });
-// 커스텀 헤더

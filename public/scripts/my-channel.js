@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const thumbnailsContainer = document.getElementById('thumbnailsContainer');
   const liveButton = document.getElementById('liveVideo');
   const uploadBtn = document.getElementById('uploadBtn');
+  const chatBtn = document.getElementById('chatBtn');
 
   if (!token) {
     channelNameElement.textContent = '로그인이 필요합니다.';
@@ -114,4 +115,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   editBtn.addEventListener('click', () => {
     window.location.href = '/edit-mychannel';
   });
+
+  chatBtn.addEventListener('click', () => {});
 });

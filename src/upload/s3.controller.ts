@@ -1,8 +1,8 @@
-import { Body, Controller, Post, UseGuards, Logger } from '@nestjs/common';
-import { S3Service } from './s3.service';
+import { Body, Controller, Logger, Post, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { UserEntity } from 'src/user/entities/user.entity';
 import { UserInfo } from 'src/utils/user-info.decorator';
-import { AuthGuard } from '@nestjs/passport';
+import { S3Service } from './s3.service';
 
 @Controller('s3')
 export class S3Controller {

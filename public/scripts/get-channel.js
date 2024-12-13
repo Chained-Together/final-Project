@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       videoData.forEach((video) => {
         const card = document.createElement('div');
-        card.classList.add('video-card', 'thumbnail'); // "thumsbnail" 클래스 추가
+        card.classList.add('video-card', 'thumbnail');
         card.id = video.id;
 
         const img = document.createElement('img');

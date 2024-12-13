@@ -1,8 +1,8 @@
-import { UserEntity } from 'src/user/entities/user.entity';
-import { NotificationEntity } from '../entities/notification.entity';
 import { ChannelEntity } from 'src/channel/entities/channel.entity';
+import { UserEntity } from 'src/user/entities/user.entity';
 import { VideoEntity } from 'src/video/entities/video.entity';
 import { Visibility } from 'src/video/video.visibility.enum';
+import { NotificationEntity } from '../entities/notification.entity';
 
 export const mockUser: UserEntity = {
   id: 1,

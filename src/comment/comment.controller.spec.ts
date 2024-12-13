@@ -1,7 +1,6 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { CommentController } from './comment.controller';
-import { CommentService } from './comment.service';
 import { AuthGuard } from '@nestjs/passport';
+import { Test, TestingModule } from '@nestjs/testing';
+import { mockCommentService } from './__mocks__/mock.comment.service';
 import {
   mockComment,
   mockCommentDto,
@@ -10,7 +9,8 @@ import {
   mockUpdatedComment,
   mockUser,
 } from './__mocks__/mock.commnet.data';
-import { mockCommentService } from './__mocks__/mock.comment.service';
+import { CommentController } from './comment.controller';
+import { CommentService } from './comment.service';
 
 describe('CommentController', () => {
   let commentController: CommentController;
@@ -127,7 +127,7 @@ describe('CommentController', () => {
 
       const result = await commentController.createReply(
         mockReplyComment.videoId,
-        mockReplyComment.parentComment,
+        mockReplyComment.parentCommentId,
         mockUser,
         mockCommentDto,
       );
@@ -135,7 +135,7 @@ describe('CommentController', () => {
       expect(result).toEqual(mockReplyComment);
       expect(mockCommentService.createReply).toHaveBeenCalledWith(
         mockReplyComment.videoId,
-        mockReplyComment.parentComment,
+        mockReplyComment.parentCommentId,
         mockUser,
         mockCommentDto,
       );

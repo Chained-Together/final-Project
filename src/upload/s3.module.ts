@@ -1,8 +1,8 @@
+import { S3Client } from '@aws-sdk/client-s3';
 import { Module } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { S3Controller } from './s3.controller';
 import { S3Service } from './s3.service';
-import { ConfigService } from '@nestjs/config';
-import { S3Client } from '@aws-sdk/client-s3';
 
 @Module({
   providers: [

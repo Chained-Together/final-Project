@@ -1,4 +1,7 @@
-import { Controller, Get, Query, Render } from '@nestjs/common';
+import { Controller, Get, Param, Query, Render, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { UserInfo } from '../utils/user-info.decorator';
+import { UserEntity } from '../user/entities/user.entity';
 
 @Controller('')
 export class ViewController {
@@ -84,5 +87,19 @@ export class ViewController {
   @Render('stream')
   showstream() {
     return;
+  }
+
+  @Get('chat/:roomId')
+  @UseGuards(AuthGuard('jwt'))
+  @Render('chat')
+  showChat(
+    @UserInfo() user: UserEntity,
+    @Param('roomId')
+    roomId: string,
+  ) {
+    return {
+      roomId,
+      user,
+    };
   }
 }

@@ -1,18 +1,20 @@
 import { Module } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { AuthController } from './auth.controller';
-import { PassportModule } from '@nestjs/passport';
-import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { JwtStrategy } from './jwt.strategy';
-import { BcryptHashingService } from 'src/interface/impl/bcrypt-hashing-service';
-import { ChannelEntity } from 'src/channel/entities/channel.entity';
-import { UserEntity } from 'src/user/entities/user.entity';
-import { GoogleStrategy } from './google.strategy';
-import { NaverStrategy } from './naver.strategy';
-import { ChannelService } from 'src/channel/channel.service';
 import { ChannelModule } from 'src/channel/channel.module';
+import { ChannelService } from 'src/channel/channel.service';
+import { ChannelEntity } from 'src/channel/entities/channel.entity';
+import { BcryptHashingService } from 'src/interface/impl/bcrypt-hashing-service';
+import { ChannelRepository } from 'src/interface/impl/channel.repository';
+import { UserRepository } from 'src/interface/impl/user.repository';
+import { UserEntity } from 'src/user/entities/user.entity';
+import { AuthController } from './auth.controller';
+import { AuthService } from './auth.service';
+import { GoogleStrategy } from './google.strategy';
+import { JwtStrategy } from './jwt.strategy';
+import { NaverStrategy } from './naver.strategy';
 
 @Module({
   imports: [
@@ -36,6 +38,14 @@ import { ChannelModule } from 'src/channel/channel.module';
     {
       provide: 'HashingService',
       useClass: BcryptHashingService,
+    },
+    {
+      provide: 'IUserRepository',
+      useClass: UserRepository,
+    },
+    {
+      provide: 'IChannelRepository',
+      useClass: ChannelRepository,
     },
   ],
 })

@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { mockResetPasswordRequestDto, mockUpdatePasswordDto } from './__mocks__/mock.password.data';
+import { mockPasswordService } from './__mocks__/mock.password.service';
 import { PasswordController } from './password.controller';
 import { PasswordService } from './password.service';
-import { mockPasswordService } from './__mocks__/mock.password.service';
-import { mockResetPasswordRequestDto, mockUpdatePasswordDto } from './__mocks__/mock.password.data';
 
 describe('PasswordController', () => {
   let passwordController: PasswordController;

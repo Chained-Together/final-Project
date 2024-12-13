@@ -28,7 +28,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     channelNameElement.textContent = channelData.name || '알 수 없음';
     profileImageElement.src = channelData.profileImage || '/path/to/default-profile.png';
 
-    // 비디오 로드
+    // createChannelEditUI(
+    //   channelEditContainer,
+    //   channelData,
+    //   token,
+    //   channelNameElement,
+    //   profileImageElement,
+    // );
     const videoResponse = await fetch(`/video/edit/${channelData.id}`, {
       method: 'GET',
       headers: {
@@ -250,7 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
         name: profileNameInput.value,
       };
 
-      const response = await fetch('/channel/profile', {
+      const response = await fetch('/channel', {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -268,7 +274,7 @@ document.addEventListener('DOMContentLoaded', () => {
       profileEditModal.style.display = 'none';
     } catch (error) {
       console.error('프로필 수정 중 오류 발생:', error);
-      alert('프로필 수정 중 오류가 발생했습니다.');
+      alert(error);
     }
   });
 });

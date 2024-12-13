@@ -1,12 +1,4 @@
-import {
-  IsArray,
-  IsEmpty,
-  IsEnum,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { IsArray, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 import { Visibility } from '../video.visibility.enum';
 
 export class VideoDto {

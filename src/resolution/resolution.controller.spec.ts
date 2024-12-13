@@ -1,10 +1,9 @@
+import { HttpException, HttpStatus } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { mockResolutionResponse, mockUpdateMetadataDto } from './__mocks__/mock.resolution.data';
+import { mockResolutionService } from './__mocks__/mock.resolution.service';
 import { ResolutionController } from './resolution.controller';
 import { ResolutionService } from './resolution.service';
-import { UpdateMetadataDto } from './dto/update-resolution.dto';
-import { mockResolutionService } from './__mocks__/mock.resolution.service';
-import { mockResolutionResponse, mockUpdateMetadataDto } from './__mocks__/mock.resolution.data';
-import { HttpException, HttpStatus } from '@nestjs/common';
 
 describe('ResolutionController', () => {
   let resolutionController: ResolutionController;
