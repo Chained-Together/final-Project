@@ -6,6 +6,7 @@ import { NotificationEntity } from './entities/notification.entity';
 import { NotificationController } from './notification.controller';
 import { NotificationService } from './notification.service';
 import { ChannelRepository } from 'src/interface/impl/channel.repository';
+import { NotificationRepository } from '../interface/impl/notification.repository';
 
 @Module({
   imports: [TypeOrmModule.forFeature([ChannelEntity, NotificationEntity, UserEntity])],
@@ -18,7 +19,7 @@ import { ChannelRepository } from 'src/interface/impl/channel.repository';
     },
     {
       provide: 'INotificationRepository',
-      useClass: NotificationEntity,
+      useClass: NotificationRepository,
     },
   ],
 })

@@ -5,7 +5,6 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import session from 'express-session';
 import * as dotenv from 'dotenv';
-import { IoAdapter } from '@nestjs/platform-socket.io';
 // import { createProxyMiddleware } from 'http-proxy-middleware';
 
 const envFile = process.env.NODE_ENV === 'production' ? '.env' : 'development.env';
