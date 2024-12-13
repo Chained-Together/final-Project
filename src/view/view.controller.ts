@@ -88,4 +88,23 @@ export class ViewController {
   showstream() {
     return;
   }
+  @Get('/obs')
+  @Render('obs')
+  showsobs() {
+    return;
+  }
+
+  @Get('chat/:roomId')
+  @UseGuards(AuthGuard('jwt'))
+  @Render('chat')
+  showChat(
+    @UserInfo() user: UserEntity,
+    @Param('roomId')
+    roomId: string,
+  ) {
+    return {
+      roomId,
+      user,
+    };
+  }
 }
