@@ -8,6 +8,7 @@ import { NotificationService } from './notification.service';
 import { ChannelRepository } from 'src/interface/impl/channel.repository';
 import { NotificationRepository } from '../interface/impl/notification.repository';
 
+
 @Module({
   imports: [TypeOrmModule.forFeature([ChannelEntity, NotificationEntity, UserEntity])],
   controllers: [NotificationController],
