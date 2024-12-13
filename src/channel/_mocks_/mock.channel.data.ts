@@ -19,6 +19,8 @@ export const mockUser: UserEntity = {
   isSocial: false,
   googleId: 'google@google.com',
   naverId: 'naverId@naver.com',
+  obsStreamKey: null,
+  liveStreaming: null,
 };
 
 export const mockChannel: ChannelEntity = {

@@ -38,7 +38,7 @@ services:
 
   nginx-rtmp:
     build:
-      context: ./nginx-rtmp # nginx-rtmp 디렉토리에서 빌드
+      context: ./rtmp # nginx-rtmp 디렉토리에서 빌드
     ports:
       - '1935:1935' # RTMP 스트리밍 포트
       - '8080:8080' # NGINX 관리 페이지 포트

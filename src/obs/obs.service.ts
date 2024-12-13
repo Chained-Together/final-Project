@@ -1,87 +1,53 @@
-import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
-import { OBSWebSocket } from 'obs-websocket-js';
-
+import { Inject, Injectable } from '@nestjs/common';
+import { IObsStreamKeyRepository } from 'src/interface/obs-interface';
+import { v4 as uuidv4 } from 'uuid';
 @Injectable()
-export class ObsService implements OnModuleInit, OnModuleDestroy {
-  private obs: OBSWebSocket;
-
-  constructor() {
-    this.obs = new OBSWebSocket();
-  }
-
-  async onModuleInit() {
+export class ObsService {
+  constructor(
+    @Inject('IObsStreamKeyRepository')
+    private readonly obsStreamKeyRepository: IObsStreamKeyRepository,
+  ) {}
+  async getUserStreamKey(userId: number) {
     try {
-      await this.obs.connect('ws://localhost:4455', 'oydCbzTsb5pqy0dT');
-      console.log('Connected to OBS WebSocket');
+      const checkStreamKey = await this.obsStreamKeyRepository.findObsStreamKeyByUserId(userId);
+
+      if (!checkStreamKey) {
+        let randomStreamKey;
+        let isUnique = false;
+
+        // 고유한 스트림 키 생성
+        while (!isUnique) {
+          randomStreamKey = uuidv4().slice(0, 8);
+          const existingKey = await this.obsStreamKeyRepository.findByStreamKey(randomStreamKey);
+          isUnique = !existingKey;
+        }
+
+        const createStreamKey = this.obsStreamKeyRepository.createObsStreamKey(
+          userId,
+          randomStreamKey,
+        );
+        return await this.obsStreamKeyRepository.save(createStreamKey);
+      }
+
+      return checkStreamKey;
     } catch (error) {
-      console.error('Failed to connect to OBS WebSocket:', error);
-      throw new Error('OBS WebSocket connection failed');
+      throw new Error(`Failed to get or create stream key: ${error.message}`);
     }
   }
 
-  async onModuleDestroy() {
-    try {
-      await this.obs.disconnect();
-      console.log('Disconnected from OBS WebSocket');
-    } catch (error) {
-      console.error('Error disconnecting from OBS WebSocket:', error);
+  async verifyStreamKey(streamKey: string): Promise<boolean> {
+    const keyEntity = await this.obsStreamKeyRepository.findByStreamKey(streamKey);
+
+    if (!keyEntity) {
+      return false;
     }
+
+    await this.obsStreamKeyRepository.updateStatusTrue(streamKey);
+
+    return true;
   }
 
-
-  async startStreaming(): Promise<void> {
-    try {
-      const response = await this.obs.call('StartStream');
-      console.log('Streaming started', response);
-    } catch (error) {
-      console.error('Error starting streaming:', error);
-      throw new Error('Error starting streaming');
-    }
-  }
-
-  async stopStreaming(): Promise<void> {
-    try {
-      const response = await this.obs.call('StopStream');
-      console.log('Streaming stopped', response);
-    } catch (error) {
-      console.error('Error stopping streaming:', error);
-      throw new Error('Error stopping streaming');
-    }
-  }
-
- 
-  async getStreamingStatus(): Promise<any> {
-    try {
-      const status = await this.obs.call('GetStreamStatus');
-      console.log('Streaming status:', status);
-      return status;
-    } catch (error) {
-      console.error('Error fetching streaming status:', error);
-      throw new Error('Error fetching streaming status');
-    }
-  }
-
-
-  async getSceneList(): Promise<any[]> {
-    try {
-      const data = await this.obs.call('GetSceneList');
-      console.log(`${data.scenes.length} Available Scenes!`);
-      return data.scenes; 
-    } catch (error) {
-      console.error('Error fetching scene list:', error);
-      throw new Error('Error fetching scene list');
-    }
-  }
-
-
-  async getCurrentScene(): Promise<any> {
-    try {
-      const currentScene = await this.obs.call('GetCurrentPreviewScene');
-      console.log(`Current Scene: ${currentScene.sceneName}`);
-      return currentScene; 
-    } catch (error) {
-      console.error('Error fetching current scene:', error);
-      throw new Error('Error fetching current scene');
-    }
+  async handleStreamDone(streamKey: string): Promise<void> {
+    await this.obsStreamKeyRepository.updateStatusFalse(streamKey);
   }
 }

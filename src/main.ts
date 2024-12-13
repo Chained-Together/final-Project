@@ -1,11 +1,10 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { join } from 'path';
-import { NestExpressApplication } from '@nestjs/platform-express';
 import { Logger, ValidationPipe } from '@nestjs/common';
-import session from 'express-session';
+import { NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import * as dotenv from 'dotenv';
-import * as express from 'express';
+import session from 'express-session';
+import { join } from 'path';
+import { AppModule } from './app.module';
 
 const envFile = process.env.NODE_ENV === 'production' ? '.env' : 'development.env';
 dotenv.config({ path: envFile });

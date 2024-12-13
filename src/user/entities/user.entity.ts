@@ -9,6 +9,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { LikeEntity } from '../../like/entities/like.entity';
+import { LiveStreamingEntity } from 'src/liveStreaming/entities/liveStreaming.entity';
+import { ObsStreamKeyEntity } from 'src/obs/entities/obs.entity';
 
 @Entity({
   name: 'users',
@@ -50,4 +52,10 @@ export class UserEntity {
   @OneToOne(() => ChannelEntity, (channel) => channel.user)
   @JoinColumn()
   channel: ChannelEntity;
+
+  @OneToOne(() => ObsStreamKeyEntity, (obsStreamKey) => obsStreamKey.user)
+  obsStreamKey: ObsStreamKeyEntity;
+
+  @OneToOne(() => LiveStreamingEntity, (liveStreaming) => liveStreaming.user)
+  liveStreaming: LiveStreamingEntity;
 }

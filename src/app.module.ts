@@ -28,6 +28,9 @@ import { VideoModule } from './video/video.module';
 import { ViewController } from './view/view.controller';
 import { ViewModule } from './view/view.module';
 import { ObsModule } from './obs/obs.module';
+import { ObsStreamKeyEntity } from './obs/entities/obs.entity';
+import { LiveStreamingEntity } from './liveStreaming/entities/liveStreaming.entity';
+import { LiveStreamingModule } from './liveStreaming/liveStreaming.module';
 
 const typeOrmModuleOptions = {
   useFactory: async (configService: ConfigService): Promise<TypeOrmModuleOptions> => ({
@@ -50,6 +53,8 @@ const typeOrmModuleOptions = {
       LikeEntity,
       PasswordResetTokenEntity,
       NotificationEntity,
+      ObsStreamKeyEntity,
+      LiveStreamingEntity,
     ],
     synchronize: configService.get<boolean>('DB_SYNC'),
     logging: ['query', 'error', 'schema', 'warn', 'info'],
@@ -88,6 +93,7 @@ const typeOrmModuleOptions = {
     NotificationModule,
     EventEmitterModule.forRoot(),
     ObsModule,
+    LiveStreamingModule,
   ],
   controllers: [AppController, ViewController],
   providers: [

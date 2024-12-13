@@ -15,6 +15,8 @@ export const mockUser: UserEntity = {
   deletedAt: null,
   likes: [mockLike],
   channel: null,
+  obsStreamKey: null,
+  liveStreaming: null,
 };
 
 export const mockCommentDto: CommentDto = {
@@ -67,6 +69,8 @@ export const mockUserEntity: UserEntity = {
   isSocial: false,
   googleId: null,
   naverId: null,
+  obsStreamKey: null,
+  liveStreaming: null,
 };
 
 export const mockCreateUserDto = {

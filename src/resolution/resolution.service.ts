@@ -20,6 +20,7 @@ export class ResolutionService {
     videoUrl: string,
   ): Promise<ResolutionEntity> {
     const video = await this.getVideoByCode(videoCode);
+    console.log('updateResolution:getvideoByCode', video);
     await this.updateResolutionInfo(video.id, videoUrl);
     await this.updateVideoMetadata(video.id, duration, thumbnail);
     return await this.getUpdatedResolution(video.id);
@@ -36,6 +37,7 @@ export class ResolutionService {
 
   private async updateResolutionInfo(videoId: number, videoUrl: string): Promise<void> {
     const result = await this.resolutionRepository.updateResolution(videoId, videoUrl);
+    console.log('updateResolutionInfo:updateResolution', result);
     if (result.affected === 0) {
       throw new Error('해상도 정보를 업데이트할 수 없습니다.');
     }
@@ -51,6 +53,7 @@ export class ResolutionService {
       status: true,
       thumbnailUrl: thumbnailUrl,
     });
+    console.log('updateVideoMetadata:updateVideo', result);
     if (result.affected === 0) {
       throw new Error('비디오 메타데이터를 업데이트할 수 없습니다.');
     }
@@ -58,6 +61,7 @@ export class ResolutionService {
 
   private async getUpdatedResolution(videoId: number): Promise<ResolutionEntity> {
     const resolution = await this.resolutionRepository.findResolutionByVideoId(videoId);
+    console.log('getUpdatedResolution:findResolutionByVideoId', resolution);
     if (!resolution) {
       throw new Error('업데이트된 해상도를 찾을 수 없습니다.');
     }
