@@ -1,5 +1,4 @@
-import { Logger, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { Logger } from '@nestjs/common';
 import {
   WebSocketGateway,
   WebSocketServer,
@@ -10,8 +9,9 @@ import {
   ConnectedSocket,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { JwtService } from '@nestjs/jwt';
 
-@WebSocketGateway(3001, { cors: { origin: '*' } }) // WebSocket은 3001 포트
+@WebSocketGateway(3001, { cors: { origin: '*' } })
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   private readonly logger = new Logger('ChatGateway');
   private chatRooms: Record<string, Set<string>> = {};
@@ -19,8 +19,23 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server: Server;
 
+  constructor(private readonly jwtService: JwtService) {}
+
   handleConnection(client: Socket) {
     this.logger.log(`Client connected: ${client.id}`);
+    const token = client.handshake.query.token as string;
+    if (!token) {
+      this.logger.error('No token provided');
+      client.disconnect();
+      return;
+    }
+    try {
+      const payload = this.jwtService.verify(token);
+      this.logger.log(`Authenticated user: ${payload.email}`);
+    } catch (error) {
+      this.logger.error('Invalid token', error.message);
+      client.disconnect();
+    }
   }
 
   handleDisconnect(client: Socket) {
@@ -34,15 +49,16 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('joinRoom')
   joinRoom(
-    @MessageBody() { roomId, username }: { roomId: string; username: string },
+    @MessageBody() { roomId, nickname }: { roomId: string; nickname: string },
     @ConnectedSocket() client: Socket,
   ) {
+    this.logger.log(`User ${nickname} joining room: ${roomId}`);
     if (!this.chatRooms[roomId]) {
       this.chatRooms[roomId] = new Set();
     }
     client.join(roomId);
     this.chatRooms[roomId].add(client.id);
-    this.server.to(roomId).emit('userJoined', { userId: client.id, username });
+    this.server.to(roomId).emit('userJoined', { userId: client.id, nickname });
   }
 
   @SubscribeMessage('sendMessage')
@@ -50,6 +66,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @MessageBody() { roomId, message, sender }: { roomId: string; message: string; sender: string },
     @ConnectedSocket() client: Socket,
   ) {
+    this.logger.log(`Message received from ${sender} in room ${roomId}: ${message}`);
     this.server.to(roomId).emit('receiveMessage', { sender, message });
   }
 }

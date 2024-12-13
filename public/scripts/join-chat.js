@@ -22,6 +22,6 @@ chatBtn.addEventListener('click', async () => {
     document.write(html);
     document.close();
   } else {
-    alert('접속 권한이 없습니다.');
+    console.error('접속 권한이 없습니다.');
   }
 });
