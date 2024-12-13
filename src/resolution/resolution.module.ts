@@ -14,11 +14,11 @@ import { ResolutionService } from './resolution.service';
     ResolutionService,
     {
       provide: 'IResolutionRepository',
-      useValue: ResolutionRepository,
+      useClass: ResolutionRepository,
     },
     {
       provide: 'IVideoRepository',
-      useValue: VideoRepository,
+      useClass: VideoRepository,
     },
   ],
 })

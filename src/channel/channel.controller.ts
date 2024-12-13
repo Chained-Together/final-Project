@@ -13,6 +13,7 @@ export class ChannelController {
   constructor(private channelService: ChannelService) {}
 
   @Post()
+  @UseGuards(AuthGuard('jwt'))
   async createChannel(@Body() channelDto: ChannelDto, user: UserEntity, @Res() res: Response) {
     await this.channelService.createChannel(channelDto, user);
     return res.redirect('/');
