@@ -35,7 +35,7 @@ export class AuthController {
     const token = await this.authService.googleLogin(req);
     console.log(token);
     res.setHeader('Authorization', token.access_token);
-    res.redirect(`/?token=${token.access_token}`);
+    res.redirect(`/`);
   }
 
   @Get('naver')
@@ -48,6 +48,6 @@ export class AuthController {
     const token = await this.authService.naverLogin(req);
 
     res.setHeader('Authorization', token.access_token);
-    res.redirect(`/?token=${token.access_token}`);
+    res.redirect(`/`);
   }
 }
