@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat Room</title>
+  </head>
+  <body>
+    <h1>Chat Room</h1>
+    <div id="chat-box" style="border: 1px solid #ccc; height: 300px; overflow-y: scroll"></div>
+    <input id="message-input" placeholder="Type your message" />
+    <button id="send-button">Send</button>
+
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+    <script>
+      const roomId = '<%= roomId %>';
+      const username = '<%= user.name %>';
+      const socket = io('http://localhost:3001');
+
+      socket.on('connect', () => {
+        socket.emit('joinRoom', { roomId, username });
+      });
+
+      socket.on('userJoined', (data) => {
+        const chatBox = document.getElementById('chat-box');
+        const messageElement = document.createElement('div');
+        messageElement.textContent = `${data.username} has joined the room.`;
+        chatBox.appendChild(messageElement);
+        chatBox.scrollTop = chatBox.scrollHeight;
+      });
+
+      socket.on('receiveMessage', (data) => {
+        const chatBox = document.getElementById('chat-box');
+        const messageElement = document.createElement('div');
+        messageElement.textContent = `${data.sender}: ${data.message}`;
+        chatBox.appendChild(messageElement);
+        chatBox.scrollTop = chatBox.scrollHeight;
+      });
+
+      document.getElementById('send-button').addEventListener('click', () => {
+        const message = document.getElementById('message-input').value.trim();
+        if (message) {
+          socket.emit('sendMessage', { roomId, message, sender: username });
+          document.getElementById('message-input').value = '';
+        }
+      });
+
+      socket.on('userLeft', (data) => {
+        const chatBox = document.getElementById('chat-box');
+        const messageElement = document.createElement('div');
+        messageElement.textContent = `${data.username} has left the room.`;
+        chatBox.appendChild(messageElement);
+        chatBox.scrollTop = chatBox.scrollHeight;
+      });
+    </script>
+  </body>
+</html>

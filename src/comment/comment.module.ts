@@ -10,9 +10,9 @@ import { CommentService } from './comment.service';
 import { CommentEntity } from './entities/comment.entity';
 
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { commentRepository } from 'src/interface/impl/comment.repositroy';
+import { ChannelRepository } from 'src/interface/impl/channel.repository';
+import { CommentRepository } from 'src/interface/impl/comment.repositroy';
 import { VideoRepository } from 'src/interface/impl/video.repository';
-import { channelRepository } from 'src/interface/impl/channel.repository';
 
 @Module({
   imports: [
@@ -31,7 +31,7 @@ import { channelRepository } from 'src/interface/impl/channel.repository';
     NotificationService,
     {
       provide: 'ICommentRepository',
-      useClass: commentRepository,
+      useClass: CommentRepository,
     },
     {
       provide: 'IVideoRepository',
@@ -39,7 +39,7 @@ import { channelRepository } from 'src/interface/impl/channel.repository';
     },
     {
       provide: 'IChannelRepository',
-      useClass: channelRepository,
+      useClass: ChannelRepository,
     },
     {
       provide: 'INotificationRepository',

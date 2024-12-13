@@ -27,6 +27,7 @@ import { VideoEntity } from './video/entities/video.entity';
 import { VideoModule } from './video/video.module';
 import { ViewController } from './view/view.controller';
 import { ViewModule } from './view/view.module';
+import { ChatModule } from './chat/chat.module';
 
 const typeOrmModuleOptions = {
   useFactory: async (configService: ConfigService): Promise<TypeOrmModuleOptions> => ({
@@ -86,6 +87,7 @@ const typeOrmModuleOptions = {
     PasswordModule,
     NotificationModule,
     EventEmitterModule.forRoot(),
+    ChatModule,
   ],
   controllers: [AppController, ViewController],
   providers: [
