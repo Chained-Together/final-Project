@@ -9,10 +9,11 @@ export class ObsStreamKeyRepository implements IObsStreamKeyRepository {
     private readonly repository: Repository<ObsStreamKeyEntity>,
   ) {}
 
-  createObsStreamKey(userId: number, streamKey: string): ObsStreamKeyEntity {
+  createObsStreamKey(userId: number, streamKey: string, streamingUrl: string): ObsStreamKeyEntity {
     return this.repository.create({
       user: { id: userId },
       streamKey: streamKey,
+      streamingUrl,
     });
   }
 

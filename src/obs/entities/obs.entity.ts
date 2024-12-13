@@ -20,6 +20,9 @@ export class ObsStreamKeyEntity {
   @Column({ type: 'boolean', default: false })
   status: boolean;
 
+  @Column({ type: 'varchar', nullable: true })
+  streamingUrl: string;
+
   @CreateDateColumn({ type: 'timestamp', nullable: false })
   createdAt: Date;
 
