@@ -31,6 +31,7 @@ import { ObsModule } from './obs/obs.module';
 import { ObsStreamKeyEntity } from './obs/entities/obs.entity';
 import { LiveStreamingEntity } from './liveStreaming/entities/liveStreaming.entity';
 import { LiveStreamingModule } from './liveStreaming/liveStreaming.module';
+import { ChatModule } from './chat/chat.module';
 
 const typeOrmModuleOptions = {
   useFactory: async (configService: ConfigService): Promise<TypeOrmModuleOptions> => ({
@@ -94,6 +95,7 @@ const typeOrmModuleOptions = {
     EventEmitterModule.forRoot(),
     ObsModule,
     LiveStreamingModule,
+    ChatModule,
   ],
   controllers: [AppController, ViewController],
   providers: [

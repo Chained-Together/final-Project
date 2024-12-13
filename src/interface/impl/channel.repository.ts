@@ -4,7 +4,7 @@ import { UserEntity } from 'src/user/entities/user.entity';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { IChannelRepository } from '../channel-interface';
 
-export class channelRepository implements IChannelRepository {
+export class ChannelRepository implements IChannelRepository {
   constructor(
     @InjectRepository(ChannelEntity)
     private readonly repository: Repository<ChannelEntity>,

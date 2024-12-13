@@ -32,7 +32,7 @@ uploadBtn.addEventListener('click', async () => {
       region: 'ap-northeast-2',
     };
 
-    const response = await fetch('http://localhost:3000/s3/generate-url', {
+    const response = await fetch('/s3/generate-url', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify(payload),
@@ -64,7 +64,7 @@ uploadBtn.addEventListener('click', async () => {
     };
     console.log('metadataPayload', metadataPayload);
 
-    const metadataResponse = await fetch('http://localhost:3000/video', {
+    const metadataResponse = await fetch('/video', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
