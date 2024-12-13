@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="ko">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Chat Room</title>
+    <title>채팅방</title>
     <style>
       #chat-box {
         border: 1px solid #ccc;
@@ -31,11 +31,11 @@
     </style>
   </head>
   <body>
-    <h1>Chat Room</h1>
+    <h1>귀여운 15조의 채팅방</h1>
     <div id="chat-box"></div>
     <div>
-      <input type="text" id="message-input" placeholder="Type your message" />
-      <button id="send-button">Send</button>
+      <input type="text" id="message-input" placeholder="메시지를 입력하세요" />
+      <button id="send-button">전송</button>
     </div>
 
     <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
@@ -54,16 +54,6 @@
         console.log(`Connected to server with ID: ${socket.id}`);
         socket.emit('joinRoom', { roomId, nickname });
       });
-
-      socket.on('userJoined', (data) => {
-        console.log(`${data.nickname} has joined the room.`);
-        const chatBox = document.getElementById('chat-box');
-        const messageElement = document.createElement('div');
-        messageElement.textContent = `${data.nickname} has joined the room.`;
-        chatBox.appendChild(messageElement);
-        chatBox.scrollTop = chatBox.scrollHeight;
-      });
-
       socket.on('receiveMessage', (data) => {
         console.log('메시지 수신됨:', data);
         const chatBox = document.getElementById('chat-box');
@@ -111,16 +101,6 @@
           sendMessage();
         }
       });
-
-      socket.on('userLeft', (data) => {
-        console.log(`${data.nickname} has left the room.`);
-        const chatBox = document.getElementById('chat-box');
-        const messageElement = document.createElement('div');
-        messageElement.textContent = `${data.nickname} has left the room.`;
-        chatBox.appendChild(messageElement);
-        chatBox.scrollTop = chatBox.scrollHeight;
-      });
-
       console.log(document.getElementById('chat-box'));
 
       const chatBox = document.getElementById('chat-box');
