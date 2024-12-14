@@ -143,6 +143,6 @@ export class AuthService {
     const channel = {
       name: name,
     };
-    this.channelService.createChannel(channel, user);
+    await this.channelService.createChannel(channel, user);
   }
 }

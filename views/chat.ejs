@@ -1,57 +1,96 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Chat Room</title>
-  </head>
-  <body>
-    <h1>Chat Room</h1>
-    <div id="chat-box" style="border: 1px solid #ccc; height: 300px; overflow-y: scroll"></div>
-    <input id="message-input" placeholder="Type your message" />
-    <button id="send-button">Send</button>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chat Room</title>
+</head>
+<body>
+<h1>Chat Room</h1>
+<div id="chat-box" style="border: 1px solid #ccc; height: 300px; overflow-y: scroll"></div>
+<input id="message-input" placeholder="Type your message" />
+<button id="send-button">Send</button>
 
-    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
-    <script>
-      const roomId = '<%= roomId %>';
-      const username = '<%= user.name %>';
-      const socket = io('http://localhost:3001');
+<script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+<script>
+  // 랜덤 사용자 이름 생성 함수
+  const generateRandomUsername = () => {
+    const adjectives = ['Quick', 'Clever', 'Bright', 'Happy', 'Cool'];
+    const animals = ['Fox', 'Rabbit', 'Eagle', 'Tiger', 'Bear'];
+    const randomAdjective = adjectives[Math.floor(Math.random() * adjectives.length)];
+    const randomAnimal = animals[Math.floor(Math.random() * animals.length)];
+    return `${randomAdjective}${randomAnimal}${Math.floor(Math.random() * 1000)}`;
+  };
 
-      socket.on('connect', () => {
-        socket.emit('joinRoom', { roomId, username });
-      });
+  // 서버에서 전달받은 값
+  const roomId = '<%= roomId %>';
 
-      socket.on('userJoined', (data) => {
-        const chatBox = document.getElementById('chat-box');
-        const messageElement = document.createElement('div');
-        messageElement.textContent = `${data.username} has joined the room.`;
-        chatBox.appendChild(messageElement);
-        chatBox.scrollTop = chatBox.scrollHeight;
-      });
+  // JWT 토큰 가져오기
+  const jwtToken = localStorage.getItem('token'); // 'token' 키에 저장된 JWT 가져오기
+  console.log('token : ',jwtToken);
+  let nickname = null;
 
-      socket.on('receiveMessage', (data) => {
-        const chatBox = document.getElementById('chat-box');
-        const messageElement = document.createElement('div');
-        messageElement.textContent = `${data.sender}: ${data.message}`;
-        chatBox.appendChild(messageElement);
-        chatBox.scrollTop = chatBox.scrollHeight;
-      });
+  if (jwtToken) {
+    // JWT가 존재하면 로그인된 사용자
+    const decoded = JSON.parse(atob(jwtToken.split('.')[1])); // JWT payload 디코딩
+    console.log(decoded);
+    nickname = decoded.nickname; // 'nickname' 또는 'name' 사용
+  } else {
+    // JWT가 없으면 비로그인 사용자
+    nickname = localStorage.getItem('nickname'); // localStorage에서 사용자 이름 가져오기
+    if (!nickname) {
+      nickname = generateRandomUsername(); // 랜덤 이름 생성
+      localStorage.setItem('nickname', nickname); // 랜덤 이름 저장
+    }
+  }
 
-      document.getElementById('send-button').addEventListener('click', () => {
-        const message = document.getElementById('message-input').value.trim();
-        if (message) {
-          socket.emit('sendMessage', { roomId, message, sender: username });
-          document.getElementById('message-input').value = '';
-        }
-      });
+  // WebSocket 연결
+  const socket = io('http://localhost:3001', {
+    auth: {
+      token: jwtToken || null, // JWT 토큰을 전달. 없으면 null
+    },
+  });
 
-      socket.on('userLeft', (data) => {
-        const chatBox = document.getElementById('chat-box');
-        const messageElement = document.createElement('div');
-        messageElement.textContent = `${data.username} has left the room.`;
-        chatBox.appendChild(messageElement);
-        chatBox.scrollTop = chatBox.scrollHeight;
-      });
-    </script>
-  </body>
+  // WebSocket 연결 성공 시
+  socket.on('connect', () => {
+    socket.emit('joinRoom', { roomId, nickname }); // 방 입장 시 사용자 이름 전달
+  });
+
+  // 다른 사용자가 방에 입장했을 때
+  socket.on('userJoined', (data) => {
+    const chatBox = document.getElementById('chat-box');
+    const messageElement = document.createElement('div');
+    messageElement.textContent = `${data.nickname} has joined the room.`;
+    chatBox.appendChild(messageElement);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  });
+
+  // 서버에서 메시지를 수신했을 때
+  socket.on('receiveMessage', (data) => {
+    const chatBox = document.getElementById('chat-box');
+    const messageElement = document.createElement('div');
+    messageElement.textContent = `${data.sender}: ${data.message}`;
+    chatBox.appendChild(messageElement);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  });
+
+  // 메시지 전송 버튼 클릭 시
+  document.getElementById('send-button').addEventListener('click', () => {
+    const message = document.getElementById('message-input').value.trim();
+    if (message) {
+      socket.emit('sendMessage', { roomId, message, sender: nickname }); // 메시지 전송 시 사용자 이름 포함
+      document.getElementById('message-input').value = '';
+    }
+  });
+
+  // 다른 사용자가 방을 떠났을 때
+  socket.on('userLeft', (data) => {
+    const chatBox = document.getElementById('chat-box');
+    const messageElement = document.createElement('div');
+    messageElement.textContent = `${data.nickname} has left the room.`;
+    chatBox.appendChild(messageElement);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  });
+</script>
+</body>
 </html>

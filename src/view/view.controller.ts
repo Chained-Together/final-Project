@@ -2,6 +2,7 @@ import { Controller, Get, Param, Query, Render, UseGuards } from '@nestjs/common
 import { AuthGuard } from '@nestjs/passport';
 import { UserInfo } from '../utils/user-info.decorator';
 import { UserEntity } from '../user/entities/user.entity';
+import { HeaderLoggerGuard } from '../utils/header-log.guard';
 
 @Controller('')
 export class ViewController {
@@ -90,16 +91,8 @@ export class ViewController {
   }
 
   @Get('chat/:roomId')
-  @UseGuards(AuthGuard('jwt'))
   @Render('chat')
-  showChat(
-    @UserInfo() user: UserEntity,
-    @Param('roomId')
-    roomId: string,
-  ) {
-    return {
-      roomId,
-      user,
-    };
+  showChat(@Param('roomId') roomId: string) {
+    return { roomId }; // user 정보 제거
   }
 }
