@@ -13,8 +13,10 @@ export class VideoRepository implements IVideoRepository {
     private readonly repository: Repository<VideoEntity>,
   ) {}
   findVideoByVideoCode(videoCode: string): Promise<VideoEntity | null> {
+    console.log('videoRepository:videoCode~~~~', videoCode);
     return this.repository.findOne({ where: { videoCode } });
   }
+
   findAllVideo(): Promise<VideoEntity[]> {
     return this.repository.find();
   }

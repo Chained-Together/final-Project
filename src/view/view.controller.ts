@@ -1,7 +1,8 @@
 import { Controller, Get, Param, Query, Render, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { JwtQueryAuthGuard } from '../utils/jwtquery-authguard';
 import { UserInfo } from '../utils/user-info.decorator';
 import { UserEntity } from '../user/entities/user.entity';
+import { HeaderLoggerGuard } from '../utils/header-log.guard';
 
 @Controller('')
 export class ViewController {
@@ -88,18 +89,21 @@ export class ViewController {
   showstream() {
     return;
   }
+  @Get('/obs')
+  @Render('obs')
+  showsobs() {
+    return;
+  }
 
   @Get('chat/:roomId')
-  @UseGuards(AuthGuard('jwt'))
   @Render('chat')
-  showChat(
-    @UserInfo() user: UserEntity,
-    @Param('roomId')
-    roomId: string,
-  ) {
-    return {
-      roomId,
-      user,
-    };
+  showChat(@Param('roomId') roomId: string) {
+    return { roomId }; // user 정보 제거
+  }
+
+  @Get('/main-chat')
+  @Render('chat')
+  showMainChat() {
+    return { roomId: 'main-room' };
   }
 }

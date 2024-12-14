@@ -32,6 +32,8 @@ export const mockUser: UserEntity = {
   deletedAt: null,
   likes: [mockLike],
   channel: mockChannel,
+  obsStreamKey: null,
+  liveStreaming: null,
 };
 
 export const mockCommentDto: CommentDto = {

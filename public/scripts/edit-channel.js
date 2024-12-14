@@ -28,13 +28,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     channelNameElement.textContent = channelData.name || '알 수 없음';
     profileImageElement.src = channelData.profileImage || '/path/to/default-profile.png';
 
-    // createChannelEditUI(
-    //   channelEditContainer,
-    //   channelData,
-    //   token,
-    //   channelNameElement,
-    //   profileImageElement,
-    // );
+    createChannelEditUI(
+      channelEditContainer,
+      channelData,
+      token,
+      channelNameElement,
+      profileImageElement,
+    );
     const videoResponse = await fetch(`/video/edit/${channelData.id}`, {
       method: 'GET',
       headers: {
@@ -189,7 +189,7 @@ function showPopup(thumbnail) {
         visibility: visibilityInput.value,
       };
 
-      const response = await fetch(`http://localhost:3000/video/${videoId}`, {
+      const response = await fetch(`/video/${videoId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -256,7 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
         name: profileNameInput.value,
       };
 
-      const response = await fetch('/channel', {
+      const response = await fetch('/channel/profile', {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -274,7 +274,7 @@ document.addEventListener('DOMContentLoaded', () => {
       profileEditModal.style.display = 'none';
     } catch (error) {
       console.error('프로필 수정 중 오류 발생:', error);
-      alert(error);
+      alert('프로필 수정 중 오류가 발생했습니다.');
     }
   });
 });

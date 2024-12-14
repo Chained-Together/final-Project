@@ -42,7 +42,6 @@ export class ChannelService {
 
   async updateChannel(user: UserEntity, channelDto: ChannelDto): Promise<ChannelEntity> {
     const foundChannel = await this.findChannelByUserIdOrThrow(user.id);
-    await this.ensureChannelNameIsUnique(channelDto.name);
 
     await this.channelRepository.updateChannel(
       foundChannel.id,
