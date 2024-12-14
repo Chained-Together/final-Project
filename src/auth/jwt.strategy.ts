@@ -21,8 +21,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
+    console.log('JWT Payload:', payload); // 디버깅 로그 추가
     const user = await this.userRepository.findOneBy({ email: payload.email });
-    console.log('JWT Payload:', payload); // 디코딩된 JWT 페이로드 출력
     if (!payload) {
       throw new UnauthorizedException('Invalid token payload');
     }

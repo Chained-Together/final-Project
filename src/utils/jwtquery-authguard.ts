@@ -10,6 +10,7 @@ export class JwtQueryAuthGuard extends AuthGuard('jwt') {
     const token = request.query.token;
     if (token) {
       request.headers.authorization = `Bearer ${token}`;
+      console.log('Token set in headers:', request.headers.authorization);
     }
 
     return super.canActivate(context);

@@ -1,16 +1,13 @@
 /* my-channel.css */
 
 .channel-info h2 {
-  font-size: 4rem;
   color: #ffffff; /* 채널 이름 강조 */
   position: absolute;
   top: 55%;
   left: 40%;
-  font-family: 'Jua', sans-serif;
 }
 
 .channel-info button {
-  padding: 10px 20px;
   margin: 10px;
   top: 90%;
   border-radius: 5px;
@@ -47,13 +44,13 @@
 
 /* 버튼 기본 스타일 */
 .edit-Btn,
+.chat-btn,
 .upload-Btn,
 .live-btn {
   width: 140px;
   height: 45px;
   border: none;
   border-radius: 25px;
-  background: linear-gradient(135deg, #6a11cb, #2575fc);
   color: white;
   font-size: 16px;
   font-weight: bold;
@@ -65,9 +62,11 @@
     box-shadow 0.2s ease;
 }
 
+
 /* 버튼 호버 효과 */
 .edit-Btn:hover,
 .upload-Btn:hover,
+.chat-btn:hover,
 .live-btn:hover {
   transform: translateY(-3px);
   box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
@@ -112,4 +111,35 @@
   position: absolute;
   margin-top: 70%;
   left: 80%;
+}
+
+.profile-btn {
+  width: 200px;
+  height: 200px;
+}
+
+.channel-name {
+  font-size: 30px;
+  position: relative;
+  top: -80px
+}
+
+.channel-container {
+  display: block;
+  /* justify-content: center; */
+  /* align-items: center; */
+  border: 1px solid #ccc;
+  text-align: center;
+  width: 700px;
+  height: 250px;
+  position: absolute;
+  top: 7%;
+  left: 20%;
+}
+
+.channel-name-box {
+  
+  border: 1px solid #ff0000;
+  height: 250px;
+  width: 500;
 }

@@ -12,8 +12,6 @@ io.on('connection', (socket) => {
       rooms[roomId] = [];
     }
     rooms[roomId].push(username);
-
-    socket.to(roomId).emit('userJoined', { username });
   });
 
   socket.on('sendMessage', ({ roomId, message, sender }) => {
@@ -26,7 +24,6 @@ io.on('connection', (socket) => {
         const username = rooms[roomId]?.find((name) => name === socket.id);
         if (username) {
           rooms[roomId] = rooms[roomId].filter((name) => name !== socket.id);
-          socket.to(roomId).emit('userLeft', { username });
         }
       }
     }
@@ -37,7 +34,6 @@ io.on('connection', (socket) => {
 
     if (rooms[roomId]) {
       rooms[roomId] = rooms[roomId].filter((name) => name !== username);
-      socket.to(roomId).emit('userLeft', { username });
     }
   });
 });

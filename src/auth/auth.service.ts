@@ -70,7 +70,6 @@ export class AuthService {
     const num1 = Math.floor(1000 + Math.random() * 9000);
     if (!user) {
       // 새로운 사용자 생성
-      await this.validateUserUniqueness(email);
       user = this.userRepository.createByGoogleId(email, displayName, googleId, num, num1);
       await this.userRepository.save(user);
       await this.createChannel(user.nickname, user);
@@ -92,7 +91,6 @@ export class AuthService {
     const num = Math.floor(1000 + Math.random() * 9000);
     const num1 = Math.floor(1000 + Math.random() * 9000);
     if (!user) {
-      await this.validateUserUniqueness(email);
       user = this.userRepository.createByNaverId(email, nickname, naverId, num, num1);
       await this.userRepository.save(user);
     } else {
@@ -110,7 +108,7 @@ export class AuthService {
     }
   }
 
-  private async validateUserUniqueness(signUpDto: Partial<SignUpDto>): Promise<void> {
+  private async validateUserUniqueness(signUpDto: SignUpDto): Promise<void> {
     const { email, nickname, phoneNumber } = signUpDto;
 
     if (await this.userRepository.findByEmail(email)) {
@@ -145,6 +143,6 @@ export class AuthService {
     const channel = {
       name: name,
     };
-    this.channelService.createChannel(channel, user);
+    await this.channelService.createChannel(channel, user);
   }
 }
