@@ -116,13 +116,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.location.href = '/edit-mychannel';
   });
 
-  chatBtn.addEventListener('click', () => {
-    const roomId = 'desiredRoomId'; // 원하는 방 ID로 설정
-    const token = localStorage.getItem('token'); // 로컬 스토리지에서 토큰 가져오기
-    if (token) {
-      window.location.href = `/chat?roomId=${roomId}&token=${token}`;
+  chatBtn.addEventListener('click', async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const roomId = urlParams.get('roomId') || '<%= roomId %>';
+
+    const response = await fetch(`/chat/${roomId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (response.ok) {
+      const html = await response.text();
+      document.open();
+      document.write(html);
+      document.close();
     } else {
-      window.location.href = '/login'; // 토큰이 없으면 로그인 페이지로 이동
+      console.error('접속 권한이 없습니다.');
     }
   });
 });
