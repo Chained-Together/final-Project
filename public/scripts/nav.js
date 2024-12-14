@@ -32,6 +32,24 @@ if (token) {
   });
 }
 
+// 기존 코드 유지...
+
+// Live 버튼 클릭 이벤트 추가
+const liveBtn = document.getElementById('liveBtn');
+if (liveBtn) {
+  liveBtn.addEventListener('click', () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      window.location.href = '/stream';
+    } else {
+      alert('로그인이 필요한 서비스입니다.');
+      window.location.href = '/login';
+    }
+  });
+}
+
+// 기존 코드 계속...
+
 const setImageSrc = (src) => {
   document.querySelectorAll('#profileImage').forEach((img) => (img.src = src));
 };
