@@ -1,24 +1,3 @@
-# version: '3.8'
-
-# services:
-#   app:
-#     build:
-#       context: .
-#       dockerfile: Dockerfile
-#     container_name: app
-#     environment:
-#       - DB_HOST= ${DB_HOST}
-#       - DB_PORT=5432
-#       - DB_USER=${DB_USERNAME}
-#       - DB_PASSWORD=${DB_PASSWORD}
-#       - DB_NAME=${DB_NAME}
-#       - PORT=${PORT}
-#       - NODE_ENV=production
-#     ports:
-#       - '3000:3000'
-#     volumes:
-#       - ./src:/app/src
-
 services:
   app:
     image: app-image # 이미지 이름 설정
@@ -41,7 +20,9 @@ services:
       context: ./rtmp # nginx-rtmp 디렉토리에서 빌드
     ports:
       - '1935:1935' # RTMP 스트리밍 포트
-      - '8080:8080' # NGINX 관리 페이지 포트
+      - '8888:8080' # NGINX 관리 페이지 포트
+    environment:
+      - BEANSTOCK_ADRESS=${BEANSTOCK_ADRESS}
     networks:
       - app-network
 
