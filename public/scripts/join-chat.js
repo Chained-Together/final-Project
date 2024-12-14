@@ -1,6 +1,7 @@
 const chatBtn = document.getElementById('chatBtn');
 chatBtn.addEventListener('click', async () => {
-  const roomId = 'room1'; // 방 ID 설정
+  const roomId = 'main-room'; // 또는 동적으로 생성된 roomId
+  window.location.href = `/chat/${roomId}`;
 
   const response = await fetch(`/chat/${roomId}`, {
     method: 'GET',

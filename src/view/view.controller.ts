@@ -95,4 +95,10 @@ export class ViewController {
   showChat(@Param('roomId') roomId: string) {
     return { roomId }; // user 정보 제거
   }
+
+  @Get('/main-chat')
+  @Render('chat')
+  showMainChat() {
+    return { roomId: 'main-room' };
+  }
 }
