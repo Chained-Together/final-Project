@@ -272,7 +272,7 @@ async function uploadVideo() {
     };
 
     // 프리사인 URL 요청
-    const response = await fetch('http://localhost:3000/s3/generate-url', {
+    const response = await fetch('/s3/generate-url', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify(payload),
@@ -306,7 +306,7 @@ async function uploadVideo() {
     };
 
     // 메타데이터 서버에 전송
-    const metadataResponse = await fetch('http://localhost:3000/video', {
+    const metadataResponse = await fetch('/video', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -321,7 +321,8 @@ async function uploadVideo() {
     } else if (metadataResponse.ok) {
       console.log('요청 성공:', await metadataResponse.json());
       alert('영상 업로드 성공!');
-    } else {s
+    } else {
+      s;
       console.error('메타데이터 요청 실패:', metadataResponse.status);
       throw new Error('메타데이터 전송 실패');
     }

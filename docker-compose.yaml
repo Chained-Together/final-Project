@@ -21,9 +21,10 @@
 
 services:
   app:
-    image: app-image
+    image: app-image # 이미지 이름 설정
     build:
       context: .
+      dockerfile: Dockerfile # 명시적으로 Dockerfile 사용
     ports:
       - '3000:3000'
     environment:
@@ -32,6 +33,15 @@ services:
       DB_USER: loopfiy
       DB_PASS: aaaa4321!
       DB_NAME: loopfiy
+    volumes:
+      - ./src:/usr/src/app # 소스코드 공유를 위해 추가 (필요시)
+
+  nginx-rtmp:
+    build:
+      context: ./rtmp # nginx-rtmp 디렉토리에서 빌드
+    ports:
+      - '1935:1935' # RTMP 스트리밍 포트
+      - '8080:8080' # NGINX 관리 페이지 포트
     networks:
       - app-network
 

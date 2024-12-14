@@ -54,7 +54,7 @@ export class VideoService {
     return {
       key: videoCode,
       ...(accessKey && {
-        link: `https://localhost:3000/video/${savedVideo.id}?accessKey=${accessKey}`,
+        link: `/video/${savedVideo.id}?accessKey=${accessKey}`,
       }),
     };
   }
@@ -194,7 +194,7 @@ export class VideoService {
   async getVideoLink(id: number): Promise<object> {
     const foundVideo = await this.findVideoById(id);
     const accessKey = foundVideo.accessKey;
-    const baseUrl = `http://localhost:3000`;
+    const baseUrl = `http://localhost:3000`; //배포 주소로 수정 필요요
 
     let url;
     if (foundVideo.visibility === Visibility.PUBLIC) {

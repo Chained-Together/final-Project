@@ -19,6 +19,8 @@ export const mockUser: UserEntity = {
   deletedAt: null,
   likes: [],
   channel: null,
+  obsStreamKey: null,
+  liveStreaming: null,
 };
 
 export const mockResolution: ResolutionEntity = {

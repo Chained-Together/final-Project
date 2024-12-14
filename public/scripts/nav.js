@@ -71,7 +71,7 @@ if (!token) {
 
 let storedNotifications = JSON.parse(localStorage.getItem('pastNotifications')) || [];
 
-const eventSource = new EventSource(`http://localhost:3000/notifications/stream?token=${token}`);
+const eventSource = new EventSource(`/notifications/stream?token=${token}`);
 
 eventSource.onmessage = (event) => {
   const data = JSON.parse(event.data);

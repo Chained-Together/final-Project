@@ -189,7 +189,7 @@ function showPopup(thumbnail) {
         visibility: visibilityInput.value,
       };
 
-      const response = await fetch(`http://localhost:3000/video/${videoId}`, {
+      const response = await fetch(`/video/${videoId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
