@@ -34,7 +34,7 @@ export class AuthController {
   async googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
     const token = await this.authService.googleLogin(req);
     console.log(token);
-    // res.setHeader('Authorization', token.access_token);
+    res.setHeader('Authorization', token.access_token);
     res.redirect(`/?token=${token.access_token}`);
   }
 

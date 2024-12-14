@@ -1,66 +1,55 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-  <script src="https://vjs.zencdn.net/8.3.0/video.min.js"></script>
-  <title>Hls Practice</title>
-  <style>
-    video {
-      max-width: 500px;
-      width: 100%;
-      max-height: 500px;
-      height: 100%;
-      object-fit: fill;
-    }
-  </style>
-</head>
-
-<body>
-  <video id="video" controls playsinline autoplay></video>
-
-
-  <script>
-
-    let video = null;
-
-    let videoSrc = 'http://121.181.193.159:8080/hls/stream.m3u8';
-
-
-    const initVideo = () => {
-      video = document.querySelector('#video')
-    }
-
-
-    window.addEventListener("DOMContentLoaded", () => {
-      initVideo();
-    })
-
-
-
-    const initHls = () => {
-      if (Hls.isSupported()) {
-        hls = new Hls({
-          autoStartLoad: false,
-        });
-        hls.loadSource(videoSrc);
-        hls.attachMedia(video);
-        hls.startLoad();
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="https://vjs.zencdn.net/8.3.0/video.min.js"></script>
+    <title>Hls Practice</title>
+    <style>
+      video {
+        max-width: 500px;
+        width: 100%;
+        max-height: 500px;
+        height: 100%;
+        object-fit: fill;
       }
+    </style>
+  </head>
 
-      else {
-        video.src = videoSrc;
-      }
-    }
+  <body>
+    <video id="video" controls playsinline autoplay></video>
 
+    <script>
+      let video = null;
 
-    window.addEventListener("DOMContentLoaded", () => {
-      initVideo();
-      initHls();
-    })
-  </script>
-</body>
+      let videoSrc = 'http://localhost:8888/hls/a2903906.m3u8';
 
+      const initVideo = () => {
+        video = document.querySelector('#video');
+      };
+
+      window.addEventListener('DOMContentLoaded', () => {
+        initVideo();
+      });
+
+      const initHls = () => {
+        if (Hls.isSupported()) {
+          hls = new Hls({
+            autoStartLoad: false,
+          });
+          hls.loadSource(videoSrc);
+          hls.attachMedia(video);
+          hls.startLoad();
+        } else {
+          video.src = videoSrc;
+        }
+      };
+
+      window.addEventListener('DOMContentLoaded', () => {
+        initVideo();
+        initHls();
+      });
+    </script>
+  </body>
 </html>
