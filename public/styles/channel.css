@@ -1,15 +1,6 @@
 body {
   background-color: #242424; /* 연한 회색 */
 }
-.channel-info {
-  text-align: center;
-  width: 700px;
-  height: 250px;
-  position: absolute;
-  top: 7%;
-  left: 20%;
-  font-family: 'Jua', sans-serif;
-}
 
 .profile-btn {
   position: absolute;
