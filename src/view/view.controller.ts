@@ -36,7 +36,7 @@ export class ViewController {
   }
 
   @Get('/myChannel')
-  @Render('my-channel')
+  @Render('new-channel')
   showChannelPage() {
     return;
   }
