@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   // channelEditContainer.classList.add('channel-edit-container');
   document.body.insertBefore(channelEditContainer, thumbnailsContainer);
 
+
+  
   if (!token) {
     channelNameElement.textContent = '로그인이 필요합니다.';
     return;

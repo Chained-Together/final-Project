@@ -4,14 +4,14 @@ document.getElementById('toggleButton').addEventListener('click', function () {
     header.style.display === 'none' || header.style.display === '' ? 'block' : 'none';
 });
 
-const urlParams = new URLSearchParams(window.location.search);
-const token = localStorage.getItem('token') || urlParams.get('token');
+const token = localStorage.getItem('token');
 
 const logoutBtn = document.getElementById('logoutBtn');
 const logoutText = document.getElementById('logoutText');
 if (!token) {
-  document.getElementById('myChannelBtn').style.display = 'none';
+  document.getElementById('myChannelLink').style.display = 'none';
   document.getElementById('notificationBtn').style.display = 'none';
+  document.getElementById('livestreaming').style.display = 'none';
   if (logoutText) logoutText.textContent = '로그인';
 
   logoutBtn.addEventListener('click', () => {
@@ -25,6 +25,7 @@ const buttonText = document.getElementById('buttonText');
 
 if (token) {
   logoutBtn.addEventListener('click', () => {
+    document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
     localStorage.removeItem('token');
     localStorage.removeItem('pastNotifications');
     alert('로그아웃 되었습니다.');
@@ -40,26 +41,26 @@ if (liveBtn) {
   liveBtn.addEventListener('click', () => {
     const token = localStorage.getItem('token');
     if (token) {
-      window.location.href = 'http://www.loopfiy.com/stream';
+      window.location.href = 'http://www.loopfiy.com/liveStream';
     } else {
       alert('로그인이 필요한 서비스입니다.');
       window.location.href = '/login';
     }
+
   });
 }
 
-// 기존 코드 계속...
 
 const setImageSrc = (src) => {
   document.querySelectorAll('#profileImage').forEach((img) => (img.src = src));
 };
 
-if (urlParams.get('token') && !localStorage.getItem('token')) {
+if (!localStorage.getItem('token')) {
   localStorage.setItem('token', urlParams.get('token'));
   console.log('URL에서 토큰을 로컬 스토리지에 저장 완료:', urlParams.get('token'));
 }
 
-const DEFAULT_PROFILE_IMAGE = 'public/images/user-50.png';
+const DEFAULT_PROFILE_IMAGE = '/public/images/user-50.png';
 
 if (!token) {
   setImageSrc(DEFAULT_PROFILE_IMAGE);
@@ -207,6 +208,6 @@ document.getElementById('home').addEventListener('click', () => {
   window.location.href = '/';
 });
 
-document.getElementById('myChannelBtn').addEventListener('click', () => {
+document.getElementById('myChannelLink').addEventListener('click', () => {
   window.location.href = '/myChannel';
 });

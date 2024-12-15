@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="kr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Loopfiy</title>
+    <!-- 부트 스트렙 -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- nav로고 폰트 -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Gamja+Flower&family=Gasoek+One&family=Hi+Melody&family=Jua&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+      rel="stylesheet"
+    />
+    <!-- nav로고 이미지 -->
+    <script src="https://kit.fontawesome.com/6a4db89020.js" crossorigin="anonymous"></script>
+    <link
+      href="https://demos.creative-tim.com/argon-dashboard-pro/assets/css/nucleo-svg.css"
+      rel="stylesheet"
+    />
+    <!-- nav CSS 파일 -->
+    <link rel="stylesheet" href="/public/styles/nav.css" />
+    <!-- video list CSS 파일 -->
+    <link rel="stylesheet" href="public\styles\new-video-list.css">
+    <link rel="stylesheet" href="/public/styles/main.css" />
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+  </head>
+<body class="channel-body">
+  <!-- nav바 -->
+  <%- include('nav') %>
+
+  <div class="main-channel">
+    <h4>회원님이 좋아할 만한 콘텐츠</h4>
+    <!-- 영상 컨테이너 -->
+    <div class="video-list-container">
+
+      <!-- 영상 카드드 -->
+      <div class="video-list-box container" id="videoBox">
+      </div>
+
+    </div>
+  </div>
+
+
+
+  <script src="public\scripts\main.js"></script>
+</body>
+</html>

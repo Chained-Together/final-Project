@@ -1,7 +1,9 @@
 document.addEventListener('DOMContentLoaded', async () => {
   const urlParams = new URLSearchParams(window.location.search);
-  const token = localStorage.getItem('token') || urlParams.get('token');
+  const token = localStorage.getItem('token') 
   const profileImageElements = document.querySelectorAll('.profileImage');
+
+console.log('token',token)
 
   const setImageSrc = (src) => {
     profileImageElements.forEach((img) => {
@@ -10,7 +12,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
 
   if (urlParams.get('token') && !localStorage.getItem('token')) {
-    localStorage.setItem('token', urlParams.get('token'));
+  localStorage.setItem('token', urlParams.get('token'));
+   console.log('token12341234',token)
 
     console.log('URL에서 토큰을 로컬 스토리지에 저장 완료:', urlParams.get('token'));
   }
@@ -40,6 +43,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.error('오류:', error);
     setImageSrc('/path/to/default-profile.png');
   }
+  
 });
 
 let isFetching = false; // 중복 요청 방지 플래그
@@ -65,7 +69,7 @@ function createVideoElement(video) {
   }
 
   const shortFormItem = document.createElement('div');
-  shortFormItem.className = 'shortForm-item';
+  shortFormItem.className = 'video-card';
   console.log(shortFormItem);
 
   shortFormItem.addEventListener('click', () => {
@@ -74,13 +78,13 @@ function createVideoElement(video) {
 
   if (video.thumbnailUrl) {
     const placeholderVideo = document.createElement('div');
-    placeholderVideo.className = 'placeholder-video';
+    placeholderVideo.className = 'video-card';
     placeholderVideo.style.backgroundImage = `url('${video.thumbnailUrl}')`;
     shortFormItem.appendChild(placeholderVideo);
   }
 
   if (video.title) {
-    const placeholderTitle = document.createElement('div');
+    const placeholderTitle = document.createElement('p');
     placeholderTitle.className = 'placeholder-title';
     placeholderTitle.textContent = video.title;
     shortFormItem.appendChild(placeholderTitle);
@@ -101,7 +105,7 @@ function appendVideos(container, videos) {
 
 // 초기 로드 및 스크롤 처리
 async function initialize() {
-  const shortFormGrid = document.querySelector('.shortForm-grid');
+  const shortFormGrid = document.getElementById('videoBox');
 
   try {
     // 초기 데이터 로드
