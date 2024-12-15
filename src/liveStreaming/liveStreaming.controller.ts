@@ -20,6 +20,7 @@ export class LiveStreamingController {
 
   @Get('list')
   async getLiveStreams() {
+    console.log('라이브 방송 조회 시작');
     return await this.liveStreamingService.getAllLiveStreams();
   }
 }

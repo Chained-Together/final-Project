@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       },
     });
 
+    console.log(response);
+
     if (!response.ok) {
       throw new Error('라이브 목록을 불러오는데 실패했습니다.');
     }

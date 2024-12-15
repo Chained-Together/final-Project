@@ -38,7 +38,7 @@ if (token) {
 const liveBtn = document.getElementById('liveBtn');
 if (liveBtn) {
   liveBtn.addEventListener('click', () => {
-    window.location.href = '/liveStreaming/list';
+    window.location.href = '/liveStream';
   });
 }
 
@@ -48,7 +48,7 @@ const setImageSrc = (src) => {
   document.querySelectorAll('#profileImage').forEach((img) => (img.src = src));
 };
 
-if (urlParams.get('token') && !localStorage.getItem('token')) {
+if (!localStorage.getItem('token')) {
   localStorage.setItem('token', urlParams.get('token'));
   console.log('URL에서 토큰을 로컬 스토리지에 저장 완료:', urlParams.get('token'));
 }
@@ -201,6 +201,6 @@ document.getElementById('home').addEventListener('click', () => {
   window.location.href = '/';
 });
 
-document.getElementById('myChannelBtn').addEventListener('click', () => {
+document.getElementById('myChannelLink').addEventListener('click', () => {
   window.location.href = '/myChannel';
 });

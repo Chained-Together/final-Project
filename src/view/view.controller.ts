@@ -107,7 +107,7 @@ export class ViewController {
   showMainChat(@UserInfo() user: UserEntity) {
     return { roomId: 'main-room', user };
   }
-  @Get('/liveStreaming/list')
+  @Get('/liveStream')
   @Render('live')
   showLiveList() {
     return;
