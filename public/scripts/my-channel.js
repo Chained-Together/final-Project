@@ -30,8 +30,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const videoResponse = await fetch(`/video/my/${channelData.id}`, {
       method: 'GET',
     });
-    console.log(channelData.id);
-    console.log(videoResponse);
 
     if (!videoResponse.ok) {
       throw new Error('비디오를 로드하지 못했습니다.');
