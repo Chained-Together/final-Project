@@ -51,6 +51,7 @@ loginForm.addEventListener('submit', async (event) => {
     alert(`로그인 중 오류 발생: ${error.message}`);
   }
 });
+
 document.getElementById('google-connect').addEventListener('click', (event) => {
   event.preventDefault();
   // 구글 소셜 로그인 엔드포인트로 리다이렉트
@@ -62,48 +63,33 @@ document.getElementById('naver-connect').addEventListener('click', (event) => {
   // 네이버 소셜 로그인 엔드포인트로 리다이렉트
   window.location.href = '/auth/naver';
 });
-// 쿠키에서 토큰을 가져오는 함수
+  // 소셜 로그인 후 콜백에서 토큰 처리
+  if (
+    window.location.pathname.includes('/google/callback')
+    // window.location.pathname.includes('/naver/callback')
+  ) {
+    // 쿠키에서 토큰 가져오기
+    const token = getCookie('Authorization');
+    console.log('쿠키에서 가져온 토큰:', token); // 디버깅용
+
+    if (token) {
+      // 쿠키에서 가져온 토큰을 localStorage에 저장
+      localStorage.setItem('token', token);
+      console.log('토큰이 로컬스토리지에 저장되었습니다:', token);
+
+      // 메인 페이지로 리다이렉트
+      window.location.href = '/';
+    } else {
+      console.error('쿠키에 Authorization 토큰이 존재하지 않습니다.');
+    }
+  }
+
+// getCookie 함수
 function getCookie(name) {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
   if (parts.length === 2) return parts.pop().split(';').shift();
 }
-
-// 소셜 로그인 후 쿠키에서 토큰을 가져와 로컬스토리지에 저장
-if (window.location.pathname.includes('/google/callback') || window.location.pathname.includes('/naver/callback')) {
-  const token = getCookie('Authorization');
-  if (token) {
-    localStorage.setItem('token', token); // 쿠키에서 토큰을 가져와 로컬스토리지에 저장
-    console.log('소셜 로그인 후 토큰이 저장되었습니다:', token);
-
-    // 메인 페이지로 리다이렉트
-    window.location.href = '/';
-  } else {
-    console.error('토큰이 쿠키에 존재하지 않습니다.');
-  }
-}
-// // 소셜 로그인 후 콜백에서 토큰 처리
-// if (
-//   window.location.pathname.includes('/google/callback') ||
-//   window.location.pathname.includes('/naver/callback')
-// ) 
-// function getCookie(name) {
-//   const value = `; ${document.cookie}`;
-//   const parts = value.split(`; ${name}=`);
-//   if (parts.length === 2) return parts.pop().split(';').shift();
-// }
-
-// const token = getCookie('Authorization');
-// if (token) {
-//   // 필요하면 localStorage에 저장
-//   localStorage.setItem('token', token);
-//   console.log('토큰이 저장되었습니다:', token);
-
-//   // 메인 페이지로 리다이렉트
-//   window.location.href = '/';
-// } else {
-//   console.error('토큰이 쿠키에 존재하지 않습니다.');
-// }
 
 document.getElementById('signupBtn').addEventListener('click', (event) => {
   event.preventDefault();

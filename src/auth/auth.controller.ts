@@ -34,9 +34,13 @@ export class AuthController {
   async googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
     const token = await this.authService.googleLogin(req);
     console.log(token);
-    // res.setHeader('Authorization', token.access_token);
-    // res.redirect(`/`);
-    res.status(200).json({access_token:token.access_token})
+    res.cookie('Authorization', token.access_token, {
+      httpOnly: false, // 쿠키를 JS에서 접근할 수 있도록 설정
+      secure: false, // 개발 환경에서 HTTP로도 접근 가능하도록 설정
+      maxAge: 3600000, // 쿠키 만료 시간 (1시간)
+      sameSite: 'strict',
+    });
+    res.redirect(`/`);
   }
 
   @Get('naver')

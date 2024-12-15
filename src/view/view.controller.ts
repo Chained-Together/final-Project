@@ -6,6 +6,12 @@ import { HeaderLoggerGuard } from '../utils/header-log.guard';
 
 @Controller('')
 export class ViewController {
+  @Get('/videolist')
+  @Render('new-video-list')
+  showListPage() {
+    return;
+  }
+
   @Get('/signin')
   @Render('signin')
   showSigninPage() {

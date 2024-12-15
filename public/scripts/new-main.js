@@ -52,13 +52,11 @@ async function playVideo(videoId) {
   if (videoData?.message) {
     throw new Error(videoData.message);
   }
-  console.log('videoData', videoData);
 
   globalVideoData = videoData;
 
   // HLS.js를 사용해 비디오 재생
   const hlsUrl = videoData?.videoUrl;
-  console.log('HLS URL:', hlsUrl);
   if (!hlsUrl) {
     throw new Error('비디오 URL이 없습니다.');
   }
@@ -83,9 +81,9 @@ async function playVideo(videoId) {
     video.src = hlsUrl;
     video.autoplay = true; // autoplay 속성 추가
     video.controls = true; // 사용자 컨트롤 제공
-    // video.addEventListener('loadedmetadata', () => {
-    //   video.play(); // 비디오가 준비되면 자동 재생
-    // });
+    video.addEventListener('loadedmetadata', () => {
+      video.play(); // 비디오가 준비되면 자동 재생
+    });
   } else {
     console.error('HLS.js는 이 브라우저에서 지원되지 않습니다.');
     const errorMsg = document.createElement('div');
@@ -105,13 +103,13 @@ let videoIdsIndex = 0
 document.addEventListener('DOMContentLoaded', async () => {
   //1-1:초기로드 비디오 가져오기
   const videoData = await fetchVideos();
-  console.log('1:초기로드 비디오 가져오기',videoData);
+  // console.log('1:초기로드 비디오 가져오기',videoData);
 
   //1-2:비디오ID들만 videoIds에 추출하기기
   for (let i = 0; i < videoData.length; i++) {
     videoIds.push(videoData[i].id);
   }
-  console.log('2:비디오ID들만 추출하기기', videoIds);
+  // console.log('2:비디오ID들만 추출하기기', videoIds);
 
   //1-3:가저온 첫번째 비디오를 재생한다다
   playVideo(videoIds[0])
