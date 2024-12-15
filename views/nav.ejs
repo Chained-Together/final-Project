@@ -24,103 +24,107 @@
 
 
 <nav class="navbar bg-body-tertiary">
-    <div class="container-fluid">
-      <div class="left-section log">
-        <img
-          id="toggleButton"
-          src="public\images\menu-30.png"
-          alt="Toggle Header"
-          style="cursor: pointer"
-        />
-        <i class="fa-solid fa-bolt"></i>
-        <a class="bungee-spice-regular">Loopfiy</a>
-      </div>
-
-      <form id="searchForm" class="d-flex" role="search">
-        <div class="search_container">
-          <input
-            id="searchInput"
-            class="search_input"
-            type="text"
-            placeholder="Search"
-            aria-label="Search"
-          />
-        </div>
-        <button type="submit" class="search-btn">
-          <img src="public/images/search-50.png" alt="Search Icon" />
-        </button>
-      </form>
-
-      <div class="right-section"></div>
+  <div class="container-fluid">
+    <div class="left-section log">
+      <img
+        id="toggleButton"
+        src="public\images\menu-30.png"
+        alt="Toggle Header"
+        style="cursor: pointer"
+      />
+      <i class="fa-solid fa-bolt"></i>
+      <a class="bungee-spice-regular">Loopfiy</a>
     </div>
-  </nav>
-  <header class="LoopfiyBar" id="toggleHeader" style="display: none">
-    <div class="sidebar-menu-btn-box">
-      <button class="sidebar-menu-btn" id="home">
-        <img src="public\images\home-50.png" alt="" />
-        홈
-      </button>
 
-      <button class="sidebar-menu-btn" id="notificationBtn">
-        <img src="public\images\reminder-50.png" alt="" />
-        알림
+    <form id="searchForm" class="d-flex" role="search">
+      <div class="search_container">
+        <input
+          id="searchInput"
+          class="search_input"
+          type="text"
+          placeholder="Search"
+          aria-label="Search"
+        />
+      </div>
+      <button type="submit" class="search-btn">
+        <img src="public/images/search-50.png" alt="Search Icon" />
       </button>
-      <div
-        id="notificationPopup"
+    </form>
+
+    <div class="right-section"></div>
+  </div>
+</nav>
+<header class="LoopfiyBar" id="toggleHeader" style="display: none">
+  <div class="sidebar-menu-btn-box">
+    <button class="sidebar-menu-btn" id="home">
+      <img src="public\images\home-50.png" alt="" />
+      홈
+    </button>
+
+    <button class="sidebar-menu-btn" id="notificationBtn">
+      <img src="public\images\reminder-50.png" alt="" />
+      알림
+    </button>
+    <button class="sidebar-menu-btn" id="liveBtn">
+      <img src="public\images\live-50.png" alt="" />
+      Live
+    </button>
+    <div
+      id="notificationPopup"
+      style="
+        display: none;
+        position: fixed;
+        top: 20%;
+        left: 50%;
+        transform: translate(-50%, 0);
+        background: #333333;
+        width: 100%;
+        max-width: 400px;
+        height: 50%;
+        border: 2px solid #ccc;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        overflow-y: auto;
+        z-index: 1000;
+      "
+    >
+      <div id="notificationList"></div>
+      <button
+        id="closePopupBtn"
         style="
-          display: none;
           position: fixed;
-          top: 20%;
           left: 50%;
-          transform: translate(-50%, 0);
-          background: #333333;
-          width: 100%;
-          max-width: 400px;
-          height: 50%;
-          border: 2px solid #ccc;
+          transform: translateX(-50%);
+          padding: 10px 20px;
+          background-color: #ffa600;
+          color: #ffffff;
+          border: none;
           border-radius: 8px;
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-          overflow-y: auto;
-          z-index: 1000;
+          font-size: 14px;
+          font-weight: bold;
+          cursor: pointer;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+          transition:
+            background-color 0.3s ease,
+            transform 0.2s ease;
         "
       >
-        <div id="notificationList"></div>
-        <button
-          id="closePopupBtn"
-          style="
-            position: fixed;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 10px 20px;
-            background-color: #ffa600;
-            color: #ffffff;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-            transition:
-              background-color 0.3s ease,
-              transform 0.2s ease;
-          "
-        >
-          닫기
-        </button>
-      </div>
-
-      <a href="/myChannel">
-        <button class="sidebar-menu-btn" id="myChannelLink">
-          <img src="public\images\user-50.png" alt="" id="profileImage" />
-          내 채널
-        </button>
-      </a>
-    </div>
-
-    <div class="sidebar-menu-btn-box logout-box">
-      <button id="logoutBtn" class="sidebar-logout-btn">
-        <span id="logoutText">로그아웃</span>
+        닫기
       </button>
     </div>
-  </header>
-  <script src="/public/scripts/nav.js"></script>
+
+    <a href="/myChannel">
+      <button class="sidebar-menu-btn" id="myChannelLink">
+        <img src="public\images\user-50.png" alt="" id="profileImage" />
+        내 채널
+      </button>
+    </a>
+  </div>
+
+  <div class="sidebar-menu-btn-box logout-box">
+    <button id="logoutBtn" class="sidebar-logout-btn">
+      <span id="logoutText">로그아웃</span>
+    </button>
+  </div>
+</header>
+<script src="/public/scripts/nav.js"></script>
