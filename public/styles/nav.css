@@ -87,7 +87,7 @@ a {
 
 .sidebar-menu-btn-box {
   border-bottom: 2px solid #fff;
-  padding-bottom: 10px;
+  padding: 10px;
 }
 
 .at {
@@ -312,4 +312,9 @@ a {
 
 .optionBtn {
   width: 50px;
+}
+
+.lest-text{
+  padding: 10px;
+  color: #666666;
 }

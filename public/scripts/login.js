@@ -62,23 +62,48 @@ document.getElementById('naver-connect').addEventListener('click', (event) => {
   // 네이버 소셜 로그인 엔드포인트로 리다이렉트
   window.location.href = '/auth/naver';
 });
+// 쿠키에서 토큰을 가져오는 함수
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+}
 
-// 소셜 로그인 후 콜백에서 토큰 처리
-if (
-  window.location.pathname.includes('/google/callback') ||
-  window.location.pathname.includes('/naver/callback')
-) {
-  const urlParams = new URLSearchParams(window.location.search);
-  console.log('urlParams',urlParams)
-  const token = urlParams.get('token');
+// 소셜 로그인 후 쿠키에서 토큰을 가져와 로컬스토리지에 저장
+if (window.location.pathname.includes('/google/callback') || window.location.pathname.includes('/naver/callback')) {
+  const token = getCookie('Authorization');
   if (token) {
-    localStorage.setItem('token', token);
+    localStorage.setItem('token', token); // 쿠키에서 토큰을 가져와 로컬스토리지에 저장
+    console.log('소셜 로그인 후 토큰이 저장되었습니다:', token);
 
+    // 메인 페이지로 리다이렉트
     window.location.href = '/';
   } else {
-    console.error('토큰이 전달되지 않았습니다.');
+    console.error('토큰이 쿠키에 존재하지 않습니다.');
   }
 }
+// // 소셜 로그인 후 콜백에서 토큰 처리
+// if (
+//   window.location.pathname.includes('/google/callback') ||
+//   window.location.pathname.includes('/naver/callback')
+// ) 
+// function getCookie(name) {
+//   const value = `; ${document.cookie}`;
+//   const parts = value.split(`; ${name}=`);
+//   if (parts.length === 2) return parts.pop().split(';').shift();
+// }
+
+// const token = getCookie('Authorization');
+// if (token) {
+//   // 필요하면 localStorage에 저장
+//   localStorage.setItem('token', token);
+//   console.log('토큰이 저장되었습니다:', token);
+
+//   // 메인 페이지로 리다이렉트
+//   window.location.href = '/';
+// } else {
+//   console.error('토큰이 쿠키에 존재하지 않습니다.');
+// }
 
 document.getElementById('signupBtn').addEventListener('click', (event) => {
   event.preventDefault();

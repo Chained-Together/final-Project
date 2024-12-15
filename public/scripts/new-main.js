@@ -1,25 +1,10 @@
 let globalVideoData = null;
 let lastVideoId = null;
-let videoIds = [];
 
-//1. 초기 로드에 비디오를 가져와서 재생한다다
-document.addEventListener('DOMContentLoaded', async () => {
-  console.log('1:초기로드 비디오 가져오기', await fetchVideos());
-  //1:초기로드 비디오 가져오기
-  fetchVideos();
-
-  let videoData = fetchVideos();
-  for (let i = 0; i < videoData.length; i++) {
-    videoIds.push(videoData[i].id);
-  }
-  console.log('2:비디오ID들만 추출하기기', videoIds);
-
-  // console.log('3:추춣한 비디오id를 videoArr에 푸쉬하기',videoArr);
-});
 
 //lastId의 이후 6개의 비디오를 로드함함
 async function fetchVideos(lastId) {
-  const url = lastId ? `video/many/${lastId}/6` : 'video/many/1/6';
+  const url = lastId ? `video/many/${lastId}/6` : 'video/many/0/50';
   const response = await fetch(url, { method: 'GET' });
 
   if (!response.ok) {
@@ -84,7 +69,6 @@ async function playVideo(videoId) {
     hls.loadSource(hlsUrl);
     hls.attachMedia(video); // 기존 video 요소에 연결
     hls.on(Hls.Events.MANIFEST_PARSED, () => {
-      console.log('HLS manifest loaded. Starting playback...');
       video.play(); // 비디오가 준비되면 자동 재생
     });
     hls.on(Hls.Events.ERROR, (event, data) => {
@@ -99,10 +83,9 @@ async function playVideo(videoId) {
     video.src = hlsUrl;
     video.autoplay = true; // autoplay 속성 추가
     video.controls = true; // 사용자 컨트롤 제공
-    video.addEventListener('loadedmetadata', () => {
-      console.log('Native HLS support detected. Starting playback...');
-      video.play(); // 비디오가 준비되면 자동 재생
-    });
+    // video.addEventListener('loadedmetadata', () => {
+    //   video.play(); // 비디오가 준비되면 자동 재생
+    // });
   } else {
     console.error('HLS.js는 이 브라우저에서 지원되지 않습니다.');
     const errorMsg = document.createElement('div');
@@ -112,13 +95,67 @@ async function playVideo(videoId) {
   }
 }
 
-playVideo(20);
+//-----------------------------로직---------------------------------
+//-----------------------------로직---------------------------------
 
-$('#nextButton').on('click', async () => {
-  index++;
-  if (videoArr[a][index] === videoArr[a].length - 1) {
-    videoArr.push(await fetchVideos(lastVideoId));
-    index = 0;
-    a++;
+let videoIds = [];
+let videoIdsIndex = 0
+
+//1. 초기 로드에 비디오를 가져와서 재생한다다
+document.addEventListener('DOMContentLoaded', async () => {
+  //1-1:초기로드 비디오 가져오기
+  const videoData = await fetchVideos();
+  console.log('1:초기로드 비디오 가져오기',videoData);
+
+  //1-2:비디오ID들만 videoIds에 추출하기기
+  for (let i = 0; i < videoData.length; i++) {
+    videoIds.push(videoData[i].id);
   }
+  console.log('2:비디오ID들만 추출하기기', videoIds);
+
+  //1-3:가저온 첫번째 비디오를 재생한다다
+  playVideo(videoIds[0])
 });
+
+//2. 다음 버튼을 누르면 videoIds의 다음 index번호를 다음 영상이 재생된다
+const nextButton = document.getElementById('nextButton')
+nextButton.addEventListener('click', async () => {
+  //2-1:버튼을 누를때마다 인덱스 번호 추가
+  videoIdsIndex++
+  // console.log('다음버튼을 누를때마다 인덱스 번호 추가',videoIdsIndex);
+  
+
+  //2-2:인덱스 번호로 다음 id찾아서 재생생
+  if (videoIds && videoIds[videoIdsIndex] !== undefined) {
+    playVideo(videoIds[videoIdsIndex]);
+  } else {
+    videoIdsIndex = 0
+    errBox.style.display = 'block';
+    setTimeout(()=>{
+      errBox.style.display = 'none';
+    },1500)
+    console.log('더 이상 재생할 영상이 없습니다.');
+  }
+})
+
+//3. 이전 버튼을 누르면 videoIds의 다음 index번호를 이전전 영상이 재생된다
+const errBox = document.querySelector('.err-box');
+const prevButton = document.getElementById('prevButton')
+prevButton.addEventListener('click', async () => {
+  //2-1:버튼을 누를때마다 인덱스 번호 추가
+  videoIdsIndex--
+  // console.log('다음버튼을 누를때마다 인덱스 번호 추가',videoIdsIndex);
+  
+
+  //2-2:인덱스 번호로 다음 id찾아서 재생생
+  if (videoIds && videoIds[videoIdsIndex] !== undefined) {
+    playVideo(videoIds[videoIdsIndex]);
+  } else {
+    videoIdsIndex = 0
+    errBox.style.display = 'block';
+    setTimeout(()=>{
+      errBox.style.display = 'none';
+    },1500)
+    console.log('더 이상 재생할 영상이 없습니다.');
+  }
+})
