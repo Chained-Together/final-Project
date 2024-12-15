@@ -38,4 +38,15 @@ export class LiveStreamingRepository implements ILiveStreamingRepository {
 
     return liveStreams;
   }
+
+  async findLiveStreamById(id: string): Promise<LiveStreamingEntity> {
+    return await this.repository
+      .createQueryBuilder('liveStreaming')
+      .leftJoinAndSelect('liveStreaming.user', 'user')
+      .leftJoinAndSelect('user.channel', 'channel')
+      .leftJoinAndSelect('user.obsStreamKey', 'obsStreamKey')
+      .where('liveStreaming.id = :id', { id })
+      .andWhere('obsStreamKey.status = :status', { status: true })
+      .getOne();
+  }
 }

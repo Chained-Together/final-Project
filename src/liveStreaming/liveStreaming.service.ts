@@ -34,13 +34,6 @@ export class LiveStreamingService {
       }
 
       const mappedStreams = liveStreams.map((streamEntity) => {
-        console.log('Processing stream:', {
-          id: streamEntity.id,
-          title: streamEntity.title,
-          user: streamEntity.user,
-          channel: streamEntity.user?.channel,
-        });
-
         return {
           id: streamEntity.id,
           title: streamEntity.title,
@@ -57,5 +50,22 @@ export class LiveStreamingService {
       console.error('Error in getAllLiveStreams:', error);
       throw error;
     }
+  }
+
+  async getLiveStreamById(id: string) {
+    const liveStream = await this.liveStreamingRepository.findLiveStreamById(id);
+    if (!liveStream) {
+      throw new NotFoundException('라이브 스트림을 찾을 수 없습니다.');
+    }
+
+    return {
+      id: liveStream.id,
+      title: liveStream.title,
+      profileImage: liveStream.user?.channel?.profileImage,
+      channelName: liveStream.user?.channel?.name,
+      nickname: liveStream.user?.nickname,
+      streamingUrl: liveStream.user?.obsStreamKey?.streamingUrl,
+      viewer: liveStream.viewer,
+    };
   }
 }
