@@ -16,4 +16,17 @@ export class LiveStreamingRepository implements ILiveStreamingRepository {
   save(liveStreaming: LiveStreamingEntity): Promise<LiveStreamingEntity> {
     return this.repository.save(liveStreaming);
   }
+
+  async findAllLiveStreams(): Promise<LiveStreamingEntity[]> {
+    return await this.repository.find({
+      relations: ['user', 'user.obsStreamKey'],
+      where: {
+        user: {
+          obsStreamKey: {
+            status: true,
+          },
+        },
+      },
+    });
+  }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { LiveStreamingDto } from './dto/create.liveStreaming';
 import { LiveStreamingService } from './liveStreaming.service';
@@ -16,5 +16,10 @@ export class LiveStreamingController {
     @Body() liveStreamingDto: LiveStreamingDto,
   ) {
     return this.liveStreamingService.createLiveStreaming(user.id, liveStreamingDto);
+  }
+
+  @Get('list')
+  async getLiveStreams() {
+    return await this.liveStreamingService.getAllLiveStreams();
   }
 }

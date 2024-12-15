@@ -22,4 +22,19 @@ export class LiveStreamingService {
     const liveStreaming = this.liveStreamingRepository.createLiveStreaming(title);
     return await this.liveStreamingRepository.save(liveStreaming);
   }
+  async getAllLiveStreams() {
+    const liveStreams = await this.liveStreamingRepository.findAllLiveStreams();
+
+    if (liveStreams.length === 0) {
+      throw new NotFoundException('현재 진행중인 방송이 없어요');
+    }
+
+    return liveStreams.map((streamEntity) => ({
+      id: streamEntity.id,
+      title: streamEntity.title,
+      profileImage: streamEntity.user.channel.profileImage,
+      nickname: streamEntity.user.nickname,
+      viewer: streamEntity.viewer,
+    }));
+  }
 }

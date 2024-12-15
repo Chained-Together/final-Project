@@ -3,4 +3,5 @@ import { LiveStreamingEntity } from 'src/liveStreaming/entities/liveStreaming.en
 export interface ILiveStreamingRepository {
   createLiveStreaming(title: string): LiveStreamingEntity;
   save(liveStreaming: LiveStreamingEntity): Promise<LiveStreamingEntity>;
+  findAllLiveStreams(): Promise<LiveStreamingEntity[]>;
 }
