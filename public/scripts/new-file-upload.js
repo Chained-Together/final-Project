@@ -1,10 +1,10 @@
-const uploadBtn = document.getElementById('uploadBtn');
-const fileInput = document.getElementById('fileInput');
+const upload = document.getElementById('uploadbtn');
+const fileInput = document.getElementById('file');
 const titleInput = document.getElementById('title');
-const descriptionInput = document.getElementById('video-description');
+const descriptionInput = document.getElementById('description');
 const hashtagsInput = document.getElementById('hashtags');
 const visibilityInput = document.getElementById('visibility');
-const token = localStorage.getItem('token');
+const uploadToken = localStorage.getItem('token');
 
 window.addEventListener('load', () => {
   const savedVisibility = localStorage.getItem('visibility');
@@ -17,7 +17,9 @@ visibilityInput.addEventListener('input', () => {
   localStorage.setItem('visibility', visibilityInput.value);
 });
 
-uploadBtn.addEventListener('click', async () => {
+upload.addEventListener('click', async () => {
+  console.log(1);
+  
   const file = fileInput.files[0];
   if (!file) {
     alert('파일을 선택해주세요.');
@@ -34,9 +36,10 @@ uploadBtn.addEventListener('click', async () => {
 
     const response = await fetch('/s3/generate-url', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${uploadToken}` },
       body: JSON.stringify(payload),
     });
+    console.log(response)
 
     if (!response.ok) throw new Error('Pre-signed URL 요청 실패');
 
@@ -68,7 +71,7 @@ uploadBtn.addEventListener('click', async () => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${uploadToken}`,
       },
       redirect: 'follow',
       body: JSON.stringify(metadataPayload),
@@ -87,5 +90,17 @@ uploadBtn.addEventListener('click', async () => {
     }
   } catch (error) {
     alert(`업로드 중 오류 발생: ${error.message}`);
+  }
+});
+
+document.getElementById("file").addEventListener("change", function (event) {
+  const fileInput = event.target;
+  const fileNameDisplay = document.getElementById("fileNameDisplay");
+
+  if (fileInput.files.length > 0) {
+    const fileName = fileInput.files[0].name; // 업로드된 파일명 가져오기
+    fileNameDisplay.textContent = fileName; // 파일명을 <p>에 표시
+  } else {
+    fileNameDisplay.textContent = "영상파일을 첨부 하세요"; // 파일이 없을 경우 기본 메시지 표시
   }
 });

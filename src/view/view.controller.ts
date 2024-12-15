@@ -55,7 +55,7 @@ export class ViewController {
   }
 
   @Get('/upload')
-  @Render('file-upload')
+  @Render('new-file-upload')
   showUploadPage() {
     return;
   }

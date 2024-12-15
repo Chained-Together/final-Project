@@ -29,18 +29,29 @@ export class AuthController {
   @UseGuards(AuthGuard('google'))
   async googleAuth() {}
 
+  // @Get('google/callback')
+  // @UseGuards(AuthGuard('google'))
+  // async googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
+  //   const token = await this.authService.googleLogin(req);
+  //   console.log(token);
+  //   res.cookie('Authorization', token.access_token, {
+  //     httpOnly: false,  // 쿠키를 JavaScript에서 접근 가능하게 설정
+  //     secure: false,  // HTTPS에서만 작동하도록 설정
+  //     sameSite:'lax'
+  //   });
+  //   res.redirect(`/`);
+  // }
   @Get('google/callback')
   @UseGuards(AuthGuard('google'))
   async googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
+    console.log('Received request at /google/callback'); // 콜백 요청 로그
+  
     const token = await this.authService.googleLogin(req);
-    console.log(token);
-    res.cookie('Authorization', token.access_token, {
-      httpOnly: false, // 쿠키를 JS에서 접근할 수 있도록 설정
-      secure: false, // 개발 환경에서 HTTP로도 접근 가능하도록 설정
-      maxAge: 3600000, // 쿠키 만료 시간 (1시간)
-      sameSite: 'strict',
-    });
-    res.redirect(`/`);
+    console.log('Generated token:', token);
+  
+    res.cookie('Authorization', token.access_token)
+  
+    res.redirect('/'); // 메인 페이지로 리다이렉트
   }
 
   @Get('naver')
@@ -52,7 +63,7 @@ export class AuthController {
   async naverAuthCallback(@Req() req: Request, @Res() res: Response) {
     const token = await this.authService.naverLogin(req);
 
-    res.setHeader('Authorization', token.access_token);
+    res.cookie('Authorization', token.access_token);
     res.redirect(`/`);
   }
 }

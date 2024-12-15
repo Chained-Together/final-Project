@@ -12,6 +12,8 @@ if (!token) {
   document.getElementById('myChannelLink').style.display = 'none';
   document.getElementById('notificationBtn').style.display = 'none';
   document.getElementById('livestreaming').style.display = 'none';
+  document.getElementById('videoupload').style.display = 'none'
+  document.getElementById('logoutsisarajim').style.display = 'none'
   if (logoutText) logoutText.textContent = '로그인';
 
   logoutBtn.addEventListener('click', () => {
@@ -33,9 +35,7 @@ if (token) {
   });
 }
 
-// 기존 코드 유지...
 
-// Live 버튼 클릭 이벤트 추가
 const liveBtn = document.getElementById('liveBtn');
 if (liveBtn) {
   liveBtn.addEventListener('click', () => {
@@ -49,7 +49,12 @@ if (liveBtn) {
   });
 }
 
-// 기존 코드 계속...
+const uploadBtn = document.getElementById('videoupload')
+if(token){
+  uploadBtn.addEventListener('click',()=>{
+  window.location.href = '/upload'
+})
+}
 
 const setImageSrc = (src) => {
   document.querySelectorAll('#profileImage').forEach((img) => (img.src = src));
@@ -156,11 +161,11 @@ function openNotificationPopup() {
       item.style.transition = 'background-color 0.3s ease';
       item.style.width = '95%';
 
-      // 호버 효과 추가
+
       item.addEventListener('mouseover', () => {
-        item.style.transition = 'background-color 0.3s ease, transform 0.3s ease'; // 색상과 크기 애니메이션
-        item.style.backgroundColor = '#e9e9e9'; // 색상 변경
-        item.style.transform = 'scale(1.05)'; // 요소 크기 확대
+        item.style.transition = 'background-color 0.3s ease, transform 0.3s ease'; 
+        item.style.backgroundColor = '#e9e9e9';
+        item.style.transform = 'scale(1.05)';
       });
       item.addEventListener('mouseout', () => {
         item.style.backgroundColor = '#f9f9f9';
@@ -201,7 +206,7 @@ document.getElementById('notificationBtn').addEventListener('click', () => {
 
 document.getElementById('closePopupBtn').addEventListener('click', () => {
   const popup = document.getElementById('notificationPopup');
-  popup.style.display = 'none'; // 팝업창 숨기기
+  popup.style.display = 'none'; 
 });
 
 document.getElementById('home').addEventListener('click', () => {
