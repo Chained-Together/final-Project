@@ -23,18 +23,28 @@ export class LiveStreamingService {
     return await this.liveStreamingRepository.save(liveStreaming);
   }
   async getAllLiveStreams() {
-    const liveStreams = await this.liveStreamingRepository.findAllLiveStreams();
+    try {
+      const liveStreams = await this.liveStreamingRepository.findAllLiveStreams();
+      console.log('Found live streams:', liveStreams);
 
-    if (liveStreams.length === 0) {
-      throw new NotFoundException('현재 진행중인 방송이 없어요');
+      if (liveStreams.length === 0) {
+        throw new NotFoundException('현재 진행중인 방송이 없어요');
+      }
+
+      return liveStreams.map((streamEntity) => {
+        console.log('Processing stream entity:', streamEntity);
+        return {
+          id: streamEntity.id,
+          title: streamEntity.title,
+          profileImage: streamEntity.user?.channel?.profileImage,
+          nickname: streamEntity.user?.nickname,
+          channelName: streamEntity.user?.channel?.name,
+          viewer: streamEntity.viewer,
+        };
+      });
+    } catch (error) {
+      console.error('Error in getAllLiveStreams:', error);
+      throw error;
     }
-
-    return liveStreams.map((streamEntity) => ({
-      id: streamEntity.id,
-      title: streamEntity.title,
-      profileImage: streamEntity.user.channel.profileImage,
-      nickname: streamEntity.user.nickname,
-      viewer: streamEntity.viewer,
-    }));
   }
 }

@@ -19,7 +19,7 @@ export class LiveStreamingRepository implements ILiveStreamingRepository {
 
   async findAllLiveStreams(): Promise<LiveStreamingEntity[]> {
     return await this.repository.find({
-      relations: ['user', 'user.obsStreamKey'],
+      relations: ['user', 'user.obsStreamKey', 'user.channel'],
       where: {
         user: {
           obsStreamKey: {

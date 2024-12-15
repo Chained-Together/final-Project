@@ -25,7 +25,7 @@
     <div class="left-section log">
       <img
         id="toggleButton"
-        src="public\images\menu-30.png"
+        src="/public/images/menu-30.png"
         alt="Toggle Header"
         style="cursor: pointer"
       />
@@ -42,10 +42,10 @@
           placeholder="Search"
           aria-label="Search"
         />
+        <button type="submit" class="search-btn">
+          <img src="/public/images/search-50.png" alt="Search Icon" />
+        </button>
       </div>
-      <button type="submit" class="search-btn">
-        <img src="public/images/search-50.png" alt="Search Icon" />
-      </button>
     </form>
 
     <div class="right-section"></div>
@@ -54,12 +54,12 @@
 <header class="LoopfiyBar" id="toggleHeader" style="display: none">
   <div class="sidebar-menu-btn-box">
     <button class="sidebar-menu-btn" id="home">
-      <img src="public\images\home-50.png" alt="" />
+      <img src="/public\images\home-50.png" alt="" />
       홈
     </button>
 
     <button class="sidebar-menu-btn" id="notificationBtn">
-      <img src="public\images\reminder-50.png" alt="" />
+      <img src="/public\images\reminder-50.png" alt="" />
       알림
     </button>
     <div
@@ -108,14 +108,19 @@
 
     <a href="/myChannel">
       <button class="sidebar-menu-btn" id="myChannelLink">
-        <img src="public\images\user-50.png" alt="" id="profileImage" />
+        <img src="/public/images/user-50.png" alt="" id="profileImage" />
         내 채널
       </button>
     </a>
 
     <button class="sidebar-menu-btn" id="livestreaming">
-      <img src="public/images/icons8-전파-64.png" alt="" id="profileImage" />
+      <img src="/public/images/icons8-전파-64.png" alt="" id="profileImage" />
       방송 하기
+    </button>
+
+    <button class="sidebar-menu-btn" id="liveBtn">
+      <img src="/public/images/live-50.png" alt="" />
+      Live
     </button>
 
     <div id="streamKeyModal" class="modal">
