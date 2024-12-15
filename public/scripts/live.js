@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <div class="live-info">
                     <span class="live-badge">LIVE</span>
                     <h3 class="live-title">${live.title}</h3>
-                    <p class="live-channel">${live.channelName}</p>
+                    <p class="live-channel">${live.channelName || '알 수 없는 채널'}</p>
                 </div>
             `;
 
@@ -40,6 +40,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       liveList.appendChild(liveItem);
     });
+
+    if (lives.length === 0) {
+      liveList.innerHTML = '<p style="color: #fff;">현재 진행중인 방송이 없습니다.</p>';
+    }
   } catch (error) {
     console.error('Error:', error);
     liveList.innerHTML = '<p style="color: #fff;">라이브 방송을 불러오는데 실패했습니다.</p>';

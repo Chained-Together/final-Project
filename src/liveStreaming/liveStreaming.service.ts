@@ -19,7 +19,7 @@ export class LiveStreamingService {
     if (!checkStreamKey) {
       throw new NotFoundException('해당하는 스트림키 가 없습니다.');
     }
-    const liveStreaming = this.liveStreamingRepository.createLiveStreaming(title);
+    const liveStreaming = this.liveStreamingRepository.createLiveStreaming(title, userId);
     return await this.liveStreamingRepository.save(liveStreaming);
   }
   async getAllLiveStreams() {
@@ -28,7 +28,7 @@ export class LiveStreamingService {
       console.log('Found live streams:', liveStreams);
 
       if (liveStreams.length === 0) {
-        throw new NotFoundException('현재 진행중인 방송이 없어요');
+        return [];
       }
 
       return liveStreams.map((streamEntity) => {
