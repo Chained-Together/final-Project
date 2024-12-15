@@ -9,11 +9,8 @@ export class LiveStreamingRepository implements ILiveStreamingRepository {
     private readonly repository: Repository<LiveStreamingEntity>,
   ) {}
 
-  createLiveStreaming(title: string, userId: number): LiveStreamingEntity {
-    return this.repository.create({
-      title,
-      user: { id: userId },
-    });
+  createLiveStreaming(title: string): LiveStreamingEntity {
+    return this.repository.create({ title });
   }
 
   save(liveStreaming: LiveStreamingEntity): Promise<LiveStreamingEntity> {
@@ -21,12 +18,15 @@ export class LiveStreamingRepository implements ILiveStreamingRepository {
   }
 
   async findAllLiveStreams(): Promise<LiveStreamingEntity[]> {
-    return await this.repository
-      .createQueryBuilder('liveStreaming')
-      .leftJoinAndSelect('liveStreaming.user', 'user')
-      .leftJoinAndSelect('user.obsStreamKey', 'obsStreamKey')
-      .leftJoinAndSelect('user.channel', 'channel')
-      .where('obsStreamKey.status = :status', { status: true })
-      .getMany();
+    return await this.repository.find({
+      relations: ['user', 'user.obsStreamKey', 'user.channel'],
+      where: {
+        user: {
+          obsStreamKey: {
+            status: true,
+          },
+        },
+      },
+    });
   }
 }
