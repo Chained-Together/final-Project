@@ -118,4 +118,10 @@ export class ViewController {
   showLiveList() {
     return;
   }
+
+  @Get('live/watch/:id')
+  @Render('live-watch')
+  getLiveWatchPage() {
+    return {};
+  }
 }

@@ -25,6 +25,6 @@ export class LiveStreamingEntity {
   createdAt: Date;
 
   @OneToOne(() => UserEntity, (user) => user.liveStreaming, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'user_id' })
+  @JoinColumn()
   user: UserEntity;
 }

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="kr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Loopfiy Live</title>
+    <link rel="stylesheet" href="/public/styles/nav.css" />
+    <link rel="stylesheet" href="/public/styles/live-watch.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bungee+Spice&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="https://kit.fontawesome.com/6a4db89020.js" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <%- include('nav') %>
+
+    <div class="live-watch-container">
+      <div class="stream-section">
+        <video id="videoPlayer" controls autoplay></video>
+        <div class="stream-info">
+          <h2 id="streamTitle"></h2>
+          <div class="streamer-info">
+            <img id="streamerProfile" src="/public/images/user-50.png" alt="Streamer" />
+            <span id="streamerName"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-section">
+        <div id="chat-box"></div>
+        <div class="chat-input-container">
+          <input type="text" id="message-input" placeholder="메시지를 입력하세요" />
+          <button id="send-button">전송</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+    <script src="/public/scripts/live-watch.js"></script>
+  </body>
+</html>
