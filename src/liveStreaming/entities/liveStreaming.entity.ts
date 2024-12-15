@@ -21,6 +21,9 @@ export class LiveStreamingEntity {
   @Column({ type: 'int', default: 0 })
   viewer: number;
 
+  @Column({ type: 'int', nullable: false })
+  user_id: number;
+
   @CreateDateColumn({ type: 'timestamp', nullable: false })
   createdAt: Date;
 
