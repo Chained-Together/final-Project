@@ -4,13 +4,12 @@ document.getElementById('toggleButton').addEventListener('click', function () {
     header.style.display === 'none' || header.style.display === '' ? 'block' : 'none';
 });
 
-const urlParams = new URLSearchParams(window.location.search);
-const token = localStorage.getItem('token') || urlParams.get('token');
+const token = localStorage.getItem('token');
 
 const logoutBtn = document.getElementById('logoutBtn');
 const logoutText = document.getElementById('logoutText');
 if (!token) {
-  document.getElementById('myChannelBtn').style.display = 'none';
+  document.getElementById('myChannelLink').style.display = 'none';
   document.getElementById('notificationBtn').style.display = 'none';
   if (logoutText) logoutText.textContent = '로그인';
 
