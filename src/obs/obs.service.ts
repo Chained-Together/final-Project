@@ -22,13 +22,14 @@ export class ObsService {
           isUnique = !existingKey;
         }
 
-        const streamingUrl = `http://localhost:8080/hls/${randomStreamKey}.m3u8`;
+        const streamingUrl = `http://localhost:8888/hls/${randomStreamKey}.m3u8`;
 
         const createStreamKey = this.obsStreamKeyRepository.createObsStreamKey(
           userId,
           randomStreamKey,
           streamingUrl,
         );
+
         return await this.obsStreamKeyRepository.save(createStreamKey);
       }
 
