@@ -11,6 +11,7 @@ const logoutText = document.getElementById('logoutText');
 if (!token) {
   document.getElementById('myChannelLink').style.display = 'none';
   document.getElementById('notificationBtn').style.display = 'none';
+  document.getElementById('livestreaming').style.display = 'none';
   if (logoutText) logoutText.textContent = '로그인';
 
   logoutBtn.addEventListener('click', () => {
