@@ -22,7 +22,7 @@ export class ObsService {
           isUnique = !existingKey;
         }
 
-        const streamingUrl = `http://localhost:8888/hls/${randomStreamKey}.m3u8`;
+        const streamingUrl = `https://www.loopfiy.com/hls/${randomStreamKey}.m3u8`;
 
         const createStreamKey = this.obsStreamKeyRepository.createObsStreamKey(
           userId,
