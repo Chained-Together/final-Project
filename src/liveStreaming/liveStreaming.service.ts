@@ -24,15 +24,23 @@ export class LiveStreamingService {
   }
   async getAllLiveStreams() {
     try {
+      console.log('Fetching live streams...');
       const liveStreams = await this.liveStreamingRepository.findAllLiveStreams();
-      console.log('Found live streams:', liveStreams);
+      console.log('Raw live streams data:', JSON.stringify(liveStreams, null, 2));
 
       if (liveStreams.length === 0) {
+        console.log('No live streams found');
         return [];
       }
 
-      return liveStreams.map((streamEntity) => {
-        console.log('Processing stream entity:', streamEntity);
+      const mappedStreams = liveStreams.map((streamEntity) => {
+        console.log('Processing stream:', {
+          id: streamEntity.id,
+          title: streamEntity.title,
+          user: streamEntity.user,
+          channel: streamEntity.user?.channel,
+        });
+
         return {
           id: streamEntity.id,
           title: streamEntity.title,
@@ -42,6 +50,9 @@ export class LiveStreamingService {
           viewer: streamEntity.viewer,
         };
       });
+
+      console.log('Mapped streams:', JSON.stringify(mappedStreams, null, 2));
+      return mappedStreams;
     } catch (error) {
       console.error('Error in getAllLiveStreams:', error);
       throw error;

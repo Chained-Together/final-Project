@@ -21,12 +21,21 @@ export class LiveStreamingRepository implements ILiveStreamingRepository {
   }
 
   async findAllLiveStreams(): Promise<LiveStreamingEntity[]> {
-    return await this.repository
+    console.log('Executing findAllLiveStreams query...');
+
+    const query = this.repository
       .createQueryBuilder('liveStreaming')
       .leftJoinAndSelect('liveStreaming.user', 'user')
-      .leftJoinAndSelect('user.obsStreamKey', 'obsStreamKey')
       .leftJoinAndSelect('user.channel', 'channel')
-      .where('obsStreamKey.status = :status', { status: true })
-      .getMany();
+      .leftJoinAndSelect('user.obsStreamKey', 'obsStreamKey')
+      .where('obsStreamKey.status = :status', { status: true });
+
+    console.log('Generated SQL:', query.getSql());
+    console.log('Query parameters:', { status: true });
+
+    const liveStreams = await query.getMany();
+    console.log('Query result:', liveStreams);
+
+    return liveStreams;
   }
 }

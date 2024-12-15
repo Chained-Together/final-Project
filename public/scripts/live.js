@@ -24,13 +24,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       const liveItem = document.createElement('div');
       liveItem.className = 'live-item';
       liveItem.innerHTML = `
-                <img src="${live.thumbnailUrl || '/public/images/default-thumbnail.png'}" 
+                <img src="${live.profileImage || '/public/images/user-50.png'}" 
                      alt="${live.title}" 
-                     class="live-thumbnail">
+                     class="live-profileImage">
                 <div class="live-info">
                     <span class="live-badge">LIVE</span>
                     <h3 class="live-title">${live.title}</h3>
-                    <p class="live-channel">${live.channelName || '알 수 없는 채널'}</p>
                 </div>
             `;
 
