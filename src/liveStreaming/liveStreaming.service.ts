@@ -19,7 +19,32 @@ export class LiveStreamingService {
     if (!checkStreamKey) {
       throw new NotFoundException('해당하는 스트림키 가 없습니다.');
     }
-    const liveStreaming = this.liveStreamingRepository.createLiveStreaming(title);
+    const liveStreaming = this.liveStreamingRepository.createLiveStreaming(title, userId);
     return await this.liveStreamingRepository.save(liveStreaming);
+  }
+  async getAllLiveStreams() {
+    try {
+      const liveStreams = await this.liveStreamingRepository.findAllLiveStreams();
+      console.log('Found live streams:', liveStreams);
+
+      if (liveStreams.length === 0) {
+        return [];
+      }
+
+      return liveStreams.map((streamEntity) => {
+        console.log('Processing stream entity:', streamEntity);
+        return {
+          id: streamEntity.id,
+          title: streamEntity.title,
+          profileImage: streamEntity.user?.channel?.profileImage,
+          nickname: streamEntity.user?.nickname,
+          channelName: streamEntity.user?.channel?.name,
+          viewer: streamEntity.viewer,
+        };
+      });
+    } catch (error) {
+      console.error('Error in getAllLiveStreams:', error);
+      throw error;
+    }
   }
 }

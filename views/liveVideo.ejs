@@ -1,32 +1,31 @@
 <!doctype html>
 <html lang="kr">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>내 채널</title>
 
     <link rel="stylesheet" href="/public/styles/channel.css" />
     <link
-        href="https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Gamja+Flower&family=Gasoek+One&family=Hi+Melody&family=Jua&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
-        rel="stylesheet">
+      href="https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Gamja+Flower&family=Gasoek+One&family=Hi+Melody&family=Jua&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="/public/styles/my-channel.css" />
-    <link rel="stylesheet" href="./public/styles/video-edit-popup.css">
+    <link rel="stylesheet" href="./public/styles/video-edit-popup.css" />
 
     <script src="https://kit.fontawesome.com/6a4db89020.js" crossorigin="anonymous"></script>
 
     <script type="module" src="../public/scripts/my-channel.js"></script>
+  </head>
 
-</head>
-
-<body>
+  <body>
     <header>
-        <nav class="LoopfiyBar">
-            <div class="log">
-                <i class="fa-solid fa-bolt"></i>
-                <a href="/" class="bungee-spice-regular">Loopfiy</a>
-            </div>
-        </nav>
+      <nav class="LoopfiyBar">
+        <div class="log">
+          <i class="fa-solid fa-bolt"></i>
+          <a href="/" class="bungee-spice-regular">Loopfiy</a>
+        </div>
+      </nav>
     </header>
     <video id="preview" autoplay muted></video>
     <button id="startRecording">비디오 촬영</button>
@@ -34,33 +33,51 @@
     <button id="uploadBtn">Upload</button>
 
     <form>
-        <div>
-            <label for="title">영상 제목</label>
-            <input type="text" id="title" placeholder="영상 제목을 입력하세요." />
-        </div>
+      <div>
+        <label for="video-title">영상 제목</label>
+        <input
+          type="text"
+          id="video-title"
+          name="video-title"
+          placeholder="영상 제목을 입력하세요."
+        />
+      </div>
 
-        <div>
-            <label for="title">영상 설명</label>
-            <textarea id="video-description" placeholder="영상 설명을 입력하세요"></textarea>
-        </div>
+      <div>
+        <label for="video-description">영상 설명</label>
+        <textarea
+          id="video-description"
+          name="video-description"
+          placeholder="영상 설명을 입력하세요"
+        ></textarea>
+      </div>
 
-        <div>
-            <label for="title">해시 태그</label>
-            <input type="text" id="hashtags" placeholder="해시태그를 입력하세요." />
-        </div>
+      <div>
+        <label for="video-hashtags">해시 태그</label>
+        <input
+          type="text"
+          id="video-hashtags"
+          name="video-hashtags"
+          placeholder="해시태그를 입력하세요."
+        />
+      </div>
 
-        <div>
-            <label for="title">공개 여부</label>
-            <input type="text" id="visibility" placeholder="공개 여부를 입력하세요" />
-        </div>
+      <div>
+        <label for="video-visibility">공개 여부</label>
+        <input
+          type="text"
+          id="video-visibility"
+          name="video-visibility"
+          placeholder="공개 여부를 입력하세요"
+        />
+      </div>
 
-        <!-- <div>
+      <!-- <div>
             <label for="title">썸네일 url</label>
             <input type="text" id="thumbnailUrl" placeholder="썸네일 url 을 입력하세요." />
         </div> -->
     </form>
 
     <script src="/public/scripts/liveVideo.js" defer></script>
-</body>
-
+  </body>
 </html>

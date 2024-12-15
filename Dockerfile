@@ -4,7 +4,7 @@ WORKDIR /
 
 COPY . .
 
-RUN npm install --omit=dev
+RUN npm ci --omit=dev --prefer-offline
 
 EXPOSE 3000
 CMD ["npm", "run", "start:prod"]
