@@ -5,6 +5,7 @@
 
 /* 채널 메인 컨테이너 */
 .main-channel {
+    /* border: 1px solid #00ff00; */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -19,95 +20,12 @@
     align-items: center;
 }
 
-/* 채널 상단 프로필 관련 */
-.channel-container {
-    display: flex;
-    /* justify-content: space-around; */
-    align-items: center;
-    text-align: center;
-    width: 100%;
-    height: 180px;
-    margin-bottom: 20px;
-    gap: 28px;
-}
-
-.channel-img-box {
-    /* border: 1px solid #00ff00; */
-    height: 100%;
-    aspect-ratio: 1 / 1;
-}
-
-.channel-name-box {
-    width: 68%;
-    height: 100%;
-    display: grid;
-    justify-items: start;
-    align-content: center;
-}
-
-/* 프로필이미지 in 상단 프로필box */
-.profile-img {
-    width: 100%;
-    height: 100%;
-    background-color: rgba(240, 255, 255, 0.171);
-    border-radius: 50%;
-  }
-  
-.profile-img:hover {
-    transform: scale(1.01);
-    border-color: rgba(255, 255, 255, 1);
-  }
-  
-  .profile-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-
-/* 버튼 스타일 모음 */
-.chat-btn,
-.upload-Btn,
-.edit-Btn,
-.live-btn {
-  height: 40px;
-  border: none;
-  border-radius: 8px;
-  color: white;
-  font-size: 16px;
-  text-align: center;
-  background-color: #ffffff21;
-  margin-right: 5px;
-  padding: 1px 16px 1px 16px;
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.edit-Btn:hover,
-.upload-Btn:hover,
-.chat-btn:hover,
-.live-btn:hover {
-  background-color: #fe2c55;
-  transform: translateY(-3px);
-  box-shadow: 0 8px 15px rgba(255, 255, 255, 0.2);
-}
-
 /* 하단 비디오 박스 */
 .video-list-container {
-    /* border: 1px solid #00ff00; */
-    /* background-color: #555555; */
+    /* border: 1px solid #ff0000; */
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(1fr));
     width: 100%;
-}
-
-.video-list-bar {
-    /* border: 1px solid #ff0000; */
-    height: 40px;
-    width: 140px;
-    border-bottom: 2px solid #ffffff;
-    margin-bottom: 20px;
 }
 
 .video-list-box {
@@ -166,9 +84,9 @@
   width: 100%;
   aspect-ratio: 9 / 12;
   font-family: 'Jua', sans-serif;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background-size: cover; /* 부모 박스를 꽉 채움 */
+  background-position: center; /* 이미지의 중앙을 기준으로 표시 */
+  background-repeat: no-repeat; /* 이미지 반복 방지 */
 }
 
 .video-card:hover {
@@ -181,6 +99,7 @@
   object-fit: cover;
   border-radius: 3px;
   margin-bottom: 10px;
+
 }
 
 .video-card h3 {

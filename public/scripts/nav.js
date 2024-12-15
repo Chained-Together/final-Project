@@ -25,6 +25,7 @@ const buttonText = document.getElementById('buttonText');
 
 if (token) {
   logoutBtn.addEventListener('click', () => {
+    document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
     localStorage.removeItem('token');
     localStorage.removeItem('pastNotifications');
     alert('로그아웃 되었습니다.');

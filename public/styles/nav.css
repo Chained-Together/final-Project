@@ -44,14 +44,14 @@ a {
 }
 
 .LoopfiyBar {
-  display: flex;
+  /* display: flex; */
   flex-direction: column;
   justify-content: start;
   position: fixed;
   width: 250px;
   height: 100%;
   background-color: #131313;
-  padding-top: 80px;
+  padding: 10px 10px 10px 10px;
   color: #fff;
   z-index: 1000;
 }
@@ -87,7 +87,7 @@ a {
 
 .sidebar-menu-btn-box {
   border-bottom: 2px solid #fff;
-  padding-bottom: 10px;
+  padding: 10px;
 }
 
 .at {
@@ -312,4 +312,9 @@ a {
 
 .optionBtn {
   width: 50px;
+}
+
+.lest-text{
+  padding: 10px;
+  color: #666666;
 }

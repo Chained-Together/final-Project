@@ -83,11 +83,11 @@ export class VideoController {
     @Param('lastId', ParseIntPipe) lastId: number,
     @Param('take', ParseIntPipe) take: number,
   ) {
-    const validTakeValues = [6, 12];
+    // const validTakeValues = [6, 12];
 
-    if (!validTakeValues.includes(take)) {
-      throw new BadRequestException('유효한 take 값은 6 또는 12만 가능합니다.');
-    }
+    // if (!validTakeValues.includes(take)) {
+    //   throw new BadRequestException('유효한 take 값은 6 또는 12만 가능합니다.');
+    // }
 
     return this.videoService.getNewVideos(lastId, take);
   }

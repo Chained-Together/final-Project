@@ -20,6 +20,7 @@
 <!-- <link rel="stylesheet" href="/public/styles/nav.css" /> -->
 
 <!-- ▲▲▲▲▲ 네브바 사용시 사용하고자 하는 ejs파일 상단 해더 부분에 내용을 복사해서 넣으세요 ▲▲▲▲▲ -->
+
 <nav class="navbar bg-body-tertiary">
   <div class="container-fluid">
     <div class="left-section log">
@@ -53,14 +54,23 @@
 </nav>
 <header class="LoopfiyBar" id="toggleHeader" style="display: none">
   <div class="sidebar-menu-btn-box">
-    <button class="sidebar-menu-btn" id="home">
-      <img src="public\images\home-50.png" alt="" />
-      홈
-    </button>
+    <a href="/">
+      <button class="sidebar-menu-btn" id="home">
+        <img src="public\images\home-50.png" alt="" />
+        홈
+      </button>
+    </a>
 
-    <button class="sidebar-menu-btn" id="notificationBtn">
-      <img src="public\images\reminder-50.png" alt="" />
-      알림
+    <a href="/videolist">
+      <button class="sidebar-menu-btn" id="home">
+        <img src="public\images\icons8-compass-50.png" alt="" />
+        탐색
+      </button>
+    </a>
+
+    <button class="sidebar-menu-btn" id="liveBtn">
+      <img src="public\images\live-50.png" alt="" />
+      Live
     </button>
     <div
       id="notificationPopup"
@@ -105,7 +115,9 @@
         닫기
       </button>
     </div>
+  </div>
 
+  <div class="sidebar-menu-btn-box logout-box">
     <a href="/myChannel">
       <button class="sidebar-menu-btn" id="myChannelLink">
         <img src="public\images\user-50.png" alt="" id="profileImage" />
@@ -113,11 +125,15 @@
       </button>
     </a>
 
-    <button class="sidebar-menu-btn" id="livestreaming">
-      <img src="public/images/icons8-전파-64.png" alt="" id="profileImage" />
-      방송 하기
+    <button class="sidebar-menu-btn" id="notificationBtn">
+      <img src="public\images\reminder-50.png" alt="" />
+      알림
     </button>
 
+    <button class="sidebar-menu-btn" id="livestreaming">
+      <img src="public/images/go-live-50.png"   />
+      방송 하기
+    </button>
     <div id="streamKeyModal" class="modal">
       <div class="modal-content">
         <span class="close" id="closeModal">&times;</span>
@@ -129,6 +145,7 @@
         <button id="optionBtn">설정</button>
       </div>
     </div>
+
   </div>
 
   <div class="sidebar-menu-btn-box logout-box">
@@ -136,6 +153,7 @@
       <span id="logoutText">로그아웃</span>
     </button>
   </div>
+  <span class="lest-text" id="logoutText">© 2024 LoopFiy</span>
 </header>
 <script src="/public/scripts/nav.js"></script>
 <script src="/public/scripts/livestreaming.js"></script>
