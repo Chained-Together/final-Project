@@ -40,7 +40,7 @@ if (liveBtn) {
   liveBtn.addEventListener('click', () => {
     const token = localStorage.getItem('token');
     if (token) {
-      window.location.href = '/stream';
+      window.location.href = 'http://www.loopfiy.com/stream';
     } else {
       alert('로그인이 필요한 서비스입니다.');
       window.location.href = '/login';
