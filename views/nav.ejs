@@ -1,3 +1,25 @@
+<!-- ▼▼▼▼ 네브바 사용시 사용하고자 하는 ejs파일 상단 해더 부분에 아래내용을 복사해서 넣으세요 ▼▼▼▼ -->
+
+<!-- 부트 스트렙 -->
+<!-- <link
+     href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+     rel="stylesheet"
+   /> -->
+<!-- nav로고 폰트 -->
+<!-- <link
+     href="https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Gamja+Flower&family=Gasoek+One&family=Hi+Melody&family=Jua&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+     rel="stylesheet"
+   /> -->
+<!-- nav로고 이미지 -->
+<!-- <script src="https://kit.fontawesome.com/6a4db89020.js" crossorigin="anonymous"></script>
+   <link
+     href="https://demos.creative-tim.com/argon-dashboard-pro/assets/css/nucleo-svg.css"
+     rel="stylesheet"
+   /> -->
+<!-- nav CSS 파일 -->
+<!-- <link rel="stylesheet" href="/public/styles/nav.css" /> -->
+
+<!-- ▲▲▲▲▲ 네브바 사용시 사용하고자 하는 ejs파일 상단 해더 부분에 내용을 복사해서 넣으세요 ▲▲▲▲▲ -->
 <nav class="navbar bg-body-tertiary">
   <div class="container-fluid">
     <div class="left-section log">
@@ -39,10 +61,6 @@
     <button class="sidebar-menu-btn" id="notificationBtn">
       <img src="public\images\reminder-50.png" alt="" />
       알림
-    </button>
-    <button class="sidebar-menu-btn" id="liveBtn">
-      <img src="public\images\live-50.png" alt="" />
-      Live
     </button>
     <div
       id="notificationPopup"
@@ -94,6 +112,23 @@
         내 채널
       </button>
     </a>
+
+    <button class="sidebar-menu-btn" id="livestreaming">
+      <img src="public/images/icons8-전파-64.png" alt="" id="profileImage" />
+      방송 하기
+    </button>
+
+    <div id="streamKeyModal" class="modal">
+      <div class="modal-content">
+        <span class="close" id="closeModal">&times;</span>
+        <h3>방송 설정</h3>
+        <p id="streamKeyText">여기에 스트림 키가 표시됩니다.</p>
+        <p id="streamingUrlText">여기에 스트리밍 URL이 표시됩니다.</p>
+        <label for="liveTitle">방송 제목:</label>
+        <input type="text" id="liveTitle" placeholder="방송 제목을 입력하세요" />
+        <button id="optionBtn">설정</button>
+      </div>
+    </div>
   </div>
 
   <div class="sidebar-menu-btn-box logout-box">
@@ -103,3 +138,4 @@
   </div>
 </header>
 <script src="/public/scripts/nav.js"></script>
+<script src="/public/scripts/livestreaming.js"></script>
