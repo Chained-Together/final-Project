@@ -30,18 +30,21 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       const streamId = client.handshake.query.streamId as string;
 
       if (!token) {
-        client.disconnect();
-        return;
+        client.data = {
+          userId: null,
+          nickname: 'Guest',
+          streamId,
+        };
+      } else {
+        const secretKey = this.configService.get('JWT_SECRET_KEY');
+        const decoded = await this.jwtService.verifyAsync(token, { secret: secretKey });
+
+        client.data = {
+          userId: decoded.sub,
+          nickname: decoded.nickname,
+          streamId,
+        };
       }
-
-      const secretKey = this.configService.get('JWT_SECRET_KEY');
-      const decoded = await this.jwtService.verifyAsync(token, { secret: secretKey });
-
-      client.data = {
-        userId: decoded.sub,
-        nickname: decoded.nickname,
-        streamId,
-      };
 
       if (streamId) {
         client.join(streamId);
@@ -49,7 +52,11 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       }
     } catch (error) {
       this.logger.error(`Connection error: ${error.message}`);
-      client.disconnect();
+      client.data = {
+        userId: null,
+        nickname: 'Guest',
+        streamId: client.handshake.query.streamId as string,
+      };
     }
   }
 

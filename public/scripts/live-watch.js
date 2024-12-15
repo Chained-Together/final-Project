@@ -8,7 +8,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   const token = localStorage.getItem('token');
   let nickname = null;
 
-  if (token) {
+  if (!token) {
+    messageInput.placeholder = '로그인 후 채팅이 가능합니다';
+  } else {
+    messageInput.placeholder = '메시지를 입력하세요';
     const decoded = JSON.parse(atob(token.split('.')[1]));
     nickname = decoded.nickname;
   }
@@ -65,16 +68,35 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // 메시지 전송
     const sendMessage = () => {
+      const messageInput = document.getElementById('message-input');
       const message = messageInput.value.trim();
-      if (message && token) {
+      const token = localStorage.getItem('token');
+
+      if (!token) {
+        messageInput.value = '';
+        messageInput.placeholder = '로그인 후 채팅이 가능합니다';
+
+        if (confirm('로그인 페이지로 이동하시겠습니까?')) {
+          window.location.href = '/login';
+        } else {
+          messageInput.placeholder = '로그인 후 채팅이 가능합니다';
+        }
+        return;
+      }
+
+      if (message) {
         socket.emit('sendMessage', { streamId, message, sender: nickname });
         messageInput.value = '';
+        messageInput.placeholder = '메시지를 입력하세요';
       }
     };
 
     sendButton.addEventListener('click', sendMessage);
     messageInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') sendMessage();
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        sendMessage();
+      }
     });
   } catch (error) {
     console.error('Error:', error);
