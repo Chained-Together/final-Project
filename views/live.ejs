@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="kr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Loopfiy Live</title>
+    <link rel="stylesheet" href="/public/styles/nav.css" />
+    <link rel="stylesheet" href="/public/styles/live.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bungee+Spice&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://kit.fontawesome.com/6a4db89020.js" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <%- include('nav') %>
+
+    <div class="live-container">
+      <h1>실시간 방송</h1>
+      <div id="liveList" class="live-grid"></div>
+    </div>
+
+    <script src="/public/scripts/live.js"></script>
+  </body>
+</html>

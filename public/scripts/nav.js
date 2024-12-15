@@ -39,13 +39,7 @@ if (token) {
 const liveBtn = document.getElementById('liveBtn');
 if (liveBtn) {
   liveBtn.addEventListener('click', () => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      window.location.href = '/stream';
-    } else {
-      alert('로그인이 필요한 서비스입니다.');
-      window.location.href = '/login';
-    }
+    window.location.href = '/liveStream';
   });
 }
 
@@ -55,12 +49,12 @@ const setImageSrc = (src) => {
   document.querySelectorAll('#profileImage').forEach((img) => (img.src = src));
 };
 
-if (urlParams.get('token') && !localStorage.getItem('token')) {
+if (!localStorage.getItem('token')) {
   localStorage.setItem('token', urlParams.get('token'));
   console.log('URL에서 토큰을 로컬 스토리지에 저장 완료:', urlParams.get('token'));
 }
 
-const DEFAULT_PROFILE_IMAGE = 'public/images/user-50.png';
+const DEFAULT_PROFILE_IMAGE = '/public/images/user-50.png';
 
 if (!token) {
   setImageSrc(DEFAULT_PROFILE_IMAGE);
@@ -208,6 +202,6 @@ document.getElementById('home').addEventListener('click', () => {
   window.location.href = '/';
 });
 
-document.getElementById('myChannelBtn').addEventListener('click', () => {
+document.getElementById('myChannelLink').addEventListener('click', () => {
   window.location.href = '/myChannel';
 });
