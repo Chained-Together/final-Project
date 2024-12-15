@@ -2,6 +2,7 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Observable, ReplaySubject } from 'rxjs';
 import { IChannelRepository } from 'src/interface/channel-interface';
+import { NotificationRepository } from 'src/interface/impl/notification.repository';
 import { INotificationRepository } from 'src/interface/notification-interface';
 
 @Injectable()
@@ -27,15 +28,17 @@ export class NotificationService {
       throw new NotFoundException('해당 사용자를 찾을 수 없습니다.');
     }
     const userId = foundChannel.user.id;
+    console.log(1, this.notificationRepository);
 
-    const createNotification = this.notificationRepository.createNotification(userId, message);
+    // const createNotification = await this.notificationRepository.createNotification(
+    //   userId,
+    //   message,
+    // );
 
-    const saveNotification = await this.notificationRepository.saveNotification(createNotification);
-
-    this.eventEmitter.emit(`notification:${userId}`, {
-      message,
-      id: saveNotification.id,
-    });
+    // this.eventEmitter.emit(`notification:${userId}`, {
+    //   message,
+    //   id: createNotification.id,
+    // });
   }
 
   getNotificationStream(userId: number): Observable<any> {

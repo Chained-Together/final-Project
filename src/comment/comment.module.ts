@@ -13,6 +13,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ChannelRepository } from 'src/interface/impl/channel.repository';
 import { CommentRepository } from 'src/interface/impl/comment.repositroy';
 import { VideoRepository } from 'src/interface/impl/video.repository';
+import { NotificationRepository } from 'src/interface/impl/notification.repository';
 
 @Module({
   imports: [
@@ -43,7 +44,7 @@ import { VideoRepository } from 'src/interface/impl/video.repository';
     },
     {
       provide: 'INotificationRepository',
-      useClass: NotificationEntity,
+      useClass: NotificationRepository,
     },
   ],
 })
