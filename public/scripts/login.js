@@ -22,9 +22,9 @@ loginForm.addEventListener('submit', async (event) => {
     }
 
     const token = await response.headers.get('Authorization');
-
     if (token) {
       localStorage.setItem('token', token);
+      console.log('token123',token)
     } else {
       console.error('토큰이 존재하지 않습니다.');
     }
@@ -69,6 +69,7 @@ if (
   window.location.pathname.includes('/naver/callback')
 ) {
   const urlParams = new URLSearchParams(window.location.search);
+  console.log('urlParams',urlParams)
   const token = urlParams.get('token');
   if (token) {
     localStorage.setItem('token', token);

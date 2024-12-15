@@ -1,40 +1,21 @@
 let globalVideoData = null;
 let lastVideoId = null;
-let videoIds = []
+let videoIds = [];
 
 //1. 초기 로드에 비디오를 가져와서 재생한다다
 document.addEventListener('DOMContentLoaded', async () => {
-  console.log('1:초기로드 비디오 가져오기',await fetchVideos());
+  console.log('1:초기로드 비디오 가져오기', await fetchVideos());
   //1:초기로드 비디오 가져오기
-  fetchVideos()
+  fetchVideos();
 
-  let videoData = fetchVideos()
+  let videoData = fetchVideos();
   for (let i = 0; i < videoData.length; i++) {
     videoIds.push(videoData[i].id);
   }
-  console.log('2:비디오ID들만 추출하기기',videoIds)
-
-
+  console.log('2:비디오ID들만 추출하기기', videoIds);
 
   // console.log('3:추춣한 비디오id를 videoArr에 푸쉬하기',videoArr);
-  
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //lastId의 이후 6개의 비디오를 로드함함
 async function fetchVideos(lastId) {
@@ -48,12 +29,10 @@ async function fetchVideos(lastId) {
   return response.json();
 }
 
-
-async function 비디오더가져오기 (lastVideoId) {
+async function 비디오더가져오기(lastVideoId) {
   try {
     const newVideos = await fetchVideos(lastVideoId);
     if (newVideos.length > 0) {
-  
       // 마지막 비디오 ID 업데이트
       lastVideoId = newVideos[newVideos.length - 1].id;
     } else {
@@ -66,8 +45,6 @@ async function 비디오더가져오기 (lastVideoId) {
     isFetching = false;
   }
 }
-
-
 
 //비디오 id를 인자로 넣의면 해당 id의 비디오를 플레이 해줌줌
 async function playVideo(videoId) {
@@ -135,40 +112,13 @@ async function playVideo(videoId) {
   }
 }
 
-
-
-
-
-
-
-playVideo(20)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
+playVideo(20);
 
 $('#nextButton').on('click', async () => {
-  index++
-  if(videoArr[a][index] === (videoArr[a].length -1) ) {
-    videoArr.push(await fetchVideos(lastVideoId))
-    index = 0
-    a++
+  index++;
+  if (videoArr[a][index] === videoArr[a].length - 1) {
+    videoArr.push(await fetchVideos(lastVideoId));
+    index = 0;
+    a++;
   }
-})    
+});

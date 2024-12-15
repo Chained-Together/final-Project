@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const urlParams = new URLSearchParams(window.location.search);
   const token = localStorage.getItem('token') || urlParams.get('token');
   const profileImageElements = document.querySelectorAll('.profileImage');
-
+console.log('token',token)
   const setImageSrc = (src) => {
     profileImageElements.forEach((img) => {
       img.src = src;
@@ -10,7 +10,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
 
   if (urlParams.get('token') && !localStorage.getItem('token')) {
-    localStorage.setItem('token', urlParams.get('token'));
+  localStorage.setItem('token', urlParams.get('token'));
+   console.log('token12341234',token)
 
     console.log('URL에서 토큰을 로컬 스토리지에 저장 완료:', urlParams.get('token'));
   }
