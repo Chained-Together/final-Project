@@ -27,36 +27,39 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   server: Server;
 
   async afterInit() {
+    const redisUrl = this.configService.get('REDIS_URL') || 'redis://redis:6379';
+
     const pubClient = createClient({
       url: 'redis://redis:6379',
       socket: {
         host: 'redis',
         port: 6379,
         reconnectStrategy: (retries) => {
-          if (retries > 20) return new Error('Redis 연결 실패');
+          this.logger.log(`Redis 재연결 시도 ${retries}회`);
           return Math.min(retries * 100, 3000);
         },
       },
     });
+
+    pubClient.on('error', (err) => {
+      this.logger.error('Redis Client Error:', err);
+    });
+
+    pubClient.on('connect', () => {
+      this.logger.log('Redis에 연결되었습니다.');
+    });
+
     const subClient = pubClient.duplicate();
 
     try {
       await Promise.all([pubClient.connect(), subClient.connect()]);
 
       this.server.adapter(createAdapter(pubClient, subClient));
-
-      await subClient.subscribe('chat', (message) => {
-        const { roomId, sender, content } = JSON.parse(message);
-        this.server.to(roomId).emit('receiveMessage', {
-          sender,
-          message: content,
-          timestamp: new Date(),
-        });
-      });
-
       this.logger.log('Socket.IO Redis 어댑터가 설정되었습니다.');
     } catch (error) {
       this.logger.error('Redis 연결 실패:', error);
+      // 연결 실패시에도 서버는 계속 실행되도록 함
+      this.logger.warn('Redis 없이 계속 실행됩니다.');
     }
   }
 
