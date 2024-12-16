@@ -18,10 +18,7 @@ export class ObsService {
         // 고유한 스트림 키 생성
         while (!isUnique) {
           randomStreamKey = uuidv4().slice(0, 8);
-          const existingKey = await this.obsStreamKeyRepository.findByStreamKey(
-            randomStreamKey,
-            userId,
-          );
+          const existingKey = await this.obsStreamKeyRepository.findByStreamKey(randomStreamKey);
           isUnique = !existingKey;
         }
         const src = process.env.VIDEO_SRC;
@@ -42,8 +39,8 @@ export class ObsService {
     }
   }
 
-  async verifyStreamKey(streamKey: string, userId: number): Promise<boolean> {
-    const keyEntity = await this.obsStreamKeyRepository.findByStreamKey(streamKey, userId);
+  async verifyStreamKey(streamKey: string): Promise<boolean> {
+    const keyEntity = await this.obsStreamKeyRepository.findByStreamKey(streamKey);
 
     if (!keyEntity) {
       return false;
