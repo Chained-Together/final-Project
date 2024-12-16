@@ -13,6 +13,7 @@ export class LiveStreamingRepository implements ILiveStreamingRepository {
     return this.repository.create({
       title,
       user: { id: userId },
+      user_id: userId,
     });
   }
 
