@@ -11,11 +11,13 @@ import { LikeEntity } from './entities/like.entity';
 import { LikeController } from './like.controller';
 import { LikeService } from './like.service';
 import { NotificationRepository } from 'src/interface/impl/notification.repository';
+import { NotificationModule } from 'src/notification/notification.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([LikeEntity, ChannelEntity, NotificationEntity, UserEntity]),
     EventEmitter2,
+    NotificationModule,
   ],
   controllers: [LikeController],
   providers: [

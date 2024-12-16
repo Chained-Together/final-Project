@@ -1,0 +1,53 @@
+.live-container {
+  padding: 20px;
+  margin-top: 60px;
+}
+
+.live-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.live-item {
+  background: #1a1a1a;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.live-item:hover {
+  transform: translateY(-5px);
+}
+
+.live-thumbnail {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+}
+
+.live-info {
+  padding: 15px;
+}
+
+.live-title {
+  color: #ffffff;
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.live-channel {
+  color: #aaaaaa;
+  font-size: 14px;
+}
+
+.live-badge {
+  background-color: #ff0000;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  display: inline-block;
+  margin-bottom: 8px;
+}

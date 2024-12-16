@@ -1,5 +1,12 @@
 import { UserEntity } from 'src/user/entities/user.entity';
-import { Column, CreateDateColumn, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity({
   name: 'liveStreaming',
@@ -14,9 +21,13 @@ export class LiveStreamingEntity {
   @Column({ type: 'int', default: 0 })
   viewer: number;
 
+  @Column({ type: 'int', nullable: false })
+  user_id: number;
+
   @CreateDateColumn({ type: 'timestamp', nullable: false })
   createdAt: Date;
 
   @OneToOne(() => UserEntity, (user) => user.liveStreaming, { onDelete: 'CASCADE' })
+  @JoinColumn()
   user: UserEntity;
 }

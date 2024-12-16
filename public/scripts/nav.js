@@ -27,7 +27,7 @@ const buttonText = document.getElementById('buttonText');
 
 if (token) {
   logoutBtn.addEventListener('click', () => {
-    document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+    document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
     localStorage.removeItem('token');
     localStorage.removeItem('pastNotifications');
     alert('로그아웃 되었습니다.');
@@ -60,12 +60,12 @@ const setImageSrc = (src) => {
   document.querySelectorAll('#profileImage').forEach((img) => (img.src = src));
 };
 
-if (urlParams.get('token') && !localStorage.getItem('token')) {
+if (!localStorage.getItem('token')) {
   localStorage.setItem('token', urlParams.get('token'));
   console.log('URL에서 토큰을 로컬 스토리지에 저장 완료:', urlParams.get('token'));
 }
 
-const DEFAULT_PROFILE_IMAGE = 'public/images/user-50.png';
+const DEFAULT_PROFILE_IMAGE = '/public/images/user-50.png';
 
 if (!token) {
   setImageSrc(DEFAULT_PROFILE_IMAGE);
@@ -213,6 +213,6 @@ document.getElementById('home').addEventListener('click', () => {
   window.location.href = '/';
 });
 
-document.getElementById('myChannelBtn').addEventListener('click', () => {
+document.getElementById('myChannelLink').addEventListener('click', () => {
   window.location.href = '/myChannel';
 });

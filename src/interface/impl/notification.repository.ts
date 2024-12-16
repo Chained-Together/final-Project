@@ -10,13 +10,11 @@ export class NotificationRepository implements INotificationRepository {
     @InjectRepository(NotificationEntity)
     private readonly repository: Repository<NotificationEntity>,
   ) {}
-  createNotification(userId: number, message: string): NotificationEntity {
-    return this.repository.create({
+  createNotification(userId: number, message: string): Promise<NotificationEntity> {
+    const notification = this.repository.create({
       userId,
       message,
     });
-  }
-  saveNotification(notification: NotificationEntity): Promise<NotificationEntity> {
     return this.repository.save(notification);
   }
   findAllNotificationByUserId(userId: number): Promise<NotificationEntity[]> {
