@@ -39,11 +39,17 @@ if (token) {
 const liveBtn = document.getElementById('liveBtn');
 if (liveBtn) {
   liveBtn.addEventListener('click', () => {
-    window.location.href = '/liveStream';
+    const token = localStorage.getItem('token');
+    if (token) {
+      window.location.href = 'http://www.loopfiy.com/liveStream';
+    } else {
+      alert('로그인이 필요한 서비스입니다.');
+      window.location.href = '/login';
+    }
+
   });
 }
 
-// 기존 코드 계속...
 
 const setImageSrc = (src) => {
   document.querySelectorAll('#profileImage').forEach((img) => (img.src = src));
