@@ -5,6 +5,12 @@ import { UserInfo } from '../utils/user-info.decorator';
 
 @Controller('')
 export class ViewController {
+  @Get('/')
+  @Render('new-main')
+  showMainPage() {
+    return;
+  }
+
   @Get('/videolist')
   @Render('new-video-list')
   showListPage() {

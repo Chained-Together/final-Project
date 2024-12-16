@@ -25,7 +25,7 @@ const buttonText = document.getElementById('buttonText');
 
 if (token) {
   logoutBtn.addEventListener('click', () => {
-    document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+    document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
     localStorage.removeItem('token');
     localStorage.removeItem('pastNotifications');
     alert('로그아웃 되었습니다.');
@@ -41,15 +41,13 @@ if (liveBtn) {
   liveBtn.addEventListener('click', () => {
     const token = localStorage.getItem('token');
     if (token) {
-      window.location.href = 'http://www.loopfiy.com/liveStream';
+      window.location.href = '/stream';
     } else {
       alert('로그인이 필요한 서비스입니다.');
       window.location.href = '/login';
     }
-
   });
 }
-
 
 const setImageSrc = (src) => {
   document.querySelectorAll('#profileImage').forEach((img) => (img.src = src));
