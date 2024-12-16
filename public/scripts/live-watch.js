@@ -45,6 +45,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const socket = io('http://localhost:3001', {
       auth: { token },
       query: { streamId },
+      transports: ['websocket'],
+      upgrade: false,
     });
 
     socket.on('connect', () => {
