@@ -11,6 +11,8 @@ import {
 import { Server, Socket } from 'socket.io';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { createAdapter } from '@socket.io/redis-adapter';
+import { createClient } from 'redis';
 
 @WebSocketGateway(3001, { cors: { origin: '*' } })
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
@@ -23,6 +25,36 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @WebSocketServer()
   server: Server;
+
+  async afterInit() {
+    const pubClient = createClient({
+      url: this.configService.get<string>('REDIS_URL') || 'redis://redis:6379',
+      socket: {
+        host: 'redis',
+        port: 6379,
+      },
+    });
+    const subClient = pubClient.duplicate();
+
+    try {
+      await Promise.all([pubClient.connect(), subClient.connect()]);
+
+      this.server.adapter(createAdapter(pubClient, subClient));
+
+      await subClient.subscribe('chat', (message) => {
+        const { roomId, sender, content } = JSON.parse(message);
+        this.server.to(roomId).emit('receiveMessage', {
+          sender,
+          message: content,
+          timestamp: new Date(),
+        });
+      });
+
+      this.logger.log('Socket.IO Redis 어댑터가 설정되었습니다.');
+    } catch (error) {
+      this.logger.error('Redis 연결 실패:', error);
+    }
+  }
 
   async handleConnection(client: Socket) {
     try {
@@ -45,7 +77,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       }
 
       try {
-        const secretKey = this.configService.get('JWT_SECRET_KEY');
+        const secretKey = this.configService.get<string>('JWT_SECRET_KEY');
         const decoded = await this.jwtService.verifyAsync(token, { secret: secretKey });
 
         client.data = {
@@ -83,17 +115,27 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @MessageBody() data: { streamId: string; message: string },
     @ConnectedSocket() client: Socket,
   ) {
-    if (!client.data?.nickname) {
+    if (!client.data?.nickname || client.data.readOnly) {
       return;
     }
 
     const { streamId, message } = data;
 
-    this.server.to(streamId).emit('receiveMessage', {
-      sender: client.data.nickname,
-      message,
-      timestamp: new Date(),
+    const pubClient = createClient({
+      url: this.configService.get<string>('REDIS_URL') || 'redis://redis:6379',
     });
+    await pubClient.connect();
+
+    await pubClient.publish(
+      'chat',
+      JSON.stringify({
+        roomId: streamId,
+        sender: client.data.nickname,
+        content: message,
+      }),
+    );
+
+    await pubClient.disconnect();
   }
 
   handleDisconnect(client: Socket) {
