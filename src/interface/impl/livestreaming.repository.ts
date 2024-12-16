@@ -9,8 +9,13 @@ export class LiveStreamingRepository implements ILiveStreamingRepository {
     private readonly repository: Repository<LiveStreamingEntity>,
   ) {}
 
-  createLiveStreaming(title: string): LiveStreamingEntity {
-    return this.repository.create({ title });
+  createLiveStreaming(title: string, userId: number): LiveStreamingEntity {
+    return this.repository.create({
+      title: title,
+      user: {
+        id: userId,
+      },
+    });
   }
 
   save(liveStreaming: LiveStreamingEntity): Promise<LiveStreamingEntity> {
