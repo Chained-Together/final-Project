@@ -41,7 +41,7 @@ document.getElementById('livestreaming').addEventListener('click', async () => {
     const streamingUrl = data.streamingUrl;
 
     document.getElementById('streamKeyText').textContent = `스트림 키: ${streamKey}`;
-    document.getElementById('streamingUrlText').textContent = `스트리밍 URL: ${streamingUrl}`;
+    document.getElementById('streamingUrlText').textContent = `OBS 서버 URL: ${streamingUrl}`;
   } catch (error) {
     console.error('Error fetching stream key:', error);
     document.getElementById('streamKeyText').textContent = '스트림 키를 가져오는 데 실패했습니다.';
