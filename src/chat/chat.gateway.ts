@@ -28,9 +28,9 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   async afterInit() {
     const pubClient = createClient({
-      url: 'redis://localhost:6379',
+      url: 'redis://redis:6379',
       socket: {
-        host: 'localhost',
+        host: 'redis',
         port: 6379,
         reconnectStrategy: (retries) => {
           if (retries > 20) return new Error('Redis 연결 실패');
@@ -126,7 +126,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     const { streamId, message } = data;
 
     const pubClient = createClient({
-      url: 'redis://localhost:6379',
+      url: 'redis://redis:6379',
     });
     await pubClient.connect();
 
