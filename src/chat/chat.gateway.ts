@@ -34,8 +34,17 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
           userId: null,
           nickname: 'Guest',
           streamId,
+          readOnly: true,
         };
-      } else {
+
+        if (streamId) {
+          client.join(streamId);
+          this.logger.log(`Guest joined stream: ${streamId} (read-only)`);
+        }
+        return;
+      }
+
+      try {
         const secretKey = this.configService.get('JWT_SECRET_KEY');
         const decoded = await this.jwtService.verifyAsync(token, { secret: secretKey });
 
@@ -43,20 +52,29 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
           userId: decoded.sub,
           nickname: decoded.nickname,
           streamId,
+          readOnly: false,
         };
-      }
 
-      if (streamId) {
-        client.join(streamId);
-        this.logger.log(`Client ${client.id} joined stream: ${streamId}`);
+        if (streamId) {
+          client.join(streamId);
+          this.logger.log(`Client ${client.id} joined stream: ${streamId}`);
+        }
+      } catch (error) {
+        client.data = {
+          userId: null,
+          nickname: 'Guest',
+          streamId,
+          readOnly: true,
+        };
+
+        if (streamId) {
+          client.join(streamId);
+          this.logger.log(`Invalid token - Guest joined stream: ${streamId} (read-only)`);
+        }
       }
     } catch (error) {
       this.logger.error(`Connection error: ${error.message}`);
-      client.data = {
-        userId: null,
-        nickname: 'Guest',
-        streamId: client.handshake.query.streamId as string,
-      };
+      client.disconnect();
     }
   }
 
