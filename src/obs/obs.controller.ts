@@ -16,10 +16,11 @@ export class ObsController {
 
   @Post('verify')
   @HttpCode(HttpStatus.OK)
-  async verifyStreamKey(@Body() body: { name: string }) {
+  @UseGuards(AuthGuard('jwt'))
+  async verifyStreamKey(@UserInfo() user: UserEntity, @Body() body: { name: string }) {
     const { name } = body;
 
-    const isValid = await this.obsService.verifyStreamKey(name);
+    const isValid = await this.obsService.verifyStreamKey(name, user.id);
 
     if (!isValid) {
       throw new Error('Unauthorized');

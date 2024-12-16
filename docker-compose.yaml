@@ -30,17 +30,18 @@ services:
       - '1935:1935' # RTMP 스트리밍 포트
       - '8888:8080' # NGINX 관리 페이지 포트
     environment:
-      - BEANSTALK_ADDRESS=http://loopfiy.ap-northeast-2.elasticbeanstalk.com
+      - BEANSTALK_ADDRESS=http://loopfiy2.ap-northeast-2.elasticbeanstalk.com
     networks:
       - app-network
 
   nginx:
     image: nginx:latest
     ports:
-      - '80:80' # 호스트 포트:컨테이너 포트
+      - '80:80'
     depends_on:
       - app
     volumes:
+      - ./rtmp/cert:/rtmp/cert
       - ./ebextensions/nginx.conf:/etc/nginx/nginx.conf
     entrypoint: >
       /bin/sh -c "while ! curl -s http://app:3000 > /dev/null; do sleep 1; done; nginx -t && nginx -g 'daemon off;'"
