@@ -4,7 +4,8 @@ WORKDIR /
 
 COPY . .
 
-RUN npm ci --omit=dev --prefer-offline
+RUN npm install
+RUN npm run build
 
 EXPOSE 3000
 CMD ["npm", "run", "start:prod"]
