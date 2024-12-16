@@ -18,11 +18,14 @@ export class ObsService {
         // 고유한 스트림 키 생성
         while (!isUnique) {
           randomStreamKey = uuidv4().slice(0, 8);
-          const existingKey = await this.obsStreamKeyRepository.findByStreamKey(randomStreamKey);
+          const existingKey = await this.obsStreamKeyRepository.findByStreamKey(
+            randomStreamKey,
+            userId,
+          );
           isUnique = !existingKey;
         }
-
-        const streamingUrl = `https://www.loopfiy.com/hls/${randomStreamKey}.m3u8`;
+        const src = process.env.VIDEO_SRC;
+        const streamingUrl = `http://${src}/hls/${randomStreamKey}.m3u8`;
 
         const createStreamKey = this.obsStreamKeyRepository.createObsStreamKey(
           userId,
@@ -39,8 +42,8 @@ export class ObsService {
     }
   }
 
-  async verifyStreamKey(streamKey: string): Promise<boolean> {
-    const keyEntity = await this.obsStreamKeyRepository.findByStreamKey(streamKey);
+  async verifyStreamKey(streamKey: string, userId: number): Promise<boolean> {
+    const keyEntity = await this.obsStreamKeyRepository.findByStreamKey(streamKey, userId);
 
     if (!keyEntity) {
       return false;

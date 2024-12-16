@@ -74,4 +74,52 @@
     width: 100%;
 }
 
+.comment-center {
+    /* border: 3px solid #006eff; */
+
+    height: 100%;
+    border-radius: 15px;
+    aspect-ratio: 7 / 16;
+    background-color: #0f0f0f;
+}
+
+.title-center {
+    /* border: 3px solid #ff0000; */
+    height: 30%;
+    position: relative;
+    border-bottom: 1px solid #454545;
+}
+
+.title-box {
+    /* border: 3px solid #ff0000; */
+    width: 90%;
+    height: 40%;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 8px;
+    margin-top: 20px;
+    background-color: #1e1e1e;
+    padding: 30px;
+}
+
+.title-box-btn {
+    /* border: 1px solid #006eff; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    padding-bottom: 30px;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.comment-box {
+    /* border: 3px solid #26ff00; */
+    height: 70%;
+    padding: 30px;
+}
 

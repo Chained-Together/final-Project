@@ -58,24 +58,34 @@
 
       <div class="video-list-box" id="thumbnailsContainer"></div>
     </div>
+  </div>
 
+  <div id="editModal" class="modal" style="display: none">
+    <div class="modal-content">
+      <span id="closeModal" class="close-button">&times;</span>
+      <h2>비디오 편집</h2>
 
+      <label class="popup-label">썸네일 URL:</label>
+      <input id="thumbnailInput" class="popup-input" type="text" />
 
+      <label class="popup-label">영상 제목:</label>
+      <input id="titleInput" class="popup-input" type="text" />
 
+      <label class="popup-label">영상 설명:</label>
+      <textarea id="descriptionInput" class="popup-textarea"></textarea>
 
+      <label class="popup-label">해시태그:</label>
+      <input id="hashtagInput" class="popup-input" type="text" />
 
+      <label class="popup-label">공개 여부:</label>
+      <select id="visibilityInput" class="popup-input">
+        <option value="public">public</option>
+        <option value="private">private</option>
+        <option value="unlisted">unlisted</option>
+      </select>
 
-
-
-
-
-
-
-
-
-
-
-
+      <button id="updateButton" class="popup-save-button">수정하기</button>
+    </div>
   </div>
 
 

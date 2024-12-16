@@ -31,7 +31,7 @@ async function 비디오더가져오기(lastVideoId) {
   }
 }
 
-//비디오 id를 인자로 넣의면 해당 id의 비디오를 플레이 해줌줌
+//비디오 id를 인자로 넣의면 해당 id의 비디오를 플레이 해줌
 async function playVideo(videoId) {
   const token = localStorage.getItem('token') || null;
   const video = document.getElementById('videoPlayer');
@@ -93,6 +93,26 @@ async function playVideo(videoId) {
   }
 }
 
+const likeBtn = document.getElementById("like-btn");
+const commentBtn = document.getElementById("comment-btn");
+
+function goDetail(videoId) {
+  // 기존 이벤트 제거
+  const newHandler = function () {
+    if (videoId) {
+      window.location.href = `http://localhost:3000/detail?videoId=${videoId}`;
+    } else {
+      console.error("Video ID not found");
+    }
+  };
+
+  // 기존 리스너 제거 후 새로운 리스너 등록
+  likeBtn.removeEventListener("click", newHandler);
+  commentBtn.removeEventListener("click", newHandler);
+  likeBtn.addEventListener("click", newHandler);
+  commentBtn.addEventListener("click", newHandler);
+}
+
 //-----------------------------로직---------------------------------
 //-----------------------------로직---------------------------------
 
@@ -103,7 +123,6 @@ let videoIdsIndex = 0
 document.addEventListener('DOMContentLoaded', async () => {
   //1-1:초기로드 비디오 가져오기
   const videoData = await fetchVideos();
-  // console.log('1:초기로드 비디오 가져오기',videoData);
 
   //1-2:비디오ID들만 videoIds에 추출하기기
   for (let i = 0; i < videoData.length; i++) {
@@ -113,6 +132,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   //1-3:가저온 첫번째 비디오를 재생한다다
   playVideo(videoIds[0])
+  goDetail(videoData[videoIdsIndex].id)
 });
 
 //2. 다음 버튼을 누르면 videoIds의 다음 index번호를 다음 영상이 재생된다
@@ -134,6 +154,7 @@ nextButton.addEventListener('click', async () => {
     },1500)
     console.log('더 이상 재생할 영상이 없습니다.');
   }
+  goDetail(videoIds[videoIdsIndex])
 })
 
 //3. 이전 버튼을 누르면 videoIds의 다음 index번호를 이전전 영상이 재생된다
@@ -145,7 +166,7 @@ prevButton.addEventListener('click', async () => {
   // console.log('다음버튼을 누를때마다 인덱스 번호 추가',videoIdsIndex);
   
 
-  //2-2:인덱스 번호로 다음 id찾아서 재생생
+  //2-2:인덱스 번호로 다음 id찾아서 재생
   if (videoIds && videoIds[videoIdsIndex] !== undefined) {
     playVideo(videoIds[videoIdsIndex]);
   } else {
@@ -156,4 +177,5 @@ prevButton.addEventListener('click', async () => {
     },1500)
     console.log('더 이상 재생할 영상이 없습니다.');
   }
+  goDetail(videoIds[videoIdsIndex])
 })

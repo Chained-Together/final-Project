@@ -5,6 +5,12 @@ import { UserInfo } from '../utils/user-info.decorator';
 
 @Controller('')
 export class ViewController {
+  @Get('/')
+  @Render('new-main')
+  showMainPage() {
+    return;
+  }
+
   @Get('/videolist')
   @Render('new-video-list')
   showListPage() {
@@ -54,7 +60,7 @@ export class ViewController {
   }
 
   @Get('/upload')
-  @Render('file-upload')
+  @Render('new-file-upload')
   showUploadPage() {
     return;
   }
@@ -74,6 +80,12 @@ export class ViewController {
   @Get('/view-video')
   @Render('video')
   showVideoPage() {
+    return;
+  }
+
+  @Get('/detail')
+  @Render('detail-video')
+  VideoDetail() {
     return;
   }
 

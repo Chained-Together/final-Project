@@ -11,10 +11,9 @@ export class LiveStreamingRepository implements ILiveStreamingRepository {
 
   createLiveStreaming(title: string, userId: number): LiveStreamingEntity {
     return this.repository.create({
-      title: title,
-      user: {
-        id: userId,
-      },
+      title,
+      user: { id: userId },
+      user_id: userId,
     });
   }
 

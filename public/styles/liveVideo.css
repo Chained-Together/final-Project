@@ -1,0 +1,96 @@
+.form-container {
+    background-color: #555;
+    color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    width: 400px;
+    font-family: Arial, sans-serif;
+    margin: 0;
+}
+
+
+.liveVideo {
+    max-width: 1000px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #0f0f0f;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 100px;
+}
+
+ .liveVideo video {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.liveVideo button {
+    display: inline-block;
+    margin-right: 10px;
+    padding: 10px 15px;
+    font-size: 14px;
+    color: #ffffff;
+    background-color: #322f2f;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.liveVideo button:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+}
+
+.liveVideo button:hover:not(:disabled) {
+    background-color: #0056b3;
+}
+
+.liveVideo form {
+    margin-top: 20px;
+}
+
+.liveVideo div {
+    margin-bottom: 15px;
+}
+
+.liveVideo label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.liveVideo input[type="text"], textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    background-color: #555;
+    border: 1px solid #fefffe;
+    border-radius: 5px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+    color: #ffffff;
+}
+
+.liveVideo input[type="text"]:focus, textarea:focus {
+    border-color: #000000;
+    outline: none;
+}
+
+.liveVideo textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.liveVideo #uploadBtn {
+    background-color: #28a745;
+}
+
+.liveVideo #uploadBtn:hover {
+    background-color: #218838;
+} 
+

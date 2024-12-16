@@ -28,8 +28,6 @@
       <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 <body class="main-body">
-
-
   <!-- nav바 -->
   <%- include('nav') %>
 
@@ -53,19 +51,25 @@
         <video class="video" id="videoPlayer" controls></video>
         <div class="err-box">더 이상 재생할 영상이 없습니다.</div>
       </div>
-      
-      
 
 
 
       <!-- 버튼바 -->
       <div class="btn-box">
-        <button class="btn">
-          <img src="public\images\icons8-thumbs-up-50.png" alt="">
-        </button>
-        <button class="btn">
-          <img src="public\images\icons8-comments-48.png" alt="">
-        </button>
+
+          <!-- 좋아요 버튼 -->
+          <button class="btn" id="like-btn">
+            <img src="public\images\icons8-thumbs-up-50.png" alt="">
+          </button>
+
+          <!-- 댓글 버튼 -->
+          <button class="btn" id="comment-btn">
+            <img src="public\images\icons8-comments-48.png" alt="">
+          </button>
+
+
+
+
         <button class="btn" id="prevButton">
           이전
         </button>
