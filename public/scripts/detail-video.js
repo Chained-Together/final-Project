@@ -158,10 +158,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (!response.ok) throw new Error('댓글을 불러오는데 실패했습니다.');
 
       const { data: comments } = await response.json();
-      console.log('로드된 댓글:', comments); // 디버깅용
+      console.log('로드된 댓글:', comments);
 
       commentsList.innerHTML = '';
-      comments.forEach(renderComment);
+      comments.forEach((comment) => {
+        const commentElement = renderComment(comment);
+        commentsList.appendChild(commentElement);
+      });
     } catch (error) {
       console.error('댓글 로드 실패:', error);
     }
@@ -170,8 +173,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   // 댓글 작성
   async function createComment(content) {
     try {
-      console.log('댓글 작성 시도:', { content, videoId }); // 디버깅용
-
       const response = await fetch(`/videos/${videoId}/comments`, {
         method: 'POST',
         headers: {
@@ -180,12 +181,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         },
         body: JSON.stringify({ content }),
       });
-
       const result = await response.json();
-      console.log('서버 응답:', result); // 디버깅용
+      if (!response.ok) {
+        throw new Error('댓글 작성에 실패했습니다.');
+      }
 
-      if (!response.ok) throw new Error(result.message || '댓글 작성에 실패했습니다.');
-
+      // 댓글 작성 후 즉시 댓글 목록 새로고침
       await loadComments();
       commentInput.value = '';
     } catch (error) {
@@ -194,52 +195,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  // 댓글 수정
-  async function updateComment(commentId, content) {
-    try {
-      const response = await fetch(`/comment/${videoId}/${commentId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ content }),
-      });
-
-      if (!response.ok) throw new Error('댓글 수정에 실패했습니다.');
-
-      await loadComments();
-    } catch (error) {
-      console.error('댓글 수정 실패:', error);
-      alert('댓글 수정에 실패했습니다.');
-    }
-  }
-
-  // 댓글 삭제
-  async function deleteComment(commentId) {
-    try {
-      const response = await fetch(`/comment/${videoId}/${commentId}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) throw new Error('댓글 삭제에 실패했습니다.');
-
-      await loadComments();
-    } catch (error) {
-      console.error('댓글 삭제 실패:', error);
-      alert('댓글 삭제에 실패했습니다.');
-    }
-  }
-
   // 답글 작성
-  async function createReply(parentCommentId, content) {
+  async function createReply(commentId, content) {
     try {
-      console.log('답글 작성 시도:', { parentCommentId, content, videoId });
-
-      const response = await fetch(`/videos/${videoId}/comments/${parentCommentId}`, {
+      const response = await fetch(`/videos/${videoId}/comments/${commentId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -247,21 +206,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         },
         body: JSON.stringify({ content }),
       });
-
-      const result = await response.json();
-      console.log('서버 응답:', result);
-
+      if (!response.ok) throw new Error('댓글 수정에 실패했습니다.');
       if (!response.ok) {
-        throw new Error(result.message || '답글 작성에 실패했습니다.');
+        throw new Error('답글 작성에 실패했습니다.');
       }
-
+      console.error('댓글 수정 실패:', error);
+      // 답글 작성 후 즉시 댓글 목록 새로고침
       await loadComments();
-      // 답글 입력창 초기화 및 숨기기
-      const replyInput = document.querySelector('.reply-input');
-      if (replyInput) {
-        replyInput.value = '';
-        replyInput.parentElement.style.display = 'none';
-      }
     } catch (error) {
       console.error('답글 작성 실패:', error);
       alert('답글 작성에 실패했습니다.');
@@ -272,38 +223,57 @@ document.addEventListener('DOMContentLoaded', async () => {
   function renderComment(comment) {
     const commentElement = document.createElement('div');
     commentElement.className = 'comment-item';
+
+    // 현재 로그인한 사용자의 ID 가져오기
+    const currentUserId = token ? JSON.parse(atob(token.split('.')[1])).id : null;
+
     commentElement.innerHTML = `
       <div class="comment-header">
         <span class="comment-author">${comment.user?.nickname || '사용자'}</span>
         <span class="comment-date">${new Date(comment.createdAt).toLocaleString()}</span>
       </div>
-      <div class="comment-content">${comment.content}</div>
+      <div class="comment-content" id="content-${comment.id}">${comment.content}</div>
       <div class="comment-actions">
         <button class="action-button reply-btn">답글</button>
         ${
-          comment.userId === getUserIdFromToken(token)
+          currentUserId === comment.userId
             ? `
-          <button class="action-button edit-btn">수정</button>
-          <button class="action-button delete-btn">삭제</button>
+          <button class="action-button edit-btn" data-comment-id="${comment.id}">수정</button>
+          <button class="action-button delete-btn" data-comment-id="${comment.id}">삭제</button>
         `
             : ''
         }
+      </div>
+      <div class="edit-form" style="display: none;">
+        <textarea class="edit-input">${comment.content}</textarea>
+        <button class="edit-submit">수정하기</button>
+        <button class="edit-cancel">취소</button>
       </div>
       <div class="reply-form" style="display: none;">
         <textarea class="reply-input" placeholder="답글을 입력하세요..."></textarea>
         <button class="reply-submit">답글 작성</button>
       </div>
-      <div class="reply-container">
+      <div class="replies-container">
         ${
           comment.replies
             ?.map(
               (reply) => `
           <div class="reply-item">
-            <div class="comment-header">
-              <span class="comment-author">${reply.user?.nickname || '사용자'}</span>
-              <span class="comment-date">${new Date(reply.createdAt).toLocaleString()}</span>
+            <div class="reply-header">
+              <span class="reply-author">${reply.user?.nickname || '사용자'}</span>
+              <span class="reply-date">${new Date(reply.createdAt).toLocaleString()}</span>
             </div>
-            <div class="comment-content">${reply.content}</div>
+            <div class="reply-content">${reply.content}</div>
+            ${
+              currentUserId === reply.userId
+                ? `
+              <div class="reply-actions">
+                <button class="reply-edit-btn" data-reply-id="${reply.id}">수정</button>
+                <button class="reply-delete-btn" data-reply-id="${reply.id}">삭제</button>
+              </div>
+            `
+                : ''
+            }
           </div>
         `,
             )
@@ -312,58 +282,119 @@ document.addEventListener('DOMContentLoaded', async () => {
       </div>
     `;
 
-    // 이벤트 리스너 추가
-    const replyBtn = commentElement.querySelector('.reply-btn');
-    const replyForm = commentElement.querySelector('.reply-form');
-    const replySubmit = commentElement.querySelector('.reply-submit');
+    // 수정 버튼 이벤트
     const editBtn = commentElement.querySelector('.edit-btn');
+    const editForm = commentElement.querySelector('.edit-form');
+    const editInput = commentElement.querySelector('.edit-input');
+    const editSubmit = commentElement.querySelector('.edit-submit');
+    const editCancel = commentElement.querySelector('.edit-cancel');
+    const contentDiv = commentElement.querySelector(`#content-${comment.id}`);
+
+    editBtn?.addEventListener('click', () => {
+      editForm.style.display = 'block';
+      contentDiv.style.display = 'none';
+    });
+
+    editCancel?.addEventListener('click', () => {
+      editForm.style.display = 'none';
+      contentDiv.style.display = 'block';
+    });
+
+    editSubmit?.addEventListener('click', async () => {
+      const newContent = editInput.value.trim();
+      if (newContent) {
+        try {
+          const response = await fetch(`/videos/${videoId}/comments/${comment.id}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ content: newContent }),
+          });
+
+          if (!response.ok) {
+            throw new Error('댓글 수정에 실패했습니다.');
+          }
+
+          await loadComments(); // 댓글 목록 새로고침
+        } catch (error) {
+          console.error('댓글 수정 실패:', error);
+          alert('댓글 수정에 실패했습니다.');
+        }
+      }
+    });
+
+    // 삭제 버튼 이벤트
     const deleteBtn = commentElement.querySelector('.delete-btn');
-
-    replyBtn?.addEventListener('click', () => {
-      replyForm.style.display = replyForm.style.display === 'none' ? 'block' : 'none';
-    });
-
-    replySubmit?.addEventListener('click', async () => {
-      const content = commentElement.querySelector('.reply-input').value;
-      if (content.trim()) {
-        await createReply(comment.id, content);
-      }
-    });
-
-    editBtn?.addEventListener('click', async () => {
-      const newContent = prompt('댓글을 수정하세요:', comment.content);
-      if (newContent && newContent !== comment.content) {
-        await updateComment(comment.id, newContent);
-      }
-    });
-
     deleteBtn?.addEventListener('click', async () => {
       if (confirm('정말로 이 댓글을 삭제하시겠습니까?')) {
-        await deleteComment(comment.id);
+        try {
+          const response = await fetch(`/videos/${videoId}/comments/${comment.id}`, {
+            method: 'DELETE',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          if (!response.ok) {
+            throw new Error('댓글 삭제에 실패했습니다.');
+          }
+
+          await loadComments(); // 댓글 목록 새로고침
+        } catch (error) {
+          console.error('댓글 삭제 실패:', error);
+          alert('댓글 삭제에 실패했습니다.');
+        }
       }
     });
 
-    commentsList.appendChild(commentElement);
+    // 기존의 답글 관련 이벤트 리스너들...
+    const replyBtn = commentElement.querySelector('.reply-btn');
+    const replyForm = commentElement.querySelector('.reply-form');
+    const replyInput = commentElement.querySelector('.reply-input');
+    const replySubmit = commentElement.querySelector('.reply-submit');
+
+    // 답글 폼 토글
+    replyBtn?.addEventListener('click', () => {
+      replyForm.style.display = replyForm.style.display === 'none' ? 'block' : 'none';
+      if (replyForm.style.display === 'block') {
+        replyInput.focus();
+      }
+    });
+
+    // 답글 제출
+    replySubmit?.addEventListener('click', async () => {
+      const content = replyInput.value.trim();
+      if (content) {
+        await createReply(comment.id, content);
+        replyInput.value = '';
+        replyForm.style.display = 'none';
+      }
+    });
+
+    return commentElement;
   }
 
-  // 토큰에서 사용자 ID 추출
-  function getUserIdFromToken(token) {
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload.sub; // JWT의 sub 클레임에 userId가 있다고 가정
-    } catch {
-      return null;
-    }
-  }
-
-  // 초기 댓글 로드
-  await loadComments();
-
-  // 댓글 작성 이벤트
-  commentSubmit.addEventListener('click', async () => {
+  // 댓글 작성 버튼 이벤트
+  commentSubmit?.addEventListener('click', async () => {
     const content = commentInput.value.trim();
     if (content) {
       await createComment(content);
     }
   });
+
+  // 댓글 입력창 엔터키 이벤트
+  commentInput?.addEventListener('keypress', async (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      const content = commentInput.value.trim();
+      if (content) {
+        await createComment(content);
+      }
+    }
+  });
+
+  // 초기 댓글 로드
+  await loadComments();
 });
