@@ -49,30 +49,45 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     socket.on('connect', () => {
       console.log('Connected to chat server');
+      if (token) {
+        messageInput.disabled = false;
+        sendButton.disabled = false;
+      } else {
+        messageInput.disabled = true;
+        sendButton.disabled = true;
+      }
     });
 
     socket.on('connect_error', (error) => {
       console.error('Socket connection error:', error);
+      messageInput.disabled = true;
+      sendButton.disabled = true;
+      messageInput.placeholder = '채팅 연결에 실패했습니다. 다시 로그인해주세요.';
+    });
+
+    socket.on('disconnect', () => {
+      messageInput.disabled = true;
+      sendButton.disabled = true;
+      messageInput.placeholder = '로그인 후 채팅이 가능합니다';
     });
 
     socket.on('receiveMessage', (data) => {
       const messageElement = document.createElement('div');
       messageElement.className = 'message';
       messageElement.innerHTML = `
-                <span class="username">${data.sender}</span>
-                <span class="message-text">${data.message}</span>
-            `;
+        <span class="username">${data.sender}</span>
+        <span class="message-text">${data.message}</span>
+      `;
       chatBox.appendChild(messageElement);
       chatBox.scrollTop = chatBox.scrollHeight;
     });
 
     // 메시지 전송
     const sendMessage = () => {
-      const messageInput = document.getElementById('message-input');
       const message = messageInput.value.trim();
-      const token = localStorage.getItem('token');
+      const currentToken = localStorage.getItem('token');
 
-      if (!token) {
+      if (!currentToken) {
         messageInput.value = '';
         messageInput.placeholder = '로그인 후 채팅이 가능합니다';
 
@@ -84,7 +99,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
       }
 
-      if (message) {
+      if (message && socket.connected) {
         socket.emit('sendMessage', { streamId, message, sender: nickname });
         messageInput.value = '';
         messageInput.placeholder = '메시지를 입력하세요';
@@ -98,6 +113,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         sendMessage();
       }
     });
+
+    // UI 상태 설정
+    if (!token) {
+      messageInput.disabled = true;
+      sendButton.disabled = true;
+    }
   } catch (error) {
     console.error('Error:', error);
     alert('스트림을 불러오는데 실패했습니다.');

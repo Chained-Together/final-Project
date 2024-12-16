@@ -3,7 +3,7 @@ services:
     image: app-image # 이미지 이름 설정
     build:
       context: .
-      dockerfile: Dockerfile # 명시적으로 Dockerfile 사용
+      dockerfile: Dockerfile
     ports:
       - '3000:3000'
     environment:
@@ -12,12 +12,20 @@ services:
       DB_USER: loopfiy
       DB_PASS: aaaa4321!
       DB_NAME: loopfiy
+      REDIS_URL: 'redis://redis:6379' # Redis URL 설정
+    networks:
+      - app-network
+
+  redis:
+    image: redis:latest
+    ports:
+      - '6379:6379'
     networks:
       - app-network
 
   nginx-rtmp:
     build:
-      context: ./rtmp # nginx-rtmp 디렉토리에서 빌드
+      context: ./rtmp
     ports:
       - '1935:1935' # RTMP 스트리밍 포트
       - '8888:8080' # NGINX 관리 페이지 포트
@@ -31,7 +39,7 @@ services:
     ports:
       - '80:80' # 호스트 포트:컨테이너 포트
     depends_on:
-      - app # nginx는 app이 먼저 시작된 후에 실행
+      - app
     volumes:
       - ./ebextensions/nginx.conf:/etc/nginx/nginx.conf
     entrypoint: >
