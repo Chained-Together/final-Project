@@ -40,28 +40,29 @@
 <link rel="stylesheet" href="/public/styles/nav.css" />
 <link rel="stylesheet" href="/public/styles/liveVideo.css"/>
     </header>
+<div class="liveVideo">
+    <video id="preview" autoplay muted></video>
+    <button id="startRecording">비디오 촬영</button>
+    <button id="stopRecording" disabled>녹화 종료</button>
+    <button id="uploadBtn">Upload</button>
 
-<div class="container">
-    <div class="liveVideo">
-        <video id="preview" autoplay muted></video>
-        <button id="startRecording">비디오 촬영</button>
-        <button id="stopRecording" disabled>녹화 종료</button>
-        <button id="uploadBtn">Upload</button>
-    </div>
     <div class="form-container">
         <form>
             <div>
                 <label for="title">영상 제목</label>
-                <input type="text" class="title" id="title" placeholder="영상 제목을 입력하세요." />
+                <input type="text" id="title" placeholder="영상 제목을 입력하세요." />
             </div>
+
             <div>
                 <label for="video-description">영상 설명</label>
                 <textarea id="video-description" placeholder="영상 설명을 입력하세요"></textarea>
             </div>
+
             <div>
                 <label for="hashtags">해시 태그</label>
-                <input type="text" class="hashtags" id="hashtags" placeholder="해시태그를 입력하세요." />
+                <input type="text" id="hashtags" placeholder="해시태그를 입력하세요." />
             </div>
+
             <div>
                 <label for="visibility" class="video-upload-label">공개 여부</label>
                 <select id="visibility" class="video-upload-select">
