@@ -4,8 +4,8 @@ document.getElementById('toggleButton').addEventListener('click', function () {
     header.style.display === 'none' || header.style.display === '' ? 'block' : 'none';
 });
 
-const token = localStorage.getItem('token');
 
+const token = localStorage.getItem('token');
 const logoutBtn = document.getElementById('logoutBtn');
 const logoutText = document.getElementById('logoutText');
 if (!token) {

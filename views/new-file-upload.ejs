@@ -44,25 +44,24 @@
   
         <label for="visibility" class="video-upload-label">공개 여부</label>
         <select id="visibility" class="video-upload-select">
-          <option value="public">공개</option>
+          <option value="public" selected>공개</option>
           <option value="private">비공개</option>
         </select>
+        
 
         <p class="video-upload-file-label">문서를 업로드해 주세요</p>
         <div class="video-upload-file-upload">
-          <label for="file" class="video-upload-dropzone">
+          <label  for="file" class="video-upload-dropzone">
             <span class="video-upload-icon">⬆</span>
             <p class="video-upload-text"><strong>파일 찾아보기</strong></p>
             <p id="fileNameDisplay">영상파일을 첨부 하세요</p>
             <input type="file" id="file" class="video-upload-input-file">
           </label>
         </div>
-  
-        <button id="uploadbtn" type="submit" class="video-upload-button">업로드</button>
+        <button id="uploadbtn" class="video-upload-button">업로드</button>
       </form>
     </div>
-
-
-  <script src="public\scripts\new-file-upload.js"></script>
+    <script src="/public/scripts/newfile-upload.js"></script>
   </body>
+  
 </html>

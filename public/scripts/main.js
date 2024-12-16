@@ -72,7 +72,7 @@ function createVideoElement(video) {
   console.log(shortFormItem);
 
   shortFormItem.addEventListener('click', () => {
-    window.location.href = `/view-video?id=${video.id}`;
+    window.location.href = `/detail?videoId=${video.id}`;
   });
 
   if (video.thumbnailUrl) {

@@ -10,6 +10,7 @@ import { UserEntity } from 'src/user/entities/user.entity';
 import { LikeEntity } from './entities/like.entity';
 import { LikeController } from './like.controller';
 import { LikeService } from './like.service';
+import { NotificationRepository } from 'src/interface/impl/notification.repository';
 
 @Module({
   imports: [
@@ -30,7 +31,7 @@ import { LikeService } from './like.service';
     },
     {
       provide: 'INotificationRepository',
-      useClass: NotificationEntity,
+      useClass: NotificationRepository,
     },
   ],
 })

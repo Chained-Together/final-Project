@@ -78,6 +78,12 @@ export class ViewController {
     return;
   }
 
+  @Get('/detail')
+  @Render('detail-video')
+  VideoDetail() {
+    return;
+  }
+
   @Get('/liveVideo')
   @Render('liveVideo')
   showLiveVideo() {
