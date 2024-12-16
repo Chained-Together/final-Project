@@ -20,29 +20,35 @@
     <link rel="stylesheet" href="/public/styles/edit-channel.css" />
     <link rel="stylesheet" href="/public/styles/channel.css" />
     <link rel="stylesheet" href="/public/styles/nav.css" />
-    <link rel="stylesheet" href="/public/styles/my-channel.css" />
+    <!-- <link rel="stylesheet" href="/public/styles/my-channel.css" /> -->
     <script src="https://kit.fontawesome.com/6a4db89020.js" crossorigin="anonymous"></script>
   </head>
   <body>
   <!-- nav바 -->
   <%- include('nav') %>
-
-    <div class="channel-info" id="channelInfo">
-      <img src="profileImageElement.src" alt="프로필 사진" id="profile" class="profile-btn" />
-      <h2>
-        <p><strong id="channelName">로딩 중...</strong></p>
-      </h2>
-      <button type="submit" class="search-btn" id="accountEditBtn">
-        <img src="public/images/option.png" alt="Search Icon" />
-      </button>
-      <button class="profile-edit-btn" id="profileEditBtn">프로필 수정</button>
-      <button class="done-btn" id="editDoneBtn">완료</button>
+  
+  <div class="main-channel">
+    <div class="profile-container">
+      <!-- <div class="channel-info" id="channelInfo"> -->
+        <img src="profileImageElement.src" alt="프로필 사진" id="profile" class="profile-btn" />
+        <h2>
+          <p><strong id="channelName">로딩 중...</strong></p>
+        </h2>
+        <button type="submit" class="search-btn" id="accountEditBtn">
+          <img src="public/images/option.png" alt="Search Icon" />
+        </button>
+        <button class="profile-edit-btn" id="profileEditBtn">프로필 수정</button>
+        <button class="done-btn" id="editDoneBtn">완료</button>
+      <!-- </div> -->
     </div>
+  </div>
+
+
     <p class="error" id="errorMessage"></p>
 
-    <div class="video-list" id="thumbnailsContainer"></div>
+    <!-- <div class="video-list" id="thumbnailsContainer"></div> -->
 
-    <div id="editModal" class="modal" style="display: none">
+    <div id="edit-modal" class="modal" style="display: none">
       <div class="modal-content">
         <span id="closeModal" class="close-button">&times;</span>
         <h2>비디오 편집</h2>
@@ -85,9 +91,9 @@
       </div>
     </div>
 
-    <script src="/public/scripts/nav.js"></script>
     <script src="/public/scripts/edit-channel.js"></script>
     <script src="/public/scripts/search.js" defer></script>
+    <script src="public\scripts\edit-channel.js" ></script>
   </body>
 </html>
 <script></script>

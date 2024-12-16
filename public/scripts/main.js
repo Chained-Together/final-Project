@@ -1,8 +1,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const token = localStorage.getItem('token') 
+  // const urlParams = new URLSearchParams(window.location.search);
+  const token = localStorage.getItem('token')
   const profileImageElements = document.querySelectorAll('.profileImage');
-
 console.log('token',token)
 
   const setImageSrc = (src) => {
@@ -11,12 +10,12 @@ console.log('token',token)
     });
   };
 
-  if (urlParams.get('token') && !localStorage.getItem('token')) {
-  localStorage.setItem('token', urlParams.get('token'));
-   console.log('token12341234',token)
+  // if (urlParams.get('token') && !localStorage.getItem('token')) {
+  // localStorage.setItem('token', urlParams.get('token'));
+  //  console.log('token12341234',token)
 
-    console.log('URL에서 토큰을 로컬 스토리지에 저장 완료:', urlParams.get('token'));
-  }
+  //   console.log('URL에서 토큰을 로컬 스토리지에 저장 완료:', urlParams.get('token'));
+  // }
 
   if (!token) {
     setImageSrc('/path/to/default-profile.png');
@@ -73,7 +72,7 @@ function createVideoElement(video) {
   console.log(shortFormItem);
 
   shortFormItem.addEventListener('click', () => {
-    window.location.href = `/view-video?id=${video.id}`;
+    window.location.href = `/detail?videoId=${video.id}`;
   });
 
   if (video.thumbnailUrl) {

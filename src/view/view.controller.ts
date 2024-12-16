@@ -60,7 +60,7 @@ export class ViewController {
   }
 
   @Get('/upload')
-  @Render('file-upload')
+  @Render('new-file-upload')
   showUploadPage() {
     return;
   }
@@ -80,6 +80,12 @@ export class ViewController {
   @Get('/view-video')
   @Render('video')
   showVideoPage() {
+    return;
+  }
+
+  @Get('/detail')
+  @Render('detail-video')
+  VideoDetail() {
     return;
   }
 

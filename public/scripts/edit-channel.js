@@ -94,6 +94,7 @@ const createVideoCard = (video, container, token) => {
     window.location.href = `/view-video?id=${video.id}`;
   });
 
+  
   const editBtn = document.createElement('button');
   editBtn.textContent = '편집';
   editBtn.classList.add('editBtn');
