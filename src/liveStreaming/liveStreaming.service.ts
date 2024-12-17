@@ -19,6 +19,7 @@ export class LiveStreamingService {
     if (!checkStreamKey) {
       throw new NotFoundException('해당하는 스트림키 가 없습니다.');
     }
+
     const liveStreaming = this.liveStreamingRepository.createLiveStreaming(title, userId);
     return await this.liveStreamingRepository.save(liveStreaming);
   }
