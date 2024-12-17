@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!response.ok) throw new Error('스트림 정보를 가져올 수 없습니다.');
 
     const streamData = await response.json();
+    console.log('streamData', streamData);
 
     // 스트림 정보 설정
     document.getElementById('streamTitle').textContent = streamData.title;
@@ -42,9 +43,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // 소켓 연결
-    const socket = io('http://localhost:3001', {
+    const socket = io(`http://www.loopfiy.com:3001`, {
       auth: { token },
       query: { streamId },
+      transports: ['websocket'],
+      upgrade: false,
     });
 
     socket.on('connect', () => {

@@ -4,7 +4,6 @@ document.getElementById('toggleButton').addEventListener('click', function () {
     header.style.display === 'none' || header.style.display === '' ? 'block' : 'none';
 });
 
-
 const token = localStorage.getItem('token');
 const logoutBtn = document.getElementById('logoutBtn');
 const logoutText = document.getElementById('logoutText');
@@ -12,8 +11,8 @@ if (!token) {
   document.getElementById('myChannelLink').style.display = 'none';
   document.getElementById('notificationBtn').style.display = 'none';
   document.getElementById('livestreaming').style.display = 'none';
-  document.getElementById('videoupload').style.display = 'none'
-  document.getElementById('logoutsisarajim').style.display = 'none'
+  document.getElementById('videoupload').style.display = 'none';
+  document.getElementById('logoutsisarajim').style.display = 'none';
   if (logoutText) logoutText.textContent = '로그인';
 
   logoutBtn.addEventListener('click', () => {
@@ -35,13 +34,12 @@ if (token) {
   });
 }
 
-
 const liveBtn = document.getElementById('liveBtn');
 if (liveBtn) {
   liveBtn.addEventListener('click', () => {
     const token = localStorage.getItem('token');
     if (token) {
-      window.location.href = '/stream';
+      window.location.href = '/liveStream';
     } else {
       alert('로그인이 필요한 서비스입니다.');
       window.location.href = '/login';
@@ -49,11 +47,11 @@ if (liveBtn) {
   });
 }
 
-const uploadBtn = document.getElementById('videoupload')
-if(token){
-  uploadBtn.addEventListener('click',()=>{
-  window.location.href = '/upload'
-})
+const uploadBtn = document.getElementById('videoupload');
+if (token) {
+  uploadBtn.addEventListener('click', () => {
+    window.location.href = '/upload';
+  });
 }
 
 const setImageSrc = (src) => {
@@ -161,9 +159,8 @@ function openNotificationPopup() {
       item.style.transition = 'background-color 0.3s ease';
       item.style.width = '95%';
 
-
       item.addEventListener('mouseover', () => {
-        item.style.transition = 'background-color 0.3s ease, transform 0.3s ease'; 
+        item.style.transition = 'background-color 0.3s ease, transform 0.3s ease';
         item.style.backgroundColor = '#e9e9e9';
         item.style.transform = 'scale(1.05)';
       });
@@ -206,7 +203,7 @@ document.getElementById('notificationBtn').addEventListener('click', () => {
 
 document.getElementById('closePopupBtn').addEventListener('click', () => {
   const popup = document.getElementById('notificationPopup');
-  popup.style.display = 'none'; 
+  popup.style.display = 'none';
 });
 
 document.getElementById('home').addEventListener('click', () => {

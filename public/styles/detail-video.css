@@ -1,125 +1,208 @@
 /* 중앙+중앙 정렬 */
 .center-end-center {
-    display: flex;
-    justify-content: center;
-    /* align-items: center; */
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
 }
 
 .main-channel {
-    /* border: 3px solid #2bff00; */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 90vh;
-    padding: 32px 24px 36px 24px;
+  /* border: 3px solid #2bff00; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 90vh;
+  padding: 32px 24px 36px 24px;
 }
 
 /* 영상카드 */
 .video-channel {
-    /* border: 2px solid #ff0000; */
-    height: 100%;
-    width: auto;
+  /* border: 2px solid #ff0000; */
+  height: 100%;
+  width: auto;
 }
 
-.video-box { 
-    /* border: 1px solid #ffe600; */
-    position: relative;
-    height: 100%;
-    border-radius: 15px;
-    aspect-ratio: 9 / 16;
-    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.233);
+.video-box {
+  /* border: 1px solid #ffe600; */
+  position: relative;
+  height: 100%;
+  border-radius: 15px;
+  aspect-ratio: 9 / 16;
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.233);
 }
 
 .video {
-    width: 100%;
-    height: 100%;
-    background-color: black;
-    border-radius: 20px;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  border-radius: 20px;
 }
 
 .err-box {
-    /* border: 3px solid #2bff00; */
-    display: none;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 2vw;
-    text-align: center;
-    font-weight: bold;
+  /* border: 3px solid #2bff00; */
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2vw;
+  text-align: center;
+  font-weight: bold;
 }
 
 /* 버튼 바 관련 */
 .btn-box {
-    /* border: 1px solid #006eff; */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 120px;
-    height: auto
+  /* border: 1px solid #006eff; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 120px;
+  height: auto;
 }
 
 .btn {
-    /* border: 1px solid #006eff; */
-    border-radius: 50%;
-    height: 60px;
-    aspect-ratio: 1 / 1;
-    margin: 10px;
-    background-color:rgba(61, 61, 61, 0.329);
-    color: white;
+  /* border: 1px solid #006eff; */
+  border-radius: 50%;
+  height: 60px;
+  aspect-ratio: 1 / 1;
+  margin: 10px;
+  background-color: rgba(61, 61, 61, 0.329);
+  color: white;
 }
 
 .btn img {
-    width: 100%;
+  width: 100%;
 }
 
 .comment-center {
-    /* border: 3px solid #006eff; */
+  /* border: 3px solid #006eff; */
 
-    height: 100%;
-    border-radius: 15px;
-    aspect-ratio: 7 / 16;
-    background-color: #0f0f0f;
+  height: 100%;
+  border-radius: 15px;
+  aspect-ratio: 7 / 16;
+  background-color: #0f0f0f;
 }
 
 .title-center {
-    /* border: 3px solid #ff0000; */
-    height: 30%;
-    position: relative;
-    border-bottom: 1px solid #454545;
+  /* border: 3px solid #ff0000; */
+  height: 30%;
+  position: relative;
+  border-bottom: 1px solid #454545;
 }
 
 .title-box {
-    /* border: 3px solid #ff0000; */
-    width: 90%;
-    height: 40%;
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    border-radius: 8px;
-    margin-top: 20px;
-    background-color: #1e1e1e;
-    padding: 30px;
+  /* border: 3px solid #ff0000; */
+  width: 90%;
+  height: 40%;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 8px;
+  margin-top: 20px;
+  background-color: #1e1e1e;
+  padding: 30px;
 }
 
 .title-box-btn {
-    /* border: 1px solid #006eff; */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: auto;
-    padding-bottom: 30px;
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
+  /* border: 1px solid #006eff; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+  padding-bottom: 30px;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .comment-box {
-    /* border: 3px solid #26ff00; */
-    height: 70%;
-    padding: 30px;
+  /* border: 3px solid #26ff00; */
+  height: 70%;
+  padding: 30px;
 }
 
+/* 댓글 입력 영역 */
+.comment-input-container {
+  margin: 20px 0;
+  padding: 15px;
+  background-color: #1e1e1e;
+  border-radius: 8px;
+}
+
+.comment-input {
+  width: 100%;
+  min-height: 60px;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #333;
+  border: 1px solid #454545;
+  border-radius: 4px;
+  color: #fff;
+  resize: vertical;
+}
+
+.comment-submit {
+  padding: 8px 16px;
+  background-color: #4a4a4a;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.comment-submit:hover {
+  background-color: #666;
+}
+
+/* 댓글 목록 */
+.comments-list {
+  margin-top: 20px;
+}
+
+.comment-item {
+  padding: 15px;
+  margin-bottom: 15px;
+  background-color: #1e1e1e;
+  border-radius: 8px;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.comment-author {
+  font-weight: bold;
+  color: #fff;
+}
+
+.comment-date {
+  color: #888;
+  font-size: 0.9em;
+}
+
+.comment-content {
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.comment-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.action-button {
+  padding: 4px 8px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.action-button:hover {
+  background-color: #444;
+}

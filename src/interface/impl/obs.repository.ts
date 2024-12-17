@@ -31,11 +31,10 @@ export class ObsStreamKeyRepository implements IObsStreamKeyRepository {
     });
   }
 
-  findByStreamKey(streamKey: string, userId: number): Promise<ObsStreamKeyEntity | null> {
+  findByStreamKey(streamKey: string): Promise<ObsStreamKeyEntity | null> {
     return this.repository.findOne({
       where: {
         streamKey: streamKey,
-        user: { id: userId },
       },
     });
   }

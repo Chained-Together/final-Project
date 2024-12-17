@@ -6,6 +6,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - '3000:3000'
+      - '3001:3001'
     environment:
       DB_HOST: 'loopfiy1.czo0oemmwl67.ap-northeast-2.rds.amazonaws.com'
       DB_PORT: 5432
@@ -41,7 +42,6 @@ services:
     depends_on:
       - app
     volumes:
-      - ./rtmp/cert:/rtmp/cert
       - ./ebextensions/nginx.conf:/etc/nginx/nginx.conf
     entrypoint: >
       /bin/sh -c "while ! curl -s http://app:3000 > /dev/null; do sleep 1; done; nginx -t && nginx -g 'daemon off;'"
