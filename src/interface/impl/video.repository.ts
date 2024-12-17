@@ -51,8 +51,8 @@ export class VideoRepository implements IVideoRepository {
     return this.repository
       .createQueryBuilder('video')
       .where('video.title LIKE :keyword', { keyword: `%${keyword}%` })
+      .andWhere('video.status = :status', { status: true })
       .orWhere('video.hashtags @> :keywordArray', { keywordArray: JSON.stringify([keyword]) })
-      .andWhere('video.status = :status', { status: Visibility.PUBLIC })
       .getMany();
   }
   async findNewVideos(lastId: number, take: number): Promise<VideoEntity[]> {
