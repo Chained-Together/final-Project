@@ -1,7 +1,6 @@
 let globalVideoData = null;
 let lastVideoId = null;
 
-
 //lastId의 이후 6개의 비디오를 로드함함
 async function fetchVideos(lastId) {
   const url = lastId ? `video/many/${lastId}/6` : 'video/many/0/50';
@@ -93,31 +92,31 @@ async function playVideo(videoId) {
   }
 }
 
-const likeBtn = document.getElementById("like-btn");
-const commentBtn = document.getElementById("comment-btn");
+const likeBtn = document.getElementById('like-btn');
+const commentBtn = document.getElementById('comment-btn');
 
 function goDetail(videoId) {
   // 기존 이벤트 제거
   const newHandler = function () {
     if (videoId) {
-      window.location.href = `http://localhost:3000/detail?videoId=${videoId}`;
+      window.location.href = `/detail?videoId=${videoId}`;
     } else {
-      console.error("Video ID not found");
+      console.error('Video ID not found');
     }
   };
 
   // 기존 리스너 제거 후 새로운 리스너 등록
-  likeBtn.removeEventListener("click", newHandler);
-  commentBtn.removeEventListener("click", newHandler);
-  likeBtn.addEventListener("click", newHandler);
-  commentBtn.addEventListener("click", newHandler);
+  likeBtn.removeEventListener('click', newHandler);
+  commentBtn.removeEventListener('click', newHandler);
+  likeBtn.addEventListener('click', newHandler);
+  commentBtn.addEventListener('click', newHandler);
 }
 
 //-----------------------------로직---------------------------------
 //-----------------------------로직---------------------------------
 
 let videoIds = [];
-let videoIdsIndex = 0
+let videoIdsIndex = 0;
 
 //1. 초기 로드에 비디오를 가져와서 재생한다다
 document.addEventListener('DOMContentLoaded', async () => {
@@ -128,54 +127,58 @@ document.addEventListener('DOMContentLoaded', async () => {
   for (let i = 0; i < videoData.length; i++) {
     videoIds.push(videoData[i].id);
   }
+  
+  console.log('역순전',videoIds);
+  
+  videoIds.reverse();
+
+  console.log('역순후',videoIds);
   // console.log('2:비디오ID들만 추출하기기', videoIds);
 
   //1-3:가저온 첫번째 비디오를 재생한다다
-  playVideo(videoIds[0])
-  goDetail(videoData[videoIdsIndex].id)
+  playVideo(videoIds[0]);
+  goDetail(videoData[videoIdsIndex].id);
 });
 
 //2. 다음 버튼을 누르면 videoIds의 다음 index번호를 다음 영상이 재생된다
-const nextButton = document.getElementById('nextButton')
+const nextButton = document.getElementById('nextButton');
 nextButton.addEventListener('click', async () => {
   //2-1:버튼을 누를때마다 인덱스 번호 추가
-  videoIdsIndex++
+  videoIdsIndex++;
   // console.log('다음버튼을 누를때마다 인덱스 번호 추가',videoIdsIndex);
-  
 
   //2-2:인덱스 번호로 다음 id찾아서 재생생
   if (videoIds && videoIds[videoIdsIndex] !== undefined) {
     playVideo(videoIds[videoIdsIndex]);
   } else {
-    videoIdsIndex = 0
+    videoIdsIndex = 0;
     errBox.style.display = 'block';
-    setTimeout(()=>{
+    setTimeout(() => {
       errBox.style.display = 'none';
-    },1500)
+    }, 1500);
     console.log('더 이상 재생할 영상이 없습니다.');
   }
-  goDetail(videoIds[videoIdsIndex])
-})
+  goDetail(videoIds[videoIdsIndex]);
+});
 
 //3. 이전 버튼을 누르면 videoIds의 다음 index번호를 이전전 영상이 재생된다
 const errBox = document.querySelector('.err-box');
-const prevButton = document.getElementById('prevButton')
+const prevButton = document.getElementById('prevButton');
 prevButton.addEventListener('click', async () => {
   //2-1:버튼을 누를때마다 인덱스 번호 추가
-  videoIdsIndex--
+  videoIdsIndex--;
   // console.log('다음버튼을 누를때마다 인덱스 번호 추가',videoIdsIndex);
-  
 
   //2-2:인덱스 번호로 다음 id찾아서 재생
   if (videoIds && videoIds[videoIdsIndex] !== undefined) {
     playVideo(videoIds[videoIdsIndex]);
   } else {
-    videoIdsIndex = 0
+    videoIdsIndex = 0;
     errBox.style.display = 'block';
-    setTimeout(()=>{
+    setTimeout(() => {
       errBox.style.display = 'none';
-    },1500)
+    }, 1500);
     console.log('더 이상 재생할 영상이 없습니다.');
   }
-  goDetail(videoIds[videoIdsIndex])
-})
+  goDetail(videoIds[videoIdsIndex]);
+});

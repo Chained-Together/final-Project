@@ -16,7 +16,7 @@ export class ObsController {
 
   @Post('verify')
   @HttpCode(HttpStatus.OK)
-  async verifyStreamKey(@UserInfo() user: UserEntity, @Body() body: { name: string }) {
+  async verifyStreamKey(@Body() body: { name: string }) {
     const { name } = body;
 
     const isValid = await this.obsService.verifyStreamKey(name);

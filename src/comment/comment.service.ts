@@ -6,6 +6,7 @@ import { NotificationService } from 'src/notification/notification.service';
 import { UserEntity } from 'src/user/entities/user.entity';
 import { CommentDto } from './dto/comment.dto';
 import { CommentEntity } from './entities/comment.entity';
+import { find } from 'rxjs';
 
 @Injectable()
 export class CommentService {
@@ -32,15 +33,24 @@ export class CommentService {
 
     await this.commentRepository.save(createComment);
 
-    await this.forwardNotification(videoId, user.id);
+    await this.forwardNotification(videoId, user.nickname);
 
     return createComment;
   }
 
   async findAll(videoId: number) {
     await this.verifyVideo(videoId);
-    const comment = await this.commentRepository.findAllComment(videoId);
-    return { data: comment };
+    const comments = await this.commentRepository.findAllComment(videoId);
+    const allComment = await Promise.all(
+      comments.map(async (comment) => {
+        const replies = await this.commentRepository.findAllReplyComment(comment.id);
+        return {
+          ...comment,
+          replies: replies,
+        };
+      }),
+    );
+    return { data: allComment };
   }
 
   async findOne(videoId: number, commentId: number) {
@@ -81,18 +91,17 @@ export class CommentService {
   }
 
   async createReply(videoId: number, commentId: number, user: UserEntity, commentDto: CommentDto) {
-    await this.verifyComment(user.id, commentId, videoId);
-
     const checkComment = await this.commentRepository.findCommentByCommentId(commentId);
     if (!checkComment) {
       throw new NotFoundException('해당하는 댓글이 존재하지 않습니다.');
     }
+
+    console.log('checkComment', checkComment);
     const checkReply = await this.commentRepository.findReplyByCommentGroup(
       checkComment.commentGroup,
     );
 
     //변수만들기
-    
 
     const newOrderNumber = (checkReply?.orderNumber ?? 1) + 1;
 
@@ -107,8 +116,7 @@ export class CommentService {
 
     await this.commentRepository.save(createReply);
 
-    await this.forwardNotification(videoId, user.id);
-
+    await this.forwardNotification(videoId, user.nickname);
     return createReply;
   }
 
@@ -119,7 +127,7 @@ export class CommentService {
       videoId,
     );
 
-    if (_.isNil(findComment)) {
+    if (!findComment) {
       throw new NotFoundException('해당하는 댓글이 존재하지 않습니다.');
     }
 
@@ -154,8 +162,9 @@ export class CommentService {
     }
   }
 
-  private async forwardNotification(videoId: number, userId: number) {
-    const message = `${userId}님이 ${videoId} 영상에 댓글을 달았습니다.`;
+  private async forwardNotification(videoId: number, userNickname: string) {
+    const video = await this.verifyVideo(videoId);
+    const message = `${userNickname}님이 ${video.title} 영상에 댓글을 달았습니다.`;
 
     this.notificationService.emitNotification(message, videoId);
   }

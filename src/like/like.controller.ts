@@ -16,9 +16,8 @@ export class LikeController {
     @Request() req,
   ): Promise<({ user: { id: number }; video: { id: number } } & LikeEntity) | DeleteResult> {
     const user = req.user as UserEntity;
-    const userId = user.id;
 
-    return this.likeService.toggleLike(userId, videoId);
+    return this.likeService.toggleLike(user, videoId);
   }
 
   @Get(':videoId')

@@ -56,40 +56,50 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     setTimeout(() => {
       thumbnailsContainer.innerHTML = '';
-
+    
       videoData.forEach((video) => {
         const card = document.createElement('div');
         card.classList.add('video-card', 'thumbnail'); // "thumbnail" 클래스 추가
         card.id = video.id;
-
+    
+        const imgContainer = document.createElement('div'); // img를 감싸는 div 추가
+        imgContainer.classList.add('img-container');
+    
         const img = document.createElement('img');
         img.src = video.thumbnailUrl;
         img.alt = video.title;
-
+    
+        const titleContainer = document.createElement('div'); // title을 감싸는 div 추가
+        titleContainer.classList.add('title-container');
+    
         const title = document.createElement('h3');
         title.textContent = video.title;
-
+    
         const description = document.createElement('p');
         description.textContent = video.description;
-
+    
         const hashtagContainer = document.createElement('div');
         hashtagContainer.classList.add('hashtag-container');
-
+    
         const span = document.createElement('p');
         span.textContent = String(video.hashtags);
         hashtagContainer.appendChild(span);
-
+    
         card.addEventListener('click', () => {
-          window.location.href = `/view-video?id=${video.id}`;
+          window.location.href = `/detail?videoId=${video.id}`;
         });
-
-        card.appendChild(img);
-        card.appendChild(title);
+    
+        imgContainer.appendChild(img);  // img 추가
+        titleContainer.appendChild(title); // h3를 감싼 div에 추가
+        card.appendChild(imgContainer); // img를 감싼 div 추가
+        card.appendChild(titleContainer); // title을 감싼 div 추가
         card.appendChild(description);
         card.appendChild(hashtagContainer);
         thumbnailsContainer.appendChild(card);
       });
     }, 0);
+    
+    
   } catch (error) {
     console.error('오류:', error);
     channelNameElement.textContent = '정보를 로드하는 중 오류가 발생했습니다.';

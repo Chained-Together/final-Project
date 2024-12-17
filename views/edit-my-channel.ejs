@@ -18,9 +18,9 @@
 
     <link rel="stylesheet" href="/public/styles/video-edit-popup.css" />
     <link rel="stylesheet" href="/public/styles/edit-channel.css" />
-    <link rel="stylesheet" href="/public/styles/channel.css" />
+    <!-- <link rel="stylesheet" href="/public/styles/channel.css" /> -->
     <link rel="stylesheet" href="/public/styles/nav.css" />
-    <!-- <link rel="stylesheet" href="/public/styles/my-channel.css" /> -->
+    <link rel="stylesheet" href="/public/styles/new-channel.css" />
     <script src="https://kit.fontawesome.com/6a4db89020.js" crossorigin="anonymous"></script>
   </head>
   <body>
@@ -29,24 +29,35 @@
   
   <div class="main-channel">
     <div class="profile-container">
-      <!-- <div class="channel-info" id="channelInfo"> -->
-        <img src="profileImageElement.src" alt="프로필 사진" id="profile" class="profile-btn" />
-        <h2>
+
+        <div class="channel-img-box">
+          <img src="profileImageElement.src" alt="프로필 사진" id="profile" class="profile-img" />
+        </div>
+        <div class="channel-name-box">
           <p><strong id="channelName">로딩 중...</strong></p>
-        </h2>
-        <button type="submit" class="search-btn" id="accountEditBtn">
-          <img src="public/images/option.png" alt="Search Icon" />
-        </button>
-        <button class="profile-edit-btn" id="profileEditBtn">프로필 수정</button>
-        <button class="done-btn" id="editDoneBtn">완료</button>
-      <!-- </div> -->
+          <div>
+            <button type="submit" class="search-btn" id="accountEditBtn">
+            </button>
+            <button class="profile-edit-btn" id="profileEditBtn">프로필 수정</button>
+            <button class="done-btn" id="editDoneBtn">완료</button>
+          </div>
+      </div>
     </div>
+
+    <div class="video-list-bar center-end-center">
+      <span>내 동영상</span>
+    </div>
+
+    <div class="video-list-container">
+      <div class="video-list-box" id="thumbnailsContainer"></div>
+    </div>
+    
   </div>
+  <!-- <div class="video-list" id="thumbnailsContainer"></div> -->
 
 
     <p class="error" id="errorMessage"></p>
 
-    <!-- <div class="video-list" id="thumbnailsContainer"></div> -->
 
     <div id="edit-modal" class="modal" style="display: none">
       <div class="modal-content">

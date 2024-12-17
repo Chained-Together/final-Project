@@ -6,6 +6,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - '3000:3000'
+      - '3001:3001'
     environment:
       DB_HOST: 'loopfiy1.czo0oemmwl67.ap-northeast-2.rds.amazonaws.com'
       DB_PORT: 5432

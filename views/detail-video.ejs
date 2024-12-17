@@ -51,22 +51,43 @@
 
             <div class="title-box-btn">
               <button class="btn" id="detail-like-btn">
-                <img src="public\images\icons8-thumbs-up-50.png" alt="" />
+                <img src="\public\images\icons8-thumbs-up-50.png" alt="" />
+                <div id="like-count">0</div>
               </button>
-              <div id="like-count">0</div>
+
+              <!-- 공유버튼 : js로직 연결시 id="shared-btn 사용할것 -->
+              <button class="btn" id="shared-btn">
+                <img src="\public\images\icons8-share-100.png" alt="" />
+              </button>
 
               <a href="/">
                 <button class="btn" id="cancel-btn">
-                  <img src="public\images\icons8-cancel-100.png" alt="" />
+                  <img src="\public\images\icons8-cancel-100.png" alt="" />
                 </button>
               </a>
             </div>
           </div>
 
-          <div class="comment-box"></div>
+          <div class="comment-box">
+            <div class="comment-input-container">
+              <textarea
+                class="comment-input"
+                placeholder="댓글을 입력하세요..."
+                rows="3"
+              ></textarea>
+              <button class="comment-submit">댓글 작성</button>
+            </div>
+            <div class="comments-list">
+              <!-- 댓글들이 여기에 동적으로 추가됩니다 -->
+            </div>
+          </div>
         </div>
       </div>
     </div>
+
+
+
+
 
     <!-- 실시간 hls를 위한 스크립트 -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>

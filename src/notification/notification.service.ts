@@ -30,15 +30,15 @@ export class NotificationService {
     const userId = foundChannel.user.id;
     console.log(1, this.notificationRepository);
 
-    // const createNotification = await this.notificationRepository.createNotification(
-    //   userId,
-    //   message,
-    // );
+    const createNotification = await this.notificationRepository.createNotification(
+      userId,
+      message,
+    );
 
-    // this.eventEmitter.emit(`notification:${userId}`, {
-    //   message,
-    //   id: createNotification.id,
-    // });
+    this.eventEmitter.emit(`notification:${userId}`, {
+      message,
+      id: createNotification.id,
+    });
   }
 
   getNotificationStream(userId: number): Observable<any> {
