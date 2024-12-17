@@ -81,6 +81,9 @@
   border-radius: 15px;
   aspect-ratio: 7 / 16;
   background-color: #0f0f0f;
+  max-width: 400px;
+  min-width: 400px;
+  width: 100%;
 }
 
 .title-center {
@@ -121,6 +124,9 @@
   /* border: 3px solid #26ff00; */
   height: 70%;
   padding: 30px;
+  overflow-y: auto; /* 세로 스크롤 활성화 */
+  overflow-x: hidden; /* 가로 스크롤 비활성화 (필요시 설정) */
+  box-sizing: border-box; /* 패딩 포함 크기 계산 */
 }
 
 /* 댓글 입력 영역 */
