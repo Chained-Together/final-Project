@@ -229,7 +229,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     commentElement.innerHTML = `
     <div class="comment-header">
-      <span class="comment-author">${comment.user?.nickname || '사용자'}</span>
+      <span class="comment-author">${comment.nickname || '사용자'}</span>
       <span class="comment-date">${new Date(comment.createdAt).toLocaleString()}</span>
     </div>
     <div class="comment-content" id="content-${comment.id}">${comment.content}</div>
@@ -250,8 +250,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       <button class="edit-cancel">취소</button>
     </div>
     <div class="reply-form" style="display: none;">
-      <textarea class="reply-input" placeholder="답글을 입력하세요..."></textarea>
-      <button class="reply-submit">답글 작성</button>
+      <textarea class="reply-input comment-input" placeholder="답글을 입력하세요..."></textarea>
+      <button class="reply-submit comment-submit">답글 작성</button>
     </div>
     <div class="replies-container"></div>
   `;
@@ -334,32 +334,124 @@ document.addEventListener('DOMContentLoaded', async () => {
         const replyElement = document.createElement('div');
         replyElement.className = 'reply-item';
         replyElement.innerHTML = `
+        <div id="reply-content" style="display: none;">
           <div class="reply-header">
-            <span class="reply-author">${reply.user?.nickname || '사용자'}</span>
+            <span class="reply-author">${reply.nickname || '사용자'}</span>
             <span class="reply-date">${new Date(reply.createdAt).toLocaleString()}</span>
           </div>
-          <div class="reply-content">${reply.content}</div>
-          ${
-            currentUserId === reply.userId
-              ? `
-            <div class="reply-actions">
-              <button class="reply-edit-btn" data-reply-id="${reply.id}">수정</button>
-              <button class="reply-delete-btn" data-reply-id="${reply.id}">삭제</button>
-            </div>
-          `
-              : ''
+          <div class="reply-content" id="reply-content-${reply.id}">${reply.content}</div>
+        ${
+          currentUserId === reply.userId
+            ? `
+          <div class="reply-actions">
+            <button class="reply-edit-btn" data-reply-id="${reply.id}">수정</button>
+            <button class="reply-delete-btn" data-reply-id="${reply.id}">삭제</button>
+          </div>
+          <div class="reply-edit-form" style="display: none;">
+            <textarea class="reply-edit-input">${reply.content}</textarea>
+            <button class="reply-edit-submit">수정하기</button>
+            <button class="reply-edit-cancel">취소</button>
+          </div>
+        </div>
+      `
+          : ''
+      }
+    `;
+
+        const editButton = replyElement.querySelector('.reply-edit-btn');
+        const editForm = replyElement.querySelector('.reply-edit-form');
+        const editInput = replyElement.querySelector('.reply-edit-input');
+        const editSubmit = replyElement.querySelector('.reply-edit-submit');
+        const editCancel = replyElement.querySelector('.reply-edit-cancel');
+        const replyContent = replyElement.querySelector(`#reply-content-${reply.id}`);
+
+        // 수정 버튼 클릭 시 폼 표시
+        editButton?.addEventListener('click', () => {
+          editForm.style.display = 'block';
+          replyContent.style.display = 'none';
+        });
+
+        // 취소 버튼 클릭 시 폼 숨기기
+        editCancel?.addEventListener('click', () => {
+          editForm.style.display = 'none';
+          replyContent.style.display = 'block';
+        });
+
+        // 수정 완료 버튼 클릭 이벤트
+        editSubmit?.addEventListener('click', async () => {
+          const newContent = editInput.value.trim();
+          if (newContent) {
+            try {
+              const response = await fetch(`/videos/${videoId}/comments/${reply.id}`, {
+                method: 'PUT',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ content: newContent }),
+              });
+
+              if (!response.ok) {
+                throw new Error('답글 수정에 실패했습니다.');
+              }
+
+              // 수정된 내용을 화면에 반영
+              replyContent.textContent = newContent;
+              editForm.style.display = 'none';
+              replyContent.style.display = 'block';
+              alert('답글이 수정되었습니다.');
+            } catch (error) {
+              console.error('답글 수정 실패:', error);
+              alert('답글 수정에 실패했습니다.');
+            }
           }
-        `;
+        });
+
+        const deleteButton = replyElement.querySelector('.reply-delete-btn');
+        if (deleteButton) {
+          deleteButton.addEventListener('click', async () => {
+            const confirmDelete = confirm('정말로 이 답글을 삭제하시겠습니까?');
+            if (confirmDelete) {
+              try {
+                const response = await fetch(`/videos/${videoId}/comments/${reply.id}`, {
+                  method: 'DELETE',
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                });
+
+                if (!response.ok) {
+                  throw new Error('답글 삭제에 실패했습니다.');
+                }
+
+                // 성공 시 답글 DOM에서 제거
+                replyElement.remove();
+                alert('답글이 삭제되었습니다.');
+              } catch (error) {
+                console.error('답글 삭제 실패:', error);
+                alert('답글 삭제에 실패했습니다.');
+              }
+            }
+          });
+        }
+
+        // 답글 컨테이너에 추가
         repliesContainer.appendChild(replyElement);
       });
     }
 
-    // 답글 폼 토글
+    // 답글 폼 토글 버튼 이벤트
     replyBtn?.addEventListener('click', () => {
       replyForm.style.display = replyForm.style.display === 'none' ? 'block' : 'none';
       if (replyForm.style.display === 'block') {
         replyInput.focus();
       }
+
+      // 답글 내용 표시/숨기기 기능 추가
+      const replyContents = document.querySelectorAll('#reply-content'); // 모든 답글 컨텐츠 선택
+      replyContents.forEach((replyContent) => {
+        replyContent.style.display = replyContent.style.display === 'none' ? 'block' : 'none';
+      });
     });
 
     // 답글 제출

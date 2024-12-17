@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CommentEntity } from 'src/comment/entities/comment.entity';
+import { UserEntity } from 'src/user/entities/user.entity';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { ICommentRepository } from '../comment-interface';
 
@@ -9,6 +10,8 @@ export class CommentRepository implements ICommentRepository {
   constructor(
     @InjectRepository(CommentEntity)
     private readonly repository: Repository<CommentEntity>,
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
   ) {}
   findCommentByVideoId(videoId: number): Promise<CommentEntity | null> {
     return this.repository.findOne({ where: { video: { id: videoId } } });
@@ -43,21 +46,52 @@ export class CommentRepository implements ICommentRepository {
   save(comment: CommentEntity): Promise<CommentEntity> {
     return this.repository.save(comment);
   }
-  findAllComment(videoId: number): Promise<CommentEntity[]> {
-    return this.repository.find({
+  async findAllComment(videoId: number): Promise<CommentEntity[]> {
+    const comments = await this.repository.find({
       where: { video: { id: videoId }, depth: 0 },
       select: ['id', 'userId', 'content', 'createdAt'],
       order: { createdAt: 'ASC' },
     });
+
+    const commentsWithUser = await Promise.all(
+      comments.map(async (comment) => {
+        const user = await this.userRepository.findOne({
+          where: { id: comment.userId },
+        });
+
+        return {
+          ...comment,
+          nickname: user?.nickname || '알 수 없음',
+        };
+      }),
+    );
+
+    return commentsWithUser;
   }
-  findAllReplyComment(commentId: number): Promise<CommentEntity[]> {
-    return this.repository.find({
+
+  async findAllReplyComment(commentId: number): Promise<CommentEntity[]> {
+    const replies = await this.repository.find({
       where: { parentComment: commentId, depth: 1 },
       select: ['id', 'userId', 'content', 'createdAt'],
       order: {
         orderNumber: 'ASC',
       },
     });
+
+    const repliesWithUser = await Promise.all(
+      replies.map(async (reply) => {
+        const user = await this.userRepository.findOne({
+          where: { id: reply.userId },
+        });
+
+        return {
+          ...reply,
+          nickname: user?.nickname || '알 수 없음',
+        };
+      }),
+    );
+
+    return repliesWithUser;
   }
   findCommentUserIdAndCommentIdAndVideoId(
     userId: number,
