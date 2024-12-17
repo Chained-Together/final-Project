@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         hashtagContainer.appendChild(span);
 
         card.addEventListener('click', () => {
-          window.location.href = `/view-video?id=${video.id}`;
+          window.location.href = `/detail?videoId=${video.id}`;
         });
 
         card.appendChild(img);

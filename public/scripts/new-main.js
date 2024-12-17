@@ -100,7 +100,7 @@ function goDetail(videoId) {
   // 기존 이벤트 제거
   const newHandler = function () {
     if (videoId) {
-      window.location.href = `http://localhost:3000/detail?videoId=${videoId}`;
+      window.location.href = `/detail?videoId=${videoId}`;
     } else {
       console.error("Video ID not found");
     }
