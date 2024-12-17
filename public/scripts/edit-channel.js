@@ -8,11 +8,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (thumbnailsContainer && thumbnailsContainer.parentNode) {
     thumbnailsContainer.parentNode.insertBefore(channelEditContainer, thumbnailsContainer);
   } else {
-    console.error("thumbnailsContainer 또는 부모 노드를 찾을 수 없습니다.");
+    console.error('thumbnailsContainer 또는 부모 노드를 찾을 수 없습니다.');
   }
 
-
-  
   if (!token) {
     channelNameElement.textContent = '로그인이 필요합니다.';
     return;
@@ -133,7 +131,7 @@ const createVideoCard = (video, container, token) => {
   card.appendChild(visibilityLabel);
 
   card.addEventListener('click', () => {
-    window.location.href = `/view-video?id=${video.id}`;
+    window.location.href = `/detail?videoId=${video.id}`;
   });
 
   container.appendChild(card);
@@ -268,7 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
         name: profileNameInput.value,
       };
 
-      const response = await fetch('/channel/profile', {
+      const response = await fetch('/channel', {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

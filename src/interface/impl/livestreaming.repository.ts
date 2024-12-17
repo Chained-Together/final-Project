@@ -13,13 +13,11 @@ export class LiveStreamingRepository implements ILiveStreamingRepository {
     const checkTitle = this.repository.findOne({
       where: {
         user: { id: userId },
-        title: title,
       },
     });
 
     if (checkTitle) {
       this.repository.delete({
-        title: title,
         user: {
           id: userId,
         },
