@@ -10,6 +10,22 @@ export class LiveStreamingRepository implements ILiveStreamingRepository {
   ) {}
 
   createLiveStreaming(title: string, userId: number): LiveStreamingEntity {
+    const checkTitle = this.repository.findOne({
+      where: {
+        user: { id: userId },
+        title: title,
+      },
+    });
+
+    if (checkTitle) {
+      this.repository.delete({
+        title: title,
+        user: {
+          id: userId,
+        },
+      });
+    }
+
     return this.repository.create({
       title,
       user: { id: userId },
