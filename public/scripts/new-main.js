@@ -120,6 +120,7 @@ let videoIdsIndex = 0;
 
 //1. 초기 로드에 비디오를 가져와서 재생한다다
 document.addEventListener('DOMContentLoaded', async () => {
+  videoIdsIndex = 0
   //1-1:초기로드 비디오 가져오기
   const videoData = await fetchVideos();
 
