@@ -38,10 +38,10 @@ document.getElementById('livestreaming').addEventListener('click', async () => {
     console.log('Response Data:', data);
 
     const streamKey = data.streamKey;
-    const streamingUrl = data.streamingUrl;
 
     document.getElementById('streamKeyText').textContent = `스트림 키: ${streamKey}`;
-    document.getElementById('streamingUrlText').textContent = `OBS 서버 URL: ${streamingUrl}`;
+    document.getElementById('streamingUrlText').textContent =
+      `OBS 서버 설정 값: rtmp://${process.env.VIDEO_SRC}/live`;
   } catch (error) {
     console.error('Error fetching stream key:', error);
     document.getElementById('streamKeyText').textContent = '스트림 키를 가져오는 데 실패했습니다.';
