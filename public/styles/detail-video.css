@@ -81,6 +81,9 @@
   border-radius: 15px;
   aspect-ratio: 7 / 16;
   background-color: #0f0f0f;
+  max-width: 400px;
+  min-width: 400px;
+  width: 100%;
 }
 
 .title-center {
@@ -121,6 +124,28 @@
   /* border: 3px solid #26ff00; */
   height: 70%;
   padding: 30px;
+  overflow-y: auto; /* 세로 스크롤 활성화 */
+  overflow-x: hidden; /* 가로 스크롤 비활성화 (필요시 설정) */
+  box-sizing: border-box; /* 패딩 포함 크기 계산 */
+}
+
+/* 스크롤바 너비 설정 */
+.comment-box::-webkit-scrollbar {
+  width: 8px; /* 세로 스크롤바 너비 */
+  height: 8px; /* 가로 스크롤바 높이 */
+}
+
+/* 스크롤바의 슬라이더 부분 */
+.comment-box::-webkit-scrollbar-thumb {
+  background-color: #555; /* 슬라이더 색상 */
+  border-radius: 10px; /* 둥근 모양 */
+  border: 2px solid #f0f0f0; /* 슬라이더와 트랙 사이 간격 */
+}
+
+/* 스크롤바의 트랙 부분 */
+.comment-box::-webkit-scrollbar-track {
+  background-color: #333; /* 트랙 배경색 */
+  border-radius: 10px; /* 둥근 모양 */
 }
 
 /* 댓글 입력 영역 */
@@ -194,6 +219,8 @@
   gap: 10px;
 }
 
+.reply-edit-btn,
+.reply-delete-btn,
 .action-button {
   padding: 4px 8px;
   background-color: #333;
@@ -203,6 +230,8 @@
   cursor: pointer;
 }
 
+.reply-edit-btn,
+.reply-delete-btn,
 .action-button:hover {
   background-color: #444;
 }

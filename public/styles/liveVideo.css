@@ -3,10 +3,13 @@
     color: #fff;
     padding: 30px;
     border-radius: 10px;
-    width: 400px;
+    width: 80%; /* 화면 너비의 80% */
+    max-width: 500px; /* 최대 너비를 500px로 제한 */
     font-family: Arial, sans-serif;
-    margin: 0;
+    margin: 0 auto; /* 수평 가운데 정렬 */
+    margin-top: 50px;
 }
+
 
 
 .liveVideo {
@@ -68,7 +71,7 @@
     width: 100%;
     padding: 10px;
     font-size: 14px;
-    background-color: #555;
+    background-color: #333;
     border: 1px solid #fefffe;
     border-radius: 5px;
     box-sizing: border-box;

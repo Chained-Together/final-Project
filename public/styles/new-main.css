@@ -35,6 +35,8 @@
     height: 100%;
     background-color: black;
     border-radius: 20px;
+    object-fit: cover;
+    overflow: hidden; 
 }
 
 .err-box {

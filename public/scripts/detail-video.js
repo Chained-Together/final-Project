@@ -230,6 +230,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     commentElement.innerHTML = `
     <div class="comment-header">
       <span class="comment-author">${comment.nickname || '사용자'}</span>
+      <span class="comment-author">${comment.nickname || '사용자'}</span>
       <span class="comment-date">${new Date(comment.createdAt).toLocaleString()}</span>
     </div>
     <div class="comment-content" id="content-${comment.id}">${comment.content}</div>
@@ -250,8 +251,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       <button class="edit-cancel">취소</button>
     </div>
     <div class="reply-form" style="display: none;">
-      <textarea class="reply-input" placeholder="답글을 입력하세요..."></textarea>
-      <button class="reply-submit">답글 작성</button>
+      <textarea class="reply-input comment-input" placeholder="답글을 입력하세요..."></textarea>
+      <button class="reply-submit comment-submit">답글 작성</button>
     </div>
     <div class="replies-container"></div>
   `;
@@ -334,22 +335,24 @@ document.addEventListener('DOMContentLoaded', async () => {
         const replyElement = document.createElement('div');
         replyElement.className = 'reply-item';
         replyElement.innerHTML = `
-      <div class="reply-header">
-        <span class="reply-author">${reply.nickname || '사용자'}</span>
-        <span class="reply-date">${new Date(reply.createdAt).toLocaleString()}</span>
-      </div>
-      <div class="reply-content" id="reply-content-${reply.id}">${reply.content}</div>
-      ${
-        currentUserId === reply.userId
-          ? `
-        <div class="reply-actions">
-          <button class="reply-edit-btn" data-reply-id="${reply.id}">수정</button>
-          <button class="reply-delete-btn" data-reply-id="${reply.id}">삭제</button>
-        </div>
-        <div class="reply-edit-form" style="display: none;">
-          <textarea class="reply-edit-input">${reply.content}</textarea>
-          <button class="reply-edit-submit">수정하기</button>
-          <button class="reply-edit-cancel">취소</button>
+        <div id="reply-content" style="display: none;">
+          <div class="reply-header">
+            <span class="reply-author">${reply.nickname || '사용자'}</span>
+            <span class="reply-date">${new Date(reply.createdAt).toLocaleString()}</span>
+          </div>
+          <div class="reply-content" id="reply-content-${reply.id}">${reply.content}</div>
+        ${
+          currentUserId === reply.userId
+            ? `
+          <div class="reply-actions">
+            <button class="reply-edit-btn" data-reply-id="${reply.id}">수정</button>
+            <button class="reply-delete-btn" data-reply-id="${reply.id}">삭제</button>
+          </div>
+          <div class="reply-edit-form" style="display: none;">
+            <textarea class="reply-edit-input">${reply.content}</textarea>
+            <button class="reply-edit-submit">수정하기</button>
+            <button class="reply-edit-cancel">취소</button>
+          </div>
         </div>
       `
           : ''
@@ -438,12 +441,18 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
     }
 
-    // 답글 폼 토글
+    // 답글 폼 토글 버튼 이벤트
     replyBtn?.addEventListener('click', () => {
       replyForm.style.display = replyForm.style.display === 'none' ? 'block' : 'none';
       if (replyForm.style.display === 'block') {
         replyInput.focus();
       }
+
+      // 답글 내용 표시/숨기기 기능 추가
+      const replyContents = document.querySelectorAll('#reply-content'); // 모든 답글 컨텐츠 선택
+      replyContents.forEach((replyContent) => {
+        replyContent.style.display = replyContent.style.display === 'none' ? 'block' : 'none';
+      });
     });
 
     // 답글 제출

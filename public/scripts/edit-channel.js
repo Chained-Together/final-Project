@@ -5,7 +5,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   const thumbnailsContainer = document.getElementById('thumbnailsContainer');
   const channelEditContainer = document.createElement('div');
   // channelEditContainer.classList.add('channel-edit-container');
-  document.body.insertBefore(channelEditContainer, thumbnailsContainer);
+  if (thumbnailsContainer && thumbnailsContainer.parentNode) {
+    thumbnailsContainer.parentNode.insertBefore(channelEditContainer, thumbnailsContainer);
+  } else {
+    console.error("thumbnailsContainer 또는 부모 노드를 찾을 수 없습니다.");
+  }
 
 
   
@@ -64,37 +68,10 @@ const createVideoCard = (video, container, token) => {
   card.classList.add('video-card', 'thumbnail');
   card.id = video.id;
 
-  const img = document.createElement('img');
-  img.src = video.thumbnailUrl;
-  img.alt = video.title;
+  // 버튼 컨테이너 생성
+  const buttonContainer = document.createElement('div');
+  buttonContainer.classList.add('button-container');
 
-  const title = document.createElement('h3');
-  title.textContent = video.title;
-
-  const description = document.createElement('p');
-  description.textContent = video.description;
-
-  const hashtagContainer = document.createElement('div');
-  hashtagContainer.classList.add('hashtag-container');
-  const span = document.createElement('p');
-  span.textContent = String(video.hashtags);
-  hashtagContainer.appendChild(span);
-
-  const visibilityLabel = document.createElement('p');
-  visibilityLabel.className = 'visibility-label';
-  visibilityLabel.textContent = `Visibility: ${video.visibility}`;
-
-  card.appendChild(img);
-  card.appendChild(title);
-  card.appendChild(description);
-  card.appendChild(hashtagContainer);
-  card.appendChild(visibilityLabel);
-
-  card.addEventListener('click', () => {
-    window.location.href = `/view-video?id=${video.id}`;
-  });
-
-  
   const editBtn = document.createElement('button');
   editBtn.textContent = '편집';
   editBtn.classList.add('editBtn');
@@ -125,8 +102,40 @@ const createVideoCard = (video, container, token) => {
     }
   });
 
-  card.appendChild(editBtn);
-  card.appendChild(deleteBtn);
+  // buttonContainer.appendChild(editBtn);
+  buttonContainer.appendChild(deleteBtn);
+  card.appendChild(buttonContainer);
+
+  const img = document.createElement('img');
+  img.src = video.thumbnailUrl;
+  img.alt = video.title;
+
+  const title = document.createElement('h3');
+  title.textContent = video.title;
+
+  const description = document.createElement('p');
+  description.textContent = video.description;
+
+  const hashtagContainer = document.createElement('div');
+  hashtagContainer.classList.add('hashtag-container');
+  const span = document.createElement('p');
+  span.textContent = String(video.hashtags);
+  hashtagContainer.appendChild(span);
+
+  const visibilityLabel = document.createElement('p');
+  visibilityLabel.className = 'visibility-label';
+  visibilityLabel.textContent = `Visibility: ${video.visibility}`;
+
+  card.appendChild(img);
+  card.appendChild(title);
+  card.appendChild(description);
+  card.appendChild(hashtagContainer);
+  card.appendChild(visibilityLabel);
+
+  card.addEventListener('click', () => {
+    window.location.href = `/view-video?id=${video.id}`;
+  });
+
   container.appendChild(card);
 };
 

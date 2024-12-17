@@ -164,7 +164,6 @@ async function uploadVideo() {
       console.log('요청 성공:', await metadataResponse.json());
       alert('영상 업로드 성공!');
     } else {
-      s;
       console.error('메타데이터 요청 실패:', metadataResponse.status);
       throw new Error('메타데이터 전송 실패');
     }
