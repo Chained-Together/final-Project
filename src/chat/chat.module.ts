@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService, ConfigModule } from '@nestjs/config';
-import { ChatGateway } from './chat.gateway';
+// import { ChatGateway } from './chat.gateway';
 
 @Module({
   imports: [
@@ -14,6 +14,6 @@ import { ChatGateway } from './chat.gateway';
       inject: [ConfigService],
     }),
   ],
-  providers: [ChatGateway],
+  // providers: [ChatGateway],
 })
 export class ChatModule {}

@@ -30,6 +30,11 @@ export class VideoRepository implements IVideoRepository {
       where: { channel: { id: channelId } },
     });
   }
+  findVideoByVideoId(videoId: number): Promise<VideoEntity> {
+    return this.repository.findOne({
+      where: { id: videoId },
+    });
+  }
   findVideoWithChannelAndResolution(videoId: number): Promise<VideoEntity> {
     return this.repository.findOne({
       where: { id: videoId },
@@ -87,8 +92,5 @@ export class VideoRepository implements IVideoRepository {
   }
   saveVideo(video: VideoEntity): Promise<VideoEntity> {
     return this.repository.save(video);
-  }
-  findVideoByVideoId(videoId: number): Promise<VideoEntity> {
-    return this.repository.findOne({ where: { id: videoId } });
   }
 }

@@ -198,6 +198,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // 답글 작성
   async function createReply(commentId, content) {
     try {
+      console.log(`/videos/${videoId}/comments/${commentId}`);
       const response = await fetch(`/videos/${videoId}/comments/${commentId}`, {
         method: 'POST',
         headers: {
@@ -206,12 +207,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         },
         body: JSON.stringify({ content }),
       });
-      if (!response.ok) throw new Error('댓글 수정에 실패했습니다.');
       if (!response.ok) {
-        throw new Error('답글 작성에 실패했습니다.');
+        throw new Error('답글 작성에 실패');
       }
-      console.error('댓글 수정 실패:', error);
-      // 답글 작성 후 즉시 댓글 목록 새로고침
+
+      const result = await response.json();
       await loadComments();
     } catch (error) {
       console.error('답글 작성 실패:', error);
@@ -228,59 +228,33 @@ document.addEventListener('DOMContentLoaded', async () => {
     const currentUserId = token ? JSON.parse(atob(token.split('.')[1])).id : null;
 
     commentElement.innerHTML = `
-      <div class="comment-header">
-        <span class="comment-author">${comment.user?.nickname || '사용자'}</span>
-        <span class="comment-date">${new Date(comment.createdAt).toLocaleString()}</span>
-      </div>
-      <div class="comment-content" id="content-${comment.id}">${comment.content}</div>
-      <div class="comment-actions">
-        <button class="action-button reply-btn">답글</button>
-        ${
-          currentUserId === comment.userId
-            ? `
-          <button class="action-button edit-btn" data-comment-id="${comment.id}">수정</button>
-          <button class="action-button delete-btn" data-comment-id="${comment.id}">삭제</button>
-        `
-            : ''
-        }
-      </div>
-      <div class="edit-form" style="display: none;">
-        <textarea class="edit-input">${comment.content}</textarea>
-        <button class="edit-submit">수정하기</button>
-        <button class="edit-cancel">취소</button>
-      </div>
-      <div class="reply-form" style="display: none;">
-        <textarea class="reply-input" placeholder="답글을 입력하세요..."></textarea>
-        <button class="reply-submit">답글 작성</button>
-      </div>
-      <div class="replies-container">
-        ${
-          comment.replies
-            ?.map(
-              (reply) => `
-          <div class="reply-item">
-            <div class="reply-header">
-              <span class="reply-author">${reply.user?.nickname || '사용자'}</span>
-              <span class="reply-date">${new Date(reply.createdAt).toLocaleString()}</span>
-            </div>
-            <div class="reply-content">${reply.content}</div>
-            ${
-              currentUserId === reply.userId
-                ? `
-              <div class="reply-actions">
-                <button class="reply-edit-btn" data-reply-id="${reply.id}">수정</button>
-                <button class="reply-delete-btn" data-reply-id="${reply.id}">삭제</button>
-              </div>
-            `
-                : ''
-            }
-          </div>
-        `,
-            )
-            .join('') || ''
-        }
-      </div>
-    `;
+    <div class="comment-header">
+      <span class="comment-author">${comment.user?.nickname || '사용자'}</span>
+      <span class="comment-date">${new Date(comment.createdAt).toLocaleString()}</span>
+    </div>
+    <div class="comment-content" id="content-${comment.id}">${comment.content}</div>
+    <div class="comment-actions">
+      <button class="action-button reply-btn">답글</button>
+      ${
+        currentUserId === comment.userId
+          ? `
+        <button class="action-button edit-btn" data-comment-id="${comment.id}">수정</button>
+        <button class="action-button delete-btn" data-comment-id="${comment.id}">삭제</button>
+      `
+          : ''
+      }
+    </div>
+    <div class="edit-form" style="display: none;">
+      <textarea class="edit-input">${comment.content}</textarea>
+      <button class="edit-submit">수정하기</button>
+      <button class="edit-cancel">취소</button>
+    </div>
+    <div class="reply-form" style="display: none;">
+      <textarea class="reply-input" placeholder="답글을 입력하세요..."></textarea>
+      <button class="reply-submit">답글 작성</button>
+    </div>
+    <div class="replies-container"></div>
+  `;
 
     // 수정 버튼 이벤트
     const editBtn = commentElement.querySelector('.edit-btn');
@@ -349,11 +323,36 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     });
 
-    // 기존의 답글 관련 이벤트 리스너들...
+    const repliesContainer = commentElement.querySelector('.replies-container');
     const replyBtn = commentElement.querySelector('.reply-btn');
     const replyForm = commentElement.querySelector('.reply-form');
-    const replyInput = commentElement.querySelector('.reply-input');
-    const replySubmit = commentElement.querySelector('.reply-submit');
+    const replyInput = replyForm.querySelector('.reply-input');
+    const replySubmit = replyForm.querySelector('.reply-submit');
+
+    if (comment.replies && comment.replies.length > 0) {
+      comment.replies.forEach((reply) => {
+        const replyElement = document.createElement('div');
+        replyElement.className = 'reply-item';
+        replyElement.innerHTML = `
+          <div class="reply-header">
+            <span class="reply-author">${reply.user?.nickname || '사용자'}</span>
+            <span class="reply-date">${new Date(reply.createdAt).toLocaleString()}</span>
+          </div>
+          <div class="reply-content">${reply.content}</div>
+          ${
+            currentUserId === reply.userId
+              ? `
+            <div class="reply-actions">
+              <button class="reply-edit-btn" data-reply-id="${reply.id}">수정</button>
+              <button class="reply-delete-btn" data-reply-id="${reply.id}">삭제</button>
+            </div>
+          `
+              : ''
+          }
+        `;
+        repliesContainer.appendChild(replyElement);
+      });
+    }
 
     // 답글 폼 토글
     replyBtn?.addEventListener('click', () => {

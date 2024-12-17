@@ -12,10 +12,18 @@ import { LikeController } from './like.controller';
 import { LikeService } from './like.service';
 import { NotificationRepository } from 'src/interface/impl/notification.repository';
 import { NotificationModule } from 'src/notification/notification.module';
+import { VideoRepository } from 'src/interface/impl/video.repository';
+import { VideoEntity } from 'src/video/entities/video.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([LikeEntity, ChannelEntity, NotificationEntity, UserEntity]),
+    TypeOrmModule.forFeature([
+      LikeEntity,
+      ChannelEntity,
+      NotificationEntity,
+      UserEntity,
+      VideoEntity,
+    ]),
     EventEmitter2,
     NotificationModule,
   ],
@@ -34,6 +42,10 @@ import { NotificationModule } from 'src/notification/notification.module';
     {
       provide: 'INotificationRepository',
       useClass: NotificationRepository,
+    },
+    {
+      provide: 'IVideoRepository',
+      useClass: VideoRepository,
     },
   ],
 })
