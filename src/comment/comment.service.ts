@@ -40,8 +40,17 @@ export class CommentService {
 
   async findAll(videoId: number) {
     await this.verifyVideo(videoId);
-    const comment = await this.commentRepository.findAllComment(videoId);
-    return { data: comment };
+    const comments = await this.commentRepository.findAllComment(videoId);
+    const allComment = await Promise.all(
+      comments.map(async (comment) => {
+        const replies = await this.commentRepository.findAllReplyComment(comment.id);
+        return {
+          ...comment,
+          replies: replies,
+        };
+      }),
+    );
+    return { data: allComment };
   }
 
   async findOne(videoId: number, commentId: number) {
