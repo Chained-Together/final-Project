@@ -4,19 +4,30 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>검색 결과</title>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <!-- 부트 스트렙 -->
     <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+      />
+    <!-- nav로고 폰트 -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Gamja+Flower&family=Gasoek+One&family=Hi+Melody&family=Jua&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+        rel="stylesheet"
+      />
+    <!-- nav로고 이미지 -->
+    <script src="https://kit.fontawesome.com/6a4db89020.js" crossorigin="anonymous"></script>
+      <link
+        href="https://demos.creative-tim.com/argon-dashboard-pro/assets/css/nucleo-svg.css"
+        rel="stylesheet"
+      />
+    <!-- nav CSS 파일 -->
+    <link rel="stylesheet" href="/public/styles/nav.css" />
+    
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Gamja+Flower&family=Gasoek+One&family=Hi+Melody&family=Jua&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
-      rel="stylesheet"
-    />
     <link rel="stylesheet" href="/public/styles/search.css" />
-    <link rel="stylesheet" href="/public/styles/nav.css" />
     <link rel="stylesheet" href="/public/styles/notification.css" />
     <link rel="stylesheet" href="/public/styles/search.css" />
 
@@ -24,104 +35,8 @@
   </head>
 
   <body>
-    <nav class="navbar bg-body-tertiary">
-      <div class="container-fluid">
-        <div class="left-section log">
-          <img
-            id="toggleButton"
-            src="public\images\menu-30.png"
-            alt="Toggle Header"
-            style="cursor: pointer"
-          />
-          <i class="fa-solid fa-bolt"></i>
-          <a class="bungee-spice-regular">Loopfiy</a>
-        </div>
-
-        <form id="searchForm" class="d-flex" role="search">
-          <div class="search_container">
-            <input
-              id="searchInput"
-              class="search_input"
-              type="text"
-              placeholder="Search"
-              aria-label="Search"
-            />
-          </div>
-          <button type="submit" class="search-btn">
-            <img src="public/images/search-50.png" alt="Search Icon" />
-          </button>
-        </form>
-
-        <div class="right-section"></div>
-      </div>
-    </nav>
-    <header class="LoopfiyBar" id="toggleHeader" style="display: none">
-      <div class="sidebar-menu-btn-box">
-        <button class="sidebar-menu-btn" id="home">
-          <img src="public\images\home-50.png" alt="" />
-          홈
-        </button>
-
-        <button class="sidebar-menu-btn" id="notificationBtn">
-          <img src="public\images\reminder-50.png" alt="" />
-          알림
-        </button>
-        <div
-          id="notificationPopup"
-          style="
-            display: none;
-            position: fixed;
-            top: 20%;
-            left: 50%;
-            transform: translate(-50%, 0);
-            background: #333333;
-            width: 100%;
-            max-width: 400px;
-            height: 50%;
-            border: 2px solid #ccc;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            overflow-y: auto;
-            z-index: 1000;
-          "
-        >
-          <div id="notificationList"></div>
-          <button
-            id="closePopupBtn"
-            style="
-              position: fixed;
-              left: 50%;
-              transform: translateX(-50%);
-              padding: 10px 20px;
-              background-color: #ffa600;
-              color: #ffffff;
-              border: none;
-              border-radius: 8px;
-              font-size: 14px;
-              font-weight: bold;
-              cursor: pointer;
-              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-              transition:
-                background-color 0.3s ease,
-                transform 0.2s ease;
-            "
-          >
-            닫기
-          </button>
-        </div>
-
-        <button class="sidebar-menu-btn" id="myChannelBtn">
-          <img src="public\images\user-50.png" alt="" id="profileImage" />
-          내 채널
-        </button>
-      </div>
-
-      <div class="sidebar-menu-btn-box logout-box">
-        <button id="logoutBtn" class="sidebar-logout-btn">
-          <span id="logoutText">로그아웃</span>
-        </button>
-      </div>
-    </header>
+  <!-- nav바 -->
+  <%- include('nav') %>
 
     <div id="resultsContainer">
       <h1>검색 결과</h1>
