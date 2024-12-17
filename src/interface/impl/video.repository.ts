@@ -38,7 +38,7 @@ export class VideoRepository implements IVideoRepository {
   findVideoWithChannelAndResolution(videoId: number): Promise<VideoEntity> {
     return this.repository.findOne({
       where: { id: videoId },
-      relations: ['channel', 'resolution'],
+      relations: ['channel', 'channel.user', 'resolution'],
     });
   }
   updateVideo(videoId: number, updateData: Partial<VideoEntity>): Promise<UpdateResult> {

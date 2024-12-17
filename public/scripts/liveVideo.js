@@ -167,6 +167,7 @@ async function uploadVideo() {
       console.error('메타데이터 요청 실패:', metadataResponse.status);
       throw new Error('메타데이터 전송 실패');
     }
+    window.location.href = '/myChannel';
   } catch (error) {
     alert(`업로드 중 오류 발생: ${error.message}`);
   } finally {
