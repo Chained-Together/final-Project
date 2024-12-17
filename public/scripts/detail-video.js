@@ -230,6 +230,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     commentElement.innerHTML = `
     <div class="comment-header">
       <span class="comment-author">${comment.nickname || '사용자'}</span>
+      <span class="comment-author">${comment.nickname || '사용자'}</span>
       <span class="comment-date">${new Date(comment.createdAt).toLocaleString()}</span>
     </div>
     <div class="comment-content" id="content-${comment.id}">${comment.content}</div>
