@@ -127,6 +127,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   for (let i = 0; i < videoData.length; i++) {
     videoIds.push(videoData[i].id);
   }
+  
+  console.log('역순전',videoIds);
+  
+  videoIds.reverse();
+
+  console.log('역순후',videoIds);
   // console.log('2:비디오ID들만 추출하기기', videoIds);
 
   //1-3:가저온 첫번째 비디오를 재생한다다
