@@ -80,23 +80,26 @@
   height: 100%;
   border-radius: 15px;
   aspect-ratio: 7 / 16;
-  background-color: #0f0f0f;
+  background-color: #151515;
   max-width: 400px;
-  min-width: 400px;
+  min-width: 230px;
   width: 100%;
 }
 
 .title-center {
-  /* border: 3px solid #ff0000; */
   height: 30%;
   position: relative;
   border-bottom: 1px solid #454545;
-  min-width: 360px;
-  min-height: 128px;
+  min-height: 140px; /* 기본 최소 높이 */
+  display: flex; /* 자식 요소 배치를 위한 flex 사용 */
+  justify-content: center; /* 가로 중앙 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
+  transform: scale(1); /* 비율 조정 */
+  transform-origin: center; /* 중심 기준으로 크기 조절 */
+  overflow: hidden; /* 요소가 박스를 넘지 않도록 설정 */
 }
 
 .title-box {
-  /* border: 3px solid #ff0000; */
   width: 90%;
   height: 40%;
   position: absolute;
@@ -107,7 +110,15 @@
   margin-top: 20px;
   background-color: #1e1e1e;
   padding: 30px;
+
+  display: flex; /* Flexbox 사용 */
+  flex-direction: column; /* 요소를 수직 방향으로 정렬 */
+  justify-content: center; /* 세로 중앙 정렬 */
+  align-items: flex-start; /* 가로 왼쪽 정렬 */
+  overflow: hidden;
 }
+
+
 
 .title-box-btn {
   /* border: 1px solid #006eff; */
@@ -115,21 +126,38 @@
   justify-content: center;
   align-items: center;
   height: auto;
-  padding-bottom: 30px;
+  padding-bottom: 5px;
   position: absolute;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  min-width: 200px;
+  max-width: 200px;
+}
+
+.title-box-btn button {
+  width: 30px;
+  height: 30px;
+  
+}
+
+.btn {
+  display: flex;          /* Flexbox 활성화 */
+  justify-content: center; /* 가로 중앙 정렬 */
+  align-items: center;     /* 세로 중앙 정렬 */
+}
+
+.btn img {
+  width: 18px;
+  height: 18px;
 }
 
 .comment-box {
   /* border: 3px solid #26ff00; */
   height: 70%;
-  padding: 30px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  box-sizing: border-box;
+  padding: 10px;
+  overflow-y: auto; /* 세로 스크롤 활성화 */
+  overflow-x: hidden; /* 가로 스크롤 비활성화 (필요시 설정) */
+  box-sizing: border-box; /* 패딩 포함 크기 계산 */
 }
 
 .comment-box::-webkit-scrollbar {
@@ -152,30 +180,33 @@
 /* 댓글 입력 영역 */
 .comment-input-container {
   margin: 20px 0;
-  padding: 15px;
+  padding: 8px;
   background-color: #1e1e1e;
   border-radius: 8px;
+  
 }
 
 .comment-input {
   width: 100%;
   min-height: 60px;
   padding: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 3px;
   background-color: #333;
   border: 1px solid #454545;
   border-radius: 4px;
   color: #fff;
   resize: vertical;
+  height: 10px;
 }
 
 .comment-submit {
-  padding: 8px 16px;
+  padding: 3px 8px;
   background-color: #4a4a4a;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 12px;
 }
 
 .comment-submit:hover {
