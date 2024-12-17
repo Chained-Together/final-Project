@@ -25,4 +25,5 @@ export interface IVideoRepository {
   findByKeyword(keyword: string): Promise<VideoEntity[]>;
   findNewVideos(lastId: number, take: number): Promise<VideoEntity[]>;
   findVideoByVideoCode(videoCode: string): Promise<VideoEntity | null>;
+  findVideoByVideoId(videoId: number): Promise<VideoEntity>;
 }
