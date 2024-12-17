@@ -7,17 +7,24 @@ document.getElementById('toggleButton').addEventListener('click', function () {
 const token = localStorage.getItem('token');
 const logoutBtn = document.getElementById('logoutBtn');
 const logoutText = document.getElementById('logoutText');
+
 if (!token) {
   document.getElementById('myChannelLink').style.display = 'none';
   document.getElementById('notificationBtn').style.display = 'none';
-  document.getElementById('livestreaming').style.display = 'none';
+  // document.getElementById('livestreaming').style.display = 'none';
   document.getElementById('videoupload').style.display = 'none';
   document.getElementById('logoutsisarajim').style.display = 'none';
-  if (logoutText) logoutText.textContent = '로그인';
 
-  logoutBtn.addEventListener('click', () => {
-    window.location.href = '/login';
-  });
+  if (logoutBtn) {
+    logoutText.textContent = '로그인';
+    logoutBtn.addEventListener('click', () => {
+      localStorage.removeItem('token');
+      document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
+      console.log('토큰이 삭제되었습니다.');
+
+      window.location.href = '/login';
+    });
+  }
 }
 
 const loginButton = document.getElementById('loginButton');
@@ -30,22 +37,28 @@ if (token) {
     localStorage.removeItem('token');
     localStorage.removeItem('pastNotifications');
     alert('로그아웃 되었습니다.');
+
+    if (logoutText) logoutText.textContent = '로그인';
+    if (logoutBtn) logoutBtn.style.display = 'none';
+    if (loginButton) loginButton.style.display = 'block';
+    if (loginLink) loginLink.style.display = 'block';
+    if (buttonText) buttonText.textContent = '로그인';
     window.location.href = '/';
   });
 }
 
-const liveBtn = document.getElementById('liveBtn');
-if (liveBtn) {
-  liveBtn.addEventListener('click', () => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      window.location.href = '/liveStream';
-    } else {
-      alert('로그인이 필요한 서비스입니다.');
-      window.location.href = '/login';
-    }
-  });
-}
+// const liveBtn = document.getElementById('liveBtn');
+// if (liveBtn) {
+//   liveBtn.addEventListener('click', () => {
+//     const token = localStorage.getItem('token');
+//     if (token) {
+//       window.location.href = '/liveStream';
+//     } else {
+//       alert('로그인이 필요한 서비스입니다.');
+//       window.location.href = '/login';
+//     }
+//   });
+// }
 
 const uploadBtn = document.getElementById('videoupload');
 if (token) {

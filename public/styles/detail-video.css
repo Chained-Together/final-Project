@@ -160,23 +160,21 @@
   box-sizing: border-box; /* 패딩 포함 크기 계산 */
 }
 
-/* 스크롤바 너비 설정 */
 .comment-box::-webkit-scrollbar {
-  width: 8px; /* 세로 스크롤바 너비 */
-  height: 8px; /* 가로 스크롤바 높이 */
+  width: 8px;
+  height: 8px;
 }
 
-/* 스크롤바의 슬라이더 부분 */
 .comment-box::-webkit-scrollbar-thumb {
-  background-color: #555; /* 슬라이더 색상 */
-  border-radius: 10px; /* 둥근 모양 */
-  border: 2px solid #f0f0f0; /* 슬라이더와 트랙 사이 간격 */
+  background-color: #555;
+  border-radius: 10px;
+  border: 2px solid #f0f0f0;
 }
 
 /* 스크롤바의 트랙 부분 */
 .comment-box::-webkit-scrollbar-track {
-  background-color: #333; /* 트랙 배경색 */
-  border-radius: 10px; /* 둥근 모양 */
+  background-color: #333;
+  border-radius: 10px;
 }
 
 /* 댓글 입력 영역 */

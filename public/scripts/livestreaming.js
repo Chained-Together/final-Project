@@ -38,11 +38,12 @@ document.getElementById('livestreaming').addEventListener('click', async () => {
     console.log('Response Data:', data);
 
     const streamKey = data.streamKey;
+    console.log(streamKey);
     const streamingUrl = data.streamingUrl;
 
     document.getElementById('streamKeyText').textContent = `스트림 키: ${streamKey}`;
     document.getElementById('streamingUrlText').textContent =
-      `스트리밍 URL: rtmp://${process.env.VIDEO_SRC}/live`;
+      `스트리밍 URL: rtmp://3.38.115.2:8888/live`;
   } catch (error) {
     console.error('Error fetching stream key:', error);
     document.getElementById('streamKeyText').textContent = '스트림 키를 가져오는 데 실패했습니다.';

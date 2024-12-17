@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   searchForm.addEventListener('submit', (event) => {
     event.preventDefault();
     const keyword = searchInput.value.trim();
+    console.log('keyword', keyword);
     if (!keyword) {
       alert('검색어를 입력해주세요.');
       return;
@@ -90,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const videoCard = document.createElement('div');
     videoCard.className = 'video-card';
     videoCard.addEventListener('click', () => {
-      window.location.href = `/view-video?id=${video.id}`;
+      window.location.href = `/detail?videoId=${video.id}`;
     });
 
     if (video.thumbnailUrl) {
