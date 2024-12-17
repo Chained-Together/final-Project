@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     channelNameElement.textContent = channelData.name || '알 수 없음';
     profileImageElement.src = channelData.profileImage || '/path/to/default-profile.png';
 
-    const videoResponse = await fetch(`/video/my/${channelData.id}`, {
+    const videoResponse = await fetch(`/video/channel/${channelData.id}`, {
       method: 'GET',
     });
 
