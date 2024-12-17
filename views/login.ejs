@@ -19,6 +19,7 @@
   <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
   <!-- CSS Files -->
   <link id="pagestyle" href="/public/styles/argon/argon-dashboard.css?v=2.1.0" rel="stylesheet" />
+  <!-- <link href="/public/styles/login.css" /> -->
 </head>
 <body>
   <%- include('nav') %>
@@ -41,15 +42,13 @@
 <!-- nav CSS 파일 -->
 <link rel="stylesheet" href="/public/styles/nav.css" />
   </header>
-
 <main class="main-content main-content-bg mt-0">
-  <div class="page-header min-vh-100" style="background-image: url('https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/signin-basic.jpg');">
-    <span class="mask bg-gradient-dark opacity-6"></span>
+  <div class="page-header min-vh-100">
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-lg-4 col-md-7">
           <div class="card border-0 mb-0">
-            <div class="card-header bg-transparent">
+            <div class="card-header bg-custom">
               <h5 class="text-dark text-center mt-2 mb-3">Sign in</h5>
               <div class="btn-wrapper text-center">
                 <a id="naver-connect" class="btn btn-neutral btn-icon btn-sm mb-0">
@@ -90,7 +89,7 @@
                 </div>
               </form>
             </div>
-            <div>  
+            <div class="aksibal">  
               <form id="findInfo" class='find-info'>
               <div class="btn-wrapper text-center">
                 <div style="margin-bottom: 0.5rem;">
@@ -104,60 +103,6 @@
     </div>
   </div>
 </main>
-<!-- -------- START FOOTER 3 w/ COMPANY DESCRIPTION WITH LINKS & SOCIAL ICONS & COPYRIGHT ------- -->
-<footer class="footer py-5">
-  <div class="container">
-        <div class="row">
-      <div class="col-lg-8 mb-4 mx-auto text-center">
-        <a href="javascript:;" target="_blank" class="text-secondary me-xl-5 me-3 mb-sm-0 mb-2">
-          Company
-        </a>
-        <a href="javascript:;" target="_blank" class="text-secondary me-xl-5 me-3 mb-sm-0 mb-2">
-          About Us
-        </a>
-        <a href="javascript:;" target="_blank" class="text-secondary me-xl-5 me-3 mb-sm-0 mb-2">
-          Team
-        </a>
-        <a href="javascript:;" target="_blank" class="text-secondary me-xl-5 me-3 mb-sm-0 mb-2">
-          Products
-        </a>
-        <a href="javascript:;" target="_blank" class="text-secondary me-xl-5 me-3 mb-sm-0 mb-2">
-          Blog
-        </a>
-        <a href="javascript:;" target="_blank" class="text-secondary me-xl-5 me-3 mb-sm-0 mb-2">
-          Pricing
-        </a>
-      </div>
-      <div class="col-lg-8 mx-auto text-center mb-4 mt-2">
-        <a href="javascript:;" target="_blank" class="text-secondary me-xl-4 me-4">
-          <span class="text-lg fab fa-dribbble"></span>
-        </a>
-        <a href="javascript:;" target="_blank" class="text-secondary me-xl-4 me-4">
-          <span class="text-lg fab fa-twitter"></span>
-        </a>
-        <a href="javascript:;" target="_blank" class="text-secondary me-xl-4 me-4">
-          <span class="text-lg fab fa-instagram"></span>
-        </a>
-        <a href="javascript:;" target="_blank" class="text-secondary me-xl-4 me-4">
-          <span class="text-lg fab fa-pinterest"></span>
-        </a>
-        <a href="javascript:;" target="_blank" class="text-secondary me-xl-4 me-4">
-          <span class="text-lg fab fa-github"></span>
-        </a>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-8 mx-auto text-center mt-1">
-        <p class="mb-0 text-secondary">
-          Copyright © <script>
-            document.write(new Date().getFullYear())
-          </script> Soft by Creative Tim.
-        </p>
-      </div>
-    </div>
-  </div>
-</footer>
-<!-- -------- END FOOTER 3 w/ COMPANY DESCRIPTION WITH LINKS & SOCIAL ICONS & COPYRIGHT ------- -->
 <!--   Core JS Files   -->
 <script src="/public/scripts/argon/core/popper.min.js"></script>
 <script src="/public/scripts/argon/core/popper.min.js"></script>

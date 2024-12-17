@@ -32,7 +32,7 @@
   height: var(--#{$prefix}card-height);
   color: var(--#{$prefix}body-color);
   word-wrap: break-word;
-  background-color: var(--#{$prefix}card-bg);
+  background-color:#555;
   background-clip: border-box;
   border: var(--#{$prefix}card-border-width) solid var(--#{$prefix}card-border-color);
   @include border-radius(var(--#{$prefix}card-border-radius));
@@ -107,7 +107,8 @@
   padding: var(--#{$prefix}card-cap-padding-y) var(--#{$prefix}card-cap-padding-x);
   margin-bottom: 0; // Removes the default margin-bottom of <hN>
   color: var(--#{$prefix}card-cap-color);
-  background-color: var(--#{$prefix}card-cap-bg);
+  // background-color: var(--#{$prefix}card-cap-bg);
+  background-color: #555;
   border-bottom: var(--#{$prefix}card-border-width) solid var(--#{$prefix}card-border-color);
 
   &:first-child {
@@ -118,7 +119,8 @@
 .card-footer {
   padding: var(--#{$prefix}card-cap-padding-y) var(--#{$prefix}card-cap-padding-x);
   color: var(--#{$prefix}card-cap-color);
-  background-color: var(--#{$prefix}card-cap-bg);
+  // background-color: var(--#{$prefix}card-cap-bg);
+  background-color: #555;
   border-top: var(--#{$prefix}card-border-width) solid var(--#{$prefix}card-border-color);
 
   &:last-child {
