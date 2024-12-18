@@ -118,27 +118,24 @@ function goDetail(videoId) {
 let videoIds = [];
 let videoIdsIndex = 0;
 
-//1. 초기 로드에 비디오를 가져와서 재생한다다
+//1. 초기 로드에 비디오를 가져와서 재생한다
 document.addEventListener('DOMContentLoaded', async () => {
   videoIdsIndex = 0
   //1-1:초기로드 비디오 가져오기
   const videoData = await fetchVideos();
 
-  //1-2:비디오ID들만 videoIds에 추출하기기
+  //1-2:비디오ID들만 videoIds에 추출하기
   for (let i = 0; i < videoData.length; i++) {
     videoIds.push(videoData[i].id);
   }
   
-  console.log('역순전',videoIds);
-  
   videoIds.reverse();
 
-  console.log('역순후',videoIds);
   // console.log('2:비디오ID들만 추출하기기', videoIds);
 
   //1-3:가저온 첫번째 비디오를 재생한다다
   playVideo(videoIds[0]);
-  goDetail(videoData[videoIdsIndex].id);
+  goDetail(videoIds[videoIdsIndex]);
 });
 
 //2. 다음 버튼을 누르면 videoIds의 다음 index번호를 다음 영상이 재생된다
@@ -152,7 +149,9 @@ nextButton.addEventListener('click', async () => {
   if (videoIds && videoIds[videoIdsIndex] !== undefined) {
     playVideo(videoIds[videoIdsIndex]);
   } else {
-    videoIdsIndex = 0;
+    if( videoIdsIndex == videoIds.length-1 ) {
+      videoIdsIndex = videoIds.length-1
+    }
     errBox.style.display = 'block';
     setTimeout(() => {
       errBox.style.display = 'none';
