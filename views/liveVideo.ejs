@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>내 채널</title>
 
-    <link rel="stylesheet" href="/public/styles/channel.css" /> 
+    <link rel="stylesheet" href="/public/styles/channel.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Gamja+Flower&family=Gasoek+One&family=Hi+Melody&family=Jua&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
       rel="stylesheet"
@@ -14,69 +14,66 @@
     <link rel="stylesheet" href="./public/styles/video-edit-popup.css" />
 
     <script src="https://kit.fontawesome.com/6a4db89020.js" crossorigin="anonymous"></script>
-     
+  </head>
 
-</head>
-
-<body>
+  <body>
     <%- include('nav') %>
     <header>
       <link
-     href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-     rel="stylesheet"
-   /> 
- <!-- nav로고 폰트 -->
- <link
-     href="https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Gamja+Flower&family=Gasoek+One&family=Hi+Melody&family=Jua&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
-     rel="stylesheet"
-   /> 
-<!-- nav로고 이미지 -->
-<script src="https://kit.fontawesome.com/6a4db89020.js" crossorigin="anonymous"></script>
-   <link
-     href="https://demos.creative-tim.com/argon-dashboard-pro/assets/css/nucleo-svg.css"
-     rel="stylesheet"
-   /> 
-<!-- nav CSS 파일 -->
-<link rel="stylesheet" href="/public/styles/nav.css" />
-<link rel="stylesheet" href="/public/styles/liveVideo.css"/>
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+      />
+      <!-- nav로고 폰트 -->
+      <link
+        href="https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Gamja+Flower&family=Gasoek+One&family=Hi+Melody&family=Jua&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+        rel="stylesheet"
+      />
+      <!-- nav로고 이미지 -->
+      <script src="https://kit.fontawesome.com/6a4db89020.js" crossorigin="anonymous"></script>
+      <link
+        href="https://demos.creative-tim.com/argon-dashboard-pro/assets/css/nucleo-svg.css"
+        rel="stylesheet"
+      />
+      <!-- nav CSS 파일 -->
+      <link rel="stylesheet" href="/public/styles/nav.css" />
+      <link rel="stylesheet" href="/public/styles/liveVideo.css" />
     </header>
-<div class="liveVideo">
-    <video id="preview" autoplay muted></video>
-    <button id="startRecording">비디오 촬영</button>
-    <button id="stopRecording" disabled>녹화 종료</button>
-    <button id="uploadBtn">Upload</button>
+    <div class="liveVideo">
+      <video id="preview" autoplay muted></video>
+      <button id="startRecording">비디오 촬영</button>
+      <button id="stopRecording" disabled>녹화 종료</button>
 
-    <div class="form-container">
+      <div class="form-container">
         <form>
-            <div>
-                <label for="title">영상 제목</label>
-                <input type="text" id="title" placeholder="영상 제목을 입력하세요." />
-            </div>
+          <div>
+            <label for="title">영상 제목</label>
+            <input type="text" id="title" placeholder="영상 제목을 입력하세요." />
+          </div>
 
-            <div>
-                <label for="video-description">영상 설명</label>
-                <textarea id="video-description" placeholder="영상 설명을 입력하세요"></textarea>
-            </div>
+          <div>
+            <label for="hashtags">해시 태그</label>
+            <input type="text" id="hashtags" placeholder="해시태그를 입력하세요." />
+          </div>
 
-            <div>
-                <label for="hashtags">해시 태그</label>
-                <input type="text" id="hashtags" placeholder="해시태그를 입력하세요." />
-            </div>
+          <div>
+            <label for="video-description">영상 설명</label>
+            <textarea id="video-description" placeholder="영상 설명을 입력하세요"></textarea>
+          </div>
 
-            <div>
-                <label for="visibility" class="video-upload-label">공개 여부</label>
-                <select id="visibility" class="video-upload-select">
-                    <option value="public" selected>공개</option>
-                    <option value="private">비공개</option>
-                </select>
-            </div>
+          <div>
+            <label for="visibility" class="video-upload-label">공개 여부</label>
+            <select id="visibility" class="video-upload-select">
+              <option value="public" selected>공개</option>
+              <option value="private">비공개</option>
+            </select>
+          </div>
+          <button id="uploadBtn">Upload</button>
         </form>
+      </div>
     </div>
-</div>
 
-    <script type="module"  src="/public/scripts/liveVideo.js" defer></script>
-     <!-- <script type="module" src="../public/scripts/my-channel.js"></script> -->
+    <script type="module" src="/public/scripts/liveVideo.js" defer></script>
+    <!-- <script type="module" src="../public/scripts/my-channel.js"></script> -->
     <script src="/public/scripts/nav.js"></script>
-</body>
-
+  </body>
 </html>

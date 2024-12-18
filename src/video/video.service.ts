@@ -94,9 +94,6 @@ export class VideoService {
     }
 
     const { visibility, channel, resolution } = foundVideo;
-    console.log(foundVideo);
-
-    console.log(channel.user.id);
     if (visibility === Visibility.PRIVATE && channel.user.id !== userId) {
       throw new UnauthorizedException('비공개 비디오에 접근할 수 없습니다.');
     }
@@ -104,8 +101,6 @@ export class VideoService {
     if (!resolution || !resolution.videoUrl) {
       throw new NotFoundException('해당하는 비디오URL을 찾을수없습니다.');
     }
-
-    console.log(1, foundVideo, resolution);
 
     return {
       foundVideo,
