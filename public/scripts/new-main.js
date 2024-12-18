@@ -128,13 +128,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   for (let i = 0; i < videoData.length; i++) {
     videoIds.push(videoData[i].id);
   }
-  
+
   videoIds.reverse();
 
   // console.log('2:비디오ID들만 추출하기기', videoIds);
-
+  
   //1-3:가저온 첫번째 비디오를 재생한다다
-  playVideo(videoIds[0]);
+  console.log(videoIdsIndex);
+  playVideo(videoIds[videoIdsIndex]);
   goDetail(videoIds[videoIdsIndex]);
 });
 
@@ -161,7 +162,6 @@ nextButton.addEventListener('click', async () => {
   }
 
   // 범위 내에 있을 때만 인덱스 증가
-  videoIdsIndex++;
   playVideo(videoIds[videoIdsIndex]);
   goDetail(videoIds[videoIdsIndex]);
 });
@@ -172,6 +172,7 @@ const prevButton = document.getElementById('prevButton');
 prevButton.addEventListener('click', async () => {
   //2-1:버튼을 누를때마다 인덱스 번호 추가
   videoIdsIndex--;
+  
   // console.log('다음버튼을 누를때마다 인덱스 번호 추가',videoIdsIndex);
 
   //2-2:인덱스 번호로 다음 id찾아서 재생
