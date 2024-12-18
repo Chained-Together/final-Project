@@ -89,28 +89,23 @@ export class VideoService {
     accessKey?: string,
   ): Promise<VideoEntity | object> {
     const foundVideo = await this.videoRepository.findVideoWithChannelAndResolution(videoId);
-
     if (!foundVideo) {
       throw new NotFoundException('존재하지 않는 비디오입니다.');
     }
 
-    const { visibility, channel, accessKey: storedAccessKey, resolution } = foundVideo;
+    const { visibility, channel, resolution } = foundVideo;
+    console.log(foundVideo);
 
+    console.log(channel.user.id);
     if (visibility === Visibility.PRIVATE && channel.user.id !== userId) {
       throw new UnauthorizedException('비공개 비디오에 접근할 수 없습니다.');
-    }
-
-    if (
-      visibility === Visibility.UNLISTED &&
-      channel.user.id !== userId &&
-      storedAccessKey !== accessKey
-    ) {
-      throw new UnauthorizedException('올바른 링크가 아니면 접근할 수 없습니다.');
     }
 
     if (!resolution || !resolution.videoUrl) {
       throw new NotFoundException('해당하는 비디오URL을 찾을수없습니다.');
     }
+
+    console.log(1, foundVideo, resolution);
 
     return {
       foundVideo,

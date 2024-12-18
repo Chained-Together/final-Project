@@ -31,31 +31,39 @@
 
     <div class="video-upload-container">
       <h1 class="video-upload-header">영상 업로드</h1>
-  
+
       <form class="video-upload-form">
         <label for="title" class="video-upload-label">제목</label>
-        <input type="text" id="title" class="video-upload-input" placeholder="제목을 입력하세요">
-  
+        <input type="text" id="title" class="video-upload-input" placeholder="제목을 입력하세요" />
+
         <label for="hashtag" class="video-upload-label">해시태그</label>
-        <input type="text" id="hashtags" class="video-upload-input" placeholder="해시태그를 입력하세요">
-  
+        <input
+          type="text"
+          id="hashtags"
+          class="video-upload-input"
+          placeholder="해시태그를 입력하세요"
+        />
+
         <label for="description" class="video-upload-label">설명</label>
-        <textarea id="description" class="video-upload-textarea" placeholder="여기에 입력하세요..."></textarea>
-  
+        <textarea
+          id="description"
+          class="video-upload-textarea"
+          placeholder="여기에 입력하세요..."
+        ></textarea>
+
         <label for="visibility" class="video-upload-label">공개 여부</label>
         <select id="visibility" class="video-upload-select">
           <option value="public" selected>공개</option>
           <option value="private">비공개</option>
         </select>
-        
 
         <p class="video-upload-file-label">문서를 업로드해 주세요</p>
         <div class="video-upload-file-upload">
-          <label  for="file" class="video-upload-dropzone">
+          <label for="file" class="video-upload-dropzone">
             <span class="video-upload-icon">⬆</span>
             <p class="video-upload-text"><strong>파일 찾아보기</strong></p>
             <p id="fileNameDisplay">영상파일을 첨부 하세요</p>
-            <input type="file" id="file" class="video-upload-input-file">
+            <input type="file" id="file" class="video-upload-input-file" />
           </label>
         </div>
         <button id="uploadbtn" class="video-upload-button">업로드</button>
@@ -63,5 +71,4 @@
     </div>
     <script src="/public/scripts/newfile-upload.js"></script>
   </body>
-  
 </html>

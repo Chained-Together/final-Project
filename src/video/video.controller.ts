@@ -40,8 +40,13 @@ export class VideoController {
   }
 
   @Get('my/:channelId')
+  @UseGuards(AuthGuard('jwt'))
+  getAllVideoOfMyChannel(@Param('channelId') channelId: number, @UserInfo() user: UserEntity) {
+    return this.videoService.getAllVideoOfMyChannel(channelId, user.id);
+  }
+
+  @Get('channel/:channelId')
   getAllVideoOfChannel(@Param('channelId') channelId: number) {
-    console.log('요청 받음');
     return this.videoService.getAllVideoOfChannel(channelId);
   }
 

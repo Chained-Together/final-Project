@@ -489,3 +489,26 @@ document.addEventListener('DOMContentLoaded', async () => {
   // 초기 댓글 로드
   await loadComments();
 });
+
+{
+  /* <button class="btn" id="shared-btn">
+<img src="\public\images\icons8-share-100.png" alt="" />
+</button> */
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const shareButton = document.getElementById('shared-btn');
+  const copyMessage = document.getElementById('copy-message');
+
+  shareButton.addEventListener('click', async () => {
+    try {
+      const currentUrl = window.location.href;
+      await navigator.clipboard.writeText(currentUrl);
+      console.log('URL 복사됨:', currentUrl);
+      alert(`URL 복사됨: ${currentUrl}`);
+    } catch (error) {
+      console.error('URL 복사 실패:', error);
+      alert('URL 복사에 실패했습니다. 브라우저를 확인해주세요.');
+    }
+  });
+});
