@@ -120,7 +120,7 @@ let videoIdsIndex = 0;
 
 //1. 초기 로드에 비디오를 가져와서 재생한다
 document.addEventListener('DOMContentLoaded', async () => {
-  videoIdsIndex = 0
+  videoIdsIndex = 0;
   //1-1:초기로드 비디오 가져오기
   const videoData = await fetchVideos();
 
@@ -157,7 +157,12 @@ nextButton.addEventListener('click', async () => {
       errBox.style.display = 'none';
     }, 1500);
     console.log('더 이상 재생할 영상이 없습니다.');
+    return; // 함수 실행 중단
   }
+
+  // 범위 내에 있을 때만 인덱스 증가
+  videoIdsIndex++;
+  playVideo(videoIds[videoIdsIndex]);
   goDetail(videoIds[videoIdsIndex]);
 });
 
