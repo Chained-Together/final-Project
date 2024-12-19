@@ -12,4 +12,5 @@ export interface IChannelRepository {
   findChannelByKeyword(keyword: string): Promise<ChannelEntity[]>;
   save(channel: ChannelEntity): Promise<ChannelEntity>;
   findChannelByVideoJoinUser(videoId: number): Promise<ChannelEntity>;
+  findChannelByVideoId(videoId: number): Promise<ChannelEntity>;
 }

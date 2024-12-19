@@ -91,6 +91,24 @@ async function playVideo(videoId) {
     errorMsg.style.color = 'red';
     thumbnailsContainer.appendChild(errorMsg);
   }
+
+  //채널 정보 가져오기
+  const profileImageElement = document.getElementById('profileBtn');
+  const channelResponse = await fetch(`/channel/video/${foundVideo.id}`, {
+    method: 'GET',
+  });
+
+  if (!channelResponse.ok) {
+    throw new Error('채널 정보를 로드하지 못했습니다.');
+  }
+
+  const channelData = await channelResponse.json();
+  profileImageElement.src = channelData.profileImage || '/path/to/default-profile.png';
+
+  const profileBtn = document.getElementById('profileBtn');
+  profileBtn.addEventListener('click', async () => {
+    window.location.href = `/getChannel/${channelData.id}`;
+  });
 }
 
 // 좋아요 버튼과 카운트 표시 영역 가져오기
