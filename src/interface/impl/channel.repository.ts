@@ -49,4 +49,12 @@ export class ChannelRepository implements IChannelRepository {
       .where('channel.name LIKE :keyword', { keyword: `%${keyword}%` })
       .getMany();
   }
+
+  findChannelByVideoId(videoId: number): Promise<ChannelEntity> {
+    return this.repository.findOne({
+      where: {
+        video: { id: videoId },
+      },
+    });
+  }
 }
