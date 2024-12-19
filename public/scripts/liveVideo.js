@@ -159,7 +159,7 @@ async function uploadVideo() {
 
     if (metadataResponse.redirected) {
       alert('메타데이터 전송 성공');
-      window.location.href = metadataResponse.url;
+      // window.location.href = metadataResponse.url;
     } else if (metadataResponse.ok) {
       console.log('요청 성공:', await metadataResponse.json());
       alert('영상 업로드 성공!');

@@ -25,6 +25,7 @@ async function playVideo(videoId) {
   // DOM 요소 가져오기
   const titleElement = document.querySelector('.title-box h3');
   const contentElement = document.querySelector('.title-box span');
+  const hashtagElement = document.querySelector('.tag-box');
 
   // 데이터에서 제목과 설명 추출
   const { foundVideo } = videoData;
@@ -40,6 +41,18 @@ async function playVideo(videoId) {
     contentElement.textContent = foundVideo.description;
   } else {
     console.error('Content element or video description is missing');
+  }
+
+  if (hashtagElement && foundVideo.hashtags) {
+    hashtagElement.innerHTML = '';
+    foundVideo.hashtags.forEach((hashtag) => {
+      const span = document.createElement('span');
+      span.textContent = `#${hashtag}`;
+      span.style.marginRight = '8px';
+      hashtagElement.appendChild(span);
+    });
+  } else {
+    console.error('Hashtag element or hashtags array is missing');
   }
 
   // HLS.js를 사용해 비디오 재생

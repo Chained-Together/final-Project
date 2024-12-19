@@ -97,6 +97,7 @@
   transform: scale(1); /* 비율 조정 */
   transform-origin: center; /* 중심 기준으로 크기 조절 */
   overflow: hidden; /* 요소가 박스를 넘지 않도록 설정 */
+  flex-direction: column;
 }
 
 .title-box {
@@ -118,8 +119,6 @@
   overflow: hidden;
 }
 
-
-
 .title-box-btn {
   /* border: 1px solid #006eff; */
   display: flex;
@@ -137,13 +136,12 @@
 .title-box-btn button {
   width: 30px;
   height: 30px;
-  
 }
 
 .btn {
-  display: flex;          /* Flexbox 활성화 */
+  display: flex; /* Flexbox 활성화 */
   justify-content: center; /* 가로 중앙 정렬 */
-  align-items: center;     /* 세로 중앙 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
 }
 
 .btn img {
@@ -183,7 +181,6 @@
   padding: 8px;
   background-color: #1e1e1e;
   border-radius: 8px;
-  
 }
 
 .comment-input {
@@ -266,4 +263,24 @@
 .reply-delete-btn,
 .action-button:hover {
   background-color: #444;
+}
+
+.tag-box {
+  position: relative; /* 상대 위치로 이동 */
+  z-index: 1; /* 필요에 따라 z-index 값을 설정 */
+  padding-top: 40px; /* 부모 요소 안에서 아래로 내리기 */
+  text-align: left; /* 왼쪽 정렬 */
+  padding-left: 5px; /* 왼쪽으로 약간 띄우기 (선택 사항) */
+  width: 90%;
+  font-size: 15px;
+  color: #999;
+  clear: both;
+  box-sizing: border-box;
+  margin-top: 25px;
+}
+
+.title-box,
+.tag-box {
+  width: 90%; /* 박스 크기를 부모에 맞게 조정 */
+  padding: 10px; /* 내부 패딩 */
 }
