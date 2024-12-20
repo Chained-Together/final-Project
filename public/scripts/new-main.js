@@ -123,6 +123,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   videoIdsIndex = 0;
   //1-1:초기로드 비디오 가져오기
   const videoData = await fetchVideos();
+  console.log('videoData',videoData);
+
 
   //1-2:비디오ID들만 videoIds에 추출하기
   for (let i = 0; i < videoData.length; i++) {
@@ -130,16 +132,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   videoIds.reverse();
+  videoData.reverse();
 
   // console.log('2:비디오ID들만 추출하기기', videoIds);
   
-  //1-3:가저온 첫번째 비디오를 재생한다다
-  console.log(videoIdsIndex);
+  //1-3:가저온 첫번째 비디오를 재생한다
+  document.getElementById('videoTitle').innerHTML = videoData[videoIdsIndex].title
   playVideo(videoIds[videoIdsIndex]);
   goDetail(videoIds[videoIdsIndex]);
-});
 
-//2. 다음 버튼을 누르면 videoIds의 다음 index번호를 다음 영상이 재생된다
+  //2. 다음 버튼을 누르면 videoIds의 다음 index번호를 다음 영상이 재생된다
 const nextButton = document.getElementById('nextButton');
 nextButton.addEventListener('click', async () => {
   //2-1:버튼을 누를때마다 인덱스 번호 추가
@@ -162,6 +164,7 @@ nextButton.addEventListener('click', async () => {
   }
 
   // 범위 내에 있을 때만 인덱스 증가
+  document.getElementById('videoTitle').innerHTML = videoData[videoIdsIndex].title
   playVideo(videoIds[videoIdsIndex]);
   goDetail(videoIds[videoIdsIndex]);
 });
@@ -186,5 +189,10 @@ prevButton.addEventListener('click', async () => {
     }, 1500);
     console.log('더 이상 재생할 영상이 없습니다.');
   }
+
+  document.getElementById('videoTitle').innerHTML = videoData[videoIdsIndex].title
   goDetail(videoIds[videoIdsIndex]);
 });
+
+});
+
