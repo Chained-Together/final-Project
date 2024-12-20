@@ -40,6 +40,10 @@ export class ChannelService {
     return this.findChannelByUserIdOrThrow(user.id);
   }
 
+  async getUserChannel(videoId: number): Promise<ChannelEntity> {
+    return this.findChannelByVideoId(videoId);
+  }
+
   async updateChannel(user: UserEntity, channelDto: ChannelDto): Promise<ChannelEntity> {
     const foundChannel = await this.findChannelByUserIdOrThrow(user.id);
 
@@ -95,5 +99,13 @@ export class ChannelService {
     if (!keyword || keyword.trim().length === 0) {
       throw new BadRequestException('Keyword cannot be empty');
     }
+  }
+
+  private async findChannelByVideoId(videoId: number): Promise<ChannelEntity> {
+    const foundChannel = await this.channelRepository.findChannelByVideoId(videoId);
+    if (!foundChannel) {
+      throw new NotFoundException('해당 채널이 존재하지 않습니다.');
+    }
+    return foundChannel;
   }
 }

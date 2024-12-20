@@ -39,6 +39,20 @@ export class VideoRepository implements IVideoRepository {
     return this.repository.findOne({
       where: { id: videoId },
       relations: ['channel', 'channel.user', 'resolution'],
+      select: {
+        channel: {
+          id: true,
+          name: true,
+          profileImage: true,
+          user: {
+            id: true,
+            email: true,
+            name: true,
+            nickname: true,
+            // password와 phoneNumber는 제외
+          },
+        },
+      },
     });
   }
   updateVideo(videoId: number, updateData: Partial<VideoEntity>): Promise<UpdateResult> {

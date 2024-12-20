@@ -38,6 +38,7 @@ document.getElementById('livestreaming').addEventListener('click', async () => {
     console.log('Response Data:', data);
 
     const streamKey = data.streamKey;
+
     console.log(streamKey);
     const streamingUrl = data.streamingUrl;
 

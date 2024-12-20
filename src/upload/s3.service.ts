@@ -83,7 +83,7 @@ export class S3Service {
 
       this.logger.log(`프리사인 URL 생성 완료: User=${user.id}, Duration=${duration}ms`);
       this.logger.debug(`생성된 프리사인 URL: ${presignedUrl}`);
-
+      console.log({ presignedUrl, key });
       return { presignedUrl, key };
     } catch (error) {
       this.logger.error(`프리사인 URL 생성 실패: User=${user.id}`, error.stack);

@@ -284,3 +284,17 @@
   width: 90%; /* 박스 크기를 부모에 맞게 조정 */
   padding: 10px; /* 내부 패딩 */
 }
+
+.profile-btn {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease;
+}

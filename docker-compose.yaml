@@ -30,8 +30,6 @@ services:
     ports:
       - '1935:1935' # RTMP 스트리밍 포트
       - '8888:8080' # NGINX 관리 페이지 포트
-    environment:
-      - BEANSTALK_ADDRESS=http://loopfiy2.ap-northeast-2.elasticbeanstalk.com
     networks:
       - app-network
 
