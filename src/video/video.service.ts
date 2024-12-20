@@ -19,8 +19,16 @@ export class VideoService {
     private resolutionRepository: IResolutionRepository,
   ) {}
 
-  async getNewVideos(lastId: number, take: number) {
-    return this.videoRepository.findNewVideos(lastId, take);
+  async getNewVideos(take: number) {
+    const videoData = await this.videoRepository.findNewVideos(take);
+
+    //랜덤
+    // let max = 49;
+    // let min = 0
+    // const rendomIndex = Math.floor(Math.random() * (max - min) + min);
+    // console.log('rendomIndex',rendomIndex);
+    
+    return videoData;
   }
 
   async saveMetadata(user: UserEntity, videoDto: VideoDto): Promise<object> {
@@ -58,8 +66,6 @@ export class VideoService {
       }),
     };
   }
-  //TODO: 도메인 이름 넣기
-  //프론트 일부공개 ,일부 공개시만 링크제공되는지 확인,람다 status 코드추가
 
   private generateAccessKey(): string {
     return `${Math.random().toString(36).substr(2, 9)}-${Date.now()}`;

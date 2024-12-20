@@ -23,7 +23,7 @@ export interface IVideoRepository {
   updateVideo(videoId: number, updateData: Partial<VideoEntity>): Promise<UpdateResult>;
   deleteVideo(videoId: number): Promise<DeleteResult>;
   findByKeyword(keyword: string): Promise<VideoEntity[]>;
-  findNewVideos(lastId: number, take: number): Promise<VideoEntity[]>;
+  findNewVideos(take: number): Promise<VideoEntity[]>;
   findVideoByVideoCode(videoCode: string): Promise<VideoEntity | null>;
   findVideoByVideoId(videoId: number): Promise<VideoEntity>;
 }

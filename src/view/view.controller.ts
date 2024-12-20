@@ -171,4 +171,12 @@ export class ViewController {
   getLiveWatchPage() {
     return {};
   }
+
+  @Get('/detail')
+  @Render('detail-video')
+  VideoDetail() {
+    return;
+  }
+
+
 }

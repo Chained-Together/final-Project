@@ -20,47 +20,51 @@ export class VideoRepository implements IVideoRepository {
   findAllVideo(): Promise<VideoEntity[]> {
     return this.repository.find();
   }
+
   findAllVideoByChannelAndVisibility(channelId: number): Promise<VideoEntity[]> {
     return this.repository.find({
       where: { channel: { id: channelId }, visibility: Visibility.PUBLIC },
     });
   }
+
   findAllVideoByChannelId(channelId: number): Promise<VideoEntity[]> {
     return this.repository.find({
       where: { channel: { id: channelId } },
     });
   }
+
   findVideoByVideoId(videoId: number): Promise<VideoEntity> {
     return this.repository.findOne({
       where: { id: videoId },
     });
   }
+  
   findVideoWithChannelAndResolution(videoId: number): Promise<VideoEntity> {
     return this.repository.findOne({
       where: { id: videoId },
-      relations: ['channel', 'channel.user', 'resolution'],
+      relations: ['channel', 'resolution', 'likes'],
       select: {
         channel: {
-          id: true,
           name: true,
-          profileImage: true,
-          user: {
-            id: true,
-            email: true,
-            name: true,
-            nickname: true,
-            // password와 phoneNumber는 제외
-          },
         },
+        resolution: {
+          videoUrl: true,
+        },
+        likes:{
+          id: true,
+        }
       },
     });
   }
+
   updateVideo(videoId: number, updateData: Partial<VideoEntity>): Promise<UpdateResult> {
     return this.repository.update({ id: videoId }, updateData);
   }
+
   deleteVideo(videoId: number): Promise<DeleteResult> {
     return this.repository.delete({ id: videoId });
   }
+
   findByKeyword(keyword: string): Promise<VideoEntity[]> {
     return this.repository
       .createQueryBuilder('videos')
@@ -77,20 +81,35 @@ export class VideoRepository implements IVideoRepository {
       )
       .getMany();
   }
-  async findNewVideos(lastId: number, take: number): Promise<VideoEntity[]> {
+
+  async findNewVideos( take: number ): Promise<any[]> {
     const query = this.repository
       .createQueryBuilder('videos')
       .where('videos.visibility = :visibility', { visibility: 'public' })
       .andWhere('videos.status = :status', { status: true })
-      .orderBy('videos.id', 'ASC')
+      .orderBy('videos.uploadedAt', 'DESC')
+      .leftJoinAndSelect('videos.channel', 'channel')
+      .leftJoinAndSelect('videos.resolution', 'resolution')
+      .leftJoinAndSelect('videos.likes', 'likes')
       .take(take);
-
-    if (lastId) {
-      query.andWhere('videos.id > :lastId', { lastId });
-    }
-
-    return await query.getMany();
+  
+    const videos = await query.getMany();
+  
+    // Transform videos into the desired structure
+    const videoArr = videos.map(video => ({
+      videoId: video.id,
+      title: video.title,
+      description: video.description,
+      hashtags: video.hashtags || [], // Ensure hashtags are an array
+      channelName: video.channel?.name || null, // Handle potential null values
+      thumbnailUrl: video.thumbnailUrl,
+      videoUrl: video.resolution?.videoUrl || null,
+      likes: video.likes.length, // Count the number of likes
+    }));
+  
+    return videoArr;
   }
+
   createVideo(
     title: string,
     description: string,

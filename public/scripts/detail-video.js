@@ -26,6 +26,9 @@ async function playVideo(videoId) {
   const titleElement = document.querySelector('.title-box h3');
   const contentElement = document.querySelector('.title-box span');
   const hashtagElement = document.querySelector('.tag-box');
+  const backgroundImg = document.getElementById('background-img');
+
+  backgroundImg.src = videoData.foundVideo.thumbnailUrl;
 
   // 데이터에서 제목과 설명 추출
   const { foundVideo } = videoData;
@@ -98,6 +101,8 @@ async function playVideo(videoId) {
     method: 'GET',
   });
 
+  
+
   if (!channelResponse.ok) {
     throw new Error('채널 정보를 로드하지 못했습니다.');
   }
@@ -109,6 +114,7 @@ async function playVideo(videoId) {
   profileBtn.addEventListener('click', async () => {
     window.location.href = `/getChannel/${channelData.id}`;
   });
+  document.getElementById('channel-name').innerHTML = channelData.name
 }
 
 // 좋아요 버튼과 카운트 표시 영역 가져오기

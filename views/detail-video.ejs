@@ -23,7 +23,7 @@
     <!-- nav CSS 파일 -->
     <link rel="stylesheet" href="/public/styles/nav.css" />
     <!-- main css -->
-    <link rel="stylesheet" href="public\styles\new-main.css" />
+    <!-- <link rel="stylesheet" href="public\styles\new-main.css" /> -->
     <!-- jquery 인폴트 -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <!-- 디테일 전용 css -->
@@ -36,29 +36,38 @@
     <div class="main-channel">
       <!-- 영상카드 -->
       <div class="video-channel center-end-center">
-        <div class="video-box center-end-center">
-          <video class="video" id="videoPlayer" controls></video>
-          <div class="err-box">더 이상 재생할 영상이 없습니다.</div>
+
+        <div class="video-center">
+          <div class="video-box center-end-center">
+            <video class="video" id="videoPlayer" controls></video>
+            <div class="err-box">더 이상 재생할 영상이 없습니다.</div>
+          </div>
         </div>
+        <img class="background-img" id="background-img" src="" alt="">
+
 
         <!-- 댓글box -->
         <div class="comment-center">
           <div class="title-center">
             <div class="title-box">
-              <h3>제목</h3>
+              <div class="channel-box">
+                <img src="profileImageElement.src" alt="" class="profile-btn" id="profileBtn" />
+                <h3 id="channel-name">채널이름</h3>
+              </div>
+              <div class="title">
+                <h5>제목</h5>
+                <div class="tag-box"><span>해시태그</span></div>
+              </div>
               <span>내용</span>
             </div>
-            <div class="tag-box"><span>해시태그</span></div>
 
             <div class="title-box-btn">
-              <img src="profileImageElement.src" alt="" class="profile-btn" id="profileBtn" />
 
               <button class="btn" id="detail-like-btn">
                 <img src="\public\images\icons8-thumbs-up-50.png" alt="" />
                 <div id="like-count">0</div>
               </button>
 
-              <!-- 공유버튼 : js로직 연결시 id="shared-btn 사용할것 -->
               <button class="btn" id="shared-btn">
                 <img src="\public\images\icons8-share-100.png" alt="" />
               </button>

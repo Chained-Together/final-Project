@@ -155,4 +155,11 @@ export class VideoController {
   findVideoByKeyword(@Param('keyword') keyword: string) {
     return this.videoService.findVideoByKeyword(keyword);
   }
+
+  @Get('/many/:take')
+  getNewVideos(
+    @Param('take', ParseIntPipe) take: number,
+  ) {
+    return this.videoService.getNewVideos(take);
+  }
 }
