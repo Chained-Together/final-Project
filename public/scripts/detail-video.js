@@ -530,6 +530,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 document.addEventListener('DOMContentLoaded', () => {
   const shareButton = document.getElementById('shared-btn');
   const copyMessage = document.getElementById('copy-message');
+  const backButton = document.getElementById('cancel-btn');
 
   shareButton.addEventListener('click', async () => {
     try {
@@ -541,5 +542,10 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('URL 복사 실패:', error);
       alert('URL 복사에 실패했습니다. 브라우저를 확인해주세요.');
     }
+  });
+
+  backButton.addEventListener('click', (event) => {
+    event.preventDefault();
+    history.back();
   });
 });
