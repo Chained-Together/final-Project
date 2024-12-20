@@ -49,4 +49,10 @@ export class ChannelController {
   findChannelByKeyword(@Param('keyword') keyword: string) {
     return this.channelService.findChannelByKeyword(keyword);
   }
+
+  @Get('/video/:videoId')
+  async getUserChannel(@Param('videoId') videoId: number): Promise<ChannelEntity> {
+    console.log('요청 받음');
+    return this.channelService.getUserChannel(videoId);
+  }
 }

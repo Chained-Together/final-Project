@@ -20,7 +20,7 @@ export class ChannelEntity {
   @Column()
   name: string;
 
-  @Column({ type: 'varchar', nullable: true })
+  @Column({ type: 'varchar', nullable: true, default: '/public/images/user-50.png' })
   profileImage: string;
 
   @OneToMany(() => VideoEntity, (video) => video.channel, { cascade: true })

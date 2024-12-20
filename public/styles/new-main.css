@@ -30,6 +30,18 @@
     box-shadow: 0 6px 20px rgba(255, 255, 255, 0.233);
 }
 
+  .video-box {
+    position: relative;
+  }
+
+  .video-title {
+    padding: 20px;
+    position: absolute;
+    bottom: 50px;
+    left: 0;
+    margin: 0;
+  }
+
 .video {
     width: 100%;
     height: 100%;

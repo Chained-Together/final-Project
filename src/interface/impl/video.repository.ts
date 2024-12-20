@@ -39,6 +39,20 @@ export class VideoRepository implements IVideoRepository {
     return this.repository.findOne({
       where: { id: videoId },
       relations: ['channel', 'channel.user', 'resolution'],
+      select: {
+        channel: {
+          id: true,
+          name: true,
+          profileImage: true,
+          user: {
+            id: true,
+            email: true,
+            name: true,
+            nickname: true,
+            // password와 phoneNumber는 제외
+          },
+        },
+      },
     });
   }
   updateVideo(videoId: number, updateData: Partial<VideoEntity>): Promise<UpdateResult> {
@@ -49,10 +63,18 @@ export class VideoRepository implements IVideoRepository {
   }
   findByKeyword(keyword: string): Promise<VideoEntity[]> {
     return this.repository
-      .createQueryBuilder('video')
-      .where('video.title LIKE :keyword', { keyword: `%${keyword}%` })
-      .andWhere('video.status = :status', { status: true })
-      .orWhere('video.hashtags @> :keywordArray', { keywordArray: JSON.stringify([keyword]) })
+      .createQueryBuilder('videos')
+      .where('videos.visibility = :visibility', { visibility: 'public' })
+      .andWhere('videos.title LIKE :keyword', { keyword: `%${keyword}%` })
+      .andWhere('videos.status = :status', { status: true })
+      .orWhere(
+        '(videos.visibility = :visibility AND videos.status = :status AND videos.hashtags @> :keywordArray)',
+        {
+          visibility: 'public',
+          status: true,
+          keywordArray: JSON.stringify([keyword]),
+        },
+      )
       .getMany();
   }
   async findNewVideos(lastId: number, take: number): Promise<VideoEntity[]> {
