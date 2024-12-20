@@ -5,6 +5,7 @@ import * as dotenv from 'dotenv';
 import session from 'express-session';
 import { join } from 'path';
 import { AppModule } from './app.module';
+import { setUpSwagger } from './utils/swagger';
 
 const envFile = process.env.NODE_ENV === 'production' ? '.env' : 'development.env';
 dotenv.config({ path: envFile });
@@ -39,6 +40,8 @@ async function bootstrap() {
   expressApp.set('views', join(__dirname, '..', 'views'));
   console.log(join(process.cwd(), 'views'));
   app.useGlobalPipes(new ValidationPipe());
+
+  setUpSwagger(app);
 
   await app.listen(process.env.PORT ?? 3000);
   Logger.log(`서버 실행 http://localhost:${process.env.PORT}`);
