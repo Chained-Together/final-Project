@@ -15,6 +15,7 @@ async function getVideoDuration(blob) {
   return new Promise((resolve, reject) => {
     const video = document.createElement('video');
     video.preload = 'metadata';
+    
     video.onloadedmetadata = () => {
       console.log('Video duration:', video.duration);
       resolve(video.duration);
@@ -49,9 +50,11 @@ async function startMediaRecording() {
       recordedChunks = []; // 청크 초기화
 
       const videoDuration = await getVideoDuration(videoBlob);
+
       uploadButton.disabled = false;
     };
     mediaRecorder.start();
+
     startButton.disabled = true;
     stopButton.disabled = false;
   } catch (error) {
@@ -62,6 +65,7 @@ async function startMediaRecording() {
 function stopMediaRecording() {
   if (mediaRecorder && mediaRecorder.state !== 'inactive') {
     mediaRecorder.stop();
+
     videoPreview.srcObject = null;
     videoPreview.src = '';
   }
@@ -74,6 +78,7 @@ async function uploadVideo() {
       alert('업로드할 영상이 없습니다.');
       return;
     }
+
     const payload = {
       fileType: videoBlob.type,
       fileSize: videoBlob.size,
@@ -93,6 +98,7 @@ async function uploadVideo() {
     }
 
     const { presignedUrl, key } = await response.json();
+
     const uploadResponse = await fetch(presignedUrl, {
       method: 'PUT',
       body: videoBlob,
