@@ -148,7 +148,7 @@ nextButton.addEventListener('click', async () => {
   videoIdsIndex++;
   // console.log('다음버튼을 누를때마다 인덱스 번호 추가',videoIdsIndex);
 
-  //2-2:인덱스 번호로 다음 id찾아서 재생생
+  //2-2:인덱스 번호로 다음 id찾아서 재생
   if (videoIds && videoIds[videoIdsIndex] !== undefined) {
     playVideo(videoIds[videoIdsIndex]);
   } else {

@@ -8,7 +8,7 @@ const descriptionInput = document.getElementById('video-description');
 const hashtagsInput = document.getElementById('hashtags');
 const visibilityInput = document.getElementById('visibility');
 const thumbnailUrlInput = document.getElementById('thumbnailUrl');
-const token = localStorage.getItem('token');
+// const token = localStorage.getItem('token');
 
 let mediaRecorder;
 let recordedChunks = [];
