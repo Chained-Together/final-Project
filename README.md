@@ -1,99 +1,131 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+<div align="center">
+    <a href="https://www.loopfiy.com" target="_blank">
+      <img src="https://github.com/user-attachments/assets/0deb6a42-0d74-4183-8464-f02852f7273c" width="90%" />
+    </a>
+  <h3></h3>
+</div>
+<div align="center">
+  <p align=center>
+    <a href="https://teamsparta.notion.site/Chained-Togeth-83da828a1a2e46fd9f9b81c3e8ccad9a"> Notion </a> &nbsp; ｜ &nbsp; 
+    <a href=""> Figma </a> &nbsp; ｜ &nbsp;
+    <a href=""> Wiki </a> &nbsp; ｜ &nbsp;
+  </p>
+</div>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+<br/>
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+> ### 목차
+>
+> [1. 💻 데모 및 배포 링크](#-데모-및-배포-링크) <br> > [2. 🎯 기획 배경](#-기획-배경) <br> > [3. 📺 핵심 기능](#-핵심-기능) <br> > [4. ⚙️ 서비스 아키텍처](#%EF%B8%8F-서비스-아키텍처) <br> > &nbsp;&nbsp;&nbsp;&nbsp;[4.1. 업로드 과정](#-) <br> > &nbsp;&nbsp;&nbsp;&nbsp;[4.2. 배포](#-배포) <br> > [5. 📝 핵심 기술 정리](#-핵심-기술-정리) <br> > &nbsp;&nbsp;&nbsp;&nbsp;[5.1. 핵심 기술](#핵심기술) <br> > &nbsp;&nbsp;&nbsp;&nbsp;[5.2. 추후 기술적 도전](#추후-기술적-도전) <br> > [6. 🛠️ 기술 스택](#%EF%B8%8F-기술-스택) <br> > [7. 👊 팀 소개](#team-정권지르기-) <br>
 
-## Description
+<br/>
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+# 💻 데모 및 배포 링크
 
-## Project setup
+- **서비스 링크**: [https://www.loopfiy.com/](https://www.loopfiy.com/)
 
-```bash
-$ npm install
-```
+<br/>
 
-## Compile and run the project
+# 🎯 기획 배경
 
-```bash
-# development
-$ npm run start
+**현재의 shortform콘텐츠는 shortform 이라는 이름에 걸맞지 않게 점점 길어지고 있습니다.**
 
-# watch mode
-$ npm run start:dev
+**이러한 흐름 속에서 저희는 진정으로 '짧고 강렬한' 콘텐츠를 제공할 플랫폼을 만들고자 했습니다.**
 
-# production mode
-$ npm run start:prod
-```
+**저희의 shortform플랫폼은 8초에서 최대 10초라는 짧은 시간 안에, 시청자가 온전히 집중할 수 있는 콘텐츠를 제공합니다.**
 
-## Run tests
+**이는 단순히 짧은 영상이 아니라, 사람들의 평균적인 집중 시간에 최적화된 콘텐츠로,**
 
-```bash
-# unit tests
-$ npm run test
+**시청자에게 강렬하고 효과적인 경험을 전달하는 것을 목표로 프로젝트를 진행하게 되었습니다.**
 
-# e2e tests
-$ npm run test:e2e
+<br/>
 
-# test coverage
-$ npm run test:cov
-```
+# 📺 핵심 기능
 
-## Deployment
+![메인화면 기능](https://github.com/user-attachments/assets/1d512ce8-81b2-43ce-9872-34565b9b7bd9)
+![알림 기능](https://github.com/user-attachments/assets/30a9a88c-59a0-450b-aeb7-79ebf5888b99)
+![유저 채널 기능](https://github.com/user-attachments/assets/b8f98000-9bec-4234-bffc-494e6179b5df)
+![비디오 업로드 기능 (2)](https://github.com/user-attachments/assets/753a7c69-a7a4-40d5-9b90-032fa8b350ba)
+![직접 촬영 기능](https://github.com/user-attachments/assets/abe2a94b-3e7f-47ac-bbb0-c629aa5222dc)
+![검색 기능](https://github.com/user-attachments/assets/80e721b7-ac97-461b-88e1-0da66c997f6c)
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+<br/>
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+# ⚙️ 서비스 아키텍처
 
-```bash
-$ npm install -g mau
-$ mau deploy
-```
+![ServerArchitecture](https://github.com/user-attachments/assets/a97966eb-d27e-4640-b87a-89b8feef6f8c)
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### 🎥 업로드 과정
 
-## Resources
+| **단계**                       | **설명**                                                                                                                                                             |
+| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **1. 영상 업로드**             | 사용자가 비디오를 업로드 합니다.                                                                                                                                     |
+| **2-1. S3 영상 저장**          | API 서버는 presignURL을 생성해 클라이언트에 반환하고 생성된 **presignUrl**을 통해 영상을 S3에 전송합니다.                                                            |
+| **2-2. 메타데이터 RDS 저장**   | S3에 영상을 전송 후 영상의 메타데이터를 **PostgreSQL RDS**에 저장합니다.                                                                                             |
+| **3. 영상을 hls로 트랜스코딩** | S3에 영상이 저장되면 AWS LAMDA 함수가 트리거되어 **AWS MediaConvert**를 호출합니다. MediaConvert는 영상을 **HLS로 트랜스코딩하여 m3u8 파일을 다시 S3에 저장**합니다. |
+| **4. RDS에 CDN URL로 저장**    | 저장된 m3u8 파일의 key 값을 이용해 **CDN URL**을 생성 후 RDS에 저장합니다.                                                                                           |
+| **5. 영상 시청**               | 클라이언트가 재생 요청을 하면 RDS에 저장된 비디오 URL 정보를 통해 **CloudFront**로부터 **HLS 세그먼트**를 제공받아 실시간으로 영상을 시청할 수 있습니다.             |
 
-Check out a few resources that may come in handy when working with NestJS:
+<br />
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+<br />
 
-## Support
+### 🚀 배포
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+| **구성**      | **설명**                                                                               |
+| ------------- | -------------------------------------------------------------------------------------- |
+| **배포 도구** | **프론트엔드**와 **백엔드**는 , **Docker**, **AWS Beanstalk**를를 활용하여 배포됩니다. |
 
-## Stay in touch
+<br/>
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+# 📝 핵심 기술 정리
 
-## License
+프로젝트를 진행하면서 겪은 다양한 경험과 학습 내용을 꾸준히 문서화하며 지식을 공유하고, 깊이 있는 기술적 도전을 이어나가고자 합니다.
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+## 핵심 기술
+
+### [⚡ SSE를 통한 실시간 알림](https://teamsparta.notion.site/f2ee7c2e758c4c4aaa4c9a1991b0af16)
+
+- 실시간 단방향 소통을 위해 채택
+- 댓글 작성 시, 좋아요/취소 시 실시간 알림 수신 가능
+
+### [📺 HLS 전송을 통한 영상 스트리밍](https://teamsparta.notion.site/1512dc3ef5148185ab0ec062bcd3e4b0?p=ec20cccdefb345c5b70d00e11e18c23c&pm=s)
+
+- 적응형 비트레이트를 활용하여 네트워크 품질에 따라 자동으로 비디오 품질 조정
+- 이후 라이브 기능 구현 및 영상 시간 조정(10초 이상) 시 확장성을 위해 구현
+
+## 추후 기술적 도전
+
+### [☕️ Nginx-Rtmp를 통한 라이브 기능 구현](https://teamsparta.notion.site/NGINX-RTMP-8711f0f116044100806fbe1ad2b1c991)
+
+- Nginx-Rtmp와 OBS를 활용한 라이브 방송을 구현할 예정
+- 방송용 서비스 컨테이너를 분리하여 구현할 예정
+
+### [🏛️ 라이브방송 내 실시간 채팅 구현 ](https://teamsparta.notion.site/Redis-Pub-Sub-c48d3ed1255d419fb507932641cb0736)
+
+- REIDS PUB/SUB, socket.io를 이용해 실시간 채팅창 구현 예정
+- 채팅 서버 확장성 고려
+
+### [🐬atillery를 활용한 성능 분석 및 개선 ](https://gominzip.notion.site/docker-swarm-80b228b59cf54d0e9221fc6c150e07bf?pvs=4)
+
+#### [👉 더 많은 기술정리 보러 가기 👈](https://teamsparta.notion.site/Chained-Togeth-83da828a1a2e46fd9f9b81c3e8ccad9a)
+
+<br/>
+
+# 🛠️ 기술 스택
+
+| Part              | Stack                                                                                                           |
+| ----------------- | --------------------------------------------------------------------------------------------------------------- |
+| VCS/패키지 매니저 | ![rounded-in-photoretrica](https://github.com/user-attachments/assets/97662e86-10d1-4386-b840-d33b0db4b8df)     |
+| 백엔드            | ![rounded-in-photoretrica (2)](https://github.com/user-attachments/assets/2512b288-3cf5-4ffd-801a-5f1929ef0417) |
+| 인프라/도구       | ![rounded-in-photoretrica (3)](https://github.com/user-attachments/assets/a47d1a4f-7992-4b84-8c35-18466cc506d4) |
+
+<br/>
+
+# TEAM Chained Together⛓️
+
+|                                    최강현                                     |                                    송강필                                    |                                    김성록                                     |                                    문승호                                    |                                   양양소린                                    |                                    신민재                                     |
+| :---------------------------------------------------------------------------: | :--------------------------------------------------------------------------: | :---------------------------------------------------------------------------: | :--------------------------------------------------------------------------: | :---------------------------------------------------------------------------: | :---------------------------------------------------------------------------: |
+| <img width="150" src="https://avatars.githubusercontent.com/u/127270767?v=4"> | <img width="150" src="https://avatars.githubusercontent.com/u/92740959?v=4"> | <img width="150" src="https://avatars.githubusercontent.com/u/174415370?v=4"> | <img width="150" src="https://avatars.githubusercontent.com/u/53264081?v=4"> | <img width="150" src="https://avatars.githubusercontent.com/u/177493080?v=4"> | <img width="150" src="https://avatars.githubusercontent.com/u/114797773?v=4"> |
+|                                    **BE**                                     |                                    **BE**                                    |                                    **BE**                                     |                                    **BE**                                    |                                    **BE**                                     |                                    **BE**                                     |
+|                   [@NterChoi](https://github.com/NterChoi)                    |                 [@strongfeel](https://github.com/strongfeel)                 |                [@SungRok1231](https://github.com/SungRok1231)                 |                 [@Jacob-moon](https://github.com/Jacob-moon)                 |                 [@surinnnnnn](https://github.com/surinnnnnn)                  |                   [@New-mean](https://github.com/New-mean)                    |
