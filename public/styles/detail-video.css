@@ -96,7 +96,7 @@
     flex-direction: column; /* 세로 정렬 */
     align-items: center; /* 가로 중앙 정렬 */
     justify-content: center; /* 세로 중앙 정렬 */
-    height: 200vh;
+    height: 180vh;
   }
 
   .video-channel {

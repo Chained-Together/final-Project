@@ -61,7 +61,9 @@ async function fetchVideos(lastId) {
 
 // 비디오 데이터를 템플릿으로 생성
 function createVideoElement(video) {
-  if (!video || (!video.thumbnailUrl && !video.title)) {
+  console.log('video',video);
+  
+  if (!video) {
     console.warn('유효하지 않은 비디오 데이터:', video);
     return null;
   }
@@ -71,7 +73,7 @@ function createVideoElement(video) {
   console.log(shortFormItem);
 
   shortFormItem.addEventListener('click', () => {
-    window.location.href = `/detail?videoId=${video.id}`;
+    window.location.href = `/detail?videoId=${video.videoId}`;
   });
 
   if (video.thumbnailUrl) {
