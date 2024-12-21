@@ -21,12 +21,16 @@ export class VideoService {
 
   async getNewVideos(take: number) {
     const videoData = await this.videoRepository.findNewVideos(take);
-
+    let result = []
     //랜덤
-    // let max = 49;
-    // let min = 0
-    // const rendomIndex = Math.floor(Math.random() * (max - min) + min);
-    // console.log('rendomIndex',rendomIndex);
+    let max = 49;
+    let min = 0
+    const rendomIndex = Math.floor(Math.random() * (max - min) + min);
+    for (let i = 0; i < videoData.length; i++) {
+      result.push(videoData[rendomIndex])
+      
+    }
+
     
     return videoData;
   }
