@@ -23,8 +23,8 @@ async function playVideo(videoId) {
   console.log('videoData', videoData);
 
   // DOM 요소 가져오기
-  const titleElement = document.querySelector('.title-box h3');
-  const contentElement = document.querySelector('.title-box span');
+  const titleElement = document.querySelector('.title-box h5');
+  const contentElement = document.getElementById('description');
   const hashtagElement = document.querySelector('.tag-box');
   const backgroundImg = document.getElementById('background-img');
 
