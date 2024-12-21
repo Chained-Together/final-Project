@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const profileImageElement = document.getElementById('profile');
   const thumbnailsContainer = document.getElementById('thumbnailsContainer');
   const channelEditContainer = document.createElement('div');
+  const arr = document.getElementById('err');
   // channelEditContainer.classList.add('channel-edit-container');
   if (thumbnailsContainer && thumbnailsContainer.parentNode) {
     thumbnailsContainer.parentNode.insertBefore(channelEditContainer, thumbnailsContainer);
@@ -39,7 +40,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     //   channelNameElement,
     //   profileImageElement,
     // );
-    const videoResponse = await fetch(`/video/edit/${channelData.id}`, {
+    const videoResponse = await fetch(`/video/my/${channelData.id}`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -57,7 +58,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   } catch (error) {
     console.error('오류:', error);
-    channelNameElement.textContent = '정보를 로드하는 중 오류가 발생했습니다.';
+    arr.style.display = "block";
   }
 });
 
