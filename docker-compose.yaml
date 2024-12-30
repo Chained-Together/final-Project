@@ -8,19 +8,11 @@ services:
       - '3000:3000'
       - '3001:3001'
     environment:
-      DB_HOST: 'loopfiy1.czo0oemmwl67.ap-northeast-2.rds.amazonaws.com'
+      DB_HOST: 'loopfiy.cjggiigww7oa.us-east-1.rds.amazonaws.com'
       DB_PORT: 5432
       DB_USER: loopfiy
       DB_PASS: aaaa4321!
       DB_NAME: loopfiy
-      REDIS_URL: 'redis://redis:6379' # Redis URL 설정
-    networks:
-      - app-network
-
-  redis:
-    image: redis:latest
-    ports:
-      - '6379:6379'
     networks:
       - app-network
 
@@ -29,7 +21,8 @@ services:
       context: ./rtmp
     ports:
       - '1935:1935' # RTMP 스트리밍 포트
-      - '8888:8080' # NGINX 관리 페이지 포트
+    volumes:
+      - ./hls:/tmp/hls
     networks:
       - app-network
 
@@ -38,9 +31,11 @@ services:
     ports:
       - '80:80'
     depends_on:
+      - nginx-rtmp
       - app
     volumes:
       - ./ebextensions/nginx.conf:/etc/nginx/nginx.conf
+      - ./hls:/tmp/hls
     entrypoint: >
       /bin/sh -c "while ! curl -s http://app:3000 > /dev/null; do sleep 1; done; nginx -t && nginx -g 'daemon off;'"
     networks:
