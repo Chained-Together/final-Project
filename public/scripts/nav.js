@@ -11,7 +11,7 @@ const logoutText = document.getElementById('logoutText');
 if (!token) {
   document.getElementById('myChannelLink').style.display = 'none';
   document.getElementById('notificationBtn').style.display = 'none';
-  // document.getElementById('livestreaming').style.display = 'none';
+  document.getElementById('livestreaming').style.display = 'none';
   document.getElementById('videoupload').style.display = 'none';
   document.getElementById('logoutsisarajim').style.display = 'none';
 
@@ -47,18 +47,18 @@ if (token) {
   });
 }
 
-// const liveBtn = document.getElementById('liveBtn');
-// if (liveBtn) {
-//   liveBtn.addEventListener('click', () => {
-//     const token = localStorage.getItem('token');
-//     if (token) {
-//       window.location.href = '/liveStream';
-//     } else {
-//       alert('로그인이 필요한 서비스입니다.');
-//       window.location.href = '/login';
-//     }
-//   });
-// }
+const liveBtn = document.getElementById('liveBtn');
+if (liveBtn) {
+  liveBtn.addEventListener('click', () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      window.location.href = '/liveStream';
+    } else {
+      alert('로그인이 필요한 서비스입니다.');
+      window.location.href = '/login';
+    }
+  });
+}
 
 const uploadBtn = document.getElementById('videoupload');
 if (token) {
