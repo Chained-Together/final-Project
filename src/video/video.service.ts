@@ -21,17 +21,16 @@ export class VideoService {
 
   async getNewVideos(take: number) {
     const videoData = await this.videoRepository.findNewVideos(take);
-    let result = []
-    let count = []
+    let result = [];
+    let count = [];
 
-    
     for (let i = 0; i < videoData.length; i++) {
       const rendomIndex = Math.floor(Math.random() * (videoData.length - 0) + 0);
-      result.push(videoData[rendomIndex])
+      result.push(videoData[rendomIndex]);
 
-      count.push(rendomIndex)
-      console.log('count',count);
-      console.log('result',result);
+      count.push(rendomIndex);
+      console.log('count', count);
+      console.log('result', result);
     }
 
     return videoData;
@@ -58,10 +57,6 @@ export class VideoService {
     const savedVideo = await this.videoRepository.saveVideo(video);
 
     const resolution = this.resolutionRepository.createResolution(savedVideo);
-    // const resolution = this.resolutionRepository.create({
-    //   videoUrl: null,
-    //   video: savedVideo,
-    // });
 
     await this.resolutionRepository.saveResolution(resolution);
 
@@ -196,7 +191,7 @@ export class VideoService {
   async getVideoLink(id: number): Promise<object> {
     const foundVideo = await this.findVideoById(id);
     const accessKey = foundVideo.accessKey;
-    const baseUrl = `http://localhost:3000`; //배포 주소로 수정 필요요
+    const baseUrl = `http://localhost:3000`; //배포 주소로 수정 필요
 
     let url;
     if (foundVideo.visibility === Visibility.PUBLIC) {

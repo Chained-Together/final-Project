@@ -13,46 +13,11 @@ async function fetchVideos(take) {
   return response.json();
 }
 
-// async function 비디오더가져오기(lastVideoId) {
-//   try {
-//     const newVideos = await fetchVideos(lastVideoId);
-//     if (newVideos.length > 0) {
-//       // 마지막 비디오 ID 업데이트
-//       lastVideoId = newVideos[newVideos.length - 1].id;
-//     } else {
-//       console.log('더 이상 불러올 데이터가 없습니다.');
-//       // $(window).off('scroll'); // 더 이상 이벤트 감지 중단
-//     }
-//   } catch (error) {
-//     console.error('추가 데이터를 가져오는 중 오류 발생:', error);
-//   } finally {
-//     isFetching = false;
-//   }
-// }
-
 //비디오 id를 인자로 넣의면 해당 id의 비디오를 플레이 해줌
 async function playVideo(url) {
   const token = localStorage.getItem('token') || null;
   const video = document.getElementById('videoPlayer');
   const thumbnailsContainer = document.getElementById('thumbnailsContainer');
-  // 비디오 데이터 가져오기
-  // const response = await fetch(`/video/${videoId}`, {
-  //   method: 'GET',
-  //   headers: {
-  //     Authorization: `Bearer ${token}`,
-  //   },
-  // });
-
-  // if (!response.ok) {
-  //   throw new Error('비디오를 로드하지 못했습니다.');
-  // }
-
-  // const videoData = await response.json();
-  // if (videoData?.message) {
-  //   throw new Error(videoData.message);
-  // }
-
-  // globalVideoData = videoData;
 
   // HLS.js를 사용해 비디오 재생
   const hlsUrl = url;
@@ -112,69 +77,62 @@ function goDetail(videoId) {
   commentBtn.addEventListener('click', newHandler);
 }
 
-//-----------------------------로직---------------------------------
-//-----------------------------로직---------------------------------
 let videoIdsIndex = 0;
 
-/**초기 로드에 비디오를 가져와서 재생한다 */ 
+/**초기 로드에 비디오를 가져와서 재생한다 */
 document.addEventListener('DOMContentLoaded', async () => {
   videoIdsIndex = 0;
-  console.log('초기',videoIdsIndex);
-  
-  const videoData = await fetchVideos();
-  console.log('videoData',videoData);
+  console.log('초기', videoIdsIndex);
 
-  document.getElementById('videoTitle').innerHTML = videoData[videoIdsIndex].title
+  const videoData = await fetchVideos();
+  console.log('videoData', videoData);
+
+  document.getElementById('videoTitle').innerHTML = videoData[videoIdsIndex].title;
   playVideo(videoData[videoIdsIndex].videoUrl);
   goDetail(videoData[videoIdsIndex].videoId);
 
+  /** 다음 버튼을 누르면 videoIds의 다음 index번호를 다음 영상이 재생된다 */
+  const nextButton = document.getElementById('nextButton');
+  nextButton.addEventListener('click', async () => {
+    if (videoIdsIndex === videoData.length - 1) {
+      videoIdsIndex = videoData.length - 1;
 
-/** 다음 버튼을 누르면 videoIds의 다음 index번호를 다음 영상이 재생된다 */
-const nextButton = document.getElementById('nextButton');
-nextButton.addEventListener('click', async () => {
+      errBox.style.display = 'block';
+      setTimeout(() => {
+        errBox.style.display = 'none';
+      }, 2000);
 
-  if( videoIdsIndex === videoData.length-1 ) {
-    videoIdsIndex = videoData.length-1
+      return; // 함수 실행 중단
+    }
 
-    errBox.style.display = 'block';
-    setTimeout(() => {
-      errBox.style.display = 'none';
-    }, 2000);
+    videoIdsIndex++;
 
-    return; // 함수 실행 중단
-  }
+    if (videoData && videoData[videoIdsIndex] !== undefined) {
+      playVideo(videoData[videoIdsIndex].videoUrl);
+    }
 
-  videoIdsIndex++;
-
-  if (videoData && videoData[videoIdsIndex] !== undefined) {
-    playVideo(videoData[videoIdsIndex].videoUrl);
-  }
-
-  document.getElementById('videoTitle').innerHTML = videoData[videoIdsIndex].title
-  goDetail(videoData[videoIdsIndex].videoId);
-});
+    document.getElementById('videoTitle').innerHTML = videoData[videoIdsIndex].title;
+    goDetail(videoData[videoIdsIndex].videoId);
+  });
 
   /**이전 버튼을 누르면 videoIds의 다음 index번호를 이전전 영상이 재생된다 */
   const errBox = document.querySelector('.err-box');
   const prevButton = document.getElementById('prevButton');
   prevButton.addEventListener('click', async () => {
-
     videoIdsIndex--;
 
     if (videoData && videoData[videoIdsIndex] !== undefined) {
       playVideo(videoData[videoIdsIndex].videoUrl);
     } else {
-      videoIdsIndex = 0
+      videoIdsIndex = 0;
 
       errBox.style.display = 'block';
       setTimeout(() => {
         errBox.style.display = 'none';
       }, 2000);
     }
-    
-    document.getElementById('videoTitle').innerHTML = videoData[videoIdsIndex].title
+
+    document.getElementById('videoTitle').innerHTML = videoData[videoIdsIndex].title;
     goDetail(videoData[videoIdsIndex].videoId);
   });
-
 });
-

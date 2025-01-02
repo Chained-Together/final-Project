@@ -33,13 +33,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     channelNameElement.textContent = channelData.name || '알 수 없음';
     profileImageElement.src = channelData.profileImage || '/path/to/default-profile.png';
 
-    // createChannelEditUI(
-    //   channelEditContainer,
-    //   channelData,
-    //   token,
-    //   channelNameElement,
-    //   profileImageElement,
-    // );
     const videoResponse = await fetch(`/video/my/${channelData.id}`, {
       method: 'GET',
       headers: {
@@ -58,7 +51,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   } catch (error) {
     console.error('오류:', error);
-    arr.style.display = "block";
+    arr.style.display = 'block';
   }
 });
 

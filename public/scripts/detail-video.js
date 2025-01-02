@@ -101,8 +101,6 @@ async function playVideo(videoId) {
     method: 'GET',
   });
 
-  
-
   if (!channelResponse.ok) {
     throw new Error('채널 정보를 로드하지 못했습니다.');
   }
@@ -114,7 +112,7 @@ async function playVideo(videoId) {
   profileBtn.addEventListener('click', async () => {
     window.location.href = `/getChannel/${channelData.id}`;
   });
-  document.getElementById('channel-name').innerHTML = channelData.name
+  document.getElementById('channel-name').innerHTML = channelData.name;
 }
 
 // 좋아요 버튼과 카운트 표시 영역 가져오기
@@ -402,19 +400,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         const editCancel = replyElement.querySelector('.reply-edit-cancel');
         const replyContent = replyElement.querySelector(`#reply-content-${reply.id}`);
 
-        // 수정 버튼 클릭 시 폼 표시
         editButton?.addEventListener('click', () => {
           editForm.style.display = 'block';
           replyContent.style.display = 'none';
         });
 
-        // 취소 버튼 클릭 시 폼 숨기기
         editCancel?.addEventListener('click', () => {
           editForm.style.display = 'none';
           replyContent.style.display = 'block';
         });
 
-        // 수정 완료 버튼 클릭 이벤트
         editSubmit?.addEventListener('click', async () => {
           const newContent = editInput.value.trim();
           if (newContent) {
@@ -432,7 +427,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 throw new Error('답글 수정에 실패했습니다.');
               }
 
-              // 수정된 내용을 화면에 반영
               replyContent.textContent = newContent;
               editForm.style.display = 'none';
               replyContent.style.display = 'block';
@@ -461,7 +455,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                   throw new Error('답글 삭제에 실패했습니다.');
                 }
 
-                // 성공 시 답글 DOM에서 제거
                 replyElement.remove();
                 alert('답글이 삭제되었습니다.');
               } catch (error) {
@@ -472,26 +465,22 @@ document.addEventListener('DOMContentLoaded', async () => {
           });
         }
 
-        // 답글 컨테이너에 추가
         repliesContainer.appendChild(replyElement);
       });
     }
 
-    // 답글 폼 토글 버튼 이벤트
     replyBtn?.addEventListener('click', () => {
       replyForm.style.display = replyForm.style.display === 'none' ? 'block' : 'none';
       if (replyForm.style.display === 'block') {
         replyInput.focus();
       }
 
-      // 답글 내용 표시/숨기기 기능 추가
       const replyContents = document.querySelectorAll('#reply-content'); // 모든 답글 컨텐츠 선택
       replyContents.forEach((replyContent) => {
         replyContent.style.display = replyContent.style.display === 'none' ? 'block' : 'none';
       });
     });
 
-    // 답글 제출
     replySubmit?.addEventListener('click', async () => {
       const content = replyInput.value.trim();
       if (content) {
@@ -504,7 +493,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     return commentElement;
   }
 
-  // 댓글 작성 버튼 이벤트
   commentSubmit?.addEventListener('click', async () => {
     const content = commentInput.value.trim();
     if (content) {
@@ -512,7 +500,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // 댓글 입력창 엔터키 이벤트
   commentInput?.addEventListener('keypress', async (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -523,15 +510,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // 초기 댓글 로드
   await loadComments();
 });
-
-{
-  /* <button class="btn" id="shared-btn">
-<img src="\public\images\icons8-share-100.png" alt="" />
-</button> */
-}
 
 document.addEventListener('DOMContentLoaded', () => {
   const shareButton = document.getElementById('shared-btn');
