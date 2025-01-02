@@ -41,9 +41,7 @@ const typeOrmModuleOptions = {
     password: configService.get('DB_PASSWORD'),
     host: configService.get('DB_HOST'),
     port: configService.get<number>('DB_PORT'),
-    ssl: {
-      rejectUnauthorized: false,
-    },
+    ssl: false,
     database: configService.get('DB_NAME'),
     entities: [
       UserEntity,

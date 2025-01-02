@@ -141,16 +141,16 @@ export class ViewController {
     return;
   }
 
-  @UseGuards(JwtQueryAuthGuard)
-  @Get('/chat/:roomId')
-  @Render('chat')
-  @ApiOperation({
-    summary: '채팅 페이지 렌더링',
-    description: '특정 채팅방의 채팅 내용을 보여주는 페이지를 렌더링합니다.',
-  })
-  showChat(@Param('roomId') roomId: string, @UserInfo() user: UserEntity) {
-    return { roomId, user };
-  }
+  // @UseGuards(JwtQueryAuthGuard)
+  // @Get('/chat/:roomId')
+  // @Render('chat')
+  // @ApiOperation({
+  //   summary: '채팅 페이지 렌더링',
+  //   description: '특정 채팅방의 채팅 내용을 보여주는 페이지를 렌더링합니다.',
+  // })
+  // showChat(@Param('roomId') roomId: string, @UserInfo() user: UserEntity) {
+  //   return { roomId, user };
+  // }
 
   @Get('/liveVideo')
   @Render('liveVideo')
@@ -183,4 +183,13 @@ export class ViewController {
   VideoDetail() {
     return;
   }
+
+  @Get('/chat')
+  @Render('chat')
+  showChat() {
+    return;
+  }
+  // showChat(@Param('roomId') roomId: string, @UserInfo() user: UserEntity) {
+  //   return { roomId, user };
+  // }
 }
