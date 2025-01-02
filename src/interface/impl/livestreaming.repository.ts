@@ -36,8 +36,6 @@ export class LiveStreamingRepository implements ILiveStreamingRepository {
   }
 
   async findAllLiveStreams(): Promise<LiveStreamingEntity[]> {
-    console.log('Executing findAllLiveStreams query...');
-
     const query = this.repository
       .createQueryBuilder('liveStreaming')
       .leftJoinAndSelect('liveStreaming.user', 'user')

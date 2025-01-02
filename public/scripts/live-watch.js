@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // 소켓 연결
-    const socket = io(`http://www.loopfiy.com:3001`, {
+    const socket = io(`/socket.io/`, {
       auth: { token },
       query: { streamId },
       transports: ['websocket'],
@@ -74,6 +74,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       messageInput.placeholder = '로그인 후 채팅이 가능합니다';
     });
 
+    const MAX_CHAT_MESSAGES = 10;
+
     socket.on('receiveMessage', (data) => {
       const messageElement = document.createElement('div');
       messageElement.className = 'message';
@@ -83,6 +85,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       `;
       chatBox.appendChild(messageElement);
       chatBox.scrollTop = chatBox.scrollHeight;
+
+      while (chatBox.children.length > MAX_CHAT_MESSAGES) {
+        chatBox.removeChild(chatBox.firstChild);
+      }
     });
 
     // 메시지 전송
