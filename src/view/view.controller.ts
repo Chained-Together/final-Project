@@ -162,6 +162,12 @@ export class ViewController {
     return;
   }
 
+  @Get('liveStream')
+  @Render('live')
+  showLiveList() {
+    return;
+  }
+
   @Get('live/watch/:id')
   @Render('live-watch')
   @ApiOperation({
@@ -177,6 +183,4 @@ export class ViewController {
   VideoDetail() {
     return;
   }
-
-
 }

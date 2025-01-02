@@ -22,7 +22,7 @@ export class ObsService {
           isUnique = !existingKey;
         }
         const src = process.env.VIDEO_SRC;
-        const streamingUrl = `http://${src}/hls/${randomStreamKey}.m3u8`;
+        const streamingUrl = `https://${src}/hls/${randomStreamKey}.m3u8`;
 
         const createStreamKey = this.obsStreamKeyRepository.createObsStreamKey(
           userId,
