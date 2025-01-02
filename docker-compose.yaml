@@ -31,11 +31,9 @@ services:
     ports:
       - '80:80'
     depends_on:
-      - nginx-rtmp
       - app
     volumes:
       - ./ebextensions/nginx.conf:/etc/nginx/nginx.conf
-      - ./hls:/tmp/hls
     entrypoint: >
       /bin/sh -c "while ! curl -s http://app:3000 > /dev/null; do sleep 1; done; nginx -t && nginx -g 'daemon off;'"
     networks:
