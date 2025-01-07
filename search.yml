@@ -1,0 +1,15 @@
+config:
+     target: http://localhost:3000
+     phases:
+          - duration: 10
+            arrivalRate: 1
+     logLevel: "debug"
+
+scenarios:
+     - name: searchVideoAndChannel
+       flow:
+            - get:
+                   url: /video/search/video{{ $randomNumber(1, 1000) }}
+
+            #   - get:
+            #          url: /channel/search/channel{{ $randomNumber(1, 1000) }}

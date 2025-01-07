@@ -38,7 +38,7 @@ export class VideoRepository implements IVideoRepository {
       where: { id: videoId },
     });
   }
-  
+
   findVideoWithChannelAndResolution(videoId: number): Promise<VideoEntity> {
     return this.repository.findOne({
       where: { id: videoId },
@@ -50,9 +50,9 @@ export class VideoRepository implements IVideoRepository {
         resolution: {
           videoUrl: true,
         },
-        likes:{
+        likes: {
           id: true,
-        }
+        },
       },
     });
   }
@@ -69,7 +69,7 @@ export class VideoRepository implements IVideoRepository {
     return this.repository
       .createQueryBuilder('videos')
       .where('videos.visibility = :visibility', { visibility: 'public' })
-      .andWhere('videos.title LIKE :keyword', { keyword: `%${keyword}%` })
+      .andWhere('videos.title ILIKE :keyword', { keyword: `%${keyword}%` })
       .andWhere('videos.status = :status', { status: true })
       .orWhere(
         '(videos.visibility = :visibility AND videos.status = :status AND videos.hashtags @> :keywordArray)',
@@ -82,7 +82,7 @@ export class VideoRepository implements IVideoRepository {
       .getMany();
   }
 
-  async findNewVideos( take: number ): Promise<any[]> {
+  async findNewVideos(take: number): Promise<any[]> {
     const query = this.repository
       .createQueryBuilder('videos')
       .where('videos.visibility = :visibility', { visibility: 'public' })
@@ -92,11 +92,11 @@ export class VideoRepository implements IVideoRepository {
       .leftJoinAndSelect('videos.resolution', 'resolution')
       .leftJoinAndSelect('videos.likes', 'likes')
       .take(take);
-  
+
     const videos = await query.getMany();
-  
+
     // Transform videos into the desired structure
-    const videoArr = videos.map(video => ({
+    const videoArr = videos.map((video) => ({
       videoId: video.id,
       title: video.title,
       description: video.description,
@@ -106,7 +106,7 @@ export class VideoRepository implements IVideoRepository {
       videoUrl: video.resolution?.videoUrl || null,
       likes: video.likes.length, // Count the number of likes
     }));
-  
+
     return videoArr;
   }
 
